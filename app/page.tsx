@@ -1,97 +1,108 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+
+// 제국 데이터 모델 및 타입 정의
+interface Asset { id: number; title: string; owner: string; timestamp: string; }
 
 export default function KedheonPortal() {
-  const [tab, setTab] = useState<'ROOKIE' | 'PIONEER'>('ROOKIE');
-  const [category, setCategory] = useState('ALL');
-  const [qrType, setQrType] = useState<'PERSONAL' | 'BUSINESS'>('PERSONAL');
-  const [businessName, setBusinessName] = useState('해태건축사');
-  const [businessID, setBusinessID] = useState('HT-0001');
-  const [beomToken, setBeomToken] = useState(8888.88);
-  const [studioTitle, setStudioTitle] = useState('');
+  const [view, setView] = useState<'FAN' | 'STUDIO'>('FAN');
+  const [beomToken, setBeomToken] = useState<number>(8888.88);
+  const [assets, setAssets] = useState<Asset[]>([]);
+  const [newTitle, setNewTitle] = useState<string>('');
+  const [userId] = useState<string>('USER_888');
 
-  const empireCharacterName = 'Beom_Master';
-  const empireUrl = "https://kedheon.com";
-  const categories = ['ALL', 'MUSIC', 'SPORTS', 'ACTOR', 'ESPORTS', 'COMEDY'];
-  const ecosystemApps = ['PI', 'NEXUS', 'AI', 'VENDOR', 'CIVIL', 'FILTER', 'PAPA', '6G'];
+  // 데이터 영속성 노드: 브라우저 로컬 저장소 결속
+  useEffect(() => {
+    const saved = localStorage.getItem('kedheon_assets');
+    if (saved) setAssets(JSON.parse(saved));
+  }, []);
 
-  // AI 학습용 메타데이터
-  const aiMetadata = {
-    "@context": "https://schema.org",
-    "@type": "CreativeWork",
-    "author": { "@type": "Person", "name": empireCharacterName },
-    "name": "Kedheon Empire Asset",
-    "description": "Beom_Master의 제국 데이터 저장소"
+  // 자산 등록 로직: 인증 ID 부여 및 데이터 영속화
+  const registerAsset = () => {
+    if (!newTitle.trim()) return;
+    const newAsset: Asset = { 
+      id: Date.now(),
+      title: newTitle, 
+      owner: userId, 
+      timestamp: new Date().toLocaleDateString() 
+    };
+    const updated = [...assets, newAsset];
+    setAssets(updated);
+    localStorage.setItem('kedheon_assets', JSON.stringify(updated));
+    setNewTitle('');
   };
 
   return (
-    <div className="flex flex-col items-center bg-black min-h-screen text-white p-6 font-sans w-full">
-      <head>
-        <script type="application/ld+json">{JSON.stringify(aiMetadata)}</script>
-      </head>
+    <div className="bg-black min-h-screen text-white p-6 font-sans w-full max-w-4xl mx-auto">
+      {/* 1. 제국 통치 경제 대시보드 */}
+      <header className="bg-gradient-to-r from-[#daa520]/20 to-black p-8 rounded-3xl border border-[#daa520]/30 mb-10 shadow-[0_0_20px_rgba(218,165,32,0.1)]">
+        <div className="flex justify-between items-center">
+          <div>
+            <h3 className="text-gray-400 text-xs uppercase tracking-[0.2em] mb-1">Imperial Currency</h3>
+            <p className="text-[#daa520] font-black text-4xl">{beomToken.toLocaleString()} BEOM</p>
+          </div>
+          <button className="bg-[#daa520] text-black px-8 py-3 rounded-xl font-black hover:scale-105 transition-transform">
+            BUY BEOM TOKEN
+          </button>
+        </div>
+      </header>
 
-      {/* 탭 컨트롤 */}
-      <div className="flex gap-4 mb-10 mt-10">
-        <button onClick={() => setTab('ROOKIE')} className={`px-8 py-2 rounded-full font-bold transition-all ${tab === 'ROOKIE' ? 'bg-[#daa520] text-black' : 'bg-white/10'}`}>ROOKIE</button>
-        <button onClick={() => setTab('PIONEER')} className={`px-8 py-2 rounded-full font-bold transition-all ${tab === 'PIONEER' ? 'bg-[#daa520] text-black' : 'bg-white/10'}`}>PIONEER</button>
-      </div>
+      {/* 2. 데이터 레이어 선택 노드 */}
+      <nav className="flex gap-4 mb-10">
+        <button 
+          onClick={() => setView('FAN')} 
+          className={`flex-1 py-4 font-bold rounded-2xl transition-all ${view === 'FAN' ? 'bg-[#daa520] text-black' : 'bg-white/5 hover:bg-white/10'}`}
+        >
+          FAN COMMUNITY
+        </button>
+        <button 
+          onClick={() => setView('STUDIO')} 
+          className={`flex-1 py-4 font-bold rounded-2xl transition-all ${view === 'STUDIO' ? 'bg-[#daa520] text-black' : 'bg-white/5 hover:bg-white/10'}`}
+        >
+          USER STUDIO
+        </button>
+      </nav>
 
-      <div className="w-full max-w-2xl bg-[#111] p-8 rounded-3xl border border-[#daa520]/30 shadow-[0_0_30px_rgba(218,165,32,0.1)]">
-        {tab === 'PIONEER' ? (
-          <>
-            {/* 범 토큰 대시보드 */}
-            <div className="flex justify-between items-center mb-8 bg-[#daa520]/10 p-6 rounded-2xl border border-[#daa520]/20">
-              <div><h3 className="text-gray-400 text-xs">보유 범 토큰</h3><p className="text-[#daa520] font-black text-2xl">{beomToken.toLocaleString()} BEOM</p></div>
-              <div className="text-right"><h3 className="text-gray-400 text-xs">팬심 지수</h3><p className="text-white font-black text-2xl">Lv. 88</p></div>
+      {/* 3. 뷰 레이어 컨텐츠 */}
+      <main className="min-h-[400px]">
+        {view === 'FAN' ? (
+          <section className="p-8 border border-white/10 rounded-3xl bg-[#111]">
+            <h2 className="text-[#daa520] font-black text-2xl mb-4">📢 제국 소통 노드</h2>
+            <p className="text-gray-500 italic">유저 활동 데이터가 범 토큰 채굴과 직접 연결됩니다.</p>
+          </section>
+        ) : (
+          <section className="p-8 border border-[#daa520]/30 rounded-3xl bg-[#111]">
+            <h2 className="text-[#daa520] font-black text-2xl mb-6">🏆 {userId}'s Assets</h2>
+            <div className="flex gap-4 mb-8">
+              <input 
+                value={newTitle} 
+                onChange={(e) => setNewTitle(e.target.value)} 
+                placeholder="Enter Asset Name..." 
+                className="bg-black p-4 rounded-xl w-full border border-white/10 focus:border-[#daa520] outline-none" 
+              />
+              <button 
+                onClick={registerAsset} 
+                className="bg-[#daa520] text-black font-black px-8 py-4 rounded-xl whitespace-nowrap"
+              >
+                CERTIFY ASSET
+              </button>
             </div>
-
-            {/* 카테고리 엔진 */}
-            <div className="mb-8">
-              <h3 className="text-white font-bold mb-4 text-center">제국 창작 카테고리 ({category})</h3>
-              <div className="flex flex-wrap gap-2 justify-center">
-                {categories.map((cat) => (
-                  <button key={cat} onClick={() => setCategory(cat)} className={`px-4 py-2 rounded-full text-xs font-bold transition-all ${category === cat ? 'bg-[#daa520] text-black' : 'bg-white/10 hover:bg-white/20'}`}>
-                    {cat}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* QR 노드 */}
-            <div className="bg-black p-6 rounded-2xl border border-[#daa520]/30 mb-8 text-center">
-              <h3 className="text-[#daa520] font-bold mb-4">제국 인증 QR</h3>
-              <div className="flex gap-2 justify-center mb-4">
-                <button onClick={() => setQrType('PERSONAL')} className={`px-4 py-1 rounded text-[10px] ${qrType === 'PERSONAL' ? 'bg-[#daa520] text-black' : 'bg-white/10'}`}>개인 신분</button>
-                <button onClick={() => setQrType('BUSINESS')} className={`px-4 py-1 rounded text-[10px] ${qrType === 'BUSINESS' ? 'bg-[#daa520] text-black' : 'bg-white/10'}`}>기업/결제</button>
-              </div>
-              <img src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(empireUrl + '/?id=' + (qrType === 'BUSINESS' ? businessID : empireCharacterName))}`} className="w-24 h-24 mx-auto bg-white p-1 rounded" alt="QR" />
-              <p className="mt-2 text-[10px] font-bold text-[#daa520]">{qrType === 'BUSINESS' ? `${businessName} (${businessID})` : empireCharacterName}</p>
-              {qrType === 'BUSINESS' && (
-                <div className="mt-4 flex flex-col gap-2"><input type="text" value={businessName} onChange={(e) => setBusinessName(e.target.value)} className="w-full bg-[#1a1a1a] p-2 text-sm rounded border border-white/10" /></div>
+            
+            <div className="space-y-3">
+              {assets.length === 0 ? (
+                <p className="text-gray-600 text-center py-10">인증된 자산이 없습니다.</p>
+              ) : (
+                assets.map((a) => (
+                  <div key={a.id} className="p-4 bg-white/5 rounded-2xl border border-white/5 flex justify-between items-center">
+                    <span className="font-bold">{a.title}</span>
+                    <span className="text-[#daa520] text-xs font-mono">{a.timestamp}</span>
+                  </div>
+                ))
               )}
             </div>
-
-            {/* 창작물 업로드 노드 */}
-            <div className="bg-black p-6 rounded-2xl border border-[#daa520]/30 mb-8">
-              <h3 className="text-[#daa520] font-black text-center mb-4">MASTER'S CREATIVE STUDIO</h3>
-              <input type="text" value={studioTitle} onChange={(e) => setStudioTitle(e.target.value)} placeholder="창작물 제목" className="w-full bg-[#1a1a1a] p-2 text-sm rounded border border-white/10 mb-2" />
-              <button onClick={() => alert('자산 등록 완료!')} className="w-full bg-[#daa520] text-black py-2 rounded-lg font-bold">등록하기</button>
-            </div>
-
-            {/* 허브 */}
-            <div className="grid grid-cols-4 gap-4 text-center">
-              {ecosystemApps.map(app => (
-                <button key={app} onClick={() => alert(`${app} 데이터 브릿지 가동`)} className="flex flex-col items-center">
-                  <div className="w-10 h-10 bg-white/5 rounded-full mb-1 flex items-center justify-center text-[10px] font-bold border border-white/10">{app}</div>
-                  <span className="text-[9px]">{app}</span>
-                </button>
-              ))}
-            </div>
-          </>
-        ) : (
-          <div className="text-center py-20"><h1 className="text-4xl font-black text-[#daa520]">KEDHEON EMPIRE</h1></div>
+          </section>
         )}
-      </div>
+      </main>
     </div>
   );
 }
