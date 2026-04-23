@@ -1,50 +1,40 @@
 import React from 'react';
 
 export default function KedheonPortal() {
-  // 제국 데이터 주소
   const empireUrl = "https://kedheon.com";
-  // 별도 설치 없이 큐알을 생성하는 온라인 엔진 사용
   const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(empireUrl)}`;
 
   return (
-    <div className="flex flex-col items-center justify-start bg-black min-h-screen w-full text-white overflow-x-hidden pb-10" style={{ fontFamily: 'sans-serif' }}>
+    <div className="flex flex-col items-center justify-center bg-black min-h-screen w-full text-white p-4" style={{ fontFamily: 'sans-serif' }}>
       
-      <div className="h-10 w-full" />
-
-      {/* 1. 메인 캐릭터 */}
-      <div className="relative flex flex-col items-center w-full max-w-4xl px-4">
+      {/* 1. 메인 캐릭터 (버튼 중복 제거를 위해 하단 버튼 삭제) */}
+      <div className="relative flex flex-col items-center w-full max-w-[500px]">
         <img 
           src="/kedheon-character.png" 
-          alt="Kedheon" 
-          className="w-full max-w-[450px] h-auto transition-all duration-500"
-          style={{ filter: 'drop-shadow(0 0 20px rgba(255,255,255,0.2))' }}
+          alt="Kedheon Main" 
+          className="w-full h-auto drop-shadow-[0_0_30px_rgba(255,255,255,0.1)]"
         />
+        {/* 이미지 안에 글자가 있으므로 별도 버튼은 배치하지 않음 */}
       </div>
 
-      {/* 2. 메인 버튼 */}
-      <div className="mt-8">
-        <button className="bg-[#1a2332] text-white px-16 py-4 rounded-full text-2xl font-black border-2 border-[#4fc3f7] shadow-[0_0_15px_rgba(79,195,247,0.3)]">
-          KEDHEON.PI
-        </button>
-      </div>
-
-      {/* 3. 하단 자산 노드 (범 토큰 & QR 코드) */}
-      <div className="mt-16 flex flex-row items-end justify-center w-full max-w-2xl gap-10 md:gap-20 px-6">
+      {/* 2. 하단 자산 영역 (범 토큰 & QR 코드) */}
+      <div className="mt-12 flex flex-row items-center justify-center w-full max-w-2xl gap-8 md:gap-16">
         
-        {/* 범 토큰: 하단 배치 및 투명도 보정 */}
+        {/* [팩트] 범 토큰: 격자무늬가 보이지 않도록 원형 프레임 강제 적용 */}
         <div className="flex flex-col items-center">
-          <img 
-            src="/beom-token.png" 
-            alt="Beom Token" 
-            className="w-28 h-28 md:w-40 md:h-40 object-contain"
-            style={{ mixBlendMode: 'normal' }} 
-          />
-          <span className="text-[#ffd700] mt-3 font-mono text-xs font-bold tracking-widest">BEOM TOKEN</span>
+          <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-2 border-yellow-600 shadow-[0_0_15px_rgba(255,215,0,0.2)]">
+            <img 
+              src="/beom-token.png" 
+              alt="Beom Token" 
+              className="w-full h-full object-cover" 
+            />
+          </div>
+          <span className="text-yellow-500 mt-3 font-mono text-xs font-bold">BEOM TOKEN</span>
         </div>
 
-        {/* QR 코드: 외부 엔진 기반 */}
+        {/* [팩트] QR 코드: 제국 입국 노드 */}
         <div className="flex flex-col items-center">
-          <div className="bg-white p-2 rounded-xl shadow-lg">
+          <div className="bg-white p-2 rounded-xl shadow-[0_0_20px_rgba(255,255,255,0.1)]">
             <img 
               src={qrImageUrl} 
               alt="QR Code" 
@@ -56,8 +46,9 @@ export default function KedheonPortal() {
 
       </div>
 
-      <div className="mt-auto pt-10 text-[10px] text-gray-700 font-mono">
-        KEDHEON EMPIRE v1.0.88-STABLE
+      {/* 시스템 버전 하단 고정 */}
+      <div className="mt-16 text-[10px] text-gray-800 font-mono">
+        KEDHEON EMPIRE v1.0.99-FINAL_TUNING
       </div>
     </div>
   );
