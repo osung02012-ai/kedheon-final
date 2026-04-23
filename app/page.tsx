@@ -1,71 +1,63 @@
 import React from 'react';
-import { QRCodeSVG } from 'qrcode.react';
 
-// [공정 13번] 무결성 영문 로직 재건
 export default function KedheonPortal() {
+  // 제국 데이터 주소
   const empireUrl = "https://kedheon.com";
+  // 별도 설치 없이 큐알을 생성하는 온라인 엔진 사용
+  const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(empireUrl)}`;
 
   return (
-    <div className="flex flex-col items-center justify-start bg-black min-h-screen w-full font-sans text-white overflow-x-hidden pb-10">
+    <div className="flex flex-col items-center justify-start bg-black min-h-screen w-full text-white overflow-x-hidden pb-10" style={{ fontFamily: 'sans-serif' }}>
       
       <div className="h-10 w-full" />
 
-      {/* 메인 캐릭터 섹션 */}
+      {/* 1. 메인 캐릭터 */}
       <div className="relative flex flex-col items-center w-full max-w-4xl px-4">
         <img 
           src="/kedheon-character.png" 
-          alt="Kedheon Main Character" 
-          className="w-full max-w-[500px] h-auto drop-shadow-[0_0_20px_rgba(255,255,255,0.15)] transition-all duration-500"
+          alt="Kedheon" 
+          className="w-full max-w-[450px] h-auto transition-all duration-500"
+          style={{ filter: 'drop-shadow(0 0 20px rgba(255,255,255,0.2))' }}
         />
       </div>
 
-      {/* 메인 버튼 */}
-      <div className="mt-6">
-        <button className="bg-[#1a2332] hover:bg-[#253347] text-white px-16 py-5 rounded-full text-2xl font-black tracking-widest border-2 border-[#4fc3f7] shadow-[0_0_15px_rgba(79,195,247,0.4)] transition-all active:scale-95">
+      {/* 2. 메인 버튼 */}
+      <div className="mt-8">
+        <button className="bg-[#1a2332] text-white px-16 py-4 rounded-full text-2xl font-black border-2 border-[#4fc3f7] shadow-[0_0_15px_rgba(79,195,247,0.3)]">
           KEDHEON.PI
         </button>
       </div>
 
-      {/* 하단 자산 노드 (범 토큰 & QR 코드) */}
-      <div className="mt-16 flex flex-row items-end justify-center w-full max-w-2xl gap-12 md:gap-24 px-6">
+      {/* 3. 하단 자산 노드 (범 토큰 & QR 코드) */}
+      <div className="mt-16 flex flex-row items-end justify-center w-full max-w-2xl gap-10 md:gap-20 px-6">
         
         {/* 범 토큰: 하단 배치 및 투명도 보정 */}
-        <div className="flex flex-col items-center group">
-          <div className="relative">
-            <img 
-              src="/beom-token.png" 
-              alt="Beom Token" 
-              className="w-32 h-32 md:w-44 md:h-44 object-contain"
-              style={{ 
-                filter: 'drop-shadow(0 0 10px rgba(255,215,0,0.3))',
-                mixBlendMode: 'normal'
-              }} 
-            />
-          </div>
-          <span className="text-[#ffd700] mt-3 font-mono text-sm font-bold tracking-tighter opacity-80 group-hover:opacity-100">
-            BEOM TOKEN
-          </span>
+        <div className="flex flex-col items-center">
+          <img 
+            src="/beom-token.png" 
+            alt="Beom Token" 
+            className="w-28 h-28 md:w-40 md:h-40 object-contain"
+            style={{ mixBlendMode: 'normal' }} 
+          />
+          <span className="text-[#ffd700] mt-3 font-mono text-xs font-bold tracking-widest">BEOM TOKEN</span>
         </div>
 
-        {/* QR 코드: 엔진 결속 */}
-        <div className="flex flex-col items-center group">
-          <div className="bg-white p-3 rounded-2xl shadow-[0_0_20px_rgba(255,255,255,0.2)] group-hover:scale-105 transition-transform">
-            <QRCodeSVG 
-              value={empireUrl} 
-              size={120} 
-              level="H"
-              includeMargin={false}
+        {/* QR 코드: 외부 엔진 기반 */}
+        <div className="flex flex-col items-center">
+          <div className="bg-white p-2 rounded-xl shadow-lg">
+            <img 
+              src={qrImageUrl} 
+              alt="QR Code" 
+              className="w-28 h-28 md:w-32 md:h-32"
             />
           </div>
-          <span className="text-white mt-4 font-mono text-[11px] font-light tracking-[0.2em] opacity-60">
-            ENTRY CODE
-          </span>
+          <span className="text-gray-400 mt-4 font-mono text-[10px] tracking-[0.3em]">ENTRY CODE</span>
         </div>
 
       </div>
 
-      <div className="mt-auto pt-10 text-[10px] text-gray-600 font-mono">
-        KEDHEON EMPIRE PORTAL v1.0.88-STABLE
+      <div className="mt-auto pt-10 text-[10px] text-gray-700 font-mono">
+        KEDHEON EMPIRE v1.0.88-STABLE
       </div>
     </div>
   );
