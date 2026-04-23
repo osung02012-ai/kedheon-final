@@ -6,20 +6,22 @@ export default function KedheonPortal() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [category, setCategory] = useState('ALL');
   const [qrType, setQrType] = useState<'PERSONAL' | 'BUSINESS'>('PERSONAL');
-  const [businessName, setBusinessName] = useState('해태 건축 사무소');
+  const [businessName, setBusinessName] = useState('');
+  
+  // [팩트] 주군의 절대 식별자 고정
+  const empireCharacterName = 'Beom_Master'; 
   
   const myReferralCode = "ohsangjo";
   const piInvitationUrl = `https://minepi.com/${myReferralCode}`;
   const empireUrl = "https://kedheon.com";
   const categories = ['ALL', 'MUSIC', 'SPORTS', 'ACTOR', 'ESPORTS', 'COMEDY'];
 
-  // 주군께서 업로드한 공식 에셋 연동
   const personalImage = '/qr-personal.png'; 
   const businessImage = '/qr-business.png';
 
   return (
     <div className="flex flex-col items-center bg-black min-h-screen text-white p-6 font-sans w-full">
-      {/* 1. 상단 이원화 탭 */}
+      {/* 탭/로비 로직 동일 */}
       <div className="flex gap-4 mb-10 mt-10 justify-center">
         <button onClick={() => setTab('ROOKIE')} className={`px-8 py-2 rounded-full font-bold transition-all ${tab === 'ROOKIE' ? 'bg-[#daa520] text-black' : 'bg-white/10'}`}>ROOKIE</button>
         <button onClick={() => setTab('PIONEER')} className={`px-8 py-2 rounded-full font-bold transition-all ${tab === 'PIONEER' ? 'bg-[#daa520] text-black' : 'bg-white/10'}`}>PIONEER</button>
@@ -38,14 +40,14 @@ export default function KedheonPortal() {
               <h3 className="text-[#daa520] font-black text-xl">🔥 팬심 지수: Lv. 88 (Royal Pioneer)</h3>
             </div>
             
-            {/* 팬덤 카테고리 엔진 */}
+            {/* 팬덤 엔진 */}
             <div className="flex gap-2 overflow-x-auto pb-4 mb-6">
               {categories.map(cat => (
                 <button key={cat} onClick={() => setCategory(cat)} className={`px-4 py-1 rounded-full text-xs font-bold whitespace-nowrap ${category === cat ? 'bg-[#daa520] text-black' : 'bg-white/10'}`}>{cat}</button>
               ))}
             </div>
 
-            {/* [QR 발급 노드: 주군 고정 식별자 및 기업 이미지 스위칭] */}
+            {/* [최종 수정된 QR 발급 노드: Beom_Master 각인] */}
             <div className="bg-black p-6 rounded-2xl border border-[#daa520]/30 mb-8 text-center">
               <h3 className="text-[#daa520] font-bold mb-4">제국 인증 QR 발급</h3>
               <div className="flex gap-2 justify-center mb-4">
@@ -53,12 +55,11 @@ export default function KedheonPortal() {
                 <button onClick={() => setQrType('BUSINESS')} className={`px-4 py-1 rounded text-[10px] ${qrType === 'BUSINESS' ? 'bg-[#daa520] text-black' : 'bg-white/10'}`}>기업/결제</button>
               </div>
 
-              {/* [동적 이미지 스위칭 및 데이터 각인] */}
               <div className="relative w-full max-w-[250px] mx-auto mb-4 aspect-square overflow-hidden rounded-xl border border-white/10">
                 <img src={qrType === 'PERSONAL' ? personalImage : businessImage} className="absolute inset-0 w-full h-full object-cover" alt="QR Asset" />
                 <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center p-4">
-                  <img src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(empireUrl + '/?type=' + qrType + '&identity=' + (qrType === 'BUSINESS' ? businessName : 'OH_SANG_JO_MASTER'))}`} className="w-20 h-20 bg-white p-1 rounded" alt="QR" />
-                  <p className="mt-2 text-[9px] font-bold text-[#daa520] truncate w-full px-2">{qrType === 'BUSINESS' ? businessName : 'OH_SANG_JO_MASTER'}</p>
+                  <img src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(empireUrl + '/?type=' + qrType + '&identity=' + (qrType === 'BUSINESS' ? businessName : empireCharacterName))}`} className="w-20 h-20 bg-white p-1 rounded" alt="QR" />
+                  <p className="mt-2 text-[9px] font-bold text-[#daa520] truncate w-full px-2">{qrType === 'BUSINESS' ? businessName : empireCharacterName}</p>
                 </div>
               </div>
 
@@ -75,17 +76,7 @@ export default function KedheonPortal() {
           </div>
         )}
       </div>
-
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black/90 flex items-center justify-center p-6 z-50">
-          <div className="bg-[#111] border border-[#daa520] p-8 rounded-2xl max-w-sm w-full text-center">
-            <h2 className="text-xl font-bold text-white mb-4">시민권 신청 안내</h2>
-            <p className="text-gray-400 text-sm mb-6">초대코드: <span className="text-[#daa520] font-bold">{myReferralCode}</span></p>
-            <a href={piInvitationUrl} target="_blank" className="block bg-[#daa520] text-black py-3 rounded-lg font-bold mb-4">파이 네트워크 가입</a>
-            <button onClick={() => setIsModalOpen(false)} className="text-gray-500 underline text-sm">닫기</button>
-          </div>
-        </div>
-      )}
+      {/* 시민권 모달 생략 */}
     </div>
   );
 }
