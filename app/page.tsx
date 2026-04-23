@@ -1,27 +1,40 @@
 'use client';
-
 import React, { useState, useEffect } from 'react';
 
-// 1. 제국 자산 데이터 모델
+// 자산 데이터 모델
 interface Asset { 
   id: number; 
   title: string; 
   desc: string;
+  owner: string; 
   timestamp: string; 
 }
 
 export default function KedheonPortal() {
-  const [mainTab, setMainTab] = useState<'ROOKIE' | 'PIONEER'>('PIONEER');
-  const [subTab, setSubTab] = useState<'FAN' | 'STUDIO'>('FAN');
+  // 1. 최상위 뼈대 상태
+  const [tab, setTab] = useState<'ROOKIE' | 'PIONEER'>('ROOKIE');
+  
+  // 2. UI 및 데이터 상태
   const [category, setCategory] = useState('ALL');
   const [qrType, setQrType] = useState<'PERSONAL' | 'BUSINESS'>('PERSONAL');
+  const [businessName, setBusinessName] = useState('해태건축사');
+  const [businessID, setBusinessID] = useState('HT-0001');
   const [assets, setAssets] = useState<Asset[]>([]);
   const [newTitle, setNewTitle] = useState('');
   const [newDesc, setNewDesc] = useState('');
-
+  
+  // 3. 고정 데이터
+  const empireCharacterName = 'USER_888';
+  const empireUrl = "https://kedheon.com";
+  const beomToken = 8888.88;
   const categories = ['ALL', 'MUSIC', 'SPORTS', 'ACTOR', 'ESPORTS', 'COMEDY'];
-  const hubs = ['PI', 'NEXUS', 'AI', 'VENDOR', 'CIVIL', 'FILTER', 'PAPA', '6G'];
+  const ecosystemApps = ['PI', 'NEXUS', 'AI', 'VENDOR', 'CIVIL', 'FILTER', 'PAPA', '6G'];
 
+  // 4. 로컬 이미지 경로 원상 복구
+  const personalImage = '/qr-personal.png'; 
+  const businessImage = '/qr-business.png';
+
+  // 5. 데이터 영속성
   useEffect(() => {
     const saved = localStorage.getItem('kedheon_assets');
     if (saved) setAssets(JSON.parse(saved));
@@ -29,127 +42,127 @@ export default function KedheonPortal() {
 
   const registerAsset = () => {
     if (!newTitle.trim()) return;
-    const newAsset = { id: Date.now(), title: newTitle, desc: newDesc, timestamp: new Date().toLocaleDateString() };
+    const newAsset: Asset = { 
+      id: Date.now(), 
+      title: newTitle, 
+      desc: newDesc,
+      owner: empireCharacterName, 
+      timestamp: new Date().toLocaleDateString() 
+    };
     const updated = [...assets, newAsset];
     setAssets(updated);
     localStorage.setItem('kedheon_assets', JSON.stringify(updated));
     setNewTitle('');
     setNewDesc('');
+    alert("유저 자산이 등록되었습니다.");
   };
-
-  // 이미지 손실 방지를 위한 인라인 SVG 컴포넌트
-  const BeomIcon = () => (
-    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#daa520" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-    </svg>
-  );
 
   return (
     <div className="flex flex-col items-center bg-black min-h-screen text-white p-6 font-sans w-full overflow-x-hidden">
       
-      {/* 최상위 프레임워크: ROOKIE / PIONEER */}
-      <div className="flex gap-4 mb-10 mt-10">
-        <button onClick={() => setMainTab('ROOKIE')} className={`px-10 py-3 rounded-full font-black text-sm transition-all ${mainTab === 'ROOKIE' ? 'bg-[#daa520] text-black shadow-[0_0_20px_rgba(218,165,32,0.4)]' : 'bg-white/5 border border-white/10 text-gray-500'}`}>ROOKIE</button>
-        <button onClick={() => setMainTab('PIONEER')} className={`px-10 py-3 rounded-full font-black text-sm transition-all ${mainTab === 'PIONEER' ? 'bg-[#daa520] text-black shadow-[0_0_20px_rgba(218,165,32,0.4)]' : 'bg-white/5 border border-white/10 text-gray-500'}`}>PIONEER</button>
+      {/* 1. 최상위 프레임워크 (ROOKIE / PIONEER) */}
+      <div className="flex gap-4 mb-10 mt-10 justify-center w-full max-w-2xl">
+        <button onClick={() => setTab('ROOKIE')} className={`px-8 py-2 rounded-full font-bold transition-all ${tab === 'ROOKIE' ? 'bg-[#daa520] text-black shadow-[0_0_15px_rgba(218,165,32,0.5)]' : 'bg-white/10'}`}>ROOKIE</button>
+        <button onClick={() => setTab('PIONEER')} className={`px-8 py-2 rounded-full font-bold transition-all ${tab === 'PIONEER' ? 'bg-[#daa520] text-black shadow-[0_0_15px_rgba(218,165,32,0.5)]' : 'bg-white/10'}`}>PIONEER</button>
       </div>
 
-      <div className="w-full max-w-xl">
-        {mainTab === 'ROOKIE' ? (
-          <div className="flex flex-col items-center text-center py-24 animate-pulse">
-            <div className="w-32 h-32 border-4 border-[#daa520] rounded-full flex items-center justify-center mb-8">
-              <BeomIcon />
-            </div>
-            <h1 className="text-5xl font-black text-[#daa520] tracking-tighter mb-4">KEDHEON</h1>
-            <p className="text-gray-500 text-sm tracking-[0.3em] uppercase">The Empire of Pioneers</p>
-            <button className="mt-16 bg-[#daa520] text-black px-16 py-5 rounded-2xl font-black text-lg">ENTER EMPIRE</button>
+      <div className="w-full max-w-2xl">
+        {tab === 'ROOKIE' ? (
+          <div className="flex flex-col items-center text-center py-20">
+            {/* 로컬 캐릭터 이미지 복구 */}
+            <img src="/kedheon-character.png" className="w-64 mb-6 object-contain" alt="Kedheon" />
+            <h1 className="text-4xl font-black mt-6 text-[#daa520] tracking-widest">KEDHEON EMPIRE</h1>
+            <button className="mt-10 bg-[#daa520] text-black px-12 py-5 rounded-2xl font-black shadow-[0_0_20px_rgba(218,165,32,0.3)]">시민권 신청</button>
           </div>
         ) : (
-          <div className="bg-[#0a0a0a] p-8 rounded-[40px] border border-white/10 w-full flex flex-col gap-8 shadow-2xl">
+          <div className="bg-[#111] p-8 rounded-3xl border border-white/10 w-full shadow-[0_0_30px_rgba(218,165,32,0.1)] flex flex-col gap-8">
             
-            {/* 자산 대시보드 */}
-            <div className="bg-gradient-to-br from-[#daa520]/20 to-transparent p-6 rounded-3xl border border-[#daa520]/30 flex justify-between items-center">
+            {/* 2. 대시보드 (토큰/팬심) */}
+            <div className="bg-gradient-to-r from-[#daa520]/20 to-transparent p-6 rounded-2xl border border-[#daa520]/30 flex justify-between items-center">
               <div>
-                <p className="text-gray-500 text-[10px] uppercase tracking-widest mb-1">Total Assets</p>
-                <p className="text-[#daa520] font-black text-3xl">8,888.88 <span className="text-xs">BEOM</span></p>
+                <h3 className="text-gray-400 text-xs uppercase tracking-widest mb-1">Imperial Token</h3>
+                <p className="text-[#daa520] font-black text-2xl">{beomToken.toLocaleString()} BEOM</p>
               </div>
               <div className="text-right">
-                <p className="text-gray-500 text-[10px] uppercase mb-1">Fan Grade</p>
-                <p className="text-white font-black text-2xl">Lv. 88</p>
+                <h3 className="text-gray-400 text-xs uppercase mb-1">Fan Level</h3>
+                <p className="text-white font-black text-xl">Lv. 88</p>
               </div>
             </div>
 
-            {/* 서브 탭 컨트롤 */}
-            <div className="flex gap-2 p-1.5 bg-black rounded-2xl border border-white/5">
-              <button onClick={() => setSubTab('FAN')} className={`flex-1 py-3 font-bold rounded-xl text-xs transition-all ${subTab === 'FAN' ? 'bg-[#daa520] text-black' : 'text-gray-600'}`}>COMMUNITY</button>
-              <button onClick={() => setSubTab('STUDIO')} className={`flex-1 py-3 font-bold rounded-xl text-xs transition-all ${subTab === 'STUDIO' ? 'bg-[#daa520] text-black' : 'text-gray-600'}`}>STUDIO</button>
+            {/* 3. 카테고리 셀렉터 */}
+            <div className="p-6 bg-black rounded-2xl border border-white/5 text-center">
+              <h3 className="text-[#daa520] font-black text-sm mb-4">선택된 노드: {category}</h3>
+              <div className="flex flex-wrap gap-2 justify-center">
+                {categories.map((cat) => (
+                  <button key={cat} onClick={() => setCategory(cat)} className={`px-4 py-1.5 rounded-full text-xs font-bold transition-colors ${category === cat ? 'bg-[#daa520] text-black' : 'bg-white/10 hover:bg-white/20'}`}>{cat}</button>
+                ))}
+              </div>
             </div>
 
-            {/* 데이터 레이어 콘텐츠 */}
-            {subTab === 'FAN' ? (
-              <div className="flex flex-col gap-8">
-                {/* 1. 카테고리 셀렉터 */}
-                <div className="flex flex-wrap gap-2 justify-center py-2">
-                  {categories.map(c => (
-                    <button key={c} onClick={() => setCategory(c)} className={`px-4 py-1.5 rounded-full text-[10px] font-bold transition-all ${category === c ? 'bg-[#daa520] text-black' : 'bg-white/5 text-gray-500'}`}>{c}</button>
-                  ))}
-                </div>
+            {/* 4. QR 인증 노드 (8대 생태계 바로 위로 배치) */}
+            <div className="bg-black p-6 rounded-2xl border border-[#daa520]/30 text-center">
+              <h3 className="text-[#daa520] font-bold mb-4">제국 인증 QR 발급</h3>
+              <div className="flex gap-2 justify-center mb-4">
+                <button onClick={() => setQrType('PERSONAL')} className={`px-4 py-1 rounded text-[10px] ${qrType === 'PERSONAL' ? 'bg-[#daa520] text-black' : 'bg-white/10'}`}>개인 신분</button>
+                <button onClick={() => setQrType('BUSINESS')} className={`px-4 py-1 rounded text-[10px] ${qrType === 'BUSINESS' ? 'bg-[#daa520] text-black' : 'bg-white/10'}`}>기업/결제</button>
+              </div>
 
-                {/* 2. QR 인증 시스템 (8대 허브 위로 재배치) */}
-                <div className="bg-black p-8 rounded-3xl border border-[#daa520]/40 text-center relative overflow-hidden">
-                  <div className="absolute top-0 right-0 p-2 opacity-20"><BeomIcon /></div>
-                  <h3 className="text-[#daa520] font-black text-xs mb-6 uppercase tracking-widest">Imperial Identity QR</h3>
-                  <div className="flex gap-2 justify-center mb-6">
-                    <button onClick={() => setQrType('PERSONAL')} className={`px-5 py-2 rounded-lg text-[10px] font-bold ${qrType === 'PERSONAL' ? 'bg-[#daa520] text-black' : 'bg-white/5'}`}>PERSONAL</button>
-                    <button onClick={() => setQrType('BUSINESS')} className={`px-5 py-2 rounded-lg text-[10px] font-bold ${qrType === 'BUSINESS' ? 'bg-[#daa520] text-black' : 'bg-white/5'}`}>BUSINESS</button>
-                  </div>
-                  {/* 이미지 대신 CSS 패턴으로 구현한 QR 가이드 */}
-                  <div className="w-28 h-28 bg-white mx-auto mb-4 rounded-xl p-2 flex items-center justify-center">
-                    <div className="w-full h-full border-4 border-black border-dashed opacity-30 flex items-center justify-center text-[8px] text-black font-mono">GEN_QR_NODE</div>
-                  </div>
-                  <p className="text-[10px] font-mono text-gray-500">AUTH_TOKEN: HT-BEOM-888</p>
-                </div>
-
-                {/* 3. 8대 생태계 허브 */}
-                <div className="grid grid-cols-4 gap-4">
-                  {hubs.map(h => (
-                    <button key={h} className="flex flex-col items-center gap-2 group">
-                      <div className="w-12 h-12 bg-white/5 rounded-2xl border border-white/10 flex items-center justify-center text-[10px] text-[#daa520] font-black group-hover:border-[#daa520] transition-all">{h}</div>
-                      <span className="text-[9px] text-gray-600 font-bold">{h}</span>
-                    </button>
-                  ))}
+              {/* 로컬 이미지 및 QR API 원상 복구 */}
+              <div className="relative w-full max-w-[250px] mx-auto mb-4 aspect-square overflow-hidden rounded-xl border border-white/10">
+                <img src={qrType === 'PERSONAL' ? personalImage : businessImage} className="absolute inset-0 w-full h-full object-cover" alt="QR Asset" />
+                <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center p-4">
+                  <img src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(empireUrl + '/?type=' + qrType + '&id=' + (qrType === 'BUSINESS' ? businessID : empireCharacterName))}`} className="w-20 h-20 bg-white p-1 rounded" alt="QR Code" />
+                  <p className="mt-2 text-[9px] font-bold text-[#daa520] truncate w-full px-2">{qrType === 'BUSINESS' ? `${businessName} (${businessID})` : empireCharacterName}</p>
                 </div>
               </div>
-            ) : (
-              <div className="flex flex-col gap-6">
-                {/* 자산 등록 노드 */}
-                <div className="bg-black p-6 rounded-3xl border border-white/10">
-                  <h3 className="text-[#daa520] font-black text-xs mb-6 text-center tracking-widest uppercase">Asset Certification</h3>
-                  <div className="flex flex-col gap-4">
-                    <input type="text" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} placeholder="IP 자산 명칭" className="bg-[#151515] p-4 text-sm rounded-xl border border-white/5 focus:border-[#daa520] outline-none" />
-                    <textarea value={newDesc} onChange={(e) => setNewDesc(e.target.value)} placeholder="자산에 대한 상세 설명 및 데이터 속성" className="bg-[#151515] p-4 text-sm rounded-xl border border-white/5 h-28 focus:border-[#daa520] outline-none resize-none" />
-                    <button onClick={registerAsset} className="bg-[#daa520] text-black py-4 rounded-2xl font-black text-sm shadow-xl">제국 공식 자산 등록</button>
-                  </div>
-                </div>
 
-                {/* 인증 리스트 */}
-                <div className="space-y-3">
-                  <p className="text-gray-600 text-[10px] font-bold uppercase ml-2">Certified Assets</p>
-                  {assets.length === 0 ? (
-                    <div className="p-10 text-center text-gray-700 text-xs border border-dashed border-white/10 rounded-3xl">등록된 자산이 없습니다.</div>
-                  ) : (
-                    assets.map(a => (
-                      <div key={a.id} className="bg-white/5 p-4 rounded-2xl border-l-4 border-[#daa520] flex flex-col gap-1">
-                        <div className="flex justify-between items-center">
-                          <span className="font-black text-sm">{a.title}</span>
-                          <span className="text-[#daa520] text-[9px] font-mono">{a.timestamp}</span>
-                        </div>
-                        <p className="text-[11px] text-gray-500 line-clamp-1">{a.desc}</p>
+              {qrType === 'BUSINESS' && (
+                <div className="flex flex-col gap-2">
+                  <input type="text" value={businessName} onChange={(e) => setBusinessName(e.target.value)} placeholder="기업명" className="w-full bg-[#1a1a1a] p-2 text-sm rounded border border-white/10" />
+                  <input type="text" value={businessID} onChange={(e) => setBusinessID(e.target.value)} placeholder="고유ID" className="w-full bg-[#1a1a1a] p-2 text-sm rounded border border-white/10" />
+                </div>
+              )}
+            </div>
+
+            {/* 5. 8대 생태계 허브 */}
+            <div className="bg-black p-6 rounded-2xl border border-white/5">
+              <h3 className="text-center text-xs font-bold text-[#daa520] mb-4">🌐 8대 생태계 허브</h3>
+              <div className="grid grid-cols-4 gap-4 text-center">
+                {ecosystemApps.map(app => (
+                  <button key={app} className="flex flex-col items-center hover:scale-105 transition-transform">
+                    <div className="w-12 h-12 bg-white/5 rounded-full mb-2 border border-white/10 flex items-center justify-center text-[10px] text-[#daa520] font-bold">{app}</div>
+                    <span className="text-[10px] text-gray-400">{app}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* 6. 유저 창작 스튜디오 */}
+            <div className="bg-black p-6 rounded-2xl border border-white/5 text-center">
+              <h3 className="text-[#daa520] font-black text-sm mb-4">USER STUDIO (자산 등록)</h3>
+              <div className="flex flex-col gap-3">
+                <input type="text" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} placeholder="창작물 제목 입력" className="w-full bg-[#1a1a1a] p-3 text-sm rounded-lg border border-white/10 focus:border-[#daa520] outline-none" />
+                <textarea value={newDesc} onChange={(e) => setNewDesc(e.target.value)} placeholder="창작물 설명" className="w-full h-20 bg-[#1a1a1a] p-3 text-sm rounded-lg border border-white/10 focus:border-[#daa520] outline-none" />
+                <button onClick={registerAsset} className="w-full bg-[#daa520] text-black py-3 rounded-lg font-black shadow-lg">제국 자산으로 등록</button>
+              </div>
+
+              {/* 자산 리스트 */}
+              {assets.length > 0 && (
+                <div className="mt-6 space-y-3 text-left">
+                  <h3 className="text-gray-400 text-xs font-bold mb-2">인증된 자산 목록</h3>
+                  {assets.map((a) => (
+                    <div key={a.id} className="p-4 bg-white/5 rounded-xl border-l-4 border-[#daa520]">
+                      <div className="flex justify-between items-start mb-1">
+                        <span className="font-bold text-white text-sm">{a.title}</span>
+                        <span className="text-[#daa520] text-[10px] font-mono">{a.timestamp}</span>
                       </div>
-                    ))
-                  )}
+                      {a.desc && <p className="text-xs text-gray-500 line-clamp-2">{a.desc}</p>}
+                    </div>
+                  ))}
                 </div>
-              </div>
-            )}
+              )}
+            </div>
+
           </div>
         )}
       </div>
