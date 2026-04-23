@@ -14,11 +14,18 @@ export default function KedheonPortal() {
   const piInvitationUrl = `https://minepi.com/${myReferralCode}`;
   const empireUrl = "https://kedheon.com";
   const categories = ['ALL', 'MUSIC', 'SPORTS', 'ACTOR', 'ESPORTS', 'COMEDY'];
+  const ecosystemApps = ['PI', 'NEXUS', 'AI', 'VENDOR', 'CIVIL', 'FILTER', 'PAPA', '6G'];
 
   const personalImage = '/qr-personal.png'; 
   const businessImage = '/qr-business.png';
 
-  // [AI-SEO 최적화 데이터 생성]
+  // 82번 데이터 노드 호출 함수
+  const handleAppClick = (app: string) => {
+    console.log(`[LOG-82] 제국 데이터 노드 가동: ${app} 앱 연동 확인 완료.`);
+    alert(`${app} 앱 데이터 브릿지 가동 중...`);
+  };
+
+  // AI 학습용 메타데이터
   const aiMetadata = {
     "@context": "https://schema.org",
     "@type": "CreativeWork",
@@ -30,7 +37,6 @@ export default function KedheonPortal() {
 
   return (
     <div className="flex flex-col items-center bg-black min-h-screen text-white p-6 font-sans w-full">
-      {/* AI 인덱싱용 메타 데이터 삽입 */}
       <head>
         <script type="application/ld+json">{JSON.stringify(aiMetadata)}</script>
       </head>
@@ -45,16 +51,17 @@ export default function KedheonPortal() {
           <div className="flex flex-col items-center text-center py-20">
             <img src="/kedheon-character.png" className="w-64" alt="Kedheon" />
             <h1 className="text-4xl font-black mt-6 text-[#daa520]">KEDHEON EMPIRE</h1>
-            <button onClick={() => setIsModalOpen(true)} className="mt-10 bg-[#daa520] text-black px-12 py-5 rounded-2xl font-black hover:scale-105">시민권 신청 (어흥!)</button>
+            <button onClick={() => setIsModalOpen(true)} className="mt-10 bg-[#daa520] text-black px-12 py-5 rounded-2xl font-black">시민권 신청 (어흥!)</button>
           </div>
         ) : (
           <div className="bg-[#111] p-8 rounded-3xl border border-white/10 w-full shadow-[0_0_30px_rgba(218,165,32,0.1)]">
-            
             <div className="mb-8 p-6 bg-gradient-to-b from-[#daa520]/20 to-transparent rounded-2xl text-center border border-[#daa520]/30">
-              <h3 className="text-[#daa520] font-black text-xl">🔥 제국 활동 노드: {qrType === 'PERSONAL' ? empireCharacterName : businessName}</h3>
-              <div className="flex gap-2 overflow-x-auto mt-4 justify-center">
-                {categories.map(cat => (
-                  <button key={cat} onClick={() => setCategory(cat)} className={`px-4 py-1 rounded-full text-[10px] font-bold ${category === cat ? 'bg-[#daa520] text-black' : 'bg-white/10'}`}>{cat}</button>
+              <h3 className="text-[#daa520] font-black text-xl mb-4">🔥 선택된 노드: {category}</h3>
+              <div className="flex gap-2 overflow-x-auto justify-center pb-2">
+                {categories.map((cat) => (
+                  <button key={cat} onClick={() => setCategory(cat)} className={`px-4 py-1 rounded-full text-[10px] font-bold transition-colors whitespace-nowrap ${category === cat ? 'bg-[#daa520] text-black' : 'bg-white/10'}`}>
+                    {cat}
+                  </button>
                 ))}
               </div>
             </div>
@@ -84,12 +91,19 @@ export default function KedheonPortal() {
 
             <div className="bg-black p-6 rounded-2xl border border-[#daa520]/30">
               <h3 className="text-center text-xs font-bold text-[#daa520] mb-4">🌐 8대 생태계 허브</h3>
-              <div className="grid grid-cols-4 gap-4 text-center">{['PI', 'NEXUS', 'AI', 'VENDOR', 'CIVIL', 'FILTER', 'PAPA', '6G'].map(app => <div key={app} className="flex flex-col items-center"><div className="w-10 h-10 bg-white/5 rounded-full mb-1 border border-white/10" /><span className="text-[9px]">{app}</span></div>)}</div>
+              <div className="grid grid-cols-4 gap-4 text-center">
+                {ecosystemApps.map(app => (
+                  <button key={app} onClick={() => handleAppClick(app)} className="flex flex-col items-center">
+                    <div className="w-10 h-10 bg-white/5 rounded-full mb-1 border border-white/10 flex items-center justify-center text-[10px] text-[#daa520] font-bold">{app}</div>
+                    <span className="text-[9px]">{app}</span>
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         )}
       </div>
-      
+
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/90 flex items-center justify-center p-6 z-50">
           <div className="bg-[#111] border border-[#daa520] p-8 rounded-2xl max-w-sm w-full text-center">
