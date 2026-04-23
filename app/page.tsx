@@ -88,3 +88,22 @@ export default function KedheonPortal() {
     </div>
   );
 }
+/* PIONEER 모드 대시보드 내부의 서비스 섹션 로직 */
+<div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+  <div className="bg-black p-5 border border-[#daa520] rounded-xl">
+    <h3 className="text-[#daa520] font-bold">🚀 제국 노드 서비스</h3>
+    <p className="text-gray-400 text-[11px] mt-1">고성능 노드 운영 보상 및 검증 데이터 제공</p>
+  </div>
+  <div className="bg-black p-5 border border-[#daa520] rounded-xl">
+    <h3 className="text-[#daa520] font-bold">🐯 범(Beom) 토큰</h3>
+    <p className="text-gray-400 text-[11px] mt-1">제국 내 자산 순환 및 거버넌스 투표권</p>
+  </div>
+  <div className="bg-black p-5 border border-[#daa520] rounded-xl">
+    <h3 className="text-[#daa520] font-bold">🌐 도메인 자산</h3>
+    <p className="text-gray-400 text-[11px] mt-1">주군이 선점한 파이 생태계 핵심 도메인 활용</p>
+  </div>
+  <div className="bg-black p-5 border border-[#daa520] rounded-xl">
+    <h3 className="text-[#daa520] font-bold">💎 VIP 멤버십</h3>
+    <p className="text-gray-400 text-[11px] mt-1">시민권 보유자 대상 독점 프로젝트 조기 참여</p>
+  </div>
+</div>
