@@ -44,10 +44,11 @@ export default function KedheonPortal() {
             </button>
           </div>
         ) : (
-          /* [웹3 유저 모드] 전문 대시보드 */
+          /* [웹3 유저 모드] 전문 대시보드 & 서비스 섹션 */
           <div className="w-full bg-[#111] p-8 rounded-3xl border border-white/10 shadow-[0_0_30px_rgba(218,165,32,0.1)]">
             <h2 className="text-2xl font-bold mb-6 text-[#daa520] border-b border-white/10 pb-4">PIONEER DASHBOARD</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
               <div className="bg-black p-5 rounded-xl border border-white/5">
                 <p className="text-gray-500 text-xs uppercase">Node Status</p>
                 <p className="text-green-500 font-bold mt-1 text-lg">ACTIVE (Score: 17.16)</p>
@@ -57,9 +58,25 @@ export default function KedheonPortal() {
                 <p className="text-blue-500 font-bold mt-1 text-lg">CONNECTED</p>
               </div>
             </div>
-            <p className="mt-8 text-gray-400 text-sm leading-relaxed">
-              현재 주군의 도메인 포트폴리오와 범(Beom) 토큰 경제 시스템의 실시간 데이터가 이 노드에서 통합 모니터링되고 있습니다.
-            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-black p-5 border border-[#daa520] rounded-xl">
+                <h3 className="text-[#daa520] font-bold">🚀 제국 노드 서비스</h3>
+                <p className="text-gray-400 text-[11px] mt-1">고성능 노드 운영 보상 및 검증 데이터</p>
+              </div>
+              <div className="bg-black p-5 border border-[#daa520] rounded-xl">
+                <h3 className="text-[#daa520] font-bold">🐯 범(Beom) 토큰</h3>
+                <p className="text-gray-400 text-[11px] mt-1">제국 내 자산 순환 및 거버넌스 투표권</p>
+              </div>
+              <div className="bg-black p-5 border border-[#daa520] rounded-xl">
+                <h3 className="text-[#daa520] font-bold">🌐 도메인 자산</h3>
+                <p className="text-gray-400 text-[11px] mt-1">파이 생태계 핵심 도메인 포트폴리오</p>
+              </div>
+              <div className="bg-black p-5 border border-[#daa520] rounded-xl">
+                <h3 className="text-[#daa520] font-bold">💎 VIP 멤버십</h3>
+                <p className="text-gray-400 text-[11px] mt-1">독점 프로젝트 조기 참여권</p>
+              </div>
+            </div>
           </div>
         )}
       </div>
@@ -88,22 +105,3 @@ export default function KedheonPortal() {
     </div>
   );
 }
-/* PIONEER 모드 대시보드 내부의 서비스 섹션 로직 */
-<div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-  <div className="bg-black p-5 border border-[#daa520] rounded-xl">
-    <h3 className="text-[#daa520] font-bold">🚀 제국 노드 서비스</h3>
-    <p className="text-gray-400 text-[11px] mt-1">고성능 노드 운영 보상 및 검증 데이터 제공</p>
-  </div>
-  <div className="bg-black p-5 border border-[#daa520] rounded-xl">
-    <h3 className="text-[#daa520] font-bold">🐯 범(Beom) 토큰</h3>
-    <p className="text-gray-400 text-[11px] mt-1">제국 내 자산 순환 및 거버넌스 투표권</p>
-  </div>
-  <div className="bg-black p-5 border border-[#daa520] rounded-xl">
-    <h3 className="text-[#daa520] font-bold">🌐 도메인 자산</h3>
-    <p className="text-gray-400 text-[11px] mt-1">주군이 선점한 파이 생태계 핵심 도메인 활용</p>
-  </div>
-  <div className="bg-black p-5 border border-[#daa520] rounded-xl">
-    <h3 className="text-[#daa520] font-bold">💎 VIP 멤버십</h3>
-    <p className="text-gray-400 text-[11px] mt-1">시민권 보유자 대상 독점 프로젝트 조기 참여</p>
-  </div>
-</div>
