@@ -6,12 +6,16 @@ export default function KedheonPortal() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [category, setCategory] = useState('ALL');
   const [qrType, setQrType] = useState<'PERSONAL' | 'BUSINESS'>('PERSONAL');
-  const [businessName, setBusinessName] = useState('');
+  const [businessName, setBusinessName] = useState('해태 건축 사무소');
   
   const myReferralCode = "ohsangjo";
   const piInvitationUrl = `https://minepi.com/${myReferralCode}`;
   const empireUrl = "https://kedheon.com";
   const categories = ['ALL', 'MUSIC', 'SPORTS', 'ACTOR', 'ESPORTS', 'COMEDY'];
+
+  // 주군께서 업로드한 공식 에셋 연동
+  const personalImage = '/qr-personal.png'; 
+  const businessImage = '/qr-business.png';
 
   return (
     <div className="flex flex-col items-center bg-black min-h-screen text-white p-6 font-sans w-full">
@@ -31,17 +35,17 @@ export default function KedheonPortal() {
         ) : (
           <div className="bg-[#111] p-8 rounded-3xl border border-white/10 w-full shadow-[0_0_30px_rgba(218,165,32,0.1)]">
             <div className="mb-8 p-6 bg-gradient-to-b from-[#daa520]/20 to-transparent rounded-2xl text-center border border-[#daa520]/30">
-              <h3 className="text-[#daa520] font-black text-xl">🔥 팬심 지수: Lv. 88</h3>
+              <h3 className="text-[#daa520] font-black text-xl">🔥 팬심 지수: Lv. 88 (Royal Pioneer)</h3>
             </div>
             
-            {/* 팬덤 엔진 */}
+            {/* 팬덤 카테고리 엔진 */}
             <div className="flex gap-2 overflow-x-auto pb-4 mb-6">
               {categories.map(cat => (
                 <button key={cat} onClick={() => setCategory(cat)} className={`px-4 py-1 rounded-full text-xs font-bold whitespace-nowrap ${category === cat ? 'bg-[#daa520] text-black' : 'bg-white/10'}`}>{cat}</button>
               ))}
             </div>
 
-            {/* [QR 발급 노드: 주군 식별자 고정 및 기업 정보 이원화] */}
+            {/* [QR 발급 노드: 주군 고정 식별자 및 기업 이미지 스위칭] */}
             <div className="bg-black p-6 rounded-2xl border border-[#daa520]/30 mb-8 text-center">
               <h3 className="text-[#daa520] font-bold mb-4">제국 인증 QR 발급</h3>
               <div className="flex gap-2 justify-center mb-4">
@@ -49,19 +53,18 @@ export default function KedheonPortal() {
                 <button onClick={() => setQrType('BUSINESS')} className={`px-4 py-1 rounded text-[10px] ${qrType === 'BUSINESS' ? 'bg-[#daa520] text-black' : 'bg-white/10'}`}>기업/결제</button>
               </div>
 
-              {qrType === 'BUSINESS' ? (
-                <input type="text" value={businessName} onChange={(e) => setBusinessName(e.target.value)} placeholder="기업/상호명 입력" className="w-full bg-[#1a1a1a] p-2 text-sm rounded mb-4 border border-white/10 focus:border-[#daa520]" />
-              ) : (
-                <div className="w-full bg-[#111] p-2 text-sm rounded mb-4 text-[#daa520] border border-[#daa520]/20 font-black italic">
-                  IDENTITY: OH_SANG_JO_MASTER (FIXED)
+              {/* [동적 이미지 스위칭 및 데이터 각인] */}
+              <div className="relative w-full max-w-[250px] mx-auto mb-4 aspect-square overflow-hidden rounded-xl border border-white/10">
+                <img src={qrType === 'PERSONAL' ? personalImage : businessImage} className="absolute inset-0 w-full h-full object-cover" alt="QR Asset" />
+                <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center p-4">
+                  <img src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(empireUrl + '/?type=' + qrType + '&identity=' + (qrType === 'BUSINESS' ? businessName : 'OH_SANG_JO_MASTER'))}`} className="w-20 h-20 bg-white p-1 rounded" alt="QR" />
+                  <p className="mt-2 text-[9px] font-bold text-[#daa520] truncate w-full px-2">{qrType === 'BUSINESS' ? businessName : 'OH_SANG_JO_MASTER'}</p>
                 </div>
-              )}
+              </div>
 
-              <img 
-                src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(empireUrl + '/?type=' + qrType + '&identity=' + (qrType === 'BUSINESS' ? businessName : 'OH_SANG_JO_MASTER'))}`} 
-                className="w-24 h-24 mx-auto rounded-lg bg-white p-1" alt="QR" 
-              />
-              <p className="mt-2 text-[10px] font-bold text-[#daa520]">{qrType === 'BUSINESS' ? businessName : 'OH_SANG_JO_MASTER'}</p>
+              {qrType === 'BUSINESS' && (
+                <input type="text" value={businessName} onChange={(e) => setBusinessName(e.target.value)} placeholder="기업/상호명 입력" className="w-full bg-[#1a1a1a] p-2 text-sm rounded mb-2 border border-white/10 focus:border-[#daa520]" />
+              )}
             </div>
 
             {/* 8대 앱 연동 허브 */}
@@ -73,7 +76,6 @@ export default function KedheonPortal() {
         )}
       </div>
 
-      {/* 레퍼럴 모달 */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/90 flex items-center justify-center p-6 z-50">
           <div className="bg-[#111] border border-[#daa520] p-8 rounded-2xl max-w-sm w-full text-center">
