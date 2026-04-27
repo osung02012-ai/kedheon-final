@@ -1,11 +1,12 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 
-// 자산 데이터 모델
+// 자산 데이터 모델 (Category 필드 추가)
 interface Asset { 
   id: number; 
   title: string; 
   desc: string;
+  category: string; // 소속 팬덤
   owner: string; 
   timestamp: string; 
 }
@@ -15,7 +16,7 @@ export default function KedheonPortal() {
   const [tab, setTab] = useState<'ROOKIE' | 'PIONEER'>('PIONEER');
   
   // 2. UI 및 데이터 상태
-  const [category, setCategory] = useState('ALL');
+  const [category, setCategory] = useState('MUSIC'); // 기본값 MUSIC
   const [qrType, setQrType] = useState<'PERSONAL' | 'BUSINESS'>('PERSONAL');
   const [businessName, setBusinessName] = useState('해태건축사');
   const [businessID, setBusinessID] = useState('HT-0001');
@@ -23,13 +24,11 @@ export default function KedheonPortal() {
   const [newTitle, setNewTitle] = useState('');
   const [newDesc, setNewDesc] = useState('');
 
-  // --- [신규 추가] QR 구매 상태 ---
-  const [isQrActive, setIsQrActive] = useState(false);
-  const QR_PURCHASE_COST = 50; 
-  
-  // 3. 범 토큰 경제 상태
+  // 3. 범 토큰 및 QR 상태
   const [beomToken, setBeomToken] = useState(8888.88);
+  const [isQrActive, setIsQrActive] = useState(false);
   const [fanLevel, setFanLevel] = useState(88);
+  const QR_PURCHASE_COST = 50; 
   
   // 4. 고정 데이터
   const empireCharacterName = 'USER_888';
@@ -56,31 +55,30 @@ export default function KedheonPortal() {
   const handleHubClick = (app: string) => {
     setBeomToken(prev => prev + 1);
     setFanLevel(prev => prev + 1);
-    alert(`[${app}] 생태계 활동 보상: +1 BEOM 지급 완료.`);
+    alert(`[${app}] 생태계 활동 보상: +1 BEOM 지급.`);
   };
 
-  // --- [신규 추가] QR 구매/갱신 로직 ---
   const purchaseQR = () => {
     if (beomToken < QR_PURCHASE_COST) {
       alert(`범 토큰이 부족합니다. (필요: ${QR_PURCHASE_COST} BEOM)`);
       return;
     }
-    
-    if (confirm(`${QR_PURCHASE_COST} BEOM을 사용하여 인증 QR을 발급/갱신하시겠습니까?`)) {
+    if (confirm(`${QR_PURCHASE_COST} BEOM으로 인증 QR을 발급하시겠습니까?`)) {
       setBeomToken(prev => prev - QR_PURCHASE_COST);
       setIsQrActive(true);
-      alert("제국 인증 QR이 성공적으로 확보되었습니다! (유효기간: 무제한)");
+      alert("제국 인증 QR 확보 완료!");
     }
   };
 
   const registerAsset = () => {
-    if (!newTitle.trim()) { alert("창작물 제목을 입력하십시오."); return; }
-    if (beomToken < 10) { alert("범 토큰 잔액이 부족합니다. (10 BEOM 필요)"); return; }
+    if (!newTitle.trim()) { alert("제목을 입력하십시오."); return; }
+    if (beomToken < 10) { alert("잔액 부족 (10 BEOM 필요)"); return; }
 
     const newAsset: Asset = { 
       id: Date.now(), 
       title: newTitle, 
       desc: newDesc,
+      category: category, // 현재 선택된 팬덤 카테고리 저장
       owner: empireCharacterName, 
       timestamp: new Date().toLocaleDateString() 
     };
@@ -91,7 +89,7 @@ export default function KedheonPortal() {
     setBeomToken(prev => prev - 10);
     setNewTitle('');
     setNewDesc('');
-    alert(`제국 자산으로 공식 등록되었습니다.`);
+    alert(`[${category}] 카테고리에 자산이 등록되었습니다.`);
   };
 
   return (
@@ -125,52 +123,53 @@ export default function KedheonPortal() {
               </div>
             </div>
 
-            {/* 4. 제국 인증 QR 시스템 (수정됨) */}
+            {/* 3. 팬덤 센터 (복구 완료!) */}
+            <div className="p-6 bg-black rounded-2xl border border-white/5 text-center">
+              <h3 className="text-[#daa520] font-bold text-xs uppercase tracking-widest mb-4">Fandom Center</h3>
+              <div className="flex flex-wrap gap-2 justify-center">
+                {categories.map((cat) => (
+                  <button key={cat} onClick={() => setCategory(cat)} className={`px-4 py-1.5 rounded-full text-[10px] font-bold transition-all ${category === cat ? 'bg-[#daa520] text-black scale-110 shadow-[0_0_10px_rgba(218,165,32,0.4)]' : 'bg-white/10 hover:bg-white/20 text-gray-400'}`}>{cat}</button>
+                ))}
+              </div>
+              <p className="mt-4 text-[10px] text-gray-500 italic">현재 접속 중인 팬덤 영토: <span className="text-[#daa520] font-bold">{category}</span></p>
+            </div>
+
+            {/* 4. 제국 인증 QR 시스템 */}
             <div className="bg-black p-6 rounded-2xl border border-[#daa520]/30 text-center relative overflow-hidden">
               <div className="absolute top-0 right-0 p-2 text-[10px] text-gray-600 font-mono">-{QR_PURCHASE_COST} BEOM / 발급</div>
-              <h3 className="text-[#daa520] font-bold mb-4">제국 인증 QR 시스템</h3>
+              <h3 className="text-[#daa520] font-bold mb-4 text-sm">제국 인증 QR 시스템</h3>
               
               <div className="flex gap-2 justify-center mb-4">
                 <button onClick={() => {setQrType('PERSONAL'); setIsQrActive(false);}} className={`px-4 py-1 rounded text-[10px] ${qrType === 'PERSONAL' ? 'bg-[#daa520] text-black' : 'bg-white/10'}`}>개인 신분</button>
                 <button onClick={() => {setQrType('BUSINESS'); setIsQrActive(false);}} className={`px-4 py-1 rounded text-[10px] ${qrType === 'BUSINESS' ? 'bg-[#daa520] text-black' : 'bg-white/10'}`}>기업/결제</button>
               </div>
 
-              <div className="relative w-full max-w-[250px] mx-auto mb-4 aspect-square overflow-hidden rounded-xl border border-white/10 group">
+              <div className="relative w-full max-w-[220px] mx-auto mb-4 aspect-square overflow-hidden rounded-xl border border-white/10">
                 <img src={qrType === 'PERSONAL' ? personalImage : businessImage} className="absolute inset-0 w-full h-full object-cover" alt="QR Background" />
-                
-                {/* QR 활성화 여부에 따른 오버레이 */}
                 <div className={`absolute inset-0 bg-black/60 flex flex-col items-center justify-center p-4 transition-all ${isQrActive ? 'backdrop-blur-0' : 'backdrop-blur-md'}`}>
                   {isQrActive ? (
                     <>
-                      <img src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(empireUrl + '/?type=' + qrType + '&id=' + (qrType === 'BUSINESS' ? businessID : empireCharacterName))}`} className="w-20 h-20 bg-white p-1 rounded animate-pulse" alt="QR Code" />
+                      <img src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(empireUrl + '/?type=' + qrType + '&id=' + (qrType === 'BUSINESS' ? businessID : empireCharacterName))}`} className="w-20 h-20 bg-white p-1 rounded" alt="QR Code" />
                       <p className="mt-2 text-[9px] font-bold text-[#daa520] truncate w-full px-2">{qrType === 'BUSINESS' ? `${businessName} (${businessID})` : empireCharacterName}</p>
                     </>
                   ) : (
                     <div className="flex flex-col items-center">
-                      <div className="text-3xl mb-2">🔒</div>
-                      <p className="text-[10px] text-gray-400 mb-4">인증이 만료되었거나 발급되지 않았습니다.</p>
-                      <button onClick={purchaseQR} className="bg-[#daa520] text-black px-4 py-2 rounded text-[10px] font-black hover:scale-105 transition-transform">QR 확보하기 ({QR_PURCHASE_COST} BEOM)</button>
+                      <div className="text-2xl mb-2">🔒</div>
+                      <button onClick={purchaseQR} className="bg-[#daa520] text-black px-4 py-2 rounded text-[10px] font-black shadow-lg">QR 확보하기</button>
                     </div>
                   )}
                 </div>
               </div>
-
-              {qrType === 'BUSINESS' && (
-                <div className="flex flex-col gap-2 mt-4">
-                  <input type="text" value={businessName} onChange={(e) => {setBusinessName(e.target.value); setIsQrActive(false);}} placeholder="기업명" className="w-full bg-[#1a1a1a] p-2 text-sm rounded border border-white/10 focus:border-[#daa520] outline-none" />
-                  <input type="text" value={businessID} onChange={(e) => {setBusinessID(e.target.value); setIsQrActive(false);}} placeholder="고유ID" className="w-full bg-[#1a1a1a] p-2 text-sm rounded border border-white/10 focus:border-[#daa520] outline-none" />
-                </div>
-              )}
             </div>
 
             {/* 5. 8대 생태계 허브 */}
             <div className="bg-black p-6 rounded-2xl border border-white/5">
-              <h3 className="text-center text-xs font-bold text-[#daa520] mb-4">🌐 8대 생태계 허브 (활동 채굴)</h3>
-              <div className="grid grid-cols-4 gap-4 text-center">
+              <h3 className="text-center text-[10px] font-bold text-[#daa520] mb-4 uppercase tracking-widest">🌐 Ecosystem Hub (Mining)</h3>
+              <div className="grid grid-cols-4 gap-4">
                 {ecosystemApps.map(app => (
                   <button key={app} onClick={() => handleHubClick(app)} className="flex flex-col items-center hover:scale-105 transition-transform group">
-                    <div className="w-12 h-12 bg-white/5 rounded-full mb-2 border border-white/10 flex items-center justify-center text-[10px] text-[#daa520] font-bold group-hover:bg-[#daa520]/20 transition-colors">{app}</div>
-                    <span className="text-[10px] text-gray-400 group-hover:text-white transition-colors">{app}</span>
+                    <div className="w-10 h-10 bg-white/5 rounded-full mb-2 border border-white/10 flex items-center justify-center text-[9px] text-[#daa520] font-bold group-hover:bg-[#daa520]/20 transition-colors">{app}</div>
+                    <span className="text-[9px] text-gray-500">{app}</span>
                   </button>
                 ))}
               </div>
@@ -179,24 +178,25 @@ export default function KedheonPortal() {
             {/* 6. 유저 창작 스튜디오 */}
             <div className="bg-black p-6 rounded-2xl border border-white/5 text-center relative overflow-hidden">
               <div className="absolute top-0 right-0 p-2 text-[10px] text-gray-600 font-mono">-10 BEOM / 등록</div>
-              <h3 className="text-[#daa520] font-black text-sm mb-4">USER STUDIO (제국 자산 등록)</h3>
-              <div className="flex flex-col gap-3">
-                <input type="text" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} placeholder="창작물 제목 입력" className="w-full bg-[#1a1a1a] p-3 text-sm rounded-lg border border-white/10 focus:border-[#daa520] outline-none" />
-                <textarea value={newDesc} onChange={(e) => setNewDesc(e.target.value)} placeholder="창작물 상세 설명" className="w-full h-20 bg-[#1a1a1a] p-3 text-sm rounded-lg border border-white/10 focus:border-[#daa520] outline-none resize-none" />
-                <button onClick={registerAsset} className="w-full bg-[#daa520] text-black py-3 rounded-lg font-black shadow-lg hover:bg-[#b8860b] transition-colors">자산 등록 (10 BEOM 결제)</button>
+              <h3 className="text-[#daa520] font-black text-sm mb-4">USER STUDIO</h3>
+              <div className="flex flex-col gap-3 text-left">
+                <p className="text-[10px] text-[#daa520] font-bold">소속 팬덤: {category}</p>
+                <input type="text" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} placeholder="창작물 제목" className="w-full bg-[#1a1a1a] p-3 text-sm rounded-lg border border-white/10 focus:border-[#daa520] outline-none" />
+                <textarea value={newDesc} onChange={(e) => setNewDesc(e.target.value)} placeholder="창작물 상세 설명" className="w-full h-16 bg-[#1a1a1a] p-3 text-sm rounded-lg border border-white/10 focus:border-[#daa520] outline-none resize-none" />
+                <button onClick={registerAsset} className="w-full bg-[#daa520] text-black py-3 rounded-lg font-black shadow-lg">자산 등록 (10 BEOM 결제)</button>
               </div>
 
               {/* 인증된 자산 리스트 */}
               {assets.length > 0 && (
                 <div className="mt-6 space-y-3 text-left">
-                  <h3 className="text-gray-400 text-xs font-bold mb-2">인증된 자산 목록</h3>
+                  <h3 className="text-gray-400 text-[10px] font-bold mb-2 uppercase tracking-tighter">Verified Assets List</h3>
                   {assets.map((a) => (
                     <div key={a.id} className="p-4 bg-white/5 rounded-xl border-l-4 border-[#daa520]">
                       <div className="flex justify-between items-start mb-1">
-                        <span className="font-bold text-white text-sm">{a.title}</span>
-                        <span className="text-[#daa520] text-[10px] font-mono">{a.timestamp}</span>
+                        <span className="font-bold text-white text-sm">{a.title} <span className="text-[#daa520] text-[9px]">[{a.category}]</span></span>
+                        <span className="text-gray-600 text-[9px] font-mono">{a.timestamp}</span>
                       </div>
-                      {a.desc && <p className="text-xs text-gray-500 line-clamp-2">{a.desc}</p>}
+                      {a.desc && <p className="text-xs text-gray-500 line-clamp-1">{a.desc}</p>}
                     </div>
                   ))}
                 </div>
