@@ -12,9 +12,9 @@ interface Territory {
   id: string; title: string; desc: string; creator: string;
 }
 
-// --- [공통 섹션 타이틀: 타이틀(3) : 설명(2) 황금 비율] ---
+// --- [공통 섹션 타이틀 컴포넌트: 타이틀(3) : 설명(2) 황금 비율] ---
 const SectionTitle = ({ title, desc }: { title: string; desc: string }) => (
-  <div className="flex flex-col items-center mb-14 gap-4">
+  <div className="flex flex-col items-center mb-14 gap-4 px-4">
     <div className="flex items-center gap-6">
       <span className="text-6xl animate-pulse">🌐</span>
       <h3 className="text-[#daa520] font-black text-5xl tracking-[0.2em] uppercase leading-tight text-center">
@@ -48,18 +48,15 @@ export default function KedheonPortal() {
   const [viewMode, setViewMode] = useState<'HUB' | 'BOARD'>('HUB'); 
   const [category, setCategory] = useState('ALL');
   
-  // 데이터 상태
   const [beomToken, setBeomToken] = useState(8791.88); 
   const [assets, setAssets] = useState<Asset[]>([]);
   const [userTerritories, setUserTerritories] = useState<Territory[]>([]);
   
-  // QR 관련 상태
   const [qrType, setQrType] = useState<'PERSONAL' | 'BUSINESS'>('PERSONAL');
   const [isQrActive, setIsQrActive] = useState(false);
   const [businessName, setBusinessName] = useState('해태건축사');
   const [businessID, setBusinessID] = useState('HT-0001');
 
-  // 입력 폼 상태
   const [newTitle, setNewTitle] = useState('');
   const [newDesc, setNewDesc] = useState('');
   const [newVideoUrl, setNewVideoUrl] = useState('');
@@ -67,7 +64,6 @@ export default function KedheonPortal() {
   const [createRoomTitle, setCreateRoomTitle] = useState('');
   const [showCreateModal, setShowCreateModal] = useState(false);
 
-  // 초기 데이터 및 로직
   const defaultTerritories = ['MUSIC', 'SPORTS', 'ANIME', 'DRAMA', 'MOVIE', 'ESPORTS', 'COMEDY'];
   const ecosystemApps = ['Pi Network', 'Nexus AI', 'Kedheon AI', 'Pi Vendor', 'Pi Civil', 'Pi FactFilter', 'PiPapa', 'Pi 6G Network'];
 
@@ -91,7 +87,7 @@ export default function KedheonPortal() {
 
   if (!hasMounted) return null;
 
-  // --- [비즈니스 로직 함수] ---
+  // --- [비즈니스 로직] ---
   const handleCreateTerritory = () => {
     if (beomToken < TERRITORY_CREATE_COST) return alert("잔액 부족");
     const newRoom = { id: createRoomTitle.toUpperCase(), title: createRoomTitle.toUpperCase(), desc: "", creator: empireCharacterName };
@@ -129,7 +125,7 @@ export default function KedheonPortal() {
 
       <div className="w-full max-w-6xl">
         {tab === 'ROOKIE' ? (
-          <div className="flex flex-col items-center text-center py-20 animate-in fade-in duration-500">
+          <div className="flex flex-col items-center text-center py-20 animate-in fade-in zoom-in duration-500">
             <img src={mainCharacter} className="w-80 h-80 rounded-[60px] object-cover mb-12 shadow-2xl border-4 border-[#daa520]/20" alt="K" />
             <h1 className="text-7xl font-black text-[#daa520] tracking-widest mb-8 uppercase">Kedheon Empire</h1>
             <button onClick={() => setTab('PIONEER')} className="bg-[#daa520] text-black px-24 py-10 rounded-3xl font-black text-3xl shadow-xl hover:scale-105 transition-transform">제국 입국하기</button>
@@ -139,7 +135,7 @@ export default function KedheonPortal() {
             
             {viewMode === 'HUB' ? (
               <>
-                {/* 1. 대시보드 (범 토큰 정렬) */}
+                {/* 1. 대시보드 */}
                 <div className="bg-[#111] p-12 rounded-[60px] border border-[#daa520]/40 shadow-2xl flex justify-between items-center group">
                   <div className="relative z-10 text-left">
                     <h3 className="text-gray-500 text-xs uppercase tracking-[0.4em] mb-4 font-black opacity-60">Imperial Balance</h3>
@@ -161,7 +157,7 @@ export default function KedheonPortal() {
 
                 {/* 2. 영토 선택 및 자치령 생성 */}
                 <div className="p-16 bg-[#111] rounded-[60px] border border-white/5 text-center">
-                  <SectionTitle title="Imperial Fandom Territory" desc="제국의 영토 혹은 시민들이 개척한 자치령 팬방에 진입하십시오." />
+                  <SectionTitle title="Imperial Fandom Territory" desc="제국 공식 영토 혹은 시민들이 개척한 자치령 팬방에 진입하십시오." />
                   <div className="flex flex-wrap gap-5 justify-center mb-12">
                     <button onClick={() => {setCategory('ALL'); setViewMode('BOARD');}} className="px-12 py-6 rounded-3xl text-sm font-black bg-[#daa520] text-black shadow-lg">ENTER ALL FEED</button>
                     {defaultTerritories.map(cat => (
@@ -174,14 +170,35 @@ export default function KedheonPortal() {
                   <button onClick={() => setShowCreateModal(true)} className="bg-white/5 text-white px-10 py-5 rounded-full border border-white/10 font-black hover:bg-white/10 transition-all">➕ 새로운 팬방 개척하기 (500 BEOM)</button>
                 </div>
 
-                {/* 3. 복구된 QR 시스템 */}
+                {/* 3. QR 시스템 (설명문 추가 완료!) */}
                 <div className="bg-[#111] p-16 rounded-[60px] border border-[#daa520]/20 text-center relative overflow-hidden">
                   <div className="absolute top-8 right-12 text-sm text-gray-600 font-mono font-bold tracking-[0.2em]">FEE: 50 BEOM</div>
-                  <SectionTitle title="Imperial Auth QR System" desc="제국 공식 신분 인증 및 결제용 QR을 활성화합니다." />
-                  <div className="flex gap-4 justify-center mb-14">
-                    <button onClick={() => {setQrType('PERSONAL'); setIsQrActive(false);}} className={`px-12 py-5 rounded-2xl text-sm font-black transition-all ${qrType === 'PERSONAL' ? 'bg-[#daa520] text-black shadow-lg' : 'bg-[#1a1a1a] text-gray-500'}`}>PERSONAL AUTH</button>
-                    <button onClick={() => {setQrType('BUSINESS'); setIsQrActive(false);}} className={`px-12 py-5 rounded-2xl text-sm font-black transition-all ${qrType === 'BUSINESS' ? 'bg-[#daa520] text-black shadow-lg' : 'bg-[#1a1a1a] text-gray-500'}`}>BUSINESS AUTH</button>
+                  <SectionTitle 
+                    title="Imperial Auth QR System" 
+                    desc="제국 공식 신분 인증 및 결제용 QR을 활성화합니다." 
+                  />
+                  
+                  {/* 주군이 명령하신 123 보안 설명문 박제 */}
+                  <div className="max-w-3xl mx-auto mb-12 grid grid-cols-1 md:grid-cols-3 gap-6 text-left border-t border-b border-white/5 py-8">
+                    <div className="space-y-2">
+                      <p className="text-[#daa520] font-black text-lg italic">01. 익명성 보장</p>
+                      <p className="text-gray-500 text-sm font-medium leading-relaxed">개인 지갑 주소를 노출하지 않고 제국 전용 결제 ID로 안전하게 거래합니다.</p>
+                    </div>
+                    <div className="space-y-2 border-x border-white/5 px-6">
+                      <p className="text-[#daa520] font-black text-lg italic">02. 철통 방패</p>
+                      <p className="text-gray-500 text-sm font-medium leading-relaxed">모든 트랜잭션은 앱 지갑을 거점으로 보호되어 송금인의 직접 추적을 차단합니다.</p>
+                    </div>
+                    <div className="space-y-2">
+                      <p className="text-[#daa520] font-black text-lg italic">03. 프라이버시</p>
+                      <p className="text-gray-500 text-sm font-medium leading-relaxed">상대방은 주군의 자산 잔액이나 과거 거래 내역을 결코 엿볼 수 없습니다.</p>
+                    </div>
                   </div>
+
+                  <div className="flex gap-4 justify-center mb-14">
+                    <button onClick={() => {setQrType('PERSONAL'); setIsQrActive(false);}} className={`px-12 py-5 rounded-2xl text-xs font-black transition-all ${qrType === 'PERSONAL' ? 'bg-[#daa520] text-black shadow-lg' : 'bg-[#1a1a1a] text-gray-500'}`}>PERSONAL AUTH</button>
+                    <button onClick={() => {setQrType('BUSINESS'); setIsQrActive(false);}} className={`px-12 py-5 rounded-2xl text-xs font-black transition-all ${qrType === 'BUSINESS' ? 'bg-[#daa520] text-black shadow-lg' : 'bg-[#1a1a1a] text-gray-500'}`}>BUSINESS AUTH</button>
+                  </div>
+
                   <div className="relative w-full max-w-[650px] mx-auto aspect-[1.8/1] rounded-[50px] border border-white/10 overflow-hidden shadow-2xl group mb-10">
                     <img src={qrType === 'PERSONAL' ? personalQrImg : businessQrImg} className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" alt="QR" />
                     <div className={`absolute inset-0 flex flex-col items-center justify-center p-12 transition-all ${isQrActive ? 'bg-transparent' : 'bg-black/95 backdrop-blur-3xl'}`}>
@@ -190,10 +207,11 @@ export default function KedheonPortal() {
                           <img src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(empireUrl + '/?id=' + (qrType === 'BUSINESS' ? businessID : empireCharacterName))}`} className="w-40 h-40" alt="QR" />
                         </div>
                       ) : (
-                        <button onClick={purchaseQR} className="bg-[#daa520] text-black px-20 py-8 rounded-3xl font-black text-2xl shadow-xl hover:scale-105 active:scale-95 transition-all">QR 확보하기</button>
+                        <button onClick={purchaseQR} className="bg-[#daa520] text-black px-20 py-8 rounded-3xl font-black text-2xl shadow-xl hover:scale-105 active:scale-95 transition-all">인증 확보 (보안 결제)</button>
                       )}
                     </div>
                   </div>
+                  
                   {qrType === 'BUSINESS' && (
                     <div className="flex flex-col gap-5 max-w-md mx-auto animate-in slide-in-from-top-6">
                       <input type="text" value={businessName} onChange={(e) => {setBusinessName(e.target.value); setIsQrActive(false);}} placeholder="기업 명칭" className="bg-black/60 border border-white/10 p-6 rounded-3xl text-xl focus:border-[#daa520] outline-none text-center font-black" />
@@ -217,7 +235,7 @@ export default function KedheonPortal() {
               <div className="flex flex-col gap-12 animate-in fade-in duration-500">
                 <div className="flex justify-between items-center bg-[#111] p-10 rounded-[40px] border border-white/5">
                   <button onClick={() => setViewMode('HUB')} className="bg-[#1a1a1a] text-[#daa520] px-12 py-5 rounded-2xl font-black border border-[#daa520]/40 hover:bg-[#daa520] hover:text-black transition-all">← BACK TO HUB</button>
-                  <p className="text-white font-black text-5xl uppercase tracking-tighter">{category}</p>
+                  <p className="text-white font-black text-5xl uppercase tracking-tighter leading-none">{category}</p>
                 </div>
                 <div className="bg-[#111] p-16 rounded-[60px] border border-white/10">
                   <SectionTitle title={`${category} BROADCAST`} desc="영상을 박제하여 시민들의 BEOM 호응을 이끌어내십시오." />
