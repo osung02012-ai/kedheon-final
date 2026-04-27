@@ -72,7 +72,6 @@ const translations = {
   }
 };
 
-// --- [3. 공통 섹션 타이틀 컴포넌트] ---
 const SectionTitle = ({ title, desc }: { title: string; desc: string }) => (
   <div className="flex flex-col items-center mb-14 gap-4 px-4">
     <div className="flex items-center gap-6">
@@ -84,13 +83,12 @@ const SectionTitle = ({ title, desc }: { title: string; desc: string }) => (
 );
 
 export default function KedheonPortal() {
-  // --- [4. 상수 및 에셋 설정] ---
   const PI_TO_BEOM_RATE = 314.1592; 
   const TERRITORY_CREATE_COST = 500;
   const empireCharacterName = 'CHEOREOM_88';
   const empireUrl = "https://kedheon.com";
 
-  // 에셋 경로 (고해상도 이미지 파일명 확인 필수)
+  // 에셋 경로
   const mainCharacter = "/kedheon-character.png"; 
   const beomTokenImg = "/beom-token.png"; 
   const businessQrImg = "/qr-business.png";
@@ -99,13 +97,13 @@ export default function KedheonPortal() {
   const defaultCategories = ['MUSIC', 'SPORTS', 'ANIME', 'DRAMA', 'MOVIE', 'ESPORTS', 'COMEDY'];
   const ecosystemApps = ['Pi Network', 'Nexus AI', 'Kedheon AI', 'Pi Vendor', 'Pi Civil', 'Pi FactFilter', 'PiPapa', 'Pi 6G Network'];
 
-  // --- [5. 상태 관리] ---
+  // 상태 관리
   const [hasMounted, setHasMounted] = useState(false);
   const [lang, setLang] = useState<'KO' | 'EN'>('KO');
   const [tab, setTab] = useState<'ROOKIE' | 'PIONEER'>('PIONEER');
   const [viewMode, setViewMode] = useState<'HUB' | 'BOARD'>('HUB'); 
   const [category, setCategory] = useState('ALL');
-  const [beomToken, setBeomToken] = useState(8791.88); 
+  const [beomToken, setBeomToken] = useState(8141.88); 
   const [assets, setAssets] = useState<Asset[]>([]);
   const [userTerritories, setUserTerritories] = useState<Territory[]>([]);
   const [qrType, setQrType] = useState<'PERSONAL' | 'BUSINESS'>('PERSONAL');
@@ -118,7 +116,6 @@ export default function KedheonPortal() {
 
   const t = translations[lang];
 
-  // --- [6. 라이프사이클 및 데이터 로드] ---
   useEffect(() => {
     setHasMounted(true);
     const savedAssets = localStorage.getItem('k_assets');
@@ -142,12 +139,10 @@ export default function KedheonPortal() {
 
   if (!hasMounted) return null;
 
-  // --- [7. 비즈니스 로직] ---
   const toggleLang = () => setLang(prev => prev === 'KO' ? 'EN' : 'KO');
 
   const handleCreateTerritory = () => {
     if (beomToken < TERRITORY_CREATE_COST) return alert(lang === 'KO' ? "잔액 부족" : "Insufficient Balance");
-    if (!createRoomTitle.trim()) return alert(lang === 'KO' ? "이름을 입력하세요" : "Enter Name");
     const newRoom = { id: createRoomTitle.toUpperCase(), title: createRoomTitle.toUpperCase(), desc: "", creator: empireCharacterName };
     setUserTerritories([...userTerritories, newRoom]);
     setBeomToken(prev => prev - TERRITORY_CREATE_COST);
@@ -172,7 +167,7 @@ export default function KedheonPortal() {
   return (
     <div className="flex flex-col items-center bg-black min-h-screen text-white p-6 font-sans w-full overflow-x-hidden">
       
-      {/* --- 글로벌 헤더 --- */}
+      {/* 글로벌 헤더 */}
       <div className="w-full max-w-6xl flex justify-between items-center mt-6 mb-10">
         <button onClick={toggleLang} className="bg-[#daa520] text-black px-8 py-3 rounded-full font-black text-sm shadow-xl hover:scale-110 transition-all">
           {lang === 'KO' ? "ENGLISH MODE" : "한국어 모드"}
@@ -184,18 +179,12 @@ export default function KedheonPortal() {
       </div>
 
       <div className="w-full max-w-6xl">
-        {tab === 'ROOKIE' ? (
-          <div className="flex flex-col items-center text-center py-20 animate-in fade-in zoom-in duration-500">
-            <img src={mainCharacter} className="w-80 h-80 rounded-[60px] object-cover mb-12 shadow-2xl border-4 border-[#daa520]/20" alt="Kedheon" />
-            <h1 className="text-7xl font-black text-[#daa520] tracking-widest mb-8 uppercase leading-none">Kedheon Empire</h1>
-            <button onClick={() => setTab('PIONEER')} className="bg-[#daa520] text-black px-24 py-10 rounded-3xl font-black text-3xl shadow-2xl hover:scale-105 transition-transform">제국 입국하기</button>
-          </div>
-        ) : (
+        {tab === 'PIONEER' && (
           <div className="flex flex-col gap-16 animate-in slide-in-from-bottom-10 duration-700">
             
             {viewMode === 'HUB' ? (
               <>
-                {/* 1. 대시보드 (이미지 최적화: 중복 테두리 제거 및 overflow 해제) */}
+                {/* 1. 대시보드 - 금색 번짐(Shadow) 완전 제거 및 선명도 강화 */}
                 <div className="bg-[#111] p-12 rounded-[60px] border border-[#daa520]/40 shadow-2xl flex justify-between items-center group relative overflow-hidden">
                   <div className="relative z-10 text-left">
                     <h3 className="text-gray-500 text-xs uppercase tracking-[0.4em] mb-4 font-black opacity-60">{t.balance}</h3>
@@ -205,25 +194,22 @@ export default function KedheonPortal() {
                     </div>
                   </div>
                   <div className="flex flex-col items-end relative z-10"> 
-                    {/* [이미지 보정 영역] 
-                        - border-8(금색테두리) 제거 (이미지에 포함됨)
-                        - overflow-visible 설정 ('범' 글자 잘림 방지)
-                    */}
-                    <div className="w-64 h-64 rounded-full shadow-[0_0_80px_rgba(218,165,32,0.8)] mb-8 bg-transparent flex items-center justify-center overflow-visible">
+                    {/* [수정] shadow 효과와 pulse 이펙트를 제거하여 이미지 본연의 선명함을 강조 */}
+                    <div className="w-64 h-64 flex items-center justify-center overflow-visible relative">
                        <img 
                          src={beomTokenImg} 
-                         className="w-full h-full object-contain transform hover:scale-110 transition-transform duration-500" 
-                         alt="High-Res Beom Token" 
+                         className="w-full h-full object-contain relative z-20 transform hover:scale-105 transition-transform duration-500" 
+                         alt="Beom Token" 
                        />
                     </div>
-                    <div className="text-right">
-                        <p className="text-white font-black text-7xl leading-none">Lv. 88</p>
+                    <div className="text-right mt-6">
+                        <p className="text-white font-black text-8xl leading-none">Lv. 88</p>
                         <p className="text-base text-[#daa520] uppercase mt-4 font-black tracking-[0.5em]">{t.grade}</p>
                     </div>
                   </div>
                 </div>
 
-                {/* 2. 영토 선택 및 자치령 시스템 */}
+                {/* 2. 영토 선택 */}
                 <div className="p-16 bg-[#111] rounded-[60px] border border-white/5 text-center">
                   <SectionTitle title={t.territoryTitle} desc={t.territoryDesc} />
                   <div className="flex flex-wrap gap-5 justify-center mb-12">
@@ -238,7 +224,7 @@ export default function KedheonPortal() {
                   <button onClick={() => setShowCreateModal(true)} className="bg-white/5 text-white px-10 py-5 rounded-full border border-white/10 font-black hover:bg-white/10 transition-all">{t.createRoom}</button>
                 </div>
 
-                {/* 3. QR 보안 시스템 (123 가이드 통합) */}
+                {/* 3. QR 보안 시스템 */}
                 <div className="bg-[#111] p-16 rounded-[60px] border border-[#daa520]/20 text-center relative overflow-hidden">
                   <SectionTitle title={t.qrTitle} desc={t.qrDesc} />
                   <div className="max-w-4xl mx-auto mb-12 grid grid-cols-1 md:grid-cols-3 gap-8 text-left border-y border-white/5 py-10">
@@ -267,7 +253,7 @@ export default function KedheonPortal() {
                   </div>
                 </div>
 
-                {/* 4. 에코시스템 인프라 */}
+                {/* 4. 에코 허브 */}
                 <div className="bg-[#111] p-16 rounded-[60px] border border-white/5">
                   <SectionTitle title={t.hubTitle} desc={t.hubDesc} />
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
@@ -278,7 +264,7 @@ export default function KedheonPortal() {
                 </div>
               </>
             ) : (
-              /* --- [BOARD VIEW: 피드] --- */
+              /* --- [BOARD VIEW] --- */
               <div className="flex flex-col gap-12 animate-in fade-in duration-500">
                 <div className="flex justify-between items-center bg-[#111] p-10 rounded-[40px] border border-white/5">
                   <button onClick={() => setViewMode('HUB')} className="bg-[#1a1a1a] text-[#daa520] px-12 py-5 rounded-2xl font-black border border-[#daa520]/40 hover:bg-[#daa520] hover:text-black transition-all text-base tracking-widest">{t.backBtn}</button>
@@ -316,7 +302,7 @@ export default function KedheonPortal() {
         )}
       </div>
 
-      {/* --- 자치령 개척 모달 --- */}
+      {/* 영토 개척 모달 */}
       {showCreateModal && (
         <div className="fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center p-6 text-center">
           <div className="bg-[#111] p-12 rounded-[50px] border border-[#daa520]/50 w-full max-w-2xl animate-in zoom-in-95">
