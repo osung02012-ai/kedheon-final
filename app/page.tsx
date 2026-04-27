@@ -6,60 +6,54 @@ interface Asset { id: number; title: string; desc: string; category: string; vid
 interface Territory { id: string; title: string; }
 interface Project { id: number; name: string; target: number; current: number; status: string; }
 
-// --- [2. 글로벌 다국어 사전 (무결성 보장)] ---
+// --- [2. 글로벌 다국어 사전] ---
 const translations = {
   KO: {
     balance: "제국 자산 잔액", grade: "제국 등급",
-    citizenshipTitle: "IMPERIAL CITIZENSHIP",
-    citizenshipDesc: "개인 및 기업 시민권을 획득하여 제국의 정식 일원이 되십시오.",
-    personal: "개인 시민", business: "기업 엔티티",
-    authActive: "인증 활성화됨", authInactive: "인증 필요 (50 BEOM)",
-    launchTitle: "TERRITORY EXPANSION",
-    launchDesc: "새로운 영토 개척을 지원하고 초기 권한을 확보하십시오.",
-    launchStatus: "개척 진행률", supportProject: "개척 지원 (1,000 BEOM)",
-    contributionTitle: "CONTRIBUTION REWARD",
-    contributionDesc: "제국 인프라 기여 보상을 확인하고 BEOM을 예치하십시오.",
-    contributedBalance: "누적 기여 자산",
-    contributeBtn: "기여 실행 (1,000 BEOM)",
-    fandomTitle: "EMPIRE TERRITORIES",
-    fandomDesc: "12대 공식 영토 피드를 정복하십시오.",
-    enterAll: "전체 피드 진입", createRoom: "➕ 새로운 팬방 개척 (500 BEOM)",
+    0: "DASHBOARD", 1: "CITIZENSHIP", 2: "LAUNCHPAD", 3: "CONTRIBUTION", 4: "TERRITORIES", 5: "BROADCAST",
+    citizenshipTitle: "IMPERIAL CITIZENSHIP", citizenshipDesc: "개인 및 기업 시민권을 획득하여 제국의 정식 일원이 되십시오.",
+    launchTitle: "TERRITORY EXPANSION", launchDesc: "새로운 영토 개척 프로젝트를 지원하고 초기 권한을 확보하십시오.",
+    contributionTitle: "CONTRIBUTION REWARD", contributionDesc: "제국 인프라 기여 보상을 확인하고 BEOM을 예치하십시오.",
+    fandomTitle: "EMPIRE TERRITORIES", fandomDesc: "12대 공식 영토 피드를 정복하십시오.",
     broadcastTitle: "BROADCAST CENTER", broadcastDesc: "제국 전역에 당신의 영상을 박제하십시오.",
+    personal: "개인 시민", business: "기업 엔티티", authActive: "인증 완료", authInactive: "인증 필요",
+    launchStatus: "개척 진행률", supportProject: "개척 지원 (1,000 BEOM)",
+    contributedBalance: "누적 기여 자산", contributeBtn: "기여 실행 (1,000 BEOM)",
+    enterAll: "전체 피드 진입", createRoom: "➕ 새로운 팬방 개척 (500 BEOM)",
     postBtn: "피드에 방송하기", supportBtn: "👑 황금 찬양", enterBtn: "제국 입국하기"
   },
   EN: {
     balance: "Empire Balance", grade: "Empire Grade",
-    citizenshipTitle: "IMPERIAL CITIZENSHIP",
-    citizenshipDesc: "Obtain Personal/Business citizenship and join the Empire.",
-    personal: "Personal", business: "Business",
-    authActive: "Authorized", authInactive: "Requires Auth (50 BEOM)",
-    launchTitle: "TERRITORY EXPANSION",
-    launchDesc: "Support expansion projects and gain early rights.",
-    launchStatus: "Progress", supportProject: "Support (1,000 BEOM)",
-    contributionTitle: "CONTRIBUTION REWARD",
-    contributionDesc: "Deposit BEOM to sustain and earn rewards.",
-    contributedBalance: "Staked Contribution",
-    contributeBtn: "Execute Contribution",
-    fandomTitle: "EMPIRE TERRITORIES",
-    fandomDesc: "Explore the 12 Official Territories.",
-    enterAll: "ENTER ALL", createRoom: "➕ Create Territory (500 BEOM)",
+    0: "DASHBOARD", 1: "CITIZENSHIP", 2: "LAUNCHPAD", 3: "CONTRIBUTION", 4: "TERRITORIES", 5: "BROADCAST",
+    citizenshipTitle: "IMPERIAL CITIZENSHIP", citizenshipDesc: "Obtain official citizenship and join the Empire.",
+    launchTitle: "TERRITORY EXPANSION", launchDesc: "Support expansion projects and gain early rights.",
+    contributionTitle: "CONTRIBUTION REWARD", contributionDesc: "Deposit BEOM to sustain and earn rewards.",
+    fandomTitle: "EMPIRE TERRITORIES", fandomDesc: "Explore the 12 Official Territories.",
     broadcastTitle: "BROADCAST CENTER", broadcastDesc: "Broadcast your video across the Empire.",
+    personal: "Personal", business: "Business", authActive: "Authorized", authInactive: "Auth Required",
+    launchStatus: "Progress", supportProject: "Support (1,000 BEOM)",
+    contributedBalance: "Staked Assets", contributeBtn: "Execute Contribution",
+    enterAll: "ENTER ALL", createRoom: "➕ Create Territory (500 BEOM)",
     postBtn: "Post to Feed", supportBtn: "👑 Royal Praise", enterBtn: "ENTER EMPIRE"
   }
 };
 
-const SectionTitle = ({ title, desc }: { title: string; desc: string }) => (
-  <div className="flex flex-col items-center py-20 gap-4 border-t border-white/5 w-full text-center">
-    <h3 className="text-[#daa520] font-black text-4xl tracking-[0.3em] uppercase leading-tight">{title}</h3>
-    <p className="text-gray-500 font-bold text-xl opacity-80 max-w-2xl leading-relaxed">{desc}</p>
+// --- [3. 개편된 섹션 타이틀 컴포넌트] ---
+const SectionHeader = ({ num, title, desc }: { num: string, title: string; desc: string }) => (
+  <div className="w-full flex flex-col items-start gap-4 mb-16 animate-in fade-in slide-in-from-left-10 duration-700">
+    <div className="flex items-center gap-6 w-full">
+      <span className="text-[#daa520] font-black text-6xl opacity-20 italic select-none">{num}</span>
+      <div className="h-[2px] flex-1 bg-gradient-to-r from-[#daa520]/40 to-transparent"></div>
+    </div>
+    <div className="border-l-8 border-[#daa520] pl-8 py-2">
+      <h3 className="text-[#daa520] font-black text-4xl tracking-[0.2em] uppercase leading-none mb-3">{title}</h3>
+      <p className="text-gray-500 font-bold text-lg opacity-80 leading-relaxed max-w-2xl">{desc}</p>
+    </div>
   </div>
 );
 
 export default function KedheonPortal() {
   const PI_TO_BEOM_RATE = 314.1592;
-  const empireCharacterName = 'CHEOREOM_88';
-
-  // --- [상태 관리] ---
   const [hasMounted, setHasMounted] = useState(false);
   const [lang, setLang] = useState<'KO' | 'EN'>('KO');
   const [tab, setTab] = useState<'ROOKIE' | 'PIONEER'>('PIONEER');
@@ -70,34 +64,27 @@ export default function KedheonPortal() {
   const [category, setCategory] = useState('ALL');
   const [assets, setAssets] = useState<Asset[]>([]);
   const [userTerritories, setUserTerritories] = useState<Territory[]>([]);
-  
   const [newTitle, setNewTitle] = useState('');
   const [newDesc, setNewDesc] = useState('');
-  const [newVideoUrl, setNewVideoUrl] = useState('');
-
-  const [project, setProject] = useState<Project>({ id: 1, name: "PI-VENDORS-HUB", target: 1000000, current: 842000, status: "OPEN" });
+  const [project, setProject] = useState<Project>({ id: 1, name: "PI-VENDORS-HUB", target: 1000000, current: 865000, status: "OPEN" });
 
   const t = translations[lang];
   const categories = ['MUSIC', 'SPORTS', 'ANIME', 'DRAMA', 'MOVIE', 'ESPORTS', 'COMEDY', 'TRAVEL', 'FOOD', 'BEAUTY', 'FASHION', 'TECH'];
 
-  // --- [데이터 처리 로직] ---
   useEffect(() => {
     setHasMounted(true);
-    const saved = localStorage.getItem('k_empire_final_v7');
+    const saved = localStorage.getItem('k_empire_v75');
     if (saved) {
       try {
         const p = JSON.parse(saved);
-        setBeomToken(p.token || 8141.88);
-        setAssets(p.assets || []);
-        setUserTerritories(p.rooms || []);
-        setContributedBeom(p.contributed || 0);
-      } catch (e) { console.error("JSON Error"); }
+        setBeomToken(p.token || 8141.88); setAssets(p.assets || []); setUserTerritories(p.rooms || []); setContributedBeom(p.contributed || 0);
+      } catch (e) { console.error(e); }
     }
   }, []);
 
   useEffect(() => {
     if (hasMounted) {
-      localStorage.setItem('k_empire_final_v7', JSON.stringify({ token: beomToken, assets, rooms: userTerritories, contributed: contributedBeom }));
+      localStorage.setItem('k_empire_v75', JSON.stringify({ token: beomToken, assets, rooms: userTerritories, contributed: contributedBeom }));
     }
   }, [beomToken, assets, userTerritories, contributedBeom, hasMounted]);
 
@@ -106,7 +93,7 @@ export default function KedheonPortal() {
   return (
     <div className="flex flex-col items-center bg-black min-h-screen text-white font-sans w-full overflow-x-hidden pb-40">
       
-      {/* 1. 상단 글로벌 컨트롤 (담백한 2단 구성) */}
+      {/* 1. 상단 글로벌 네비 (담백 버전) */}
       <div className="w-full max-w-4xl flex justify-between items-center p-8 sticky top-0 bg-black/90 backdrop-blur-xl z-[100] border-b border-white/10 shadow-2xl">
         <button onClick={() => setLang(l => l === 'KO' ? 'EN' : 'KO')} className="text-[#daa520] font-black text-xs tracking-widest border border-[#daa520]/40 px-6 py-2 rounded-full hover:bg-[#daa520] hover:text-black transition-all">
           {lang === 'KO' ? "ENGLISH" : "한국어"}
@@ -117,103 +104,86 @@ export default function KedheonPortal() {
         </div>
       </div>
 
-      <div className="w-full max-w-3xl flex flex-col gap-32 px-6 mt-16">
+      <div className="w-full max-w-3xl flex flex-col gap-40 px-6 mt-20">
         
         {tab === 'ROOKIE' ? (
-          /* --- [ROOKIE VIEW: 제국 대문] --- */
           <div className="flex flex-col items-center text-center py-20 animate-in fade-in zoom-in duration-700">
             <img src="/kedheon-character.png" className="w-80 h-80 rounded-[60px] object-cover mb-12 shadow-2xl border-4 border-[#daa520]/20" alt="K" />
             <h1 className="text-7xl font-black text-[#daa520] tracking-widest mb-12 uppercase leading-none italic">Kedheon Empire</h1>
-            <button onClick={() => setTab('PIONEER')} className="bg-[#daa520] text-black px-24 py-10 rounded-3xl font-black text-3xl shadow-2xl hover:scale-105 transition-transform uppercase tracking-tighter">
-              {t.enterBtn}
-            </button>
+            <button onClick={() => setTab('PIONEER')} className="bg-[#daa520] text-black px-24 py-10 rounded-3xl font-black text-3xl shadow-2xl hover:scale-105 transition-transform uppercase tracking-tighter">{t.enterBtn}</button>
           </div>
         ) : (
-          /* --- [PIONEER VIEW: 수직 집중형 제국 전체 인프라] --- */
-          <div className="flex flex-col gap-32 animate-in slide-in-from-bottom-20 duration-1000">
+          <div className="flex flex-col gap-48 animate-in slide-in-from-bottom-20 duration-1000">
             
-            {/* A. 대시보드 */}
+            {/* 01. 대시보드 - 번호 없이 강조 섹션 */}
             <div className="bg-[#111] p-12 rounded-[70px] border border-[#daa520]/40 shadow-2xl flex flex-col items-center gap-12 text-center relative overflow-hidden">
-              <div className="w-64 h-64 relative flex items-center justify-center overflow-visible">
-                <img src="/beom-token.png" className="w-full h-full object-contain transform hover:scale-110 transition-transform duration-500" alt="Beom" />
-                <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 bg-[#daa520] text-black px-10 py-3 rounded-full font-black text-2xl shadow-2xl">Lv. 88</div>
-              </div>
-              <div className="space-y-4">
-                <h3 className="text-gray-500 text-sm uppercase tracking-[0.5em] font-black opacity-60">{t.balance}</h3>
-                <p className="text-[#daa520] font-black text-8xl tracking-tighter leading-none">{beomToken.toLocaleString()} BEOM</p>
-                <p className="text-gray-400 font-mono text-2xl opacity-60">≈ {(beomToken / PI_TO_BEOM_RATE).toFixed(4)} Pi</p>
-              </div>
+               <div className="absolute top-0 right-0 p-8 opacity-5 font-black text-7xl italic uppercase">{t[0]}</div>
+               <div className="w-64 h-64 relative flex items-center justify-center overflow-visible">
+                 <img src="/beom-token.png" className="w-full h-full object-contain transform hover:scale-110 transition-transform duration-500" alt="Beom" />
+                 <div className="absolute -bottom-6 bg-[#daa520] text-black px-10 py-3 rounded-full font-black text-2xl shadow-2xl">Lv. 88</div>
+               </div>
+               <div className="space-y-4">
+                 <h3 className="text-gray-500 text-sm uppercase tracking-[0.5em] font-black opacity-60">{t.balance}</h3>
+                 <p className="text-[#daa520] font-black text-8xl tracking-tighter leading-none">{beomToken.toLocaleString()} BEOM</p>
+                 <p className="text-gray-400 font-mono text-2xl opacity-60">≈ {(beomToken / PI_TO_BEOM_RATE).toFixed(4)} Pi</p>
+               </div>
             </div>
 
-            {/* B. 시민권 & 기업 인증 */}
-            <div className="flex flex-col items-center gap-12">
-              <SectionTitle title={t.citizenshipTitle} desc={t.citizenshipDesc} />
-              <div className="flex gap-4 bg-[#111] p-3 rounded-3xl border border-white/5">
-                <button onClick={() => {setQrType('PERSONAL'); setIsQrActive(false);}} className={`px-12 py-5 rounded-2xl font-black text-base transition-all ${qrType === 'PERSONAL' ? 'bg-[#daa520] text-black' : 'text-gray-500'}`}>{t.personal}</button>
-                <button onClick={() => {setQrType('BUSINESS'); setIsQrActive(false);}} className={`px-12 py-5 rounded-2xl font-black text-base transition-all ${qrType === 'BUSINESS' ? 'bg-[#daa520] text-black' : 'text-gray-500'}`}>{t.business}</button>
-              </div>
-              <div className="w-full bg-[#111] p-16 rounded-[60px] border border-white/5 flex flex-col items-center gap-10">
+            {/* 02. 시민권 */}
+            <div className="flex flex-col items-start">
+              <SectionHeader num="01" title={t.citizenshipTitle} desc={t.citizenshipDesc} />
+              <div className="w-full bg-[#111] p-12 rounded-[60px] border border-white/5 flex flex-col items-center gap-10">
+                <div className="flex gap-4 bg-black p-2 rounded-2xl w-full max-w-md">
+                  <button onClick={() => {setQrType('PERSONAL'); setIsQrActive(false);}} className={`flex-1 py-4 rounded-xl font-black text-sm transition-all ${qrType === 'PERSONAL' ? 'bg-[#daa520] text-black' : 'text-gray-500'}`}>{t.personal}</button>
+                  <button onClick={() => {setQrType('BUSINESS'); setIsQrActive(false);}} className={`flex-1 py-4 rounded-xl font-black text-sm transition-all ${qrType === 'BUSINESS' ? 'bg-[#daa520] text-black' : 'text-gray-500'}`}>{t.business}</button>
+                </div>
                 <div className={`p-10 rounded-[40px] bg-black border-2 transition-all ${isQrActive ? 'border-[#daa520]' : 'border-white/5 opacity-30'}`}>
                   {isQrActive ? (
                     <img src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=KEDHEON_${qrType}`} className="w-48 h-48 rounded-2xl" alt="QR" />
                   ) : (
-                    <div className="w-48 h-48 flex items-center justify-center text-gray-700 text-5xl italic font-black">QR</div>
+                    <div className="w-48 h-48 flex items-center justify-center text-gray-800 text-5xl italic font-black">QR</div>
                   )}
                 </div>
-                <button onClick={() => {setBeomToken(p => p-50); setIsQrActive(true);}} className="bg-[#daa520] text-black px-16 py-6 rounded-2xl font-black text-2xl shadow-2xl hover:scale-105 active:scale-95 transition-all">
+                <button onClick={() => {setBeomToken(p => p-50); setIsQrActive(true);}} className="bg-[#daa520] text-black px-16 py-6 rounded-2xl font-black text-2xl shadow-2xl active:scale-95 transition-all">
                   {isQrActive ? t.authActive : t.authInactive}
                 </button>
               </div>
             </div>
 
-            {/* C. 런치패드 (영토 확장 지원) */}
-            <div className="flex flex-col items-center gap-12">
-              <SectionTitle title={t.launchTitle} desc={t.launchDesc} />
-              <div className="w-full bg-[#111] p-12 rounded-[60px] border border-[#daa520]/20 shadow-2xl space-y-10 text-left">
-                 <div className="flex justify-between items-center">
-                    <h4 className="text-white font-black text-3xl italic">🚀 {project.name}</h4>
-                    <span className="bg-[#daa520]/10 text-[#daa520] px-4 py-1 rounded-full text-xs font-black uppercase">{project.status}</span>
-                 </div>
+            {/* 03. 런치패드 */}
+            <div className="flex flex-col items-start">
+              <SectionHeader num="02" title={t.launchTitle} desc={t.launchDesc} />
+              <div className="w-full bg-gradient-to-br from-[#111] to-black p-12 rounded-[60px] border border-[#daa520]/20 shadow-2xl space-y-10">
+                 <div className="flex justify-between items-center"><h4 className="text-white font-black text-3xl italic">🚀 {project.name}</h4><span className="bg-[#daa520]/10 text-[#daa520] px-4 py-1 rounded-full text-xs font-black uppercase">{project.status}</span></div>
                  <div className="space-y-4">
-                    <div className="flex justify-between text-sm font-black text-gray-500 uppercase tracking-widest">
-                       <span>{t.launchStatus}</span>
-                       <span className="text-[#daa520]">{Math.round((project.current / project.target) * 100)}%</span>
-                    </div>
-                    <div className="w-full h-4 bg-white/5 rounded-full overflow-hidden">
-                       <div className="h-full bg-[#daa520] shadow-[0_0_20px_rgba(218,165,32,0.5)] transition-all duration-1000" style={{ width: `${(project.current / project.target) * 100}%` }}></div>
-                    </div>
+                    <div className="flex justify-between text-sm font-black text-gray-500 uppercase tracking-widest"><span>{t.launchStatus}</span><span className="text-[#daa520]">{Math.round((project.current / project.target) * 100)}%</span></div>
+                    <div className="w-full h-4 bg-white/5 rounded-full overflow-hidden"><div className="h-full bg-[#daa520] shadow-[0_0_20px_rgba(218,165,32,0.5)] transition-all duration-1000" style={{ width: `${(project.current / project.target) * 100}%` }}></div></div>
                  </div>
-                 <button onClick={() => {setBeomToken(p => p-1000); setProject(p => ({...p, current: p.current+1000}));}} className="w-full py-8 rounded-[35px] bg-white text-black font-black text-2xl hover:bg-[#daa520] transition-all uppercase tracking-widest">
-                   {t.supportProject}
-                 </button>
+                 <button onClick={() => {setBeomToken(p => p-1000); setProject(p => ({...p, current: p.current+1000}));}} className="w-full py-8 rounded-[35px] bg-white text-black font-black text-2xl hover:bg-[#daa520] transition-all uppercase tracking-widest shadow-2xl">{t.supportProject}</button>
               </div>
             </div>
 
-            {/* D. 기여 보상 (스테이킹) */}
-            <div className="flex flex-col items-center gap-12">
-              <SectionTitle title={t.contributionTitle} desc={t.contributionDesc} />
+            {/* 04. 기여 보상 */}
+            <div className="flex flex-col items-start">
+              <SectionHeader num="03" title={t.contributionTitle} desc={t.contributionDesc} />
               <div className="w-full bg-[#111] p-12 rounded-[60px] border border-[#daa520]/20 flex flex-col items-center gap-10 shadow-2xl">
                  <div className="text-center space-y-4">
                     <p className="text-gray-500 font-black text-xs uppercase tracking-widest">{t.contributedBalance}</p>
                     <p className="text-white font-black text-7xl tracking-tighter">{contributedBeom.toLocaleString()} BEOM</p>
                  </div>
-                 <button onClick={() => {setBeomToken(p => p-1000); setContributedBeom(p => p+1000);}} className="bg-gradient-to-br from-[#daa520] to-[#b8860b] text-black px-20 py-8 rounded-3xl font-black text-2xl shadow-2xl hover:scale-105 transition-all uppercase">
-                   {t.contributeBtn}
-                 </button>
+                 <button onClick={() => {setBeomToken(p => p-1000); setContributedBeom(p => p+1000);}} className="bg-gradient-to-br from-[#daa520] to-[#b8860b] text-black px-20 py-8 rounded-3xl font-black text-2xl shadow-2xl active:scale-95 transition-all uppercase tracking-widest">{t.contributeBtn}</button>
               </div>
             </div>
 
-            {/* E. 12대 팬덤 영토 */}
-            <div className="flex flex-col items-center gap-12">
-              <SectionTitle title={t.fandomTitle} desc={t.fandomDesc} />
-              <div className="grid grid-cols-3 md:grid-cols-4 gap-4 w-full">
+            {/* 05. 영토 피드 */}
+            <div className="flex flex-col items-start">
+              <SectionHeader num="04" title={t.fandomTitle} desc={t.fandomDesc} />
+              <div className="grid grid-cols-3 md:grid-cols-4 gap-4 w-full mb-10">
                 {categories.map(cat => (
-                  <button key={cat} onClick={() => setCategory(cat)} className={`py-6 rounded-3xl font-black text-xs tracking-widest border transition-all ${category === cat ? 'bg-[#daa520] text-black border-[#daa520] shadow-lg' : 'bg-[#111] text-gray-500 border-white/5 hover:border-[#daa520]/40'}`}>
-                    {cat}
-                  </button>
+                  <button key={cat} onClick={() => setCategory(cat)} className={`py-6 rounded-3xl font-black text-xs tracking-widest border transition-all ${category === cat ? 'bg-[#daa520] text-black border-[#daa520] shadow-lg' : 'bg-[#111] text-gray-500 border-white/5 hover:border-[#daa520]/40'}`}>{cat}</button>
                 ))}
               </div>
-              <div className="flex flex-wrap gap-4 justify-center pt-8">
+              <div className="flex flex-wrap gap-4 justify-center w-full">
                 <button onClick={() => setCategory('ALL')} className={`px-10 py-5 rounded-2xl font-black text-sm border-2 transition-all ${category === 'ALL' ? 'border-[#daa520] text-[#daa520]' : 'border-white/5 text-gray-600'}`}>{t.enterAll}</button>
                 {userTerritories.map(room => (
                   <button key={room.id} onClick={() => setCategory(room.id)} className={`px-10 py-5 rounded-2xl font-black text-sm border-2 border-[#daa520]/40 text-[#daa520] italic`}>👑 {room.title}</button>
@@ -221,30 +191,24 @@ export default function KedheonPortal() {
               </div>
             </div>
 
-            {/* F. 브로드캐스트 센터 (통합 피드) */}
-            <div className="flex flex-col items-center gap-16">
-              <SectionTitle title={t.broadcastTitle} desc={t.broadcastDesc} />
-              
-              <div className="w-full bg-[#111] p-12 rounded-[60px] border border-white/10 space-y-8 shadow-2xl text-left">
+            {/* 06. 브로드캐스트 센터 */}
+            <div className="flex flex-col items-start">
+              <SectionHeader num="05" title={t.broadcastTitle} desc={t.broadcastDesc} />
+              <div className="w-full bg-[#111] p-12 rounded-[60px] border border-white/10 space-y-8 shadow-2xl text-left mb-20">
                 <input type="text" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} placeholder="방송 제목 (Title)" className="bg-black p-8 rounded-[35px] border border-white/5 w-full text-2xl outline-none focus:border-[#daa520] font-black text-white" />
                 <textarea value={newDesc} onChange={(e) => setNewDesc(e.target.value)} placeholder="방송 상세 내용 (Details)" className="bg-black p-8 rounded-[35px] border border-white/5 w-full text-xl h-48 outline-none focus:border-[#daa520] resize-none text-gray-300" />
                 <button onClick={() => {
                   const n: Asset = { id: Date.now(), title: newTitle, desc: newDesc, category, beomSupport: 0, owner: empireCharacterName, timestamp: new Date().toLocaleDateString() };
                   setAssets([n, ...assets]); setBeomToken(p => p - 10); setNewTitle(''); setNewDesc('');
-                }} className="w-full py-10 rounded-[50px] font-black text-3xl bg-[#daa520] text-black shadow-2xl uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all">
-                  {t.postBtn}
-                </button>
+                }} className="w-full py-10 rounded-[50px] font-black text-3xl bg-[#daa520] text-black shadow-2xl uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all">{t.postBtn}</button>
               </div>
 
-              <div className="w-full space-y-20">
+              <div className="w-full space-y-24">
                 {assets.filter(a => category === 'ALL' || a.category === category).map(a => (
                   <div key={a.id} className="bg-[#111] rounded-[70px] overflow-hidden border border-white/5 shadow-2xl animate-in fade-in duration-1000">
                     <div className="p-12 space-y-8 text-left">
                       <div className="flex justify-between items-start">
-                        <div className="space-y-2">
-                          <p className="text-[#daa520] font-black text-xs tracking-widest uppercase opacity-60">[{a.category}]</p>
-                          <h4 className="text-5xl font-black text-white leading-tight tracking-tight">{a.title}</h4>
-                        </div>
+                        <div className="space-y-2"><p className="text-[#daa520] font-black text-xs tracking-widest uppercase opacity-60">[{a.category}]</p><h4 className="text-5xl font-black text-white leading-tight tracking-tight">{a.title}</h4></div>
                         <span className="text-gray-600 font-mono text-base font-bold">{a.timestamp}</span>
                       </div>
                       <p className="text-gray-400 text-2xl font-bold leading-relaxed px-4 italic">"{a.desc}"</p>
@@ -253,9 +217,7 @@ export default function KedheonPortal() {
                            if (beomToken < 100) return alert("잔액 부족!");
                            setAssets(assets.map(item => item.id === a.id ? { ...item, beomSupport: item.beomSupport + 100 } : item));
                            setBeomToken(p => p - 100);
-                        }} className="bg-gradient-to-r from-[#daa520] to-[#b8860b] text-black px-12 py-5 rounded-2xl font-black text-xl hover:scale-110 active:scale-95 transition-all shadow-xl">
-                          {t.supportBtn}
-                        </button>
+                        }} className="bg-gradient-to-r from-[#daa520] to-[#b8860b] text-black px-12 py-5 rounded-2xl font-black text-xl hover:scale-110 active:scale-95 transition-all shadow-xl">{t.supportBtn}</button>
                         <p className="text-[#daa520] font-black text-5xl tracking-tighter">{a.beomSupport.toLocaleString()} BEOM</p>
                       </div>
                     </div>
@@ -269,9 +231,9 @@ export default function KedheonPortal() {
 
       </div>
 
-      {/* 8. 담백한 하단 정보 */}
+      {/* 8. 담백한 하단 */}
       <div className="mt-80 opacity-20 text-center w-full">
-        <p className="text-xs font-mono tracking-[2em] uppercase text-white/50">Kedheon Empire | Stable v7.0 Final Master</p>
+        <p className="text-xs font-mono tracking-[2.5em] uppercase text-white/50">Kedheon Empire | Stable v7.5 Organized Master</p>
       </div>
     </div>
   );
