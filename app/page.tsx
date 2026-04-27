@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 
-// --- [데이터 모델 정의] ---
+// --- [1. 데이터 모델 및 인터페이스] ---
 interface Asset { 
   id: number; title: string; desc: string; category: string; 
   videoUrl?: string; beomSupport: number; isAd: boolean; 
@@ -12,7 +12,7 @@ interface Territory {
   id: string; title: string; desc: string; creator: string;
 }
 
-// --- [글로벌 다국어 사전] ---
+// --- [2. 글로벌 다국어 엔진 (i18n)] ---
 const translations = {
   KO: {
     hub: "제국 광장",
@@ -72,30 +72,24 @@ const translations = {
   }
 };
 
-// --- [공통 섹션 타이틀 컴포넌트] ---
+// --- [3. 공통 UI 컴포넌트] ---
 const SectionTitle = ({ title, desc }: { title: string; desc: string }) => (
   <div className="flex flex-col items-center mb-14 gap-4 px-4">
     <div className="flex items-center gap-6">
       <span className="text-6xl animate-pulse">🌐</span>
-      <h3 className="text-[#daa520] font-black text-5xl tracking-[0.2em] uppercase leading-tight text-center">
-        {title}
-      </h3>
+      <h3 className="text-[#daa520] font-black text-5xl tracking-[0.2em] uppercase leading-tight text-center">{title}</h3>
     </div>
-    <p className="text-gray-400 font-bold text-2xl tracking-wide opacity-80 text-center max-w-5xl leading-relaxed">
-      {desc}
-    </p>
+    <p className="text-gray-400 font-bold text-2xl tracking-wide opacity-80 text-center max-w-5xl leading-relaxed">{desc}</p>
   </div>
 );
 
 export default function KedheonPortal() {
-  // --- [1. 상수 및 환경 설정] ---
+  // --- [4. 상수 및 에셋 설정] ---
   const PI_TO_BEOM_RATE = 314.1592; 
-  const QR_PURCHASE_COST = 50;
   const TERRITORY_CREATE_COST = 500;
   const empireCharacterName = 'CHEOREOM_88';
   const empireUrl = "https://kedheon.com";
 
-  // 에셋 경로 (고해상도 범 토큰 이미지 적용!)
   const mainCharacter = "/kedheon-character.png"; 
   const beomTokenImg = "/beom-token.png"; 
   const businessQrImg = "/qr-business.png";
@@ -104,7 +98,7 @@ export default function KedheonPortal() {
   const defaultCategories = ['MUSIC', 'SPORTS', 'ANIME', 'DRAMA', 'MOVIE', 'ESPORTS', 'COMEDY'];
   const ecosystemApps = ['Pi Network', 'Nexus AI', 'Kedheon AI', 'Pi Vendor', 'Pi Civil', 'Pi FactFilter', 'PiPapa', 'Pi 6G Network'];
 
-  // --- [2. 상태 관리] ---
+  // --- [5. 상태 관리] ---
   const [hasMounted, setHasMounted] = useState(false);
   const [lang, setLang] = useState<'KO' | 'EN'>('KO');
   const [tab, setTab] = useState<'ROOKIE' | 'PIONEER'>('PIONEER');
@@ -115,8 +109,6 @@ export default function KedheonPortal() {
   const [userTerritories, setUserTerritories] = useState<Territory[]>([]);
   const [qrType, setQrType] = useState<'PERSONAL' | 'BUSINESS'>('PERSONAL');
   const [isQrActive, setIsQrActive] = useState(false);
-  const [businessName, setBusinessName] = useState('해태건축사');
-  const [businessID, setBusinessID] = useState('HT-0001');
   const [newTitle, setNewTitle] = useState('');
   const [newDesc, setNewDesc] = useState('');
   const [newVideoUrl, setNewVideoUrl] = useState('');
@@ -125,7 +117,7 @@ export default function KedheonPortal() {
 
   const t = translations[lang];
 
-  // --- [3. 라이프사이클 및 데이터 로드] ---
+  // --- [6. 라이프사이클 (데이터 보존)] ---
   useEffect(() => {
     setHasMounted(true);
     const savedAssets = localStorage.getItem('k_assets');
@@ -149,12 +141,12 @@ export default function KedheonPortal() {
 
   if (!hasMounted) return null;
 
-  // --- [4. 비즈니스 로직] ---
+  // --- [7. 비즈니스 로직 함수] ---
   const toggleLang = () => setLang(prev => prev === 'KO' ? 'EN' : 'KO');
 
   const handleCreateTerritory = () => {
     if (beomToken < TERRITORY_CREATE_COST) return alert(lang === 'KO' ? "잔액 부족" : "Insufficient Balance");
-    if (!createRoomTitle.trim()) return alert(lang === 'KO' ? "이름 입력" : "Enter Name");
+    if (!createRoomTitle.trim()) return alert(lang === 'KO' ? "이름 입력 필요" : "Name required");
     const newRoom = { id: createRoomTitle.toUpperCase(), title: createRoomTitle.toUpperCase(), desc: "", creator: empireCharacterName };
     setUserTerritories([...userTerritories, newRoom]);
     setBeomToken(prev => prev - TERRITORY_CREATE_COST);
@@ -162,7 +154,7 @@ export default function KedheonPortal() {
   };
 
   const registerAsset = () => {
-    if (!newTitle.trim()) return alert(lang === 'KO' ? "제목 필수" : "Title required");
+    if (!newTitle.trim()) return alert(lang === 'KO' ? "제목을 입력하세요" : "Title required");
     if (beomToken < 10) return alert(lang === 'KO' ? "잔액 부족" : "Insufficient Balance");
     const newAsset: Asset = { id: Date.now(), title: newTitle, desc: newDesc, category, videoUrl: newVideoUrl, beomSupport: 0, isAd: false, owner: empireCharacterName, timestamp: new Date().toLocaleDateString() };
     setAssets([newAsset, ...assets]);
@@ -179,7 +171,7 @@ export default function KedheonPortal() {
   return (
     <div className="flex flex-col items-center bg-black min-h-screen text-white p-6 font-sans w-full overflow-x-hidden">
       
-      {/* 글로벌 헤더 */}
+      {/* --- 글로벌 컨트롤 바 --- */}
       <div className="w-full max-w-6xl flex justify-between items-center mt-6 mb-10">
         <button onClick={toggleLang} className="bg-[#daa520] text-black px-8 py-3 rounded-full font-black text-sm shadow-xl hover:scale-110 transition-all">
           {lang === 'KO' ? "ENGLISH MODE" : "한국어 모드"}
@@ -192,17 +184,19 @@ export default function KedheonPortal() {
 
       <div className="w-full max-w-6xl">
         {tab === 'ROOKIE' ? (
+          /* [ROOKIE VIEW] */
           <div className="flex flex-col items-center text-center py-20 animate-in fade-in zoom-in duration-500">
-            <img src={mainCharacter} className="w-80 h-80 rounded-[60px] object-cover mb-12 shadow-2xl border-4 border-[#daa520]/20" alt="K" />
+            <img src={mainCharacter} className="w-80 h-80 rounded-[60px] object-cover mb-12 shadow-2xl border-4 border-[#daa520]/20" alt="Kedheon" />
             <h1 className="text-7xl font-black text-[#daa520] tracking-widest mb-8 uppercase leading-none">Kedheon Empire</h1>
             <button onClick={() => setTab('PIONEER')} className="bg-[#daa520] text-black px-24 py-10 rounded-3xl font-black text-3xl shadow-2xl hover:scale-105 transition-transform">제국 입국하기</button>
           </div>
         ) : (
+          /* [PIONEER VIEW] */
           <div className="flex flex-col gap-16 animate-in slide-in-from-bottom-10 duration-700">
             
             {viewMode === 'HUB' ? (
               <>
-                {/* 1. 대시보드 (고해상도 범 토큰 메달리온) */}
+                {/* 1. 대시보드 - 범 토큰 이미지 최적화 (테두리 중복 제거) */}
                 <div className="bg-[#111] p-12 rounded-[60px] border border-[#daa520]/40 shadow-2xl flex justify-between items-center group relative overflow-hidden">
                   <div className="relative z-10 text-left">
                     <h3 className="text-gray-500 text-xs uppercase tracking-[0.4em] mb-4 font-black opacity-60">{t.balance}</h3>
@@ -212,9 +206,8 @@ export default function KedheonPortal() {
                     </div>
                   </div>
                   <div className="flex flex-col items-end relative z-10"> 
-                    {/* 선명하게 보정된 범 토큰 이미지 영역 */}
-                    <div className="w-56 h-56 rounded-full overflow-hidden border-8 border-[#daa520]/50 shadow-[0_0_60px_rgba(218,165,32,0.7)] mb-8 bg-black flex items-center justify-center">
-                       <img src={beomTokenImg} className="w-full h-full object-cover scale-100" alt="Beom Token High Res" />
+                    <div className="w-64 h-64 rounded-full shadow-[0_0_80px_rgba(218,165,32,0.8)] mb-8 bg-transparent flex items-center justify-center overflow-visible">
+                       <img src={beomTokenImg} className="w-full h-full object-contain transform hover:scale-110 transition-transform duration-500" alt="Beom Token" />
                     </div>
                     <div className="text-right">
                         <p className="text-white font-black text-7xl leading-none">Lv. 88</p>
@@ -223,7 +216,7 @@ export default function KedheonPortal() {
                   </div>
                 </div>
 
-                {/* 2. 영토 선택 */}
+                {/* 2. 영토 선택 및 자치령 시스템 */}
                 <div className="p-16 bg-[#111] rounded-[60px] border border-white/5 text-center">
                   <SectionTitle title={t.territoryTitle} desc={t.territoryDesc} />
                   <div className="flex flex-wrap gap-5 justify-center mb-12">
@@ -232,15 +225,13 @@ export default function KedheonPortal() {
                       <button key={cat} onClick={() => {setCategory(cat); setViewMode('BOARD');}} className="px-12 py-6 rounded-3xl text-sm font-black bg-[#1a1a1a] text-gray-500 border border-white/5 hover:border-[#daa520]/40 transition-all uppercase">ENTER {cat}</button>
                     ))}
                     {userTerritories.map(room => (
-                      <button key={room.id} onClick={() => {setCategory(room.id); setViewMode('BOARD');}} className="px-12 py-6 rounded-3xl text-sm font-black bg-gradient-to-r from-[#daa520]/20 to-[#1a1a1a] text-[#daa520] border border-[#daa520]/30 shadow-xl hover:scale-105 transition-all uppercase font-bold">👑 {room.title}</button>
+                      <button key={room.id} onClick={() => {setCategory(room.id); setViewMode('BOARD');}} className="px-12 py-6 rounded-3xl text-sm font-black bg-gradient-to-r from-[#daa520]/20 to-[#1a1a1a] text-[#daa520] border border-[#daa520]/30 shadow-xl hover:scale-105 transition-all uppercase font-bold tracking-widest">👑 {room.title}</button>
                     ))}
                   </div>
-                  <button onClick={() => setShowCreateModal(true)} className="bg-white/5 text-white px-10 py-5 rounded-full border border-white/10 font-black hover:bg-white/10 transition-all">
-                    {t.createRoom}
-                  </button>
+                  <button onClick={() => setShowCreateModal(true)} className="bg-white/5 text-white px-10 py-5 rounded-full border border-white/10 font-black hover:bg-white/10 transition-all">{t.createRoom}</button>
                 </div>
 
-                {/* 3. QR 시스템 (보안 123 원칙) */}
+                {/* 3. QR 보안 시스템 (123 원칙 가이드 통합) */}
                 <div className="bg-[#111] p-16 rounded-[60px] border border-[#daa520]/20 text-center relative overflow-hidden">
                   <SectionTitle title={t.qrTitle} desc={t.qrDesc} />
                   <div className="max-w-4xl mx-auto mb-12 grid grid-cols-1 md:grid-cols-3 gap-8 text-left border-y border-white/5 py-10">
@@ -260,22 +251,16 @@ export default function KedheonPortal() {
                     <div className={`absolute inset-0 flex flex-col items-center justify-center p-12 transition-all ${isQrActive ? 'bg-transparent' : 'bg-black/95 backdrop-blur-3xl'}`}>
                       {isQrActive ? (
                         <div className="bg-white p-6 rounded-[50px] shadow-2xl border-8 border-[#daa520]/30 animate-in zoom-in-50">
-                          <img src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(empireUrl + '/?id=' + (qrType === 'BUSINESS' ? businessID : empireCharacterName))}`} className="w-48 h-48" alt="QR" />
+                          <img src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(empireUrl + '/?id=' + empireCharacterName)}`} className="w-48 h-48" alt="QR" />
                         </div>
                       ) : (
                         <button onClick={() => {setBeomToken(beomToken-50); setIsQrActive(true);}} className="bg-[#daa520] text-black px-20 py-8 rounded-3xl font-black text-2xl shadow-xl hover:scale-105 transition-all uppercase tracking-widest">{t.qrAuth}</button>
                       )}
                     </div>
                   </div>
-                  {qrType === 'BUSINESS' && (
-                    <div className="flex flex-col gap-5 max-w-md mx-auto animate-in slide-in-from-top-6">
-                      <input type="text" value={businessName} onChange={(e) => {setBusinessName(e.target.value); setIsQrActive(false);}} placeholder="Business Name" className="bg-black/60 border border-white/10 p-6 rounded-3xl text-xl focus:border-[#daa520] outline-none text-center font-black" />
-                      <input type="text" value={businessID} onChange={(e) => {setBusinessID(e.target.value); setIsQrActive(false);}} placeholder="ID Number" className="bg-black/60 border border-white/10 p-6 rounded-3xl text-xl focus:border-[#daa520] outline-none text-center font-mono text-[#daa520]" />
-                    </div>
-                  )}
                 </div>
 
-                {/* 4. 에코 허브 */}
+                {/* 4. 에코시스템 허브 */}
                 <div className="bg-[#111] p-16 rounded-[60px] border border-white/5">
                   <SectionTitle title={t.hubTitle} desc={t.hubDesc} />
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
@@ -286,12 +271,13 @@ export default function KedheonPortal() {
                 </div>
               </>
             ) : (
-              /* --- [BOARD VIEW] --- */
+              /* --- [BOARD VIEW: 영상 및 미디어 피드] --- */
               <div className="flex flex-col gap-12 animate-in fade-in duration-500">
                 <div className="flex justify-between items-center bg-[#111] p-10 rounded-[40px] border border-white/5">
                   <button onClick={() => setViewMode('HUB')} className="bg-[#1a1a1a] text-[#daa520] px-12 py-5 rounded-2xl font-black border border-[#daa520]/40 hover:bg-[#daa520] hover:text-black transition-all text-base tracking-widest">{t.backBtn}</button>
                   <p className="text-white font-black text-5xl uppercase tracking-tighter leading-none">{category}</p>
                 </div>
+
                 <div className="bg-[#111] p-16 rounded-[60px] border border-white/10 shadow-inner">
                   <SectionTitle title={`${category} ${t.broadcastTitle}`} desc={t.broadcastDesc} />
                   <div className="flex flex-col gap-6 max-w-4xl mx-auto text-left">
@@ -301,6 +287,7 @@ export default function KedheonPortal() {
                     <button onClick={registerAsset} className="w-full py-10 rounded-[50px] font-black text-3xl bg-gradient-to-br from-[#daa520] to-[#b8860b] text-black shadow-2xl transition-all uppercase tracking-widest">{t.postBtn}</button>
                   </div>
                 </div>
+
                 <div className="space-y-16">
                   {assets.filter(a => category === 'ALL' || a.category === category).map((a) => (
                     <div key={a.id} className="p-12 rounded-[70px] bg-[#111] border-l-[24px] border-gray-800 shadow-xl text-left overflow-hidden">
@@ -327,7 +314,7 @@ export default function KedheonPortal() {
         )}
       </div>
 
-      {/* 영토 개척 모달 */}
+      {/* --- 자치령 개척 모달 --- */}
       {showCreateModal && (
         <div className="fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center p-6 text-center">
           <div className="bg-[#111] p-12 rounded-[50px] border border-[#daa520]/50 w-full max-w-2xl animate-in zoom-in-95">
