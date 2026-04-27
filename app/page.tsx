@@ -283,7 +283,3 @@ export default function KedheonPortal() {
     </div>
   );
 }
-      </div>
-    </div>
-  );
-}
