@@ -11,7 +11,7 @@ interface Territory {
   id: string; title: string; desc: string; creator: string; 
 }
 
-// --- [2. 글로벌 다국어 엔진 (i18n)] ---
+// --- [2. 글로벌 다국어 엔진 (Mirroring 완벽 체크)] ---
 const translations = {
   KO: {
     hub: "제국 광장",
@@ -93,10 +93,9 @@ export default function KedheonPortal() {
   const empireCharacterName = 'CHEOREOM_88';
   const empireUrl = "https://kedheon.com";
 
-  // 상태 관리
+  // --- [상태 관리] ---
   const [hasMounted, setHasMounted] = useState(false);
   const [lang, setLang] = useState<'KO' | 'EN'>('KO');
-  const [tab, setTab] = useState<'ROOKIE' | 'PIONEER'>('PIONEER');
   const [viewMode, setViewMode] = useState<'HUB' | 'STAKING' | 'BOARD'>('HUB'); 
   const [category, setCategory] = useState('ALL');
   
@@ -117,16 +116,23 @@ export default function KedheonPortal() {
   const t = translations[lang];
   const beomTokenImg = "/beom-token.png";
 
-  // 데이터 로드 및 SDK 준비
+  // --- [데이터 로드 및 에러 방지 로직] ---
   useEffect(() => {
     setHasMounted(true);
-    const savedAssets = localStorage.getItem('k_assets');
-    const savedRooms = localStorage.getItem('k_rooms');
-    const savedToken = localStorage.getItem('k_token');
-    if (savedAssets) setAssets(JSON.parse(savedAssets));
-    if (savedRooms) setUserTerritories(JSON.parse(savedRooms));
-    if (savedToken) setBeomToken(parseFloat(savedToken));
+    
+    // 로컬 스토리지 안전 로드 (try-catch)
+    try {
+      const savedAssets = localStorage.getItem('k_assets');
+      const savedRooms = localStorage.getItem('k_rooms');
+      const savedToken = localStorage.getItem('k_token');
+      if (savedAssets) setAssets(JSON.parse(savedAssets));
+      if (savedRooms) setUserTerritories(JSON.parse(savedRooms));
+      if (savedToken) setBeomToken(parseFloat(savedToken));
+    } catch (e) {
+      console.error("Data Load Error:", e);
+    }
 
+    // Pi SDK 로드
     const script = document.createElement("script");
     script.src = "https://sdk.minepi.com/pi-sdk.js";
     script.async = true;
@@ -143,16 +149,16 @@ export default function KedheonPortal() {
 
   if (!hasMounted) return null;
 
-  // 비즈니스 로직
+  // --- [비즈니스 로직] ---
   const handleStaking = () => {
-    if (beomToken < 1000) return alert("잔액 부족!");
+    if (beomToken < 1000) return alert(lang === 'KO' ? "잔액 부족!" : "Insufficient Balance!");
     setBeomToken(prev => prev - 1000);
     setStakedBeom(prev => prev + 1000);
-    alert("1,000 BEOM이 예치되었습니다!");
+    alert(lang === 'KO' ? "1,000 BEOM이 예치되었습니다!" : "1,000 BEOM Staked!");
   };
 
   const handleCreateTerritory = () => {
-    if (beomToken < TERRITORY_CREATE_COST) return alert("잔액 부족!");
+    if (beomToken < TERRITORY_CREATE_COST) return alert("Insufficient Balance!");
     const newRoom = { id: createRoomTitle.toUpperCase(), title: createRoomTitle.toUpperCase(), desc: "", creator: empireCharacterName };
     setUserTerritories([...userTerritories, newRoom]);
     setBeomToken(prev => prev - TERRITORY_CREATE_COST);
@@ -160,7 +166,8 @@ export default function KedheonPortal() {
   };
 
   const registerAsset = () => {
-    if (beomToken < 10) return alert("잔액 부족!");
+    if (beomToken < 10) return alert("Insufficient Balance!");
+    if (!newTitle.trim()) return alert("Title Required!");
     const newAsset: Asset = { id: Date.now(), title: newTitle, desc: newDesc, category, videoUrl: newVideoUrl, beomSupport: 0, isAd: false, owner: empireCharacterName, timestamp: new Date().toLocaleDateString() };
     setAssets([newAsset, ...assets]);
     setBeomToken(prev => prev - 10);
@@ -168,7 +175,7 @@ export default function KedheonPortal() {
   };
 
   const support = (id: number, amt: number) => {
-    if (beomToken < amt) return alert("잔액 부족!");
+    if (beomToken < amt) return alert("Insufficient Balance!");
     setAssets(assets.map(a => a.id === id ? { ...a, beomSupport: a.beomSupport + amt } : a));
     setBeomToken(prev => prev - amt);
   };
@@ -182,21 +189,21 @@ export default function KedheonPortal() {
           {lang === 'KO' ? "ENGLISH MODE" : "한국어 모드"}
         </button>
         <div className="flex gap-4">
-          <button onClick={() => {setTab('HUB'); setViewMode('HUB');}} className={`px-8 py-3 rounded-2xl font-black text-lg transition-all ${viewMode === 'HUB' ? 'bg-[#daa520] text-black shadow-lg' : 'bg-[#111] text-gray-500'}`}>HUB</button>
-          <button onClick={() => setViewMode('STAKING')} className={`px-8 py-3 rounded-2xl font-black text-lg transition-all ${viewMode === 'STAKING' ? 'bg-[#daa520] text-black shadow-lg' : 'bg-[#111] text-gray-500'}`}>STAKING</button>
-          <button onClick={() => setViewMode('BOARD')} className={`px-8 py-3 rounded-2xl font-black text-lg transition-all ${viewMode === 'BOARD' ? 'bg-[#daa520] text-black shadow-lg' : 'bg-[#111] text-gray-500'}`}>TERRITORY</button>
+          <button onClick={() => setViewMode('HUB')} className={`px-8 py-3 rounded-2xl font-black text-lg transition-all ${viewMode === 'HUB' ? 'bg-[#daa520] text-black shadow-lg shadow-[#daa520]/20' : 'bg-[#111] text-gray-500'}`}>HUB</button>
+          <button onClick={() => setViewMode('STAKING')} className={`px-8 py-3 rounded-2xl font-black text-lg transition-all ${viewMode === 'STAKING' ? 'bg-[#daa520] text-black shadow-lg shadow-[#daa520]/20' : 'bg-[#111] text-gray-500'}`}>STAKING</button>
+          <button onClick={() => setViewMode('BOARD')} className={`px-8 py-3 rounded-2xl font-black text-lg transition-all ${viewMode === 'BOARD' ? 'bg-[#daa520] text-black shadow-lg shadow-[#daa520]/20' : 'bg-[#111] text-gray-500'}`}>TERRITORY</button>
         </div>
       </div>
 
       <div className="w-full max-w-6xl space-y-16">
         
-        {/* 대시보드 - 선명한 범 토큰 (Glow 제거 버전) */}
+        {/* 대시보드 */}
         <div className="bg-[#111] p-12 rounded-[60px] border border-[#daa520]/40 shadow-2xl flex justify-between items-center group relative overflow-hidden">
           <div className="relative z-10">
-            <h3 className="text-gray-500 text-xs uppercase tracking-[0.4em] mb-4 font-black">{t.balance}</h3>
-            <p className="text-[#daa520] font-black text-7xl tracking-tighter">{beomToken.toLocaleString()} BEOM</p>
+            <h3 className="text-gray-500 text-xs uppercase tracking-[0.4em] mb-4 font-black opacity-60">{t.balance}</h3>
+            <p className="text-[#daa520] font-black text-7xl tracking-tighter leading-none">{beomToken.toLocaleString()} BEOM</p>
             <div className="mt-8 bg-black/40 px-6 py-3 rounded-xl border border-white/5 w-fit">
-              <span className="text-gray-400 font-mono">≈ {(beomToken / PI_TO_BEOM_RATE).toFixed(4)} Pi</span>
+              <span className="text-gray-400 font-mono font-bold">≈ {(beomToken / PI_TO_BEOM_RATE).toFixed(4)} Pi</span>
             </div>
           </div>
           <div className="flex flex-col items-end z-10">
@@ -208,7 +215,7 @@ export default function KedheonPortal() {
           </div>
         </div>
 
-        {/* --- 뷰 모드 전환 --- */}
+        {/* --- 뷰 모드 렌더링 --- */}
 
         {viewMode === 'HUB' && (
           <div className="animate-in fade-in duration-700 space-y-16">
@@ -239,7 +246,7 @@ export default function KedheonPortal() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="bg-[#111] p-12 rounded-[50px] border border-white/5">
                 <p className="text-gray-500 font-black mb-4 uppercase tracking-widest">{t.stakedBalance}</p>
-                <p className="text-white font-black text-6xl tracking-tighter">{stakedBeom.toLocaleString()} BEOM</p>
+                <p className="text-white font-black text-6xl tracking-tighter leading-none">{stakedBeom.toLocaleString()} BEOM</p>
               </div>
               <div className="bg-[#111] p-12 rounded-[50px] border border-[#daa520]/20 flex flex-col justify-center gap-6">
                 <select onChange={(e) => setStakeDuration(Number(e.target.value))} className="bg-black text-[#daa520] p-6 rounded-3xl border border-white/10 font-black text-xl outline-none">
@@ -247,7 +254,9 @@ export default function KedheonPortal() {
                   <option value="180">{t.roi180}</option>
                   <option value="365">{t.roi365}</option>
                 </select>
-                <button onClick={handleStaking} className="bg-[#daa520] text-black py-8 rounded-3xl font-black text-2xl shadow-2xl hover:bg-white transition-all uppercase">{t.stakeBtn}</button>
+                <button onClick={handleStaking} className="bg-[#daa520] text-black py-8 rounded-3xl font-black text-2xl shadow-2xl hover:bg-white transition-all uppercase tracking-widest">
+                  {t.stakeBtn}
+                </button>
               </div>
             </div>
           </div>
@@ -257,36 +266,36 @@ export default function KedheonPortal() {
           <div className="animate-in slide-in-from-right-8 duration-700 space-y-12">
             <SectionTitle title={t.territoryTitle} desc={t.territoryDesc} />
             <div className="flex flex-wrap gap-4 justify-center">
-              <button onClick={() => setCategory('ALL')} className={`px-8 py-4 rounded-2xl font-black ${category === 'ALL' ? 'bg-[#daa520] text-black' : 'bg-[#111] text-gray-500'}`}>{t.enterAll}</button>
+              <button onClick={() => setCategory('ALL')} className={`px-8 py-4 rounded-2xl font-black transition-all ${category === 'ALL' ? 'bg-[#daa520] text-black' : 'bg-[#111] text-gray-500'}`}>{t.enterAll}</button>
               {['MUSIC', 'SPORTS', 'ANIME', 'DRAMA', 'MOVIE'].map(cat => (
-                <button key={cat} onClick={() => setCategory(cat)} className={`px-8 py-4 rounded-2xl font-black ${category === cat ? 'bg-[#daa520] text-black' : 'bg-[#111] text-gray-500'}`}>ENTER {cat}</button>
+                <button key={cat} onClick={() => setCategory(cat)} className={`px-8 py-4 rounded-2xl font-black transition-all ${category === cat ? 'bg-[#daa520] text-black' : 'bg-[#111] text-gray-500'}`}>ENTER {cat}</button>
               ))}
               {userTerritories.map(room => (
-                <button key={room.id} onClick={() => setCategory(room.id)} className={`px-8 py-4 rounded-2xl font-black border border-[#daa520]/40 ${category === room.id ? 'bg-[#daa520] text-black' : 'text-[#daa520]'}`}>👑 {room.title}</button>
+                <button key={room.id} onClick={() => setCategory(room.id)} className={`px-8 py-4 rounded-2xl font-black border border-[#daa520]/40 transition-all ${category === room.id ? 'bg-[#daa520] text-black' : 'text-[#daa520]'}`}>👑 {room.title}</button>
               ))}
-              <button onClick={() => setShowCreateModal(true)} className="bg-white/5 text-white px-8 py-4 rounded-2xl border border-white/10 font-black tracking-tighter">{t.createRoom}</button>
+              <button onClick={() => setShowCreateModal(true)} className="bg-white/5 text-white px-8 py-4 rounded-2xl border border-white/10 font-black tracking-tighter hover:bg-white/10 transition-all">{t.createRoom}</button>
             </div>
 
             {/* 방송 등록 폼 */}
-            <div className="bg-[#111] p-16 rounded-[60px] border border-white/10 max-w-4xl mx-auto space-y-6 text-left">
-              <SectionTitle title={t.broadcastTitle} desc={t.broadcastDesc} />
+            <div className="bg-[#111] p-16 rounded-[60px] border border-white/10 max-w-4xl mx-auto space-y-6 text-left shadow-2xl">
+              <h4 className="text-[#daa520] font-black text-2xl uppercase mb-8">{t.broadcastTitle}</h4>
               <input type="text" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} placeholder="Title" className="bg-black p-8 rounded-[35px] border border-white/10 w-full text-2xl outline-none focus:border-[#daa520] font-black" />
               <input type="text" value={newVideoUrl} onChange={(e) => setNewVideoUrl(e.target.value)} placeholder="YouTube URL" className="bg-black p-8 rounded-[35px] border border-white/10 w-full text-xl outline-none focus:border-[#daa520] font-mono text-[#daa520]" />
               <textarea value={newDesc} onChange={(e) => setNewDesc(e.target.value)} placeholder="Description" className="bg-black p-8 rounded-[35px] border border-white/10 w-full text-xl h-48 outline-none focus:border-[#daa520] resize-none" />
-              <button onClick={registerAsset} className="w-full py-10 rounded-[50px] font-black text-3xl bg-gradient-to-br from-[#daa520] to-[#b8860b] text-black shadow-2xl uppercase tracking-widest">{t.postBtn}</button>
+              <button onClick={registerAsset} className="w-full py-10 rounded-[50px] font-black text-3xl bg-gradient-to-br from-[#daa520] to-[#b8860b] text-black shadow-2xl uppercase tracking-widest transition-all hover:scale-[1.02] active:scale-95">{t.postBtn}</button>
             </div>
 
             {/* 피드 렌더링 */}
             <div className="space-y-16 max-w-4xl mx-auto">
               {assets.filter(a => category === 'ALL' || a.category === category).map((a) => (
-                <div key={a.id} className="p-12 rounded-[70px] bg-[#111] border-l-[24px] border-gray-800 shadow-xl text-left overflow-hidden">
+                <div key={a.id} className="p-12 rounded-[70px] bg-[#111] border-l-[24px] border-gray-800 shadow-xl text-left overflow-hidden animate-in fade-in duration-500">
                   <div className="flex justify-between items-start mb-10"><h4 className="font-black text-white text-5xl tracking-tight leading-tight">{a.title}</h4><span className="text-gray-600 text-base font-mono font-black">{a.timestamp}</span></div>
                   {a.videoUrl && a.videoUrl.includes('v=') && (
                     <div className="relative w-full aspect-video rounded-[50px] overflow-hidden mb-10 border-8 border-white/5 bg-black">
                        <iframe className="absolute inset-0 w-full h-full" src={`https://www.youtube.com/embed/${a.videoUrl.split('v=')[1]}`} frameBorder="0" allowFullScreen></iframe>
                     </div>
                   )}
-                  <p className="text-2xl text-gray-400 leading-relaxed mb-12 pl-4">{a.desc}</p>
+                  <p className="text-2xl text-gray-400 leading-relaxed mb-12 pl-4 font-bold">{a.desc}</p>
                   <div className="flex justify-between items-center pt-10 border-t border-white/5">
                     <button onClick={() => support(a.id, 100)} className="bg-[#daa520] text-black px-12 py-5 rounded-3xl font-black text-xl hover:scale-110 active:scale-95 transition-all shadow-xl">{t.supportBtn}</button>
                     <p className="text-[#daa520] font-black text-4xl tracking-tighter">{a.beomSupport.toLocaleString()} BEOM</p>
@@ -303,17 +312,18 @@ export default function KedheonPortal() {
       {showCreateModal && (
         <div className="fixed inset-0 bg-black/95 backdrop-blur-md z-50 flex items-center justify-center p-6 text-center">
           <div className="bg-[#111] p-12 rounded-[50px] border border-[#daa520]/50 w-full max-w-2xl animate-in zoom-in-95">
-            <h3 className="text-[#daa520] font-black text-3xl mb-4">EXPAND TERRITORY</h3>
+            <h3 className="text-[#daa520] font-black text-3xl mb-4 uppercase tracking-widest">Expand Territory</h3>
+            <p className="text-gray-500 font-bold mb-8">선포 비용: 500 BEOM</p>
             <input type="text" value={createRoomTitle} onChange={(e) => setCreateRoomTitle(e.target.value)} placeholder="Territory Name" className="bg-black p-6 rounded-3xl border border-white/10 w-full text-xl focus:border-[#daa520] outline-none font-black text-center mb-8" />
             <div className="flex gap-4">
-              <button onClick={() => setShowCreateModal(false)} className="flex-1 py-6 rounded-3xl font-black bg-white/5">CANCEL</button>
-              <button onClick={handleCreateTerritory} className="flex-1 py-6 rounded-3xl font-black bg-[#daa520] text-black shadow-2xl">PROCLAIM (500 BEOM)</button>
+              <button onClick={() => setShowCreateModal(false)} className="flex-1 py-6 rounded-3xl font-black bg-white/5 hover:bg-white/10 transition-all uppercase">Cancel</button>
+              <button onClick={handleCreateTerritory} className="flex-1 py-6 rounded-3xl font-black bg-[#daa520] text-black shadow-2xl transition-all hover:scale-105 active:scale-95 uppercase">Proclaim</button>
             </div>
           </div>
         </div>
       )}
       
-      <div className="text-center py-40 opacity-10"><p className="text-sm font-mono tracking-[1.5em] uppercase text-white/50">Kedheon Empire | Unified .pi Codebase v2.0</p></div>
+      <div className="text-center py-40 opacity-10"><p className="text-sm font-mono tracking-[1.5em] uppercase text-white/50">Kedheon Empire | Stable Engine v2.1 Verified</p></div>
     </div>
   );
 }
