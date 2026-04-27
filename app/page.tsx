@@ -22,6 +22,10 @@ export default function KedheonPortal() {
   const [assets, setAssets] = useState<Asset[]>([]);
   const [newTitle, setNewTitle] = useState('');
   const [newDesc, setNewDesc] = useState('');
+
+  // --- [신규 추가] QR 구매 상태 ---
+  const [isQrActive, setIsQrActive] = useState(false);
+  const QR_PURCHASE_COST = 50; 
   
   // 3. 범 토큰 경제 상태
   const [beomToken, setBeomToken] = useState(8888.88);
@@ -33,11 +37,10 @@ export default function KedheonPortal() {
   const categories = ['ALL', 'MUSIC', 'SPORTS', 'ACTOR', 'ESPORTS', 'COMEDY'];
   const ecosystemApps = ['PI', 'NEXUS', 'AI', 'VENDOR', 'CIVIL', 'FILTER', 'PAPA', '6G'];
 
-  // 5. 로컬 이미지 경로 (실제 파일과 매칭)
+  // 5. 로컬 이미지 경로
   const personalImage = '/qr-personal.png'; 
   const businessImage = '/qr-business.png';
 
-  // 6. 데이터 영속성 결속 (자산 및 토큰 잔액)
   useEffect(() => {
     const savedAssets = localStorage.getItem('kedheon_assets');
     if (savedAssets) setAssets(JSON.parse(savedAssets));
@@ -46,28 +49,33 @@ export default function KedheonPortal() {
     if (savedToken) setBeomToken(parseFloat(savedToken));
   }, []);
 
-  // 토큰 잔액 변동 시 로컬 스토리지 업데이트
   useEffect(() => {
     localStorage.setItem('kedheon_token', beomToken.toString());
   }, [beomToken]);
 
-  // 7. 생태계 활동 로직 (채굴)
   const handleHubClick = (app: string) => {
     setBeomToken(prev => prev + 1);
     setFanLevel(prev => prev + 1);
-    alert(`[${app}] 생태계 활동이 확인되었습니다.\n보상: +1 BEOM 지급 완료.`);
+    alert(`[${app}] 생태계 활동 보상: +1 BEOM 지급 완료.`);
   };
 
-  // 8. 자산 등록 로직 (소비/수수료)
+  // --- [신규 추가] QR 구매/갱신 로직 ---
+  const purchaseQR = () => {
+    if (beomToken < QR_PURCHASE_COST) {
+      alert(`범 토큰이 부족합니다. (필요: ${QR_PURCHASE_COST} BEOM)`);
+      return;
+    }
+    
+    if (confirm(`${QR_PURCHASE_COST} BEOM을 사용하여 인증 QR을 발급/갱신하시겠습니까?`)) {
+      setBeomToken(prev => prev - QR_PURCHASE_COST);
+      setIsQrActive(true);
+      alert("제국 인증 QR이 성공적으로 확보되었습니다! (유효기간: 무제한)");
+    }
+  };
+
   const registerAsset = () => {
-    if (!newTitle.trim()) {
-      alert("창작물 제목을 입력하십시오.");
-      return;
-    }
-    if (beomToken < 10) {
-      alert("범 토큰 잔액이 부족합니다. (등록 수수료: 10 BEOM)");
-      return;
-    }
+    if (!newTitle.trim()) { alert("창작물 제목을 입력하십시오."); return; }
+    if (beomToken < 10) { alert("범 토큰 잔액이 부족합니다. (10 BEOM 필요)"); return; }
 
     const newAsset: Asset = { 
       id: Date.now(), 
@@ -80,19 +88,16 @@ export default function KedheonPortal() {
     const updated = [...assets, newAsset];
     setAssets(updated);
     localStorage.setItem('kedheon_assets', JSON.stringify(updated));
-    
-    // 수수료 차감
     setBeomToken(prev => prev - 10);
     setNewTitle('');
     setNewDesc('');
-    
-    alert(`제국 자산으로 공식 등록되었습니다.\n(수수료 10 BEOM 차감 완료)`);
+    alert(`제국 자산으로 공식 등록되었습니다.`);
   };
 
   return (
     <div className="flex flex-col items-center bg-black min-h-screen text-white p-6 font-sans w-full overflow-x-hidden">
       
-      {/* 1. 최상위 프레임워크 (ROOKIE / PIONEER) */}
+      {/* 1. 최상위 프레임워크 */}
       <div className="flex gap-4 mb-10 mt-10 justify-center w-full max-w-2xl">
         <button onClick={() => setTab('ROOKIE')} className={`px-8 py-2 rounded-full font-bold transition-all ${tab === 'ROOKIE' ? 'bg-[#daa520] text-black shadow-[0_0_15px_rgba(218,165,32,0.5)]' : 'bg-white/10'}`}>ROOKIE</button>
         <button onClick={() => setTab('PIONEER')} className={`px-8 py-2 rounded-full font-bold transition-all ${tab === 'PIONEER' ? 'bg-[#daa520] text-black shadow-[0_0_15px_rgba(218,165,32,0.5)]' : 'bg-white/10'}`}>PIONEER</button>
@@ -103,12 +108,12 @@ export default function KedheonPortal() {
           <div className="flex flex-col items-center text-center py-20">
             <img src="/kedheon-character.png" className="w-64 mb-6 object-contain" alt="Kedheon Character" />
             <h1 className="text-4xl font-black mt-6 text-[#daa520] tracking-widest">KEDHEON EMPIRE</h1>
-            <button className="mt-10 bg-[#daa520] text-black px-12 py-5 rounded-2xl font-black shadow-[0_0_20px_rgba(218,165,32,0.3)] hover:scale-105 transition-transform">시민권 신청</button>
+            <button className="mt-10 bg-[#daa520] text-black px-12 py-5 rounded-2xl font-black hover:scale-105 transition-transform">시민권 신청</button>
           </div>
         ) : (
           <div className="bg-[#111] p-8 rounded-3xl border border-white/10 w-full shadow-[0_0_30px_rgba(218,165,32,0.1)] flex flex-col gap-8">
             
-            {/* 2. 경제 대시보드 (토큰/팬심) */}
+            {/* 2. 경제 대시보드 */}
             <div className="bg-gradient-to-r from-[#daa520]/20 to-transparent p-6 rounded-2xl border border-[#daa520]/30 flex justify-between items-center transition-all">
               <div>
                 <h3 className="text-gray-400 text-xs uppercase tracking-widest mb-1">Imperial Token</h3>
@@ -120,41 +125,45 @@ export default function KedheonPortal() {
               </div>
             </div>
 
-            {/* 3. 카테고리 셀렉터 (텍스트 보정 완료) */}
-            <div className="p-6 bg-black rounded-2xl border border-white/5 text-center">
-              <h3 className="text-[#daa520] font-bold text-sm mb-4">현재 카테고리: {category}</h3>
-              <div className="flex flex-wrap gap-2 justify-center">
-                {categories.map((cat) => (
-                  <button key={cat} onClick={() => setCategory(cat)} className={`px-4 py-1.5 rounded-full text-xs font-bold transition-colors ${category === cat ? 'bg-[#daa520] text-black' : 'bg-white/10 hover:bg-white/20'}`}>{cat}</button>
-                ))}
-              </div>
-            </div>
-
-            {/* 4. 제국 인증 QR 시스템 */}
-            <div className="bg-black p-6 rounded-2xl border border-[#daa520]/30 text-center">
+            {/* 4. 제국 인증 QR 시스템 (수정됨) */}
+            <div className="bg-black p-6 rounded-2xl border border-[#daa520]/30 text-center relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-2 text-[10px] text-gray-600 font-mono">-{QR_PURCHASE_COST} BEOM / 발급</div>
               <h3 className="text-[#daa520] font-bold mb-4">제국 인증 QR 시스템</h3>
+              
               <div className="flex gap-2 justify-center mb-4">
-                <button onClick={() => setQrType('PERSONAL')} className={`px-4 py-1 rounded text-[10px] ${qrType === 'PERSONAL' ? 'bg-[#daa520] text-black' : 'bg-white/10'}`}>개인 신분</button>
-                <button onClick={() => setQrType('BUSINESS')} className={`px-4 py-1 rounded text-[10px] ${qrType === 'BUSINESS' ? 'bg-[#daa520] text-black' : 'bg-white/10'}`}>기업/결제</button>
+                <button onClick={() => {setQrType('PERSONAL'); setIsQrActive(false);}} className={`px-4 py-1 rounded text-[10px] ${qrType === 'PERSONAL' ? 'bg-[#daa520] text-black' : 'bg-white/10'}`}>개인 신분</button>
+                <button onClick={() => {setQrType('BUSINESS'); setIsQrActive(false);}} className={`px-4 py-1 rounded text-[10px] ${qrType === 'BUSINESS' ? 'bg-[#daa520] text-black' : 'bg-white/10'}`}>기업/결제</button>
               </div>
 
-              <div className="relative w-full max-w-[250px] mx-auto mb-4 aspect-square overflow-hidden rounded-xl border border-white/10">
+              <div className="relative w-full max-w-[250px] mx-auto mb-4 aspect-square overflow-hidden rounded-xl border border-white/10 group">
                 <img src={qrType === 'PERSONAL' ? personalImage : businessImage} className="absolute inset-0 w-full h-full object-cover" alt="QR Background" />
-                <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center p-4">
-                  <img src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(empireUrl + '/?type=' + qrType + '&id=' + (qrType === 'BUSINESS' ? businessID : empireCharacterName))}`} className="w-20 h-20 bg-white p-1 rounded" alt="QR Code" />
-                  <p className="mt-2 text-[9px] font-bold text-[#daa520] truncate w-full px-2">{qrType === 'BUSINESS' ? `${businessName} (${businessID})` : empireCharacterName}</p>
+                
+                {/* QR 활성화 여부에 따른 오버레이 */}
+                <div className={`absolute inset-0 bg-black/60 flex flex-col items-center justify-center p-4 transition-all ${isQrActive ? 'backdrop-blur-0' : 'backdrop-blur-md'}`}>
+                  {isQrActive ? (
+                    <>
+                      <img src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(empireUrl + '/?type=' + qrType + '&id=' + (qrType === 'BUSINESS' ? businessID : empireCharacterName))}`} className="w-20 h-20 bg-white p-1 rounded animate-pulse" alt="QR Code" />
+                      <p className="mt-2 text-[9px] font-bold text-[#daa520] truncate w-full px-2">{qrType === 'BUSINESS' ? `${businessName} (${businessID})` : empireCharacterName}</p>
+                    </>
+                  ) : (
+                    <div className="flex flex-col items-center">
+                      <div className="text-3xl mb-2">🔒</div>
+                      <p className="text-[10px] text-gray-400 mb-4">인증이 만료되었거나 발급되지 않았습니다.</p>
+                      <button onClick={purchaseQR} className="bg-[#daa520] text-black px-4 py-2 rounded text-[10px] font-black hover:scale-105 transition-transform">QR 확보하기 ({QR_PURCHASE_COST} BEOM)</button>
+                    </div>
+                  )}
                 </div>
               </div>
 
               {qrType === 'BUSINESS' && (
-                <div className="flex flex-col gap-2">
-                  <input type="text" value={businessName} onChange={(e) => setBusinessName(e.target.value)} placeholder="기업명" className="w-full bg-[#1a1a1a] p-2 text-sm rounded border border-white/10 focus:border-[#daa520] outline-none" />
-                  <input type="text" value={businessID} onChange={(e) => setBusinessID(e.target.value)} placeholder="고유ID" className="w-full bg-[#1a1a1a] p-2 text-sm rounded border border-white/10 focus:border-[#daa520] outline-none" />
+                <div className="flex flex-col gap-2 mt-4">
+                  <input type="text" value={businessName} onChange={(e) => {setBusinessName(e.target.value); setIsQrActive(false);}} placeholder="기업명" className="w-full bg-[#1a1a1a] p-2 text-sm rounded border border-white/10 focus:border-[#daa520] outline-none" />
+                  <input type="text" value={businessID} onChange={(e) => {setBusinessID(e.target.value); setIsQrActive(false);}} placeholder="고유ID" className="w-full bg-[#1a1a1a] p-2 text-sm rounded border border-white/10 focus:border-[#daa520] outline-none" />
                 </div>
               )}
             </div>
 
-            {/* 5. 8대 생태계 허브 (클릭 시 토큰 채굴) */}
+            {/* 5. 8대 생태계 허브 */}
             <div className="bg-black p-6 rounded-2xl border border-white/5">
               <h3 className="text-center text-xs font-bold text-[#daa520] mb-4">🌐 8대 생태계 허브 (활동 채굴)</h3>
               <div className="grid grid-cols-4 gap-4 text-center">
@@ -167,7 +176,7 @@ export default function KedheonPortal() {
               </div>
             </div>
 
-            {/* 6. 유저 창작 스튜디오 (자산 등록 시 토큰 소비) */}
+            {/* 6. 유저 창작 스튜디오 */}
             <div className="bg-black p-6 rounded-2xl border border-white/5 text-center relative overflow-hidden">
               <div className="absolute top-0 right-0 p-2 text-[10px] text-gray-600 font-mono">-10 BEOM / 등록</div>
               <h3 className="text-[#daa520] font-black text-sm mb-4">USER STUDIO (제국 자산 등록)</h3>
