@@ -6,58 +6,62 @@ interface Asset { id: number; title: string; desc: string; category: string; vid
 interface Territory { id: string; title: string; }
 interface Project { id: number; name: string; target: number; current: number; status: string; }
 
-// --- [2. 글로벌 다국어 사전 (에러 방지용 키 정렬)] ---
+// --- [2. 글로벌 다국어 사전 (무결성 검증 완료)] ---
 const translations = {
   KO: {
     balance: "제국 자산 잔액", grade: "제국 등급",
     citizenshipTitle: "IMPERIAL CITIZENSHIP",
     citizenshipDesc: "개인 및 기업 시민권을 획득하여 제국의 정식 일원이 되십시오.",
-    personal: "개인 시민", business: "기업 시민",
+    personal: "개인 시민권", business: "기업 시민권",
     authActive: "인증 활성화됨", authInactive: "인증 필요 (50 BEOM)",
     launchTitle: "TERRITORY EXPANSION",
-    launchDesc: "제국의 새로운 영토 개척을 지원하고 초기 권한을 확보하십시오.",
+    launchDesc: "제국의 새로운 영토 개척 프로젝트를 지원하십시오.",
     launchStatus: "개척 진행률", supportProject: "개척 지원 (1,000 BEOM)",
     contributionTitle: "CONTRIBUTION REWARD",
-    contributionDesc: "제국 인프라 유지에 BEOM을 기여하고 보상을 받으십시오.",
+    contributionDesc: "제국 인프라 유지에 기여하고 생태계 보상을 확보하십시오.",
     contributedBalance: "누적 기여 자산",
     contributeBtn: "기여 실행 (1,000 BEOM)",
     fandomTitle: "EMPIRE TERRITORIES",
-    fandomDesc: "12대 공식 영토 피드를 탐험하십시오.",
-    broadcastTitle: "BROADCAST CENTER",
-    postBtn: "피드에 방송 박제", supportBtn: "👑 황금 찬양", backBtn: "맨 위로"
+    fandomDesc: "12대 공식 영토 및 시민 자치령을 탐험하십시오.",
+    enterAll: "전체 피드 진입", createRoom: "➕ 영토 개척 (500 BEOM)",
+    broadcastTitle: "BROADCAST CENTER", broadcastDesc: "영상을 박제하여 제국 전역에 전파하십시오.",
+    postBtn: "피드에 방송하기", supportBtn: "👑 황금 찬양", backBtn: "맨 위로 복귀"
   },
   EN: {
     balance: "Empire Balance", grade: "Empire Grade",
     citizenshipTitle: "IMPERIAL CITIZENSHIP",
-    citizenshipDesc: "Obtain Personal/Business citizenship and join the Empire.",
+    citizenshipDesc: "Obtain official citizenship and exercise your rights.",
     personal: "Personal", business: "Business",
     authActive: "Authorized", authInactive: "Requires Auth (50 BEOM)",
     launchTitle: "TERRITORY EXPANSION",
     launchDesc: "Support new territory expansion projects.",
     launchStatus: "Progress", supportProject: "Support (1,000 BEOM)",
     contributionTitle: "CONTRIBUTION REWARD",
-    contributionDesc: "Deposit BEOM to sustain infrastructure and earn rewards.",
+    contributionDesc: "Contribute assets to earn ecosystem rewards.",
     contributedBalance: "Staked Contribution",
     contributeBtn: "Execute Contribution",
     fandomTitle: "EMPIRE TERRITORIES",
     fandomDesc: "Explore the 12 Official Territories.",
-    broadcastTitle: "BROADCAST CENTER",
-    postBtn: "Post to Feed", supportBtn: "👑 Royal Praise", backBtn: "Back to Top"
+    enterAll: "ENTER ALL", createRoom: "➕ Create Room (500 BEOM)",
+    broadcastTitle: "BROADCAST CENTER", broadcastDesc: "Broadcast your video across the Empire.",
+    postBtn: "Broadcast to Feed", supportBtn: "👑 Royal Praise", backBtn: "Back to Top"
   }
 };
 
-// --- [3. 수직 집중형 섹션 타이틀 컴포넌트] ---
 const SectionTitle = ({ title, desc }: { title: string; desc: string }) => (
   <div className="flex flex-col items-center py-20 gap-4 border-t border-white/5 w-full text-center">
-    <h3 className="text-[#daa520] font-black text-4xl tracking-[0.3em] uppercase leading-tight">{title}</h3>
+    <div className="flex items-center gap-4">
+      <span className="text-4xl">🏛️</span>
+      <h3 className="text-[#daa520] font-black text-4xl tracking-[0.3em] uppercase">{title}</h3>
+    </div>
     <p className="text-gray-500 font-bold text-xl opacity-80 max-w-2xl leading-relaxed">{desc}</p>
   </div>
 );
 
 export default function KedheonPortal() {
   const PI_TO_BEOM_RATE = 314.1592;
+  const empireCharacterName = 'CHEOREOM_88';
 
-  // --- [상태 관리] ---
   const [hasMounted, setHasMounted] = useState(false);
   const [lang, setLang] = useState<'KO' | 'EN'>('KO');
   const [beomToken, setBeomToken] = useState(8141.88);
@@ -67,54 +71,60 @@ export default function KedheonPortal() {
   const [category, setCategory] = useState('ALL');
   const [assets, setAssets] = useState<Asset[]>([]);
   const [userTerritories, setUserTerritories] = useState<Territory[]>([]);
+  const [newTitle, setNewTitle] = useState('');
+  const [newDesc, setNewDesc] = useState('');
+  const [newVideoUrl, setNewVideoUrl] = useState('');
   
-  // 런치패드 프로젝트
-  const [project, setProject] = useState<Project>({ id: 1, name: "PI-VENDORS-HUB", target: 1000000, current: 782000, status: "OPEN" });
+  const [project, setProject] = useState<Project>({ id: 1, name: "PI-VENDORS-HUB", target: 1000000, current: 812000, status: "OPEN" });
 
   const t = translations[lang];
   const categories = ['MUSIC', 'SPORTS', 'ANIME', 'DRAMA', 'MOVIE', 'ESPORTS', 'COMEDY', 'TRAVEL', 'FOOD', 'BEAUTY', 'FASHION', 'TECH'];
 
-  // --- [데이터 처리 및 에러 방지] ---
   useEffect(() => {
     setHasMounted(true);
-    const saved = localStorage.getItem('kedheon_v65_final');
+    const saved = localStorage.getItem('k_empire_final_v68');
     if (saved) {
       try {
         const p = JSON.parse(saved);
-        setBeomToken(p.token || 8141.88);
-        setAssets(p.assets || []);
-        setUserTerritories(p.rooms || []);
-        setContributedBeom(p.contributed || 0);
-      } catch (e) { console.error("JSON Parse Error"); }
+        setBeomToken(p.token); setAssets(p.assets); setUserTerritories(p.rooms || []); setContributedBeom(p.contributed || 0);
+      } catch (e) { console.error(e); }
     }
+    const script = document.createElement("script");
+    script.src = "https://sdk.minepi.com/pi-sdk.js";
+    script.async = true;
+    document.head.appendChild(script);
   }, []);
 
   useEffect(() => {
     if (hasMounted) {
-      localStorage.setItem('kedheon_v65_final', JSON.stringify({ token: beomToken, assets, rooms: userTerritories, contributed: contributedBeom }));
+      localStorage.setItem('k_empire_final_v68', JSON.stringify({ token: beomToken, assets, rooms: userTerritories, contributed: contributedBeom }));
     }
   }, [beomToken, assets, userTerritories, contributedBeom, hasMounted]);
 
   if (!hasMounted) return null;
 
-  // --- [액션 로직] ---
   const handleSupportProject = () => {
     if (beomToken < 1000) return alert("잔액 부족!");
-    setBeomToken(p => p - 1000);
-    setProject(p => ({ ...p, current: p.current + 1000 }));
+    setBeomToken(p => p - 1000); setProject(p => ({ ...p, current: p.current + 1000 }));
   };
 
   const handleContribution = () => {
     if (beomToken < 1000) return alert("잔액 부족!");
-    setBeomToken(p => p - 1000);
-    setContributedBeom(p => p + 1000);
+    setBeomToken(p => p - 1000); setContributedBeom(p => p + 1000);
+  };
+
+  const postBroadcast = () => {
+    if (!newTitle.trim()) return alert("제목 필수!");
+    const newAsset: Asset = { id: Date.now(), title: newTitle, desc: newDesc, category, videoUrl: newVideoUrl, beomSupport: 0, owner: empireCharacterName, timestamp: new Date().toLocaleDateString() };
+    setAssets([newAsset, ...assets]); setBeomToken(p => p - 10);
+    setNewTitle(''); setNewDesc(''); setNewVideoUrl('');
   };
 
   return (
     <div className="flex flex-col items-center bg-black min-h-screen text-white font-sans w-full overflow-x-hidden pb-80">
       
-      {/* 1. 상단 고정 헤더 */}
-      <div className="w-full max-w-4xl flex justify-between items-center p-8 sticky top-0 bg-black/90 backdrop-blur-xl z-50 border-b border-white/10 shadow-2xl">
+      {/* 1. 고정 헤더 */}
+      <div className="w-full max-w-4xl flex justify-between items-center p-8 sticky top-0 bg-black/90 backdrop-blur-xl z-50 border-b border-white/10">
         <button onClick={() => setLang(l => l === 'KO' ? 'EN' : 'KO')} className="text-[#daa520] font-black text-xs tracking-widest border border-[#daa520]/40 px-6 py-2 rounded-full hover:bg-[#daa520] hover:text-black transition-all">
           {lang === 'KO' ? "ENGLISH" : "한국어"}
         </button>
@@ -137,14 +147,14 @@ export default function KedheonPortal() {
           </div>
         </div>
 
-        {/* 3. 시민권 & 기업 인증 (수직 원라인 정렬) */}
+        {/* 3. 시민권 & 기업 인증 */}
         <div className="flex flex-col items-center gap-12">
           <SectionTitle title={t.citizenshipTitle} desc={t.citizenshipDesc} />
           <div className="flex gap-4 bg-[#111] p-3 rounded-3xl border border-white/5">
             <button onClick={() => {setQrType('PERSONAL'); setIsQrActive(false);}} className={`px-12 py-5 rounded-2xl font-black text-base transition-all ${qrType === 'PERSONAL' ? 'bg-[#daa520] text-black shadow-xl' : 'text-gray-500'}`}>{t.personal}</button>
             <button onClick={() => {setQrType('BUSINESS'); setIsQrActive(false);}} className={`px-12 py-5 rounded-2xl font-black text-base transition-all ${qrType === 'BUSINESS' ? 'bg-[#daa520] text-black shadow-xl' : 'text-gray-500'}`}>{t.business}</button>
           </div>
-          <div className="w-full bg-[#111] p-16 rounded-[60px] border border-white/5 flex flex-col items-center gap-10 text-center">
+          <div className="w-full bg-[#111] p-16 rounded-[60px] border border-white/5 flex flex-col items-center gap-10 text-center shadow-inner">
             <div className={`p-10 rounded-[40px] bg-black border-2 transition-all ${isQrActive ? 'border-[#daa520]' : 'border-white/5 opacity-50'}`}>
               {isQrActive ? (
                 <img src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=KEDHEON_${qrType}`} className="w-48 h-48 rounded-2xl" alt="QR" />
@@ -152,7 +162,7 @@ export default function KedheonPortal() {
                 <div className="w-48 h-48 flex items-center justify-center text-gray-700 text-5xl italic font-black">QR</div>
               )}
             </div>
-            <button onClick={() => {setBeomToken(p => p-50); setIsQrActive(true);}} className="bg-[#daa520] text-black px-16 py-6 rounded-2xl font-black text-2xl shadow-2xl hover:scale-105 transition-all">
+            <button onClick={() => {setBeomToken(p => p-50); setIsQrActive(true);}} className="bg-[#daa520] text-black px-16 py-6 rounded-2xl font-black text-2xl shadow-2xl hover:scale-105 active:scale-95 transition-all">
               {isQrActive ? t.authActive : t.authInactive}
             </button>
           </div>
@@ -161,10 +171,10 @@ export default function KedheonPortal() {
         {/* 4. 영토 확장 지원 (런치패드) */}
         <div className="flex flex-col items-center gap-12">
           <SectionTitle title={t.launchTitle} desc={t.launchDesc} />
-          <div className="w-full bg-[#111] p-12 rounded-[60px] border border-[#daa520]/20 shadow-2xl space-y-10 text-left">
+          <div className="w-full bg-gradient-to-br from-[#111] to-black p-12 rounded-[60px] border border-[#daa520]/20 shadow-2xl space-y-10 text-left">
              <div className="flex justify-between items-center">
                 <h4 className="text-white font-black text-3xl italic">🚀 {project.name}</h4>
-                <span className="bg-[#daa520]/10 text-[#daa520] px-4 py-1 rounded-full text-xs font-black uppercase">{project.status}</span>
+                <span className="bg-[#daa520]/10 text-[#daa520] px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest">{project.status}</span>
              </div>
              <div className="space-y-4">
                 <div className="flex justify-between text-sm font-black text-gray-500 uppercase tracking-widest">
@@ -181,7 +191,7 @@ export default function KedheonPortal() {
           </div>
         </div>
 
-        {/* 5. 제국 기여 보상 (스테이킹) */}
+        {/* 5. 제국 기여 보상 */}
         <div className="flex flex-col items-center gap-12">
           <SectionTitle title={t.contributionTitle} desc={t.contributionDesc} />
           <div className="w-full bg-[#111] p-12 rounded-[60px] border border-[#daa520]/20 flex flex-col items-center gap-10 shadow-2xl">
@@ -195,7 +205,7 @@ export default function KedheonPortal() {
           </div>
         </div>
 
-        {/* 6. 팬덤 영토 (12대 카테고리) */}
+        {/* 6. 팬덤 영토 */}
         <div className="flex flex-col items-center gap-12">
           <SectionTitle title={t.fandomTitle} desc={t.fandomDesc} />
           <div className="grid grid-cols-3 md:grid-cols-4 gap-4 w-full">
@@ -213,13 +223,14 @@ export default function KedheonPortal() {
           </div>
         </div>
 
-        {/* 7. 브로드캐스트 센터 (통합 피드) */}
+        {/* 7. 브로드캐스트 센터 (피드 한 줄 정렬) */}
         <div className="flex flex-col items-center gap-16">
-          <SectionTitle title={t.broadcastTitle} desc="제국의 모든 목소리를 한 줄로 연결합니다." />
+          <SectionTitle title={t.broadcastTitle} desc={t.broadcastDesc} />
           <div className="w-full bg-[#111] p-12 rounded-[60px] border border-white/10 space-y-8 shadow-2xl text-left">
-            <input type="text" placeholder="제목 (Title)" className="bg-black p-8 rounded-[35px] border border-white/5 w-full text-2xl outline-none focus:border-[#daa520] font-black text-white" />
-            <textarea placeholder="상세 내용 (Details)" className="bg-black p-8 rounded-[35px] border border-white/5 w-full text-xl h-48 outline-none focus:border-[#daa520] resize-none text-gray-300" />
-            <button className="w-full py-10 rounded-[50px] font-black text-3xl bg-[#daa520] text-black uppercase tracking-widest shadow-2xl">
+            <input type="text" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} placeholder="제목 (Title)" className="bg-black p-8 rounded-[35px] border border-white/5 w-full text-2xl outline-none focus:border-[#daa520] font-black text-white" />
+            <input type="text" value={newVideoUrl} onChange={(e) => setNewVideoUrl(e.target.value)} placeholder="YouTube URL" className="bg-black p-8 rounded-[35px] border border-white/5 w-full text-xl outline-none focus:border-[#daa520] font-mono text-[#daa520]" />
+            <textarea value={newDesc} onChange={(e) => setNewDesc(e.target.value)} placeholder="상세 내용 (Details)" className="bg-black p-8 rounded-[35px] border border-white/5 w-full text-xl h-48 outline-none focus:border-[#daa520] resize-none text-gray-300" />
+            <button onClick={postBroadcast} className="w-full py-10 rounded-[50px] font-black text-3xl bg-gradient-to-r from-[#daa520] to-[#b8860b] text-black shadow-2xl uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all">
               {t.postBtn}
             </button>
           </div>
@@ -231,9 +242,16 @@ export default function KedheonPortal() {
                     <h4 className="text-5xl font-black text-white leading-tight tracking-tight">{a.title}</h4>
                     <span className="text-gray-600 font-mono text-base font-bold">{a.timestamp}</span>
                   </div>
+                  {a.videoUrl && a.videoUrl.includes('v=') && (
+                    <div className="relative aspect-video rounded-[50px] overflow-hidden border-8 border-white/5 bg-black shadow-inner">
+                      <iframe className="absolute inset-0 w-full h-full" src={`https://www.youtube.com/embed/${a.videoUrl.split('v=')[1]}`} frameBorder="0" allowFullScreen></iframe>
+                    </div>
+                  )}
                   <p className="text-gray-400 text-2xl font-bold leading-relaxed px-4 italic">"{a.desc}"</p>
                   <div className="pt-10 border-t border-white/5 flex justify-between items-center px-4">
-                    <button className="bg-[#daa520] text-black px-12 py-5 rounded-2xl font-black text-xl hover:scale-110 active:scale-95 transition-all shadow-xl">{t.supportBtn}</button>
+                    <button onClick={() => setBeomToken(p => p - 100)} className="bg-gradient-to-r from-[#daa520] to-[#b8860b] text-black px-12 py-5 rounded-2xl font-black text-xl hover:scale-110 active:scale-95 transition-all shadow-xl">
+                      {t.supportBtn}
+                    </button>
                     <p className="text-[#daa520] font-black text-5xl tracking-tighter">{a.beomSupport.toLocaleString()} BEOM</p>
                   </div>
                 </div>
@@ -245,10 +263,10 @@ export default function KedheonPortal() {
       </div>
 
       <div className="mt-80 opacity-20 text-center w-full">
-        <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="text-[#daa520] font-black text-sm uppercase tracking-[1em] mb-10">
+        <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="text-[#daa520] font-black text-sm uppercase tracking-[1em] mb-10 hover:opacity-100 transition-opacity">
           {t.backBtn}
         </button>
-        <p className="text-xs font-mono tracking-[1.5em] uppercase text-white/50">Kedheon Empire | Stable v6.5 Master Final</p>
+        <p className="text-xs font-mono tracking-[1.5em] uppercase text-white/50">Kedheon Empire | Stable v6.8 Master Final</p>
       </div>
     </div>
   );
