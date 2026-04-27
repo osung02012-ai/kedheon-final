@@ -95,13 +95,12 @@ export default function KedheonPortal() {
   const empireCharacterName = 'CHEOREOM_88';
   const empireUrl = "https://kedheon.com";
 
-  // 에셋 경로
+  // 에셋 경로 (고해상도 범 토큰 이미지 적용!)
   const mainCharacter = "/kedheon-character.png"; 
-  const beomTokenImg = "/beom-token.png";
+  const beomTokenImg = "/beom-token.png"; 
   const businessQrImg = "/qr-business.png";
   const personalQrImg = "/qr-personal.png";
 
-  // 기본 고정 데이터
   const defaultCategories = ['MUSIC', 'SPORTS', 'ANIME', 'DRAMA', 'MOVIE', 'ESPORTS', 'COMEDY'];
   const ecosystemApps = ['Pi Network', 'Nexus AI', 'Kedheon AI', 'Pi Vendor', 'Pi Civil', 'Pi FactFilter', 'PiPapa', 'Pi 6G Network'];
 
@@ -111,16 +110,13 @@ export default function KedheonPortal() {
   const [tab, setTab] = useState<'ROOKIE' | 'PIONEER'>('PIONEER');
   const [viewMode, setViewMode] = useState<'HUB' | 'BOARD'>('HUB'); 
   const [category, setCategory] = useState('ALL');
-  
   const [beomToken, setBeomToken] = useState(8791.88); 
   const [assets, setAssets] = useState<Asset[]>([]);
   const [userTerritories, setUserTerritories] = useState<Territory[]>([]);
-  
   const [qrType, setQrType] = useState<'PERSONAL' | 'BUSINESS'>('PERSONAL');
   const [isQrActive, setIsQrActive] = useState(false);
   const [businessName, setBusinessName] = useState('해태건축사');
   const [businessID, setBusinessID] = useState('HT-0001');
-
   const [newTitle, setNewTitle] = useState('');
   const [newDesc, setNewDesc] = useState('');
   const [newVideoUrl, setNewVideoUrl] = useState('');
@@ -136,7 +132,6 @@ export default function KedheonPortal() {
     const savedRooms = localStorage.getItem('k_rooms');
     const savedToken = localStorage.getItem('k_token');
     const savedLang = localStorage.getItem('k_lang');
-    
     if (savedAssets) setAssets(JSON.parse(savedAssets));
     if (savedRooms) setUserTerritories(JSON.parse(savedRooms));
     if (savedToken) setBeomToken(parseFloat(savedToken));
@@ -159,23 +154,17 @@ export default function KedheonPortal() {
 
   const handleCreateTerritory = () => {
     if (beomToken < TERRITORY_CREATE_COST) return alert(lang === 'KO' ? "잔액 부족" : "Insufficient Balance");
-    if (!createRoomTitle.trim()) return alert(lang === 'KO' ? "이름을 입력하세요" : "Enter a name");
-    
-    const newRoom: Territory = { id: createRoomTitle.toUpperCase(), title: createRoomTitle.toUpperCase(), desc: "", creator: empireCharacterName };
+    if (!createRoomTitle.trim()) return alert(lang === 'KO' ? "이름 입력" : "Enter Name");
+    const newRoom = { id: createRoomTitle.toUpperCase(), title: createRoomTitle.toUpperCase(), desc: "", creator: empireCharacterName };
     setUserTerritories([...userTerritories, newRoom]);
     setBeomToken(prev => prev - TERRITORY_CREATE_COST);
-    setShowCreateModal(false); 
-    setCreateRoomTitle('');
+    setShowCreateModal(false); setCreateRoomTitle('');
   };
 
   const registerAsset = () => {
     if (!newTitle.trim()) return alert(lang === 'KO' ? "제목 필수" : "Title required");
     if (beomToken < 10) return alert(lang === 'KO' ? "잔액 부족" : "Insufficient Balance");
-    
-    const newAsset: Asset = { 
-      id: Date.now(), title: newTitle, desc: newDesc, category, videoUrl: newVideoUrl, 
-      beomSupport: 0, isAd: false, owner: empireCharacterName, timestamp: new Date().toLocaleDateString() 
-    };
+    const newAsset: Asset = { id: Date.now(), title: newTitle, desc: newDesc, category, videoUrl: newVideoUrl, beomSupport: 0, isAd: false, owner: empireCharacterName, timestamp: new Date().toLocaleDateString() };
     setAssets([newAsset, ...assets]);
     setBeomToken(prev => prev - 10);
     setNewTitle(''); setNewDesc(''); setNewVideoUrl('');
@@ -213,7 +202,7 @@ export default function KedheonPortal() {
             
             {viewMode === 'HUB' ? (
               <>
-                {/* 1. 대시보드 */}
+                {/* 1. 대시보드 (고해상도 범 토큰 메달리온) */}
                 <div className="bg-[#111] p-12 rounded-[60px] border border-[#daa520]/40 shadow-2xl flex justify-between items-center group relative overflow-hidden">
                   <div className="relative z-10 text-left">
                     <h3 className="text-gray-500 text-xs uppercase tracking-[0.4em] mb-4 font-black opacity-60">{t.balance}</h3>
@@ -223,8 +212,9 @@ export default function KedheonPortal() {
                     </div>
                   </div>
                   <div className="flex flex-col items-end relative z-10"> 
-                    <div className="w-48 h-48 rounded-full overflow-hidden border-8 border-[#daa520]/50 shadow-[0_0_50px_rgba(218,165,32,0.6)] mb-8 bg-black">
-                       <img src={beomTokenImg} className="w-full h-full object-cover scale-110" alt="Coin" />
+                    {/* 선명하게 보정된 범 토큰 이미지 영역 */}
+                    <div className="w-56 h-56 rounded-full overflow-hidden border-8 border-[#daa520]/50 shadow-[0_0_60px_rgba(218,165,32,0.7)] mb-8 bg-black flex items-center justify-center">
+                       <img src={beomTokenImg} className="w-full h-full object-cover scale-100" alt="Beom Token High Res" />
                     </div>
                     <div className="text-right">
                         <p className="text-white font-black text-7xl leading-none">Lv. 88</p>
@@ -250,7 +240,7 @@ export default function KedheonPortal() {
                   </button>
                 </div>
 
-                {/* 3. QR 시스템 */}
+                {/* 3. QR 시스템 (보안 123 원칙) */}
                 <div className="bg-[#111] p-16 rounded-[60px] border border-[#daa520]/20 text-center relative overflow-hidden">
                   <SectionTitle title={t.qrTitle} desc={t.qrDesc} />
                   <div className="max-w-4xl mx-auto mb-12 grid grid-cols-1 md:grid-cols-3 gap-8 text-left border-y border-white/5 py-10">
@@ -270,7 +260,7 @@ export default function KedheonPortal() {
                     <div className={`absolute inset-0 flex flex-col items-center justify-center p-12 transition-all ${isQrActive ? 'bg-transparent' : 'bg-black/95 backdrop-blur-3xl'}`}>
                       {isQrActive ? (
                         <div className="bg-white p-6 rounded-[50px] shadow-2xl border-8 border-[#daa520]/30 animate-in zoom-in-50">
-                          <img src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(empireUrl + '/?id=' + empireCharacterName)}`} className="w-48 h-48" alt="QR" />
+                          <img src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(empireUrl + '/?id=' + (qrType === 'BUSINESS' ? businessID : empireCharacterName))}`} className="w-48 h-48" alt="QR" />
                         </div>
                       ) : (
                         <button onClick={() => {setBeomToken(beomToken-50); setIsQrActive(true);}} className="bg-[#daa520] text-black px-20 py-8 rounded-3xl font-black text-2xl shadow-xl hover:scale-105 transition-all uppercase tracking-widest">{t.qrAuth}</button>
@@ -311,7 +301,6 @@ export default function KedheonPortal() {
                     <button onClick={registerAsset} className="w-full py-10 rounded-[50px] font-black text-3xl bg-gradient-to-br from-[#daa520] to-[#b8860b] text-black shadow-2xl transition-all uppercase tracking-widest">{t.postBtn}</button>
                   </div>
                 </div>
-                {/* 피드 렌더링 */}
                 <div className="space-y-16">
                   {assets.filter(a => category === 'ALL' || a.category === category).map((a) => (
                     <div key={a.id} className="p-12 rounded-[70px] bg-[#111] border-l-[24px] border-gray-800 shadow-xl text-left overflow-hidden">
