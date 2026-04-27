@@ -5,6 +5,7 @@ interface Asset { id: number; title: string; desc: string; category: string; beo
 
 export default function KedheonPortal() {
   const empireCharacterName = 'CHEOREOM_88';
+  const invitationCode = 'CHEOREOM88'; // 제국 공식 초대코드
 
   const [hasMounted, setHasMounted] = useState(false);
   const [lang, setLang] = useState<'KO' | 'EN'>('KO');
@@ -28,18 +29,28 @@ export default function KedheonPortal() {
     authT: "IMPERIAL SECURE AUTH", authD: "보안 신분 인증 및 익명 결제 시스템을 가동합니다.",
     conT: "CONTRIBUTION REWARD", conD: "제국 인프라 기여 보상을 확인하십시오.",
     fanT: "IMPERIAL FANDOM TERRITORY", fanD: "공식 영토 혹은 시민 자치 팬방에 진입하십시오.",
-    postBtn: "제국 피드 방송", supportBtn: "👑 찬양", enterBtn: "제국 입국", createBtn: "➕ 팬방 개설"
+    guideT: "PIONEER ONBOARDING", guideD: "파이 네트워크 가입 및 채굴 가이드라인입니다.",
+    postBtn: "제국 피드 방송", supportBtn: "👑 찬양", enterBtn: "제국 입국", createBtn: "➕ 팬방 개설",
+    step1: "1. Pi Network 앱 설치 (App Store / Play Store)",
+    step2: "2. 휴대폰 번호 또는 페이스북으로 가입",
+    step3: "3. 초대코드(Invitation Code) 입력: ",
+    step4: "4. 번개 버튼을 눌러 채굴 시작 (24시간 마다)"
   } : {
     welcomeD: "Join the Kedheon Empire Web3 Ecosystem",
     authT: "SECURE AUTH", authD: "Activate secure identity and payment system.",
     conT: "REWARD", conD: "Check your infrastructure contribution rewards.",
     fanT: "TERRITORY", fanD: "Enter official or autonomous Fan Rooms.",
-    postBtn: "Broadcast", supportBtn: "👑 Praise", enterBtn: "ENTER", createBtn: "➕ Create Fan Room"
+    guideT: "PIONEER ONBOARDING", guideD: "Pi Network registration and mining guidelines.",
+    postBtn: "Broadcast", supportBtn: "👑 Praise", enterBtn: "ENTER", createBtn: "➕ Create Fan Room",
+    step1: "1. Install Pi Network App (App Store / Play Store)",
+    step2: "2. Sign up with Phone or Facebook",
+    step3: "3. Enter Invitation Code: ",
+    step4: "4. Tap the lightning bolt to start mining (Every 24h)"
   };
 
   useEffect(() => {
     setHasMounted(true);
-    const saved = localStorage.getItem('kedheon_v38_final');
+    const saved = localStorage.getItem('kedheon_v39_final');
     if (saved) {
       try {
         const p = JSON.parse(saved);
@@ -49,7 +60,7 @@ export default function KedheonPortal() {
   }, []);
 
   useEffect(() => {
-    if (hasMounted) localStorage.setItem('kedheon_v38_final', JSON.stringify({ token: beomToken, assets, staked: contributedBeom }));
+    if (hasMounted) localStorage.setItem('kedheon_v39_final', JSON.stringify({ token: beomToken, assets, staked: contributedBeom }));
   }, [beomToken, assets, contributedBeom, hasMounted]);
 
   if (!hasMounted) return null;
@@ -87,20 +98,13 @@ export default function KedheonPortal() {
           <div className="flex flex-col items-center text-center py-20 animate-in zoom-in-95 duration-500">
             <img src="/kedheon-character.png" className="w-32 h-32 md:w-56 md:h-56 rounded-3xl object-cover mb-8 shadow-[0_0_30px_rgba(218,165,32,0.3)] border-4 border-[#daa520]" alt="K" />
             <h1 className="text-4xl md:text-6xl font-black text-[#daa520] tracking-widest italic mb-4 leading-none uppercase">Kedheon Empire</h1>
-            
-            {/* 추가된 웹3 참여 설명문 */}
-            <p className="text-white font-black text-lg md:text-2xl mb-10 tracking-tighter border-y-2 border-white/20 py-2 px-6">
-              {t.welcomeD}
-            </p>
-
-            <button onClick={() => setTab('PIONEER')} className="bg-[#daa520] text-black px-12 py-4 md:px-20 md:py-6 rounded-full font-black text-xl md:text-3xl shadow-2xl border-4 border-white hover:scale-105 active:scale-95 transition-all">
-              {t.enterBtn}
-            </button>
+            <p className="text-white font-black text-lg md:text-2xl mb-10 tracking-tighter border-y-2 border-white/20 py-2 px-6">{t.welcomeD}</p>
+            <button onClick={() => setTab('PIONEER')} className="bg-[#daa520] text-black px-12 py-4 md:px-20 md:py-6 rounded-full font-black text-xl md:text-3xl shadow-2xl border-4 border-white hover:scale-105 active:scale-95 transition-all">{t.enterBtn}</button>
           </div>
         ) : (
           <div className="flex flex-col gap-16 md:gap-24 animate-in slide-in-from-bottom-5 duration-500">
             
-            {/* 대시보드 - 경계선 강화 */}
+            {/* 00. 대시보드 */}
             <div className="bg-[#111] p-6 md:p-10 rounded-3xl md:rounded-[40px] border-4 border-[#daa520] shadow-2xl flex flex-col md:flex-row justify-between items-center gap-8 relative">
                <div className="flex flex-col items-center md:items-start gap-3 md:gap-5 z-10 text-center md:text-left flex-1">
                   <h3 className="text-white/70 text-[10px] md:text-sm uppercase font-black tracking-tighter">제국 자산 잔액 | Lv. 88</h3>
@@ -111,12 +115,12 @@ export default function KedheonPortal() {
                   <img src="/kedheon-character.png" className="w-16 h-16 md:w-32 md:h-32 rounded-2xl md:rounded-3xl object-cover border-2 border-white shadow-xl" alt="Char" />
                   <div className="flex flex-col items-center gap-2">
                     <img src="/beom-token.png" className="w-20 h-20 md:w-32 md:h-32 object-contain" alt="Token" />
-                    <p className="bg-[#daa520] text-black px-4 py-1 rounded-full font-black text-[10px] md:text-sm italic border-2 border-white">KEDHEON.PI</p>
+                    <p className="bg-[#daa520] text-black px-4 py-1 rounded-full font-black text-[10px] md:text-sm italic border-2 border-white uppercase tracking-tighter">Kedheon.Pi</p>
                   </div>
                </div>
             </div>
 
-            {/* 보안 신분 인증 - QR 영역 유지 */}
+            {/* 01. 보안 신분 인증 */}
             <div className="flex flex-col w-full">
               <SectionHeader num="01" title={t.authT} desc={t.authD} />
               <div className="w-full bg-[#111] p-6 md:p-10 rounded-3xl flex flex-col items-center gap-6 md:gap-8 border-4 border-white/40">
@@ -124,19 +128,9 @@ export default function KedheonPortal() {
                   <button onClick={() => {setQrType('PERSONAL'); setIsQrActive(false);}} className={`flex-1 py-2 md:py-3 rounded-lg text-[10px] md:text-sm transition-all ${qrType === 'PERSONAL' ? 'bg-[#daa520] text-black' : 'text-white/60'}`}>개인인증</button>
                   <button onClick={() => {setQrType('BUSINESS'); setIsQrActive(false);}} className={`flex-1 py-2 md:py-3 rounded-lg text-[10px] md:text-sm transition-all ${qrType === 'BUSINESS' ? 'bg-[#daa520] text-black' : 'text-white/60'}`}>기업인증</button>
                 </div>
-
-                {qrType === 'BUSINESS' && (
-                  <input type="text" value={bizName} onChange={(e) => setBizName(e.target.value)} placeholder="ENTER BUSINESS NAME (기업명)" className="w-full max-w-md bg-black border-4 border-[#daa520] p-4 rounded-xl text-center font-black text-[#daa520] outline-none text-lg" />
-                )}
-
+                {qrType === 'BUSINESS' && <input type="text" value={bizName} onChange={(e) => setBizName(e.target.value)} placeholder="ENTER BUSINESS NAME (기업명)" className="w-full max-w-md bg-black border-4 border-[#daa520] p-4 rounded-xl text-center font-black text-[#daa520] outline-none text-lg" />}
                 <div className={`p-6 md:p-10 rounded-3xl bg-black border-4 transition-all shadow-2xl ${isQrActive ? 'border-[#daa520]' : 'opacity-20 border-white'}`}>
-                  {isQrActive ? (
-                    <img src={qrType === 'PERSONAL' ? "/qr-personal.png" : "/qr-business.png"} 
-                         onError={(e:any) => { e.target.src = `https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=KEDHEON_${qrType}_${bizName || 'SECURE'}`; }} 
-                         className="w-48 h-48 md:w-80 md:h-80 rounded-xl" alt="QR" />
-                  ) : (
-                    <div className="w-48 h-48 md:w-80 md:h-80 flex items-center justify-center text-white/20 text-3xl md:text-5xl font-black italic uppercase">Secure Auth</div>
-                  )}
+                  {isQrActive ? <img src={qrType === 'PERSONAL' ? "/qr-personal.png" : "/qr-business.png"} onError={(e:any) => { e.target.src = `https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=KEDHEON_${qrType}_${bizName || 'SECURE'}`; }} className="w-48 h-48 md:w-80 md:h-80 rounded-xl" alt="QR" /> : <div className="w-48 h-48 md:w-80 md:h-80 flex items-center justify-center text-white/20 text-3xl md:text-5xl font-black italic uppercase">Secure Auth</div>}
                 </div>
                 <button onClick={() => {setBeomToken(p => p-50); setIsQrActive(true);}} className="bg-[#daa520] text-black px-10 py-4 md:px-16 md:py-5 rounded-xl font-black text-md md:text-xl shadow-lg border-4 border-white active:scale-95 transition-all">
                   {isQrActive ? "인증 활성화 중" : "인증 시작 (50 BEOM)"}
@@ -144,7 +138,7 @@ export default function KedheonPortal() {
               </div>
             </div>
 
-            {/* 기여 보상 엔진 */}
+            {/* 02. 기여 보상 엔진 */}
             <div className="flex flex-col w-full">
               <SectionHeader num="02" title={t.conT} desc={t.conD} />
               <div className="w-full bg-[#111] p-8 md:p-12 rounded-3xl flex flex-col items-center gap-6 shadow-xl border-4 border-white">
@@ -154,7 +148,7 @@ export default function KedheonPortal() {
               </div>
             </div>
 
-            {/* 팬방 및 방송 */}
+            {/* 03. 팬방 및 방송 */}
             <div className="flex flex-col items-start w-full">
               <SectionHeader num="03" title={t.fanT} desc={t.fanD} icon="🌐" />
               <div className="grid grid-cols-4 md:grid-cols-6 gap-2 md:gap-4 w-full mb-8 md:mb-12">
@@ -162,17 +156,11 @@ export default function KedheonPortal() {
                   <button key={cat} onClick={() => setCategory(cat)} className={`py-3 md:py-5 rounded-xl font-black text-[8px] md:text-xs tracking-widest border-2 transition-all ${category === cat ? 'bg-[#daa520] text-black border-[#daa520]' : 'bg-[#111] text-white border-white/40'}`}>{cat}</button>
                 ))}
               </div>
-
-              {/* 방송 등록 카드 */}
               <div className="w-full bg-[#111] p-6 md:p-8 rounded-3xl border-4 border-[#daa520] space-y-4 text-left mb-12 shadow-xl">
                 <input type="text" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} placeholder="TITLE" className="bg-black p-3 md:p-4 rounded-xl border-2 border-white w-full text-sm md:text-lg outline-none focus:border-[#daa520] font-black text-white" />
                 <textarea value={newDesc} onChange={(e) => setNewDesc(e.target.value)} placeholder="DETAILS" className="bg-black p-3 md:p-4 rounded-xl border-2 border-white w-full text-xs md:text-sm h-24 outline-none focus:border-[#daa520] resize-none text-white font-bold" />
-                <button onClick={() => { if(!newTitle.trim()) return alert("제목!"); setAssets([{id: Date.now(), title: newTitle, desc: newDesc, category, beomSupport: 0, owner: empireCharacterName, timestamp: new Date().toLocaleDateString()}, ...assets]); setBeomToken(p=>p-10); setNewTitle(''); setNewDesc(''); }} className="w-full py-3 md:py-4 rounded-xl font-black text-sm md:text-lg bg-[#daa520] text-black shadow-md border-2 border-white active:scale-95 transition-all uppercase">
-                  {t.postBtn} (10 BEOM)
-                </button>
+                <button onClick={() => { if(!newTitle.trim()) return alert("제목!"); setAssets([{id: Date.now(), title: newTitle, desc: newDesc, category, beomSupport: 0, owner: empireCharacterName, timestamp: new Date().toLocaleDateString()}, ...assets]); setBeomToken(p=>p-10); setNewTitle(''); setNewDesc(''); }} className="w-full py-3 md:py-4 rounded-xl font-black text-sm md:text-lg bg-[#daa520] text-black shadow-md border-2 border-white active:scale-95 transition-all uppercase">{t.postBtn} (10 BEOM)</button>
               </div>
-
-              {/* 피드 리스트 */}
               <div className="w-full space-y-12">
                 <div className="flex flex-col md:flex-row gap-3 w-full mb-6">
                   <button onClick={() => setCategory('ALL')} className={`flex-[2] py-3 md:py-4 rounded-xl font-black text-sm md:text-lg border-4 transition-all ${category === 'ALL' ? 'border-[#daa520] text-[#daa520] bg-[#daa520]/10' : 'border-white text-white/60'}`}>전체 피드 입장</button>
@@ -189,18 +177,44 @@ export default function KedheonPortal() {
                     </div>
                     <p className="text-white/90 text-sm md:text-lg font-bold leading-relaxed italic">"{a.desc}"</p>
                     <div className="pt-6 border-t-2 border-white/20 flex flex-col md:flex-row justify-between items-center gap-6">
-                      <button onClick={() => { if (beomToken < 100) return alert("!"); setBeomToken(p => p - 100); setAssets(assets.map(i => i.id === a.id ? { ...i, beomSupport: i.beomSupport + 100 } : i)); }} 
-                              className="bg-[#daa520] text-black px-8 py-2.5 md:px-12 md:py-4 rounded-xl font-black text-xs md:text-lg border-2 border-white hover:scale-110 active:scale-95 transition-all shadow-lg">
-                        {t.supportBtn}
-                      </button>
-                      <p className="text-[#daa520] font-black text-2xl md:text-5xl tracking-tighter">
-                        {a.beomSupport.toLocaleString()} <span className="text-sm md:text-xl ml-2 text-white/60">BEOM 찬양금</span>
-                      </p>
+                      <button onClick={() => { if (beomToken < 100) return alert("!"); setBeomToken(p => p - 100); setAssets(assets.map(i => i.id === a.id ? { ...i, beomSupport: i.beomSupport + 100 } : i)); }} className="bg-[#daa520] text-black px-8 py-2.5 md:px-12 md:py-4 rounded-xl font-black text-xs md:text-lg border-2 border-white hover:scale-110 active:scale-95 transition-all shadow-lg">{t.supportBtn}</button>
+                      <p className="text-[#daa520] font-black text-2xl md:text-5xl tracking-tighter">{a.beomSupport.toLocaleString()} <span className="text-sm md:text-xl ml-2 text-white/60">BEOM 찬양금</span></p>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
+
+            {/* 04. 파이코인 가입 가이드라인 및 초대코드 (New Section) */}
+            <div className="flex flex-col items-start w-full">
+              <SectionHeader num="04" title={t.guideT} desc={t.guideD} icon="⚡" />
+              <div className="w-full bg-[#111] p-6 md:p-10 rounded-3xl border-4 border-white shadow-2xl flex flex-col gap-10">
+                
+                {/* 초대코드 강조 영역 */}
+                <div className="flex flex-col items-center bg-black p-6 md:p-10 rounded-[30px] border-4 border-[#daa520] animate-pulse">
+                  <p className="text-white font-black text-sm md:text-lg uppercase tracking-widest mb-4">Imperial Invitation Code</p>
+                  <p className="text-[#daa520] font-black text-5xl md:text-8xl tracking-tighter select-all cursor-pointer">{invitationCode}</p>
+                  <p className="text-white/50 font-bold text-xs mt-4 italic">초대코드를 복사하여 제국 시민권을 획득하세요.</p>
+                </div>
+
+                {/* 단계별 가이드라인 */}
+                <div className="space-y-6 text-left">
+                  {[t.step1, t.step2, t.step3 + invitationCode, t.step4].map((step, idx) => (
+                    <div key={idx} className="bg-black/50 p-4 md:p-6 rounded-2xl border-2 border-white/20 hover:border-[#daa520] transition-all flex items-center gap-4">
+                      <span className="bg-[#daa520] text-black w-8 h-8 flex items-center justify-center rounded-full font-black flex-shrink-0">{idx + 1}</span>
+                      <p className="text-white font-black text-sm md:text-xl leading-snug">{step}</p>
+                    </div>
+                  ))}
+                </div>
+
+                {/* 공식 다운로드 링크 버튼 (시각적) */}
+                <div className="flex flex-col md:flex-row gap-4 mt-4">
+                  <button className="flex-1 bg-white text-black py-4 rounded-xl font-black text-sm md:text-lg border-4 border-[#daa520] uppercase shadow-lg">App Store</button>
+                  <button className="flex-1 bg-white text-black py-4 rounded-xl font-black text-sm md:text-lg border-4 border-[#daa520] uppercase shadow-lg">Google Play</button>
+                </div>
+              </div>
+            </div>
+
           </div>
         )}
       </div>
@@ -221,7 +235,7 @@ export default function KedheonPortal() {
       )}
 
       <div className="mt-20 opacity-30 text-center w-full pb-10 font-mono tracking-[0.5em] md:tracking-[1em] uppercase text-white text-[8px] md:text-xs">
-        Kedheon Empire | Final v38.0 Integrity Master
+        Kedheon Empire | Final v39.0 Integrity Master
       </div>
     </div>
   );
