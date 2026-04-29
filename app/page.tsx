@@ -1,12 +1,13 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
 
-/** * [KEDHEON MASTER V94.0 ARCHITECTURAL LIGHT-FRAME]
+/** * [KEDHEON MASTER V95.0 ULTIMATE SALE MASTER]
  * -----------------------------------------------------------
- * 1. 프레임 약화: 섹션 배경 박스 테두리를 border-white/10으로 약하게 처리
- * 2. 액션 강화: 클릭/탭 요소는 골드 배경 및 강한 테두리 유지
- * 3. 직접 업로드: 파일 API를 통한 이미지 등록 시스템 (URL 입력 제거)
- * 4. 케데헌까페: 기업용 QR 예시 반영 및 16:9 와이드 오버레이
+ * 1. 굿즈 판매 시스템: 상품명 + 가격 + 사진(직접 업로드) 로직 완결
+ * 2. 무회색 정책 (Absolute White): 모든 텍스트 및 안내 문구 순수 화이트 적용
+ * 3. 프레임 대비: 섹션 박스(border-white/10) vs 기능/탭 박스(Strong Gold/White)
+ * 4. 루키 수직 가이드: 8단계 상세 설명 + 앱 다운로드 경로 수직 정렬
+ * 5. 기업형 QR: "케데헌까페" 예시 적용 및 16:9 와이드 오버레이
  * -----------------------------------------------------------
  */
 
@@ -19,10 +20,10 @@ const DICT = {
     rookie: "ROOKIE", pioneer: "PIONEER", exchange: "EXCHANGE", auth: "SECURE AUTH", creative: "CREATIVE", market: "MARKET",
     invitation: "Web3 초대합니다.", procedure: "가입절차 안내", assets: "ASSETS", activate: "보안 QR 활성화",
     convert: "1 PI 환전", post: "피드 등록", praise: "호응하기", buy: "구매하기", register: "상품 등록",
-    stepDesc: "시민권 획득을 위한 8단계 가이드입니다.",
-    exchangeDesc: "보유하신 채굴 기여도를 BEOM으로 즉시 전환하십시오.",
+    stepDesc: "정식 시민이 되기 위한 친절한 8단계 가이드입니다.",
+    exchangeDesc: "보유하신 채굴 기여도를 제국 통화인 BEOM으로 즉시 전환하십시오.",
     authDesc: "개인 및 비즈니스용 큐알코드를 발급받아 보안 인증 수단으로 사용하십시오.",
-    creativeDesc: "창작물을 게시하여 파이오니어들의 호응을 이끌어내십시오.",
+    creativeDesc: "창작물을 게시하여 파이오니어들의 BEOM 호응을 이끌어내십시오.",
     marketDesc: "다양한 GOODS를 거래하고 실제 사용 후기를 확인하십시오.",
     steps: [
       { t: "애플리케이션 설치", d: "스토어에서 [Pi Network] 공식 앱을 검색하여 설치하십시오." },
@@ -66,15 +67,18 @@ export default function KedheonPortal() {
   const [lang, setLang] = useState<'KR' | 'EN'>('KR');
   const [tab, setTab] = useState<'ROOKIE' | 'PIONEER'>('PIONEER');
   const [beomToken, setBeomToken] = useState(7891.88);
+  
   const [qrType, setQrType] = useState<'PERSONAL' | 'BUSINESS'>('PERSONAL');
   const [bizName, setBizName] = useState('');
   const [isQrActive, setIsQrActive] = useState(false);
+  
   const [postCategory, setPostCategory] = useState('TECH');
   const [assets, setAssets] = useState<Asset[]>([]);
   const [newTitle, setNewTitle] = useState('');
   const [newDesc, setNewDesc] = useState('');
+
   const [goods, setGoods] = useState<Good[]>([
-    { id: 1, name: "GOLD BADGE", price: 1000, img: "/beom-token.png", reviews: [{ id: 1, user: "Citizen_X", text: "고급스러운 마감입니다.", time: "2026.04.29" }] }
+    { id: 1, name: "GOLD BADGE", price: 1000, img: "/beom-token.png", reviews: [{ id: 1, user: "Alpha", text: "상당히 정교한 마감입니다.", time: "2026.04.29" }] }
   ]);
   const [sellName, setSellName] = useState('');
   const [sellPrice, setSellPrice] = useState('');
@@ -86,7 +90,7 @@ export default function KedheonPortal() {
 
   useEffect(() => {
     setHasMounted(true);
-    const saved = localStorage.getItem('kedheon_v94_lite');
+    const saved = localStorage.getItem('kedheon_v95_master');
     if (saved) {
       try {
         const p = JSON.parse(saved);
@@ -99,7 +103,7 @@ export default function KedheonPortal() {
   }, []);
 
   useEffect(() => {
-    if (hasMounted) localStorage.setItem('kedheon_v94_lite', JSON.stringify({ token: beomToken, lang, assets, goods }));
+    if (hasMounted) localStorage.setItem('kedheon_v95_master', JSON.stringify({ token: beomToken, lang, assets, goods }));
   }, [beomToken, lang, assets, goods, hasMounted]);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -112,8 +116,8 @@ export default function KedheonPortal() {
   };
 
   const SectionHeader = ({ num, title, desc }: { num: string; title: string; desc: string }) => (
-    <div className="w-full border-t border-white/20 pt-5 md:pt-8 mb-4 text-left font-black">
-      <h2 className="text-[#daa520] text-xl md:text-2xl uppercase italic mb-1 border-l-4 border-[#daa520] pl-3 leading-tight tracking-tighter">
+    <div className="w-full border-t-2 border-white/20 pt-6 md:pt-8 mb-4 text-left font-black">
+      <h2 className="text-[#daa520] text-xl md:text-3xl uppercase italic mb-1 border-l-4 border-[#daa520] pl-3 leading-tight tracking-tighter shadow-sm">
         {num}. {title}
       </h2>
       <p className="text-white text-[10px] md:text-[13px] font-sans font-bold leading-tight pl-4 italic">{desc}</p>
@@ -125,30 +129,31 @@ export default function KedheonPortal() {
   return (
     <div className="flex flex-col items-center bg-black min-h-screen text-white font-sans w-full pb-96 font-black overflow-x-hidden">
       
-      {/* GNB: 강조 탭 유지 */}
-      <div className="w-full max-w-6xl flex justify-between items-center px-4 py-3 md:py-4 sticky top-0 bg-black/95 backdrop-blur-xl z-[150] border-b-2 border-white/20">
+      {/* --- [GNB: 기능 탭 박스 강조] --- */}
+      <div className="w-full max-w-6xl flex justify-between items-center px-4 py-3 md:py-4 sticky top-0 bg-black/95 backdrop-blur-xl z-[150] border-b-2 border-white/20 shadow-2xl">
         <div className="flex items-center gap-2">
           <img src="/kedheon-character.png" className="w-8 h-8 md:w-10 md:h-10 rounded-lg border-2 border-white" alt="K" />
           <div className="text-left font-black leading-tight">
             <h2 className="text-[#daa520] text-lg md:text-xl italic uppercase tracking-tighter">Kedheon</h2>
-            <span className="text-white text-[8px] md:text-[10px] font-mono tracking-widest uppercase font-bold">v94.0 Lite-Frame</span>
+            <span className="text-white text-[8px] md:text-[10px] font-mono tracking-widest uppercase font-bold">v95.0 Master</span>
           </div>
         </div>
+        
         <div className="flex items-center gap-3 font-black">
           <div className="flex bg-white/5 rounded-lg p-0.5 border border-white/20">
             <button onClick={() => setLang('KR')} className={`px-2 py-0.5 rounded-md text-[9px] md:text-[11px] transition-all ${lang === 'KR' ? 'bg-[#daa520] text-black shadow-sm' : 'text-white'}`}>KR</button>
-            <button onClick={() => setLang('EN')} className={`px-2 py-0.5 rounded-md text-[9px] md:text-[11px] transition-all ${lang === 'EN' ? 'bg-[#daa520] text-black shadow-sm' : 'text-white'}`}>EN</button>
+            <button onClick={() => setLang('EN')} className={`px-2 py-0.5 rounded-md text-[9px] md:text-[11px] transition-all ${lang === 'EN' ? 'bg-[#daa520] text-black' : 'text-white'}`}>EN</button>
           </div>
           <div className="flex gap-1.5">
-            <button onClick={() => setTab('ROOKIE')} className={`px-3 py-1.5 rounded-lg text-[10px] md:text-xs border-2 transition-all ${tab === 'ROOKIE' ? 'bg-[#daa520] text-black border-white shadow-md' : 'border-white/10 text-white'}`}>{L.rookie}</button>
-            <button onClick={() => setTab('PIONEER')} className={`px-3 py-1.5 rounded-lg text-[10px] md:text-xs border-2 transition-all ${tab === 'PIONEER' ? 'bg-[#daa520] text-black border-white shadow-md' : 'border-white/10 text-white'}`}>{L.pioneer}</button>
+            <button onClick={() => setTab('ROOKIE')} className={`px-3 py-1.5 rounded-lg text-[10px] md:text-xs border-2 transition-all font-black ${tab === 'ROOKIE' ? 'bg-[#daa520] text-black border-white shadow-md' : 'border-white/10 text-white'}`}>{L.rookie}</button>
+            <button onClick={() => setTab('PIONEER')} className={`px-3 py-1.5 rounded-lg text-[10px] md:text-xs border-2 transition-all font-black ${tab === 'PIONEER' ? 'bg-[#daa520] text-black border-white shadow-md' : 'border-white/10 text-white'}`}>{L.pioneer}</button>
           </div>
         </div>
       </div>
 
       <div className="w-full max-w-4xl px-4 py-4 md:py-8">
         {tab === 'ROOKIE' ? (
-          /* ROOKIE: 가시성 최적화 */
+          /* --- [ROOKIE: 수직 구조 및 앱 다운로드 버튼] --- */
           <div className="flex flex-col gap-6 md:gap-10 animate-in fade-in text-left">
             <div className="flex flex-col items-center text-center gap-4 py-10 bg-[#111] rounded-[30px] border border-white/10 shadow-xl relative overflow-hidden">
               <img src="/kedheon-character.png" className="w-32 h-32 md:w-44 md:h-44 rounded-[30px] border-4 border-white shadow-xl relative z-10" alt="Main" />
@@ -158,10 +163,11 @@ export default function KedheonPortal() {
                 <p className="text-white text-[10px] md:text-[13px] mt-4 font-sans font-bold italic">{L.stepDesc}</p>
               </div>
             </div>
+
             <div className="grid grid-cols-1 gap-2 md:gap-3 font-black">
               {L.steps.map((step: any, i: number) => (
-                <div key={i} className={`p-4 md:p-6 bg-[#111] rounded-2xl border flex items-center gap-5 transition-all ${i >= 5 ? 'border-[#daa520] bg-[#daa520]/5' : 'border-white/5'}`}>
-                  <span className="text-[#daa520] text-base md:text-2xl font-black italic opacity-100 whitespace-nowrap">0{i+1}</span>
+                <div key={i} className={`p-4 md:p-6 bg-[#111] rounded-2xl border flex items-center gap-5 transition-all ${i >= 5 ? 'border-[#daa520] bg-[#daa520]/10 shadow-md' : 'border-white/5'}`}>
+                  <span className="text-[#daa520] text-base md:text-2xl font-black italic opacity-100 whitespace-nowrap font-sans">0{i+1}</span>
                   <div>
                     <h3 className="text-white text-sm md:text-lg font-black uppercase italic mb-0.5">{step.t}</h3>
                     <p className="text-white text-[10px] md:text-[13px] font-sans font-bold leading-snug">{step.d}</p>
@@ -169,16 +175,17 @@ export default function KedheonPortal() {
                 </div>
               ))}
             </div>
+
             <div className="flex gap-3 pt-4">
               <button onClick={() => window.open(PI_APP_STORE)} className="flex-1 bg-white text-black py-4 rounded-xl text-sm md:text-lg font-black uppercase border-4 border-[#daa520] active:scale-95 shadow-md">App Store</button>
               <button onClick={() => window.open(PI_PLAY_STORE)} className="flex-1 bg-white text-black py-4 rounded-xl text-sm md:text-lg font-black border-4 border-[#daa520] active:scale-95 shadow-md">Play Store</button>
             </div>
           </div>
         ) : (
-          /* PIONEER: 기능 박스 강조 */
+          /* --- [PIONEER: 조밀한 고대비 레이아웃] --- */
           <div className="flex flex-col gap-8 md:gap-14 py-2 text-left font-black animate-in slide-in-from-bottom-2">
             
-            {/* ASSETS DASHBOARD (Subtle Frame) */}
+            {/* ASSETS DASHBOARD (약한 프레임) */}
             <div className="bg-[#111] p-6 md:p-12 rounded-[40px] md:rounded-[60px] border border-white/10 shadow-xl flex justify-between items-center relative overflow-hidden">
                 <div className="text-left font-black z-10">
                   <h3 className="text-white text-[9px] md:text-[13px] uppercase tracking-widest mb-1 font-sans font-bold">{L.assets}</h3>
@@ -187,26 +194,26 @@ export default function KedheonPortal() {
                     <span className="text-lg md:text-4xl opacity-90">.{beomToken.toFixed(2).split('.')[1]}</span> 
                     <span className="ml-2 text-lg md:text-4xl">BEOM</span>
                   </p>
-                  <div className="mt-4 bg-black/60 px-5 py-2 rounded-xl border border-white inline-block text-xs md:text-2xl font-mono italic text-white font-black">
+                  <div className="mt-4 bg-black/60 px-5 py-2 rounded-xl border-2 border-white inline-block text-xs md:text-2xl font-mono italic text-white font-black">
                     ≈ {(beomToken / 100).toFixed(4)} Pi
                   </div>
                 </div>
                 <img src="/beom-token.png" className="w-16 h-16 md:w-44 md:h-44 object-contain animate-pulse" alt="B" />
             </div>
 
-            {/* 01. EXCHANGE (Strong Action) */}
+            {/* 01. EXCHANGE (강한 액션) */}
             <SectionHeader num="01" title={L.exchange} desc={L.exchangeDesc} />
-            <div className="bg-black p-5 md:p-10 rounded-[35px] border border-white/5 flex justify-between items-center shadow-md">
+            <div className="bg-black p-5 md:p-10 rounded-[35px] border border-white/10 flex justify-between items-center shadow-md">
               <div className="font-sans text-left">
                 <p className="text-white text-sm md:text-2xl font-black italic uppercase">Terminal</p>
-                <p className="text-white text-[9px] md:text-sm font-black mt-2 uppercase tracking-widest opacity-80">Rate: 1 Pi = 100 BEOM</p>
+                <p className="text-white text-[9px] md:text-sm font-black mt-2 uppercase tracking-widest opacity-90">Rate: 1 Pi = 100 BEOM</p>
               </div>
               <button onClick={() => setBeomToken(p=>p+100)} className="bg-[#daa520] text-black px-6 md:px-14 py-4 md:py-6 rounded-xl md:rounded-[30px] text-sm md:text-2xl border-4 border-white active:scale-95 uppercase font-black shadow-lg">{L.convert}</button>
             </div>
 
-            {/* 02. AUTH (Custom: 케데헌까페) */}
+            {/* 02. AUTH (케데헌까페 오버레이) */}
             <SectionHeader num="02" title={L.auth} desc={L.authDesc} />
-            <div className="bg-black p-6 md:p-12 rounded-[40px] border border-white/5 flex flex-col items-center gap-8 shadow-md">
+            <div className="bg-black p-6 md:p-12 rounded-[40px] border border-white/10 flex flex-col items-center gap-8 shadow-md">
               <div className="flex gap-2 w-full max-w-sm bg-white/5 p-1.5 rounded-xl border border-white/10 font-black">
                 <button onClick={() => { setQrType('PERSONAL'); setIsQrActive(false); }} className={`flex-1 py-2 md:py-4 rounded-lg text-[10px] md:text-sm transition-all border-2 ${qrType === 'PERSONAL' ? 'bg-[#daa520] text-black border-white shadow-md' : 'border-transparent text-white'}`}>PERSONAL</button>
                 <button onClick={() => { setQrType('BUSINESS'); setIsQrActive(false); }} className={`flex-1 py-2 md:py-4 rounded-lg text-[10px] md:text-sm transition-all border-2 ${qrType === 'BUSINESS' ? 'bg-[#daa520] text-black border-white shadow-md' : 'border-transparent text-white'}`}>BUSINESS</button>
@@ -215,18 +222,18 @@ export default function KedheonPortal() {
               {qrType === 'BUSINESS' && (
                 <div className="w-full max-w-sm space-y-2 animate-in slide-in-from-top-1 font-black">
                    <p className="text-white text-[10px] md:text-xs uppercase font-black pl-2">Enterprise Name</p>
-                   <input value={bizName} onChange={(e) => setBizName(e.target.value.toUpperCase())} placeholder="케데헌까페 명칭 입력" className="w-full bg-black border-4 border-white p-4 md:p-5 rounded-2xl text-center text-white text-lg md:text-2xl outline-none font-black placeholder:text-white/30" />
+                   <input value={bizName} onChange={(e) => setBizName(e.target.value.toUpperCase())} placeholder="케데헌까페 명칭 입력" className="w-full bg-black border-4 border-white p-4 md:p-5 rounded-2xl text-center text-white text-lg md:text-2xl outline-none font-black placeholder:text-white" />
                 </div>
               )}
 
               <div className={`relative bg-black border-4 rounded-[40px] flex flex-col items-center justify-center transition-all duration-700 overflow-hidden shadow-2xl
                 ${qrType === 'PERSONAL' ? 'w-56 h-56 md:w-80 md:h-80' : 'w-full max-w-xl aspect-video'} 
-                ${isQrActive ? 'border-[#daa520] opacity-100' : 'opacity-20 border-white/20'}`}
+                ${isQrActive ? 'border-[#daa520] opacity-100' : 'opacity-20 border-white'}`}
               >
                 {isQrActive ? (
                   <>
                     <img src={qrType === 'PERSONAL' ? "/qr-personal.png" : "/qr-business.png"} className={`w-full h-full ${qrType === 'PERSONAL' ? 'object-contain' : 'object-cover'}`} alt="QR" />
-                    <div className="absolute bottom-5 bg-black/90 px-8 py-2 rounded-full border-2 border-[#daa520] backdrop-blur-md">
+                    <div className="absolute bottom-5 bg-black/90 px-8 py-2 rounded-full border-2 border-[#daa520] backdrop-blur-md shadow-2xl">
                       <span className="text-[#daa520] text-[10px] md:text-xl font-black italic uppercase tracking-widest">{bizName || "KEDHEON CAFE"}</span>
                     </div>
                   </>
@@ -237,15 +244,15 @@ export default function KedheonPortal() {
 
             {/* 03. CREATIVE */}
             <SectionHeader num="03" title={L.creative} desc={L.creativeDesc} />
-            <div className="bg-black p-6 md:p-10 rounded-[40px] border border-white/5 space-y-6 shadow-md text-left font-black">
+            <div className="bg-black p-6 md:p-10 rounded-[40px] border border-white/10 space-y-6 shadow-md text-left font-black">
               <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide font-black">
                 {cats.map(cat => (
                   <button key={cat} onClick={() => setPostCategory(cat)} className={`px-5 py-2.5 rounded-full text-[10px] md:text-sm font-black border-2 transition-all ${postCategory === cat ? 'bg-white text-black border-white shadow-md' : 'border-white/10 text-white'}`}>{cat}</button>
                 ))}
               </div>
               <div className="space-y-4">
-                <input value={newTitle} onChange={(e) => setNewTitle(e.target.value)} placeholder="제목을 입력하십시오" className="w-full bg-black border-4 border-white p-5 rounded-2xl text-base md:text-xl text-white outline-none focus:border-[#daa520] placeholder:text-white/50" />
-                <textarea value={newDesc} onChange={(e) => setNewDesc(e.target.value)} placeholder="상세 내용을 기록하십시오" className="w-full bg-black border-4 border-white p-5 rounded-2xl text-[12px] md:text-base text-white h-28 outline-none font-bold placeholder:text-white/50" />
+                <input value={newTitle} onChange={(e) => setNewTitle(e.target.value)} placeholder="제목을 입력하십시오" className="w-full bg-black border-4 border-white p-5 rounded-2xl text-base md:text-xl text-white outline-none focus:border-[#daa520] placeholder:text-white" />
+                <textarea value={newDesc} onChange={(e) => setNewDesc(e.target.value)} placeholder="상세 내용을 기록하십시오" className="w-full bg-black border-4 border-white p-5 rounded-2xl text-[12px] md:text-base text-white h-28 outline-none font-bold placeholder:text-white" />
               </div>
               <div className="flex gap-4 font-black">
                 <button onClick={() => {if(!newTitle) return; setAssets([{id:Date.now(), title:newTitle, desc:newDesc, category:postCategory, beom:0, time:"NOW"},...assets]); setNewTitle(''); setNewDesc('');}} className="flex-[2] bg-[#daa520] text-black py-5 md:py-7 rounded-2xl md:rounded-[40px] text-lg md:text-2xl border-4 border-white uppercase font-black shadow-xl active:scale-95">{L.post} (10)</button>
@@ -253,34 +260,35 @@ export default function KedheonPortal() {
               </div>
             </div>
 
-            {/* 04. MARKET (Image Upload Feature) */}
+            {/* 04. MARKET (판매 등록: 상품명, 가격, 사진) */}
             <SectionHeader num="04" title={L.market} desc={L.marketDesc} />
-            <div className="bg-black p-6 md:p-10 rounded-[40px] border border-white/5 space-y-6 mb-6 shadow-md text-left font-black animate-in fade-in">
-              <h3 className="text-white text-sm md:text-2xl uppercase italic font-black border-l-4 border-[#daa520] pl-3 font-sans leading-none">Register New Goods</h3>
+            <div className="bg-black p-6 md:p-10 rounded-[40px] border border-white/20 space-y-6 mb-6 shadow-md text-left font-black animate-in fade-in">
+              <h3 className="text-white text-sm md:text-2xl uppercase italic font-black border-l-4 border-[#daa520] pl-3 mb-4 font-sans leading-none">Register New Goods</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 font-black">
-                <input value={sellName} onChange={(e) => setSellName(e.target.value)} placeholder="상품명을 입력하십시오" className="w-full bg-black border-4 border-white p-5 rounded-2xl text-base md:text-xl text-white outline-none focus:border-[#daa520] placeholder:text-white/50" />
-                <input type="number" value={sellPrice} onChange={(e) => setSellPrice(e.target.value)} placeholder="가격 (BEOM)" className="w-full bg-black border-4 border-white p-5 rounded-2xl text-base md:text-xl text-[#daa520] outline-none placeholder:text-[#daa520]/50" />
+                <input value={sellName} onChange={(e) => setSellName(e.target.value)} placeholder="상품명을 입력하십시오" className="w-full bg-black border-4 border-white p-5 rounded-2xl text-base md:text-xl text-white outline-none focus:border-[#daa520] placeholder:text-white" />
+                <input type="number" value={sellPrice} onChange={(e) => setSellPrice(e.target.value)} placeholder="가격 (BEOM)" className="w-full bg-black border-4 border-white p-5 rounded-2xl text-base md:text-xl text-[#daa520] outline-none placeholder:text-[#daa520]" />
               </div>
               
+              {/* 이미지 선택 기능 (File API) */}
               <div className="w-full">
                 <input type="file" accept="image/*" onChange={handleImageUpload} ref={fileInputRef} className="hidden" />
-                <button onClick={() => fileInputRef.current?.click()} className="w-full bg-black border-4 border-dashed border-white/20 p-6 rounded-2xl text-white text-center hover:border-white transition-all">
+                <button onClick={() => fileInputRef.current?.click()} className="w-full bg-black border-4 border-dashed border-white/20 p-6 rounded-2xl text-white text-center hover:border-white transition-all shadow-inner">
                   {sellImg ? (
-                    <div className="flex flex-col items-center gap-2">
-                      <img src={sellImg} className="h-24 md:h-32 object-contain rounded-lg" alt="Preview" />
-                      <span className="text-[10px] md:text-xs">사진 교체하기 (Change Image)</span>
+                    <div className="flex flex-col items-center gap-3">
+                      <img src={sellImg} className="h-24 md:h-36 object-contain rounded-lg border-2 border-white shadow-lg" alt="Preview" />
+                      <span className="text-[10px] md:text-sm font-bold uppercase">사진 교체하기 (Tap to Change)</span>
                     </div>
                   ) : (
                     <div className="flex flex-col items-center gap-2 py-4">
-                      <span className="text-2xl md:text-4xl">📸</span>
-                      <span className="text-sm md:text-lg font-black uppercase">제품 사진 선택 (Select Image)</span>
+                      <span className="text-3xl md:text-5xl">📸</span>
+                      <span className="text-sm md:text-lg font-black uppercase tracking-widest">제품 사진 선택 (Select Photo)</span>
                     </div>
                   )}
                 </button>
               </div>
 
               <button onClick={() => {
-                if(!sellName || !sellPrice || !sellImg) return alert("항목을 모두 입력하십시오.");
+                if(!sellName || !sellPrice || !sellImg) return alert("상품명, 가격, 사진을 모두 등록하십시오.");
                 setGoods([{ id: Date.now(), name: sellName, price: Number(sellPrice), img: sellImg, reviews: [] }, ...goods]);
                 setBeomToken(p=>p-20); setSellName(''); setSellPrice(''); setSellImg('');
                 alert("Listed Successfully");
@@ -288,11 +296,12 @@ export default function KedheonPortal() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 font-black text-left items-start">
+              {/* GOODS LIST */}
               <div className="space-y-4 font-black">
-                <h3 className="text-white text-xs md:text-lg uppercase border-b-2 border-white/10 pb-1 italic tracking-widest pl-2">GOODS LIST</h3>
+                <h3 className="text-white text-xs md:text-lg uppercase border-b-2 border-white pb-1 italic font-black tracking-widest pl-2">GOODS LIST</h3>
                 {goods.map(g => (
                   <div key={g.id} className="bg-[#111] p-6 md:p-8 rounded-[40px] border border-white/10 shadow-lg text-center group transition-all hover:border-[#daa520]">
-                    <img src={g.img} className="w-full h-40 md:h-64 object-contain bg-black rounded-[30px] border-2 border-white/5 mb-6 shadow-inner transition-transform group-hover:scale-105" alt="G" />
+                    <img src={g.img} className="w-full h-40 md:h-64 object-contain bg-black rounded-[30px] border-2 border-white mb-6 shadow-inner transition-transform group-hover:scale-105" alt="G" />
                     <h4 className="text-white text-lg md:text-2xl uppercase mb-1 font-black leading-tight">{g.name}</h4>
                     <p className="text-[#daa520] text-2xl md:text-5xl mb-6 font-black tracking-tighter leading-none font-sans">{g.price.toLocaleString()} <span className="text-sm md:text-2xl">BEOM</span></p>
                     <button className="w-full py-4 md:py-6 bg-white text-black rounded-2xl md:rounded-[40px] text-sm md:text-xl border-4 border-[#daa520] uppercase font-black active:scale-95 shadow-md">Buy Now</button>
@@ -300,19 +309,20 @@ export default function KedheonPortal() {
                 ))}
               </div>
 
+              {/* REVIEWS */}
               <div className="space-y-4 font-black">
-                <h3 className="text-white text-xs md:text-lg uppercase border-b-2 border-white/10 pb-1 italic tracking-widest pl-2">REVIEWS</h3>
+                <h3 className="text-white text-xs md:text-lg uppercase border-b-2 border-white pb-1 italic font-black tracking-widest pl-2">REVIEWS</h3>
                 <div className="space-y-4">
                   {goods[0]?.reviews.map(r => (
                     <div key={r.id} className="bg-white/5 p-5 md:p-8 rounded-[35px] border border-white/10 shadow-inner font-black">
                       <p className="text-white text-xs md:text-xl italic font-sans mb-4 leading-relaxed font-bold">"{r.text}"</p>
                       <div className="flex justify-between items-center text-[10px] md:text-sm font-mono text-[#daa520] font-black uppercase tracking-widest">
                         <span>- {r.user}</span>
-                        <span className="text-white/50">{r.time}</span>
+                        <span className="text-white">{r.time}</span>
                       </div>
                     </div>
                   ))}
-                  <button className="w-full py-6 md:py-10 border-4 border-dashed border-white/20 rounded-2xl md:rounded-[40px] text-xs md:text-lg text-white/50 uppercase font-black hover:border-white hover:text-white transition-all font-sans">Write Review</button>
+                  <button className="w-full py-6 md:py-10 border-4 border-dashed border-white/20 rounded-2xl md:rounded-[40px] text-xs md:text-lg text-white uppercase font-black hover:border-white hover:text-white transition-all font-sans">Write Review</button>
                 </div>
               </div>
             </div>
@@ -321,15 +331,15 @@ export default function KedheonPortal() {
         )}
       </div>
 
-      {/* FOOTER NAVIGATION: 최상위 강조 유지 */}
+      {/* FOOTER NAVIGATION: 최상위 위계 유지 */}
       <div className="fixed bottom-6 left-4 right-4 max-w-6xl mx-auto bg-black border-4 border-white/20 p-1.5 rounded-[30px] flex justify-between gap-1 z-[200] shadow-[0_0_80px_rgba(255,255,255,0.1)] backdrop-blur-3xl font-black">
         {['KEDHEON', 'CIVIL', 'NEXUS', 'VENDOR'].map(app => (
-          <button key={app} className={`flex-1 py-4 md:py-8 rounded-[25px] text-[10px] md:text-2xl transition-all font-black text-center ${app === 'KEDHEON' ? 'bg-[#daa520] text-black border-2 border-white shadow-inner scale-100 font-black' : 'text-white/40 hover:bg-white/10 hover:text-white'}`}>{app}</button>
+          <button key={app} className={`flex-1 py-4 md:py-8 rounded-[25px] text-[10px] md:text-2xl transition-all font-black text-center ${app === 'KEDHEON' ? 'bg-[#daa520] text-black border-2 border-white shadow-inner scale-100 font-black' : 'text-white hover:bg-white/10 hover:text-white'}`}>{app}</button>
         ))}
       </div>
 
-      <div className="mt-20 opacity-50 text-white text-[10px] md:text-xl tracking-[1.5em] uppercase pb-20 font-sans font-black text-center">
-        Kedheon master | V94.0 Integrity | @Ohsangjo
+      <div className="mt-20 opacity-60 text-white text-[10px] md:text-xl tracking-[1.5em] uppercase pb-20 font-sans font-black text-center">
+        Kedheon master | V95.0 Sale Master | @Ohsangjo
       </div>
     </div>
   );
