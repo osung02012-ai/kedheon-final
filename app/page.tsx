@@ -1,10 +1,13 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 
-// --- [제국 핵심 설정 데이터] ---
+// --- [제국 핵심 및 경제 설정 데이터] ---
 const PI_INVITE_CODE = 'ohsangjo'; 
 const PI_APP_STORE_URL = 'https://apps.apple.com/app/pi-network/id1445472541';
 const PI_PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.blockchainvault';
+
+// [경제 시스템 변수] - 이 숫자만 수정하면 모든 계산이 연동됩니다.
+const PI_TO_BEOM_RATIO = 100; 
 
 interface Asset { id: number; title: string; desc: string; category: string; type: 'CREATION' | 'BROADCAST'; beomSupport: number; isPromoted: boolean; timestamp: string; }
 interface Good { id: number; name: string; price: number; img: string; seller: string; }
@@ -15,7 +18,8 @@ export default function KedheonPortal() {
   const [tab, setTab] = useState<'ROOKIE' | 'PIONEER'>('PIONEER');
   const [showOnboarding, setShowOnboarding] = useState(false);
   
-  const [beomToken, setBeomToken] = useState(8141.88);
+  // 초기 자산 설정
+  const [beomToken, setBeomToken] = useState(8000.00); 
   const [qrType, setQrType] = useState<'PERSONAL' | 'BUSINESS'>('PERSONAL');
   const [bizName, setBizName] = useState('');
   const [isQrActive, setIsQrActive] = useState(false);
@@ -35,7 +39,6 @@ export default function KedheonPortal() {
 
   const cats = ['MUSIC', 'SPORTS', 'ANIME', 'DRAMA', 'MOVIE', 'ESPORTS', 'COMEDY', 'TRAVEL', 'FOOD', 'BEAUTY', 'FASHION', 'TECH'];
 
-  // [복구] 설명문이 포함된 표준 섹션 헤더
   const SectionHeader = ({ num, title, desc }: { num: string; title: string; desc: string }) => (
     <div className="w-full border-t-4 border-white pt-10 mb-8 text-left font-black">
       <h3 className="text-[#daa520] text-2xl md:text-4xl uppercase border-l-8 border-[#daa520] pl-4 leading-none italic tracking-tighter mb-2">
@@ -51,7 +54,7 @@ export default function KedheonPortal() {
     if (saved) {
       try {
         const p = JSON.parse(saved);
-        setBeomToken(p.token || 8141.88);
+        setBeomToken(p.token || 8000.00);
         if (Array.isArray(p.assets)) setAssets(p.assets);
       } catch (e) { console.error("Restore Error"); }
     }
@@ -65,6 +68,7 @@ export default function KedheonPortal() {
 
   const postContent = () => {
     if(!newTitle.trim()) return alert("제목 필수");
+    if(beomToken < 10) return alert("BEOM 토큰이 부족합니다.");
     setAssets([{ id: Date.now(), title: newTitle, desc: newDesc, category, type: postType, beomSupport: 0, isPromoted: false, timestamp: new Date().toLocaleDateString() }, ...assets]);
     setBeomToken(p => p - 10); setNewTitle(''); setNewDesc('');
     alert("피드 등록 성공 (10 BEOM 소모)");
@@ -82,7 +86,7 @@ export default function KedheonPortal() {
       {assets.filter(a => category === 'ALL' || a.category === category).map(a => (
         <div key={a.id} className="bg-[#111] rounded-[40px] border-4 p-8 md:p-12 space-y-6 shadow-2xl relative transition-all border-white hover:border-[#daa520]">
           <div className="flex justify-between items-start font-black">
-            <div className="space-y-2">
+            <div className="space-y-2 text-left">
               <span className="bg-white text-black px-3 py-1 rounded-full text-[10px] uppercase font-sans">{a.type}</span>
               <h4 className="text-3xl md:text-5xl text-[#daa520] tracking-tighter uppercase leading-tight">{a.title}</h4>
             </div>
@@ -131,7 +135,7 @@ export default function KedheonPortal() {
                 <h2 className="text-[#daa520] text-2xl md:text-4xl uppercase italic">Pioneer Onboarding</h2>
                 <div className="space-y-4 text-left text-white text-lg font-bold font-sans">
                   <p>1. Pi Network 앱 설치 후 추천인 코드 [ <span className="text-[#daa520] underline">{PI_INVITE_CODE}</span> ] 입력</p>
-                  <p>2. 채굴한 Pi를 범(BEOM) 토큰으로 환전하여 제국 입장</p>
+                  <p>2. 채굴한 Pi를 범(BEOM) 토큰으로 환제하여 제국 입장</p>
                 </div>
                 <div className="flex gap-4 font-sans"><button onClick={() => window.open(PI_APP_STORE_URL)} className="flex-1 bg-white text-black py-4 rounded-xl border-4 border-[#daa520] uppercase font-black">App Store</button><button onClick={() => window.open(PI_PLAY_STORE_URL)} className="flex-1 bg-white text-black py-4 rounded-xl border-4 border-[#daa520] uppercase font-black">Play Store</button></div>
               </div>
@@ -148,7 +152,9 @@ export default function KedheonPortal() {
                <div className="text-center md:text-left flex-1 font-black">
                   <h3 className="text-white/60 text-sm uppercase tracking-widest mb-2 font-sans">Imperial Assets</h3>
                   <p className="text-[#daa520] text-5xl md:text-8xl tracking-tighter leading-none font-sans font-black">{beomToken.toLocaleString()} BEOM</p>
-                  <div className="mt-4 bg-black px-6 py-2 rounded-xl border-2 border-white inline-block text-xl font-mono text-white italic">≈ 25.9164 Pi</div>
+                  <div className="mt-4 bg-black px-6 py-2 rounded-xl border-2 border-white inline-block text-xl font-mono text-white italic">
+                    ≈ {(beomToken / PI_TO_BEOM_RATIO).toFixed(4)} Pi
+                  </div>
                </div>
                <div className="flex items-center gap-6"><img src="/kedheon-character.png" className="w-24 h-24 md:w-32 md:h-32 rounded-3xl border-4 border-white shadow-xl" alt="Char" /><img src="/beom-token.png" className="w-20 h-20 md:w-32 md:h-32" alt="Token" /></div>
             </div>
@@ -168,8 +174,9 @@ export default function KedheonPortal() {
             <div className="flex flex-col w-full">
               <SectionHeader num="01" title="ACQUIRE BEOM TOKEN" desc="제국 내 모든 활동에 필요한 범(BEOM) 토큰을 확보하여 주권을 행사하십시오." />
               <div className="bg-[#111] p-8 rounded-[40px] border-4 border-white shadow-2xl grid md:grid-cols-2 gap-8 items-center font-black font-sans">
-                <div className="text-left space-y-2"><p className="text-white text-xl md:text-3xl uppercase italic leading-tight">파이를 범으로 환전하십시오</p><p className="text-white/60 text-sm md:text-lg italic font-bold">1 Pi = 314.159 BEOM</p></div>
-                <button onClick={() => setBeomToken(p => p + 314.15)} className="w-full bg-[#daa520] text-black py-6 rounded-2xl text-xl md:text-2xl border-4 border-white shadow-xl hover:scale-105 active:scale-95 uppercase font-black">EXCHANGE PI TO BEOM</button>
+                <div className="text-left space-y-2"><p className="text-white text-xl md:text-3xl uppercase italic leading-tight">파이를 범으로 환전하십시오</p>
+                <p className="text-white/60 text-sm md:text-lg italic font-bold">1 Pi = {PI_TO_BEOM_RATIO} BEOM</p></div>
+                <button onClick={() => setBeomToken(p => p + PI_TO_BEOM_RATIO)} className="w-full bg-[#daa520] text-black py-6 rounded-2xl text-xl md:text-2xl border-4 border-white shadow-xl hover:scale-105 active:scale-95 uppercase font-black">EXCHANGE PI TO BEOM</button>
               </div>
             </div>
 
@@ -241,7 +248,7 @@ export default function KedheonPortal() {
       )}
 
       {/* 최종 푸터 */}
-      <div className="mt-20 opacity-40 text-center w-full pb-10 font-mono text-white text-[10px] tracking-[1em] uppercase font-black">KEDHEON EMPIRE | INTEGRITY MASTER V60.0 | ohsangjo</div>
+      <div className="mt-20 opacity-40 text-center w-full pb-10 font-mono text-white text-[10px] tracking-[1em] uppercase font-black">KEDHEON EMPIRE | INTEGRITY MASTER V60.1 | ohsangjo</div>
     </div>
   );
 }
