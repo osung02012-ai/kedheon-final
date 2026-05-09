@@ -1,13 +1,13 @@
 'use client';
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 
-/** * [KEDHEON MASTER V105.4 - TOTAL SYSTEM INTEGRATION]
+/** * [KEDHEON MASTER V105.5 - EMPIRE CONSTITUTION UPDATED]
  * -----------------------------------------------------------
  * 1. 테마: Pure White (#FFFFFF) / Black (#000000) / Red (#DC2626)
  * 2. 레이아웃: 모바일 최적화 촘촘한(Compact) 간격 및 박스 설계 유지
- * 3. 기능: BUSINESS PARTNERSHIP (L4 Portal) 섹션 및 기업명 입력박스 완벽 통합
- * 4. 경제: Max(3% Net, 8% Total Revenue) 사회적 환원 자동 계산
- * 5. 인프라: 88쓰레드 / 17.94 노드 점수 / Protocol V23 완벽 싱크
+ * 3. 기능: BUSINESS PARTNERSHIP (L4 Portal) 섹션 통합
+ * 4. 경제: Max(3% Total Sales, 8% Net Profit) 사회적 환원 알고리즘 적용
+ * 5. 인프라: 88쓰레드 / 18.02 노드 점수 / Protocol V23 완벽 싱크
  * -----------------------------------------------------------
  */
 
@@ -58,52 +58,54 @@ const DICT = {
   }
 };
 
-interface Asset { id: number; title: string; desc: string; category: string; beom: number; url?: string; }
-interface Good { id: number; name: string; price: number; img: string; desc: string; reviews: string[]; }
-
 export default function KedheonEmpireFinalMaster() {
   const [hasMounted, setHasMounted] = useState(false);
-  const [lang, setLang] = useState<'KR' | 'EN'>('KR');
-  const [tab, setTab] = useState<'ROOKIE' | 'PIONEER'>('PIONEER');
+  const [lang, setLang] = useState('KR');
+  const [tab, setTab] = useState('PIONEER');
   
   // 경제 상태
   const [beomToken, setBeomToken] = useState(7891.88);
-  const [totalRevenue, setTotalRevenue] = useState(188500);
-  const [netIncome, setNetIncome] = useState(72300);
+  const [totalRevenue, setTotalRevenue] = useState(188500); // 매출 (Total Sales)
+  const [netIncome, setNetIncome] = useState(72300);     // 순이익 (Net Profit)
 
   // 파트너십 및 앱 기능 상태
   const [partnerCorp, setPartnerCorp] = useState('');
   const [partnerContact, setPartnerContact] = useState('');
   const [partnerMsg, setPartnerMsg] = useState('');
-  const [qrType, setQrType] = useState<'PERSONAL' | 'BUSINESS'>('PERSONAL');
+  const [qrType, setQrType] = useState('PERSONAL');
   const [bizName, setBizName] = useState('');
   const [isQrActive, setIsQrActive] = useState(false);
-  const [boardType, setBoardType] = useState<'CREATIVE' | 'FAN'>('CREATIVE');
+  const [boardType, setBoardType] = useState('CREATIVE');
   const [postCategory, setPostCategory] = useState('TECH');
-  const [fanRooms, setFanRooms] = useState<string[]>(['케데헌', '헌트릭스']);
+  const [fanRooms, setFanRooms] = useState(['케데헌', '헌트릭스']);
   const [newTitle, setNewTitle] = useState('');
   const [newDesc, setNewDesc] = useState('');
   const [newUrl, setNewUrl] = useState('');
 
   // 마켓 상태
-  const [goods, setGoods] = useState<Good[]>([
+  const [goods, setGoods] = useState([
     { id: 1, name: "GOLD BADGE", price: 1000, img: "/beom-token.png", desc: "제국 시민의 명예로운 문장입니다.", reviews: [] }
   ]);
   const [sellName, setSellName] = useState('');
   const [sellPrice, setSellPrice] = useState('');
   const [sellDesc, setSellDesc] = useState('');
-  const [sellImg, setSellImg] = useState<string>(''); 
+  const [sellImg, setSellImg] = useState(''); 
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef(null);
   const L = DICT[lang];
   const standardCats = ['MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'];
 
   const currentBeomValue = useMemo(() => (0.18 * 100) + (5000 * 0.01) + 1, []);
-  const redistributionAmount = useMemo(() => Math.max(netIncome * 0.03, totalRevenue * 0.08), [netIncome, totalRevenue]);
+  
+  // [로직 수정] MAX(매출의 3%, 순이익의 8%)
+  const redistributionAmount = useMemo(() => 
+    Math.max(totalRevenue * 0.03, netIncome * 0.08), 
+    [totalRevenue, netIncome]
+  );
 
   useEffect(() => {
     setHasMounted(true);
-    const saved = localStorage.getItem('KEDHEON_COMPACT_V105_4');
+    const saved = localStorage.getItem('KEDHEON_COMPACT_V105_5');
     if (saved) {
       try {
         const p = JSON.parse(saved);
@@ -116,20 +118,20 @@ export default function KedheonEmpireFinalMaster() {
 
   useEffect(() => {
     if (hasMounted) {
-      localStorage.setItem('KEDHEON_COMPACT_V105_4', JSON.stringify({ beomToken, lang, fanRooms }));
+      localStorage.setItem('KEDHEON_COMPACT_V105_5', JSON.stringify({ beomToken, lang, fanRooms }));
     }
   }, [beomToken, lang, fanRooms, hasMounted]);
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = (e) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onloadend = () => setSellImg(reader.result as string);
+      reader.onloadend = () => setSellImg(reader.result);
       reader.readAsDataURL(file);
     }
   };
 
-  const SectionHeader = ({ num, title, desc }: { num: string; title: string; desc: string }) => (
+  const SectionHeader = ({ num, title, desc }) => (
     <div className="w-full border-t-2 border-[#dc2626] pt-4 mb-3 text-left">
       <h2 className="text-black text-lg md:text-2xl font-black uppercase italic mb-0.5 border-l-4 border-black pl-2 tracking-tighter">
         {num}. {title}
@@ -149,7 +151,7 @@ export default function KedheonEmpireFinalMaster() {
           <img src="/kedheon-character.png" className="w-8 h-8 rounded-lg border border-black shadow-sm" alt="K" />
           <div className="text-left leading-tight">
             <h1 className="text-black text-sm md:text-lg font-black italic uppercase tracking-tighter">Kedheon</h1>
-            <span className="text-gray-400 text-[7px] font-mono font-bold uppercase">V105.4 MASTER</span>
+            <span className="text-gray-400 text-[7px] font-mono font-bold uppercase">V105.5 MASTER</span>
           </div>
         </div>
         
@@ -176,7 +178,7 @@ export default function KedheonEmpireFinalMaster() {
               </div>
             </div>
             <div className="grid grid-cols-1 gap-2">
-              {L.steps.map((step: any, i: number) => (
+              {L.steps.map((step, i) => (
                 <div key={i} className={`p-4 bg-white rounded-xl border flex items-center gap-4 transition-all ${i >= 5 ? 'border-[#dc2626] bg-red-50/10' : 'border-black/5'}`}>
                   <span className="text-black text-lg md:text-2xl font-black italic">0{i+1}</span>
                   <div>
@@ -219,7 +221,7 @@ export default function KedheonEmpireFinalMaster() {
               </button>
             </div>
 
-            {/* 02. AUTH SECTION (기업명 입력박스 포함) */}
+            {/* 02. AUTH SECTION */}
             <SectionHeader num="02" title={L.auth} desc={L.authDesc} />
             <div className="bg-gray-50 p-4 md:p-12 rounded-[30px] border border-black/5 flex flex-col items-center gap-4">
               <div className="flex gap-2 w-full max-w-xs bg-white p-1 rounded-lg border-2 border-black">
@@ -315,7 +317,7 @@ export default function KedheonEmpireFinalMaster() {
               ))}
             </div>
 
-            {/* 05. BUSINESS PARTNERSHIP (신규 통합) */}
+            {/* 05. BUSINESS PARTNERSHIP */}
             <SectionHeader num="05" title={L.partnership} desc={L.partnershipDesc} />
             <div className="bg-black p-4 md:p-12 rounded-[35px] border-4 border-[#dc2626] space-y-6 text-left shadow-2xl relative overflow-hidden">
                 <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
@@ -355,7 +357,7 @@ export default function KedheonEmpireFinalMaster() {
             {/* 인프라 상태 노출 */}
             <div className="mt-4 flex justify-center gap-4 text-gray-300 text-[8px] md:text-xs font-mono font-black italic uppercase">
                 <span>Infrastructure: 88-Threads Dual</span>
-                <span>Node: 17.94</span>
+                <span>Node: 18.02</span>
                 <span>Protocol: V23.0 Sync</span>
             </div>
 
@@ -373,7 +375,7 @@ export default function KedheonEmpireFinalMaster() {
       </footer>
 
       <div className="mt-20 opacity-20 text-black text-[9px] md:text-xl tracking-[1em] uppercase pb-20 font-black text-center font-black">
-        Kedheon master | V105.4 Final Empire | @Ohsangjo
+        Kedheon master | V105.5 Final Empire | @Ohsangjo
       </div>
     </div>
   );
