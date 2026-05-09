@@ -1,12 +1,12 @@
 'use client';
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 
-/** * [KEDHEON MASTER V105.5 - EMPIRE CONSTITUTION UPDATED]
+/** * [KEDHEON MASTER V105.6 - TOTAL SYSTEM INTEGRATION]
  * -----------------------------------------------------------
  * 1. 테마: Pure White (#FFFFFF) / Black (#000000) / Red (#DC2626)
  * 2. 레이아웃: 모바일 최적화 촘촘한(Compact) 간격 및 박스 설계 유지
- * 3. 기능: BUSINESS PARTNERSHIP (L4 Portal) 섹션 통합
- * 4. 경제: Max(3% Total Sales, 8% Net Profit) 사회적 환원 알고리즘 적용
+ * 3. 기능: BUSINESS PARTNERSHIP (L4 Portal) 섹션 및 기업명 입력박스 완벽 통합
+ * 4. 경제: Max(3% Total Sales, 8% Net Profit) 사회적 환원 자동 계산 [로직수정]
  * 5. 인프라: 88쓰레드 / 18.02 노드 점수 / Protocol V23 완벽 싱크
  * -----------------------------------------------------------
  */
@@ -17,7 +17,7 @@ const DICT = {
   KR: {
     rookie: "ROOKIE", pioneer: "PIONEER", exchange: "EXCHANGE", auth: "SECURE AUTH", creative: "CREATIVE & FAN", market: "MARKET", partnership: "PARTNERSHIP",
     invitation: "Web3 초대합니다.", procedure: "파이코인 가입절차 안내", assets: "ASSETS", activate: "보안 QR 활성화",
-    convert: "1 PI 환전", post: "피드 등록", buy: "구매하기", register: "상품 등록", submit: "제안서 제출",
+    convert: "1 PI 환전", post: "피드 등록", buy: "구매하기", register: "상품 등록", submit: "제안서 제출", download: "앱 다운로드",
     exchangeDesc: "채굴 기여도를 BEOM으로 즉시 전환하십시오.",
     authDesc: "개인/비즈니스 보안 QR코드를 발급받으십시오.",
     creativeDesc: "창작물과 팬심을 공유하고 호응을 이끌어내십시오.",
@@ -25,7 +25,7 @@ const DICT = {
     marketDesc: "다양한 GOODS를 거래하고 가치를 확인하십시오.",
     partnershipDesc: "제국과 미래를 함께할 기업 파트너를 기다립니다.",
     steps: [
-      { t: "애플리케이션 설치", d: "[Pi Network] 공식 앱을 설치하십시오." },
+      { t: "애플리케이션 설치", d: "[Pi Network] 공식 앱을 설치하십시오.", link: "https://minepi.com/#download" },
       { t: "가입 방식 선택", d: "[Continue with phone number] 가입." },
       { t: "국가 및 번호 설정", d: "[+82(South Korea)] 및 번호 입력." },
       { t: "보안 비밀번호 생성", d: "영문 대/소문자와 숫자를 조합하십시오." },
@@ -38,7 +38,7 @@ const DICT = {
   EN: {
     rookie: "ROOKIE", pioneer: "PIONEER", exchange: "EXCHANGE", auth: "SECURE AUTH", creative: "CREATIVE & FAN", market: "MARKET", partnership: "PARTNERSHIP",
     invitation: "Web3 Invitation.", procedure: "Join Guide", assets: "ASSETS", activate: "ACTIVATE QR",
-    convert: "CONVERT 1 PI", post: "POST FEED", buy: "BUY NOW", register: "REGISTER", submit: "SUBMIT PROPOSAL",
+    convert: "CONVERT 1 PI", post: "POST FEED", buy: "BUY NOW", register: "REGISTER", submit: "SUBMIT PROPOSAL", download: "DOWNLOAD APP",
     exchangeDesc: "Convert mining efforts into BEOM tokens.",
     authDesc: "Issue secure QR codes for authentication.",
     creativeDesc: "Share creations to earn community support.",
@@ -46,7 +46,7 @@ const DICT = {
     marketDesc: "Trade unique goods with verified reviews.",
     partnershipDesc: "Join the empire as a strategic business partner.",
     steps: [
-      { t: "Install App", d: "Download [Pi Network] app." },
+      { t: "Install App", d: "Download [Pi Network] app.", link: "https://minepi.com/#download" },
       { t: "Select Method", d: "Choose [Continue with phone number]." },
       { t: "Region Config", d: "Set to [+82(South Korea)]." },
       { t: "Password", d: "Create a strong password." },
@@ -63,12 +63,10 @@ export default function KedheonEmpireFinalMaster() {
   const [lang, setLang] = useState('KR');
   const [tab, setTab] = useState('PIONEER');
   
-  // 경제 상태
   const [beomToken, setBeomToken] = useState(7891.88);
-  const [totalRevenue, setTotalRevenue] = useState(188500); // 매출 (Total Sales)
-  const [netIncome, setNetIncome] = useState(72300);     // 순이익 (Net Profit)
+  const [totalRevenue, setTotalRevenue] = useState(188500);
+  const [netIncome, setNetIncome] = useState(72300);
 
-  // 파트너십 및 앱 기능 상태
   const [partnerCorp, setPartnerCorp] = useState('');
   const [partnerContact, setPartnerContact] = useState('');
   const [partnerMsg, setPartnerMsg] = useState('');
@@ -82,7 +80,6 @@ export default function KedheonEmpireFinalMaster() {
   const [newDesc, setNewDesc] = useState('');
   const [newUrl, setNewUrl] = useState('');
 
-  // 마켓 상태
   const [goods, setGoods] = useState([
     { id: 1, name: "GOLD BADGE", price: 1000, img: "/beom-token.png", desc: "제국 시민의 명예로운 문장입니다.", reviews: [] }
   ]);
@@ -97,7 +94,7 @@ export default function KedheonEmpireFinalMaster() {
 
   const currentBeomValue = useMemo(() => (0.18 * 100) + (5000 * 0.01) + 1, []);
   
-  // [로직 수정] MAX(매출의 3%, 순이익의 8%)
+  // [로직 수정 완료] 매출 3%와 순이익 8% 중 큰 금액 산출
   const redistributionAmount = useMemo(() => 
     Math.max(totalRevenue * 0.03, netIncome * 0.08), 
     [totalRevenue, netIncome]
@@ -105,7 +102,7 @@ export default function KedheonEmpireFinalMaster() {
 
   useEffect(() => {
     setHasMounted(true);
-    const saved = localStorage.getItem('KEDHEON_COMPACT_V105_5');
+    const saved = localStorage.getItem('KEDHEON_COMPACT_V105_6');
     if (saved) {
       try {
         const p = JSON.parse(saved);
@@ -118,7 +115,7 @@ export default function KedheonEmpireFinalMaster() {
 
   useEffect(() => {
     if (hasMounted) {
-      localStorage.setItem('KEDHEON_COMPACT_V105_5', JSON.stringify({ beomToken, lang, fanRooms }));
+      localStorage.setItem('KEDHEON_COMPACT_V105_6', JSON.stringify({ beomToken, lang, fanRooms }));
     }
   }, [beomToken, lang, fanRooms, hasMounted]);
 
@@ -151,7 +148,7 @@ export default function KedheonEmpireFinalMaster() {
           <img src="/kedheon-character.png" className="w-8 h-8 rounded-lg border border-black shadow-sm" alt="K" />
           <div className="text-left leading-tight">
             <h1 className="text-black text-sm md:text-lg font-black italic uppercase tracking-tighter">Kedheon</h1>
-            <span className="text-gray-400 text-[7px] font-mono font-bold uppercase">V105.5 MASTER</span>
+            <span className="text-gray-400 text-[7px] font-mono font-bold uppercase">V105.6 MASTER</span>
           </div>
         </div>
         
@@ -181,9 +178,14 @@ export default function KedheonEmpireFinalMaster() {
               {L.steps.map((step, i) => (
                 <div key={i} className={`p-4 bg-white rounded-xl border flex items-center gap-4 transition-all ${i >= 5 ? 'border-[#dc2626] bg-red-50/10' : 'border-black/5'}`}>
                   <span className="text-black text-lg md:text-2xl font-black italic">0{i+1}</span>
-                  <div>
+                  <div className="flex-1">
                     <h3 className="text-black text-xs md:text-lg font-black uppercase italic mb-0.5">{step.t}</h3>
                     <p className="text-gray-600 text-[10px] md:text-sm font-bold leading-tight">{step.d}</p>
+                    {step.link && (
+                      <button onClick={() => window.open(step.link, '_blank')} className="mt-2 bg-black text-white px-4 py-1.5 rounded-lg text-[9px] md:text-xs font-black uppercase hover:bg-[#dc2626] transition-all shadow-md">
+                        {L.download}
+                      </button>
+                    )}
                   </div>
                 </div>
               ))}
@@ -196,7 +198,7 @@ export default function KedheonEmpireFinalMaster() {
             <div className="bg-gray-50 p-4 md:p-10 rounded-[35px] border-2 border-black shadow-lg flex flex-col md:flex-row justify-between items-center relative overflow-hidden group">
                 <div className="text-left z-10 space-y-2 w-full md:w-auto">
                   <h3 className="text-gray-400 text-[8px] md:text-xs uppercase tracking-widest font-black leading-none">{L.assets}</h3>
-                  <p className="text-black text-4xl md:text-8xl tracking-tighter leading-none font-black">
+                  <p className="text-black text-4xl md:text-8xl tracking-tighter font-black leading-none">
                     {Math.floor(beomToken).toLocaleString()}
                     <span className="text-lg md:text-4xl opacity-30">.{beomToken.toFixed(2).split('.')[1]}</span> 
                     <span className="ml-2 text-sm md:text-4xl italic uppercase">BEOM</span>
@@ -323,9 +325,7 @@ export default function KedheonEmpireFinalMaster() {
                 <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
                     <img src="/kedheon-character.png" className="w-40 h-40 grayscale" alt="K" />
                 </div>
-                
                 <h3 className="text-white text-xl md:text-4xl font-black italic uppercase leading-none border-l-8 border-[#dc2626] pl-4">Business Portal</h3>
-                
                 <div className="space-y-3 relative z-10">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         <div className="space-y-1">
@@ -342,14 +342,7 @@ export default function KedheonEmpireFinalMaster() {
                         <textarea value={partnerMsg} onChange={(e)=>setPartnerMsg(e.target.value)} placeholder="제국과 함께할 비즈니스 모델을 간략히 기록하십시오." className="w-full bg-white/5 border-2 border-white/10 p-4 rounded-xl text-white text-xs md:text-lg font-bold h-32 outline-none focus:border-[#dc2626]" />
                     </div>
                 </div>
-
-                <div className="bg-white/5 p-4 rounded-xl border border-white/10">
-                    <p className="text-gray-400 text-[9px] md:text-sm font-bold italic leading-tight">
-                        ※ 주군의 88쓰레드 엔진 서버는 모든 제안서를 실시간으로 연산하며, <span className="text-white">정통성 있는 기업에 한해</span> 비즈니스 QR 활성 권한을 부여합니다.
-                    </p>
-                </div>
-
-                <button onClick={() => {if(!partnerCorp || !partnerMsg) return alert("Empty"); alert("Proposal Submitted to Commander."); setPartnerCorp(''); setPartnerContact(''); setPartnerMsg('');}} className="w-full bg-[#dc2626] text-white py-4 md:py-8 rounded-2xl text-sm md:text-2xl border-2 border-[#dc2626] hover:bg-white hover:text-[#dc2626] transition-all font-black shadow-lg uppercase">
+                <button onClick={() => {if(!partnerCorp || !partnerMsg) return alert("Empty"); alert("Proposal Submitted."); setPartnerCorp(''); setPartnerContact(''); setPartnerMsg('');}} className="w-full bg-[#dc2626] text-white py-4 md:py-8 rounded-2xl text-sm md:text-2xl border-2 border-[#dc2626] hover:bg-white hover:text-[#dc2626] transition-all font-black shadow-lg uppercase">
                     {L.submit}
                 </button>
             </div>
@@ -374,8 +367,8 @@ export default function KedheonEmpireFinalMaster() {
         ))}
       </footer>
 
-      <div className="mt-20 opacity-20 text-black text-[9px] md:text-xl tracking-[1em] uppercase pb-20 font-black text-center font-black">
-        Kedheon master | V105.5 Final Empire | @Ohsangjo
+      <div className="mt-20 opacity-20 text-black text-[9px] md:text-xl tracking-[1em] uppercase pb-20 font-black text-center">
+        Kedheon master | V105.6 Final Empire | @Ohsangjo
       </div>
     </div>
   );
