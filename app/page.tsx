@@ -1,14 +1,13 @@
 'use client';
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 
-/** * [KEDHEON MASTER V125.0 - THE ULTIMATE EMPIRE LEGACY]
+/** * [KEDHEON MASTER V130.0 - THE ABSOLUTE MASTER ARCHIVE]
  * -----------------------------------------------------------
- * 주군(Lord) 오상조의 제국을 위한 무삭제 절대 설계도
+ * 주군(Lord) 오상조의 제국을 위한 무삭제 절대 코드 (400열 이상)
  * 1. 테마: Pure White (#FFFFFF) / Black (#000000) / Red (#DC2626)
- * 2. 복구율: ROOKIE 8단계 + PIONEER 01~05 전 섹션 100% 통합
- * 3. 기능: 앱 다운로드, BEOM 환전, QR 인증, 커뮤니티, 마켓, 파트너십
- * 4. 경제: Max(매출 3%, 순이익 8%) 사회적 환원 자동 계산 로직
- * 5. 인프라: 88쓰레드 / Node 18.02 / Protocol V23 완벽 싱크
+ * 2. 복구: ROOKIE 8단계 완벽 가이드 + PIONEER 00~05 전 섹션 무삭제 통합
+ * 3. 경제: Max(매출 3%, 순이익 8%) 사회적 환원 자동 계산 및 고래 등급 반영
+ * 4. 인프라: 88쓰레드 / Node 18.02 / Protocol V23 완벽 동기화
  * -----------------------------------------------------------
  */
 
@@ -19,48 +18,48 @@ const DICT = {
     rookie: "ROOKIE", pioneer: "PIONEER", exchange: "EXCHANGE", auth: "SECURE AUTH", creative: "CREATIVE & FAN", market: "MARKET", partnership: "PARTNERSHIP",
     invitation: "Web3 초대합니다.", procedure: "파이코인 가입절차 안내", assets: "ASSETS", activate: "보안 QR 활성화",
     convert: "1 PI 환전", post: "피드 등록", buy: "구매하기", register: "상품 등록", submit: "제안서 제출", download: "공식 앱 다운로드",
-    exchangeDesc: "채굴 기여도를 BEOM으로 즉시 전환하십시오.",
-    authDesc: "개인/비즈니스 보안 QR코드를 발급받으십시오.",
-    creativeDesc: "창작물과 팬심을 공유하고 호응을 이끌어내십시오.",
-    fanRoomDesc: "🚩 팬룸 개설(500 BEOM): 90% 수익 환원 및 거버넌스 권한 부여.",
-    marketDesc: "다양한 GOODS를 거래하고 가치를 확인하십시오.",
-    partnershipDesc: "제국과 미래를 함께할 기업 파트너를 기다립니다.",
+    exchangeDesc: "채굴 기여도를 BEOM으로 즉시 전환하여 가치를 보존하십시오.",
+    authDesc: "제국 시민을 위한 개인/비즈니스 보안 QR코드를 발급받으십시오.",
+    creativeDesc: "시민의 창작물과 팬심을 공유하고 기여도에 따른 호응을 이끌어내십시오.",
+    fanRoomDesc: "🚩 팬룸 개설(500 BEOM): 90% 수익 환원, 거버넌스 투표권 및 제국 시민권 부여.",
+    marketDesc: "검증된 다양한 GOODS를 거래하고 실제 가치를 확인하십시오.",
+    partnershipDesc: "제국과 미래를 함께 설계할 글로벌 기업 파트너를 기다립니다.",
     steps: [
-      { t: "애플리케이션 설치", d: "[Pi Network] 공식 앱을 설치하십시오.", link: "https://minepi.com/#download" },
-      { t: "가입 방식 선택", d: "[Continue with phone number] 버튼을 통해 가입을 진행하십시오." },
-      { t: "국가 및 번호 설정", d: "[+82(South Korea)] 선택 후 본인의 휴대폰 번호를 입력하십시오." },
-      { t: "보안 비밀번호 생성", d: "영문 대/소문자와 숫자를 조합하여 8자 이상의 비밀번호를 만드십시오." },
-      { t: "실명 프로필 작성", d: "여권 영문 성명과 동일하게 기재하고, 제국 고유 ID를 설정하십시오." },
-      { t: "초대 코드 입력", d: `초대 코드란에 [ ${PI_INVITE_CODE} ]를 정확히 입력하여 합류하십시오.` },
-      { t: "비밀구절 수기 보관", d: "지갑 생성 시 나오는 24개 단어는 반드시 종이에 수기로 기록하십시오." },
-      { t: "채굴 버튼 활성화", d: "매일 24시간마다 번개 버튼을 눌러 채굴 활동을 시작하십시오." }
+      { t: "애플리케이션 설치", d: "[Pi Network] 공식 앱을 설치하고 제국으로의 첫 걸음을 떼십시오.", link: "https://minepi.com/#download" },
+      { t: "가입 방식 선택", d: "[Continue with phone number] 버튼을 눌러 본인 인증을 시작하십시오." },
+      { t: "국가 및 번호 설정", d: "국가 코드 [+82(South Korea)]를 선택하고 본인의 휴대폰 번호를 입력하십시오." },
+      { t: "보안 비밀번호 생성", d: "영문 대/소문자와 숫자를 조합하여 강력한 8자 이상의 암호를 만드십시오." },
+      { t: "실명 프로필 작성", d: "여권 영문 실명과 동일하게 기재하고, 제국 내 고유 ID를 설정하십시오." },
+      { t: "초대 코드 입력", d: `합류를 위해 초대 코드 [ ${PI_INVITE_CODE} ]를 정확히 입력하십시오.` },
+      { t: "비밀구절 수기 보관", d: "지갑 생성 시 부여되는 24개 단어는 반드시 종이에 수기로 기록하여 보관하십시오." },
+      { t: "채굴 버튼 활성화", d: "매일 24시간마다 번개 버튼을 눌러 제국 건설을 위한 활동을 시작하십시오." }
     ]
   },
   EN: {
     rookie: "ROOKIE", pioneer: "PIONEER", exchange: "EXCHANGE", auth: "SECURE AUTH", creative: "CREATIVE & FAN", market: "MARKET", partnership: "PARTNERSHIP",
     invitation: "Web3 Invitation.", procedure: "Join Guide", assets: "ASSETS", activate: "ACTIVATE QR",
     convert: "CONVERT 1 PI", post: "POST FEED", buy: "BUY NOW", register: "REGISTER", submit: "SUBMIT PROPOSAL", download: "DOWNLOAD APP",
-    exchangeDesc: "Convert mining efforts into BEOM tokens.",
-    authDesc: "Issue secure QR codes for authentication.",
-    creativeDesc: "Share creations to earn community support.",
-    fanRoomDesc: "🚩 FAN ROOM (500 BEOM): 90% revenue & governance.",
-    marketDesc: "Trade unique goods with verified reviews.",
-    partnershipDesc: "Join the empire as a strategic business partner.",
+    exchangeDesc: "Convert mining efforts into BEOM tokens immediately.",
+    authDesc: "Issue secure QR codes for Imperial authentication.",
+    creativeDesc: "Share creations to earn community support and value.",
+    fanRoomDesc: "🚩 FAN ROOM (500 BEOM): 90% revenue return & governance rights.",
+    marketDesc: "Trade verified unique goods with secure reviews.",
+    partnershipDesc: "Join the empire as a strategic global partner.",
     steps: [
-      { t: "Install App", d: "Download [Pi Network] official app.", link: "https://minepi.com/#download" },
-      { t: "Select Method", d: "Choose [Continue with phone number] to register." },
-      { t: "Region Config", d: "Set to [+82(South Korea)] and enter your mobile number." },
-      { t: "Password", d: "Create a strong password using A-Z, a-z, and 0-9." },
-      { t: "Real Identity", d: "Enter Passport name correctly and set your Unique ID." },
-      { t: "Invitation", d: `Use invitation code [ ${PI_INVITE_CODE} ] to join.` },
-      { t: "Passphrase", d: "Hand-write 24 words safely on paper. Never share them." },
-      { t: "Mining", d: "Engage the lightning button every 24 hours to start." }
+      { t: "Install App", d: "Download [Pi Network] official app from the store.", link: "https://minepi.com/#download" },
+      { t: "Select Method", d: "Choose [Continue with phone number] to begin." },
+      { t: "Region Config", d: "Set to [+82(South Korea)] and enter mobile." },
+      { t: "Password", d: "Create a strong alphanumeric password (8+ chars)." },
+      { t: "Real Identity", d: "Enter Passport name exactly and your Unique ID." },
+      { t: "Invitation", d: `Enter invitation code [ ${PI_INVITE_CODE} ].` },
+      { t: "Passphrase", d: "Hand-write 24 words safely on physical paper." },
+      { t: "Mining", d: "Engage the lightning button every 24 hours." }
     ]
   }
 };
 
 const SectionHeader = ({ num, title, desc }) => (
-  <div className="w-full border-t-4 border-[#dc2626] pt-10 mb-8 text-left animate-in slide-in-from-left duration-700">
+  <div className="w-full border-t-4 border-[#dc2626] pt-10 mb-8 text-left animate-in slide-in-from-left duration-1000">
     <h2 className="text-black text-3xl md:text-5xl font-black uppercase italic mb-2 border-l-[20px] border-black pl-6 tracking-tighter shadow-sm">
       {num}. {title}
     </h2>
@@ -68,7 +67,7 @@ const SectionHeader = ({ num, title, desc }) => (
   </div>
 );
 
-export default function KedheonEmpireFinalMaster() {
+export default function KedheonEmpireEternalMaster() {
   const [hasMounted, setHasMounted] = useState(false);
   const [lang, setLang] = useState('KR');
   const [tab, setTab] = useState('PIONEER');
@@ -78,29 +77,38 @@ export default function KedheonEmpireFinalMaster() {
   const [totalRevenue, setTotalRevenue] = useState(188500);
   const [netIncome, setNetIncome] = useState(72300);
 
-  // -- SECTIONAL STATES --
-  const [qrState, setQrState] = useState({ type: 'PERSONAL', biz: '', active: false });
+  // -- PIONEER SECTIONS STATES --
+  const [qrType, setQrType] = useState('PERSONAL');
+  const [bizName, setBizName] = useState('');
+  const [isQrActive, setIsQrActive] = useState(false);
   const [boardType, setBoardType] = useState('CREATIVE');
   const [postCategory, setPostCategory] = useState('TECH');
   const [fanRooms, setFanRooms] = useState(['케데헌', '헌트릭스', '파이Nexus']);
-  const [feed, setFeed] = useState({ title: '', desc: '', url: '' });
+  const [newTitle, setNewTitle] = useState('');
+  const [newDesc, setNewDesc] = useState('');
+  const [newUrl, setNewUrl] = useState('');
 
   // -- MARKET DATA --
-  const [sellItem, setSellItem] = useState({ name: '', price: '', desc: '', img: '' });
+  const [sellName, setSellName] = useState('');
+  const [sellPrice, setSellPrice] = useState('');
+  const [sellDesc, setSellDesc] = useState('');
+  const [sellImg, setSellImg] = useState(''); 
   const [goods, setGoods] = useState([
     { id: 1, name: "GOLD BADGE", price: 1000, img: "/beom-token.png", desc: "제국 시민의 명예로운 문장입니다." },
     { id: 2, name: "V23 NODE KEY", price: 5000, img: "/node-icon.png", desc: "88쓰레드 노드 모니터링 보안 키" },
     { id: 3, name: "PI PAPA WHALE", price: 500000, img: "/domain-icon.png", desc: "전략적 비축 자산 고래 등급 권한" }
   ]);
 
-  // -- PARTNERSHIP DATA --
-  const [partner, setPartner] = useState({ corp: '', contact: '', msg: '' });
+  // -- PARTNERSHIP STATES --
+  const [partnerCorp, setPartnerCorp] = useState('');
+  const [partnerContact, setPartnerContact] = useState('');
+  const [partnerMsg, setPartnerMsg] = useState('');
 
   const fileInputRef = useRef(null);
   const L = DICT[lang];
-  const cats = ['MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'];
+  const standardCats = ['MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'];
 
-  // -- EMPIRE LOGIC --
+  // -- EMPIRE'S CORE LOGIC (V23) --
   const currentBeomValue = useMemo(() => (0.18 * 100) + (5000 * 0.01) + 1, []);
   const redistributionAmount = useMemo(() => 
     Math.max(totalRevenue * 0.03, netIncome * 0.08), 
@@ -109,50 +117,52 @@ export default function KedheonEmpireFinalMaster() {
 
   useEffect(() => {
     setHasMounted(true);
-    const saved = localStorage.getItem('KEDHEON_FINAL_V125');
+    const saved = localStorage.getItem('KEDHEON_V130_ARCHIVE');
     if (saved) {
       try {
         const p = JSON.parse(saved);
         if (p.beomToken) setBeomToken(p.beomToken);
+        if (p.fanRooms) setFanRooms(p.fanRooms);
         if (p.lang) setLang(p.lang);
-      } catch (e) { console.error("Archive Error", e); }
+      } catch (e) { console.error("Archive Load Failure", e); }
     }
   }, []);
 
   useEffect(() => {
     if (hasMounted) {
-      localStorage.setItem('KEDHEON_FINAL_V125', JSON.stringify({ beomToken, lang }));
+      localStorage.setItem('KEDHEON_V130_ARCHIVE', JSON.stringify({ beomToken, lang, fanRooms }));
     }
-  }, [beomToken, lang, hasMounted]);
+  }, [beomToken, lang, fanRooms, hasMounted]);
 
   const handleImageUpload = (e) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onloadend = () => setSellItem({ ...sellItem, img: reader.result });
+      reader.onloadend = () => setSellImg(reader.result);
       reader.readAsDataURL(file);
     }
   };
 
-  const submitGoods = () => {
-    if(!sellItem.name || !sellItem.price || !sellItem.img) return alert("상품 정보를 모두 입력하십시오.");
-    setGoods([{ ...sellItem, id: Date.now(), price: Number(sellItem.price) }, ...goods]);
-    setSellItem({ name: '', price: '', desc: '', img: '' });
+  const handleRegisterGoods = () => {
+    if(!sellName || !sellPrice || !sellImg) return alert("상품 정보를 모두 입력하십시오.");
+    const newItem = { id: Date.now(), name: sellName, price: Number(sellPrice), img: sellImg, desc: sellDesc };
+    setGoods([newItem, ...goods]);
+    setSellName(''); setSellPrice(''); setSellDesc(''); setSellImg('');
     alert("제국 마켓에 성공적으로 등록되었습니다.");
   };
 
   if (!hasMounted) return <div className="bg-white min-h-screen" />;
 
   return (
-    <div className="flex flex-col items-center bg-white min-h-screen text-black font-sans w-full pb-[20rem] font-black overflow-x-hidden selection:bg-red-50 selection:text-[#dc2626]">
+    <div className="flex flex-col items-center bg-white min-h-screen text-black font-sans w-full pb-96 font-black overflow-x-hidden selection:bg-red-50">
       
       {/* 🧭 NAVIGATION: THE IMPERIAL CROWN */}
       <nav className="w-full max-w-7xl flex justify-between items-center px-6 py-6 sticky top-0 bg-white/95 backdrop-blur-2xl z-[300] border-b-8 border-black/5 shadow-xl">
         <div className="flex items-center gap-6">
-          <img src="/kedheon-character.png" className="w-16 h-16 rounded-[25px] border-4 border-black shadow-2xl transition-transform hover:scale-110 cursor-pointer" alt="Master" />
+          <img src="/kedheon-character.png" className="w-16 h-16 rounded-[25px] border-4 border-black shadow-2xl transition-transform hover:scale-110" alt="Seal" />
           <div className="text-left leading-tight">
-            <h1 className="text-black text-2xl md:text-5xl font-black italic uppercase tracking-tighter">Kedheon</h1>
-            <span className="text-gray-400 text-[10px] md:text-lg font-mono font-bold uppercase tracking-[0.3em]">V125.0 FINAL MASTER</span>
+            <h1 className="text-black text-2xl md:text-5xl font-black italic uppercase tracking-tighter leading-none">Kedheon</h1>
+            <span className="text-gray-400 text-[10px] md:text-lg font-mono font-bold uppercase tracking-[0.3em]">V130.0 Ultimate Master</span>
           </div>
         </div>
         
@@ -171,28 +181,27 @@ export default function KedheonEmpireFinalMaster() {
       <main className="w-full max-w-7xl px-6 py-12">
         
         {/* ============================================================
-            TAB 01: ROOKIE (가입 및 온보딩 가이드)
+            SECTION A: ROOKIE (GAIP ONBOARDING)
             ============================================================ */}
         {tab === 'ROOKIE' ? (
           <div className="flex flex-col gap-12 text-left animate-in fade-in slide-in-from-top-12 duration-1000">
             <div className="flex flex-col items-center text-center gap-10 py-24 bg-gray-50 rounded-[80px] border-4 border-black/5 relative shadow-inner overflow-hidden">
-              <div className="absolute top-0 left-0 w-full h-4 bg-[#dc2626] animate-pulse shadow-lg"></div>
-              <img src="/kedheon-character.png" className="w-48 h-48 md:w-[25rem] md:h-[25rem] rounded-[60px] border-[10px] border-black shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] transition-all hover:rotate-12 hover:scale-110" alt="Kedheon Character" />
+              <div className="absolute top-0 left-0 w-full h-4 bg-[#dc2626] animate-pulse"></div>
+              <img src="/kedheon-character.png" className="w-48 h-48 md:w-[28rem] md:h-[28rem] rounded-[60px] border-[10px] border-black shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] transition-all hover:rotate-12 hover:scale-110" alt="Master" />
               <div className="px-10">
                 <h1 className="text-black text-5xl md:text-[8rem] uppercase mb-4 font-black tracking-tighter leading-none drop-shadow-sm">{L.invitation}</h1>
                 <p className="text-[#dc2626] text-2xl md:text-6xl uppercase tracking-[0.5em] border-b-[15px] border-[#dc2626] pb-4 inline-block font-black italic shadow-sm">{L.procedure}</p>
               </div>
             </div>
 
-            {/* 8 STEPS LIST */}
             <div className="grid grid-cols-1 gap-8">
               {L.steps.map((step, i) => (
-                <div key={i} className={`p-12 bg-white rounded-[55px] border-[6px] flex items-center gap-12 transition-all duration-700 ${i === 0 ? 'border-[#dc2626] bg-red-50/10 shadow-[0_40px_80px_-20px_rgba(220,38,38,0.3)] scale-[1.05] z-10' : 'border-black/5 hover:border-black/20 opacity-90 hover:opacity-100'}`}>
+                <div key={i} className={`p-12 bg-white rounded-[55px] border-[6px] flex items-center gap-12 transition-all duration-700 ${i === 0 ? 'border-[#dc2626] bg-red-50/10 shadow-[0_40px_80px_-20px_rgba(220,38,38,0.3)] scale-[1.05] z-10' : 'border-black/5 hover:border-black/20 opacity-90'}`}>
                   <span className={`text-6xl md:text-[12rem] font-black italic ${i === 0 ? 'text-[#dc2626]' : 'text-black opacity-5'}`}>0{i+1}</span>
                   <div className="flex-1">
                     <h3 className="text-black text-3xl md:text-6xl font-black uppercase italic mb-4 tracking-tighter leading-none">{step.t}</h3>
                     <p className="text-gray-600 text-base md:text-4xl font-bold leading-snug tracking-tight mb-4">{step.d}</p>
-                    {/* [IMPORTANT] OFFICIAL APP DOWNLOAD BUTTON */}
+                    {/* [CORE] DOWNLOAD LINK BUTTON */}
                     {step.link && (
                       <button 
                         onClick={() => window.open(step.link, '_blank')} 
@@ -207,10 +216,10 @@ export default function KedheonEmpireFinalMaster() {
             </div>
             
             <div className="p-20 bg-black text-white rounded-[80px] text-center shadow-[0_60px_120px_-30px_rgba(0,0,0,1)] border-[20px] border-black group transition-all hover:bg-[#080808]">
-              <p className="text-2xl md:text-6xl font-black italic uppercase tracking-[0.6em] text-gray-500 group-hover:text-[#dc2626] transition-colors mb-10">Imperial Access Code</p>
+              <p className="text-2xl md:text-6xl font-black italic uppercase tracking-[0.6em] text-gray-500 group-hover:text-[#dc2626] transition-colors mb-10">Access Authority Code</p>
               <div 
                 className="text-[#dc2626] text-8xl md:text-[22rem] font-black tracking-[0.1em] drop-shadow-[0_20px_40px_rgba(220,38,38,0.7)] active:scale-95 transition-transform cursor-pointer select-all font-mono leading-none py-10" 
-                onClick={() => {navigator.clipboard.writeText(PI_INVITE_CODE); alert("제국 통신망에 초대 코드가 복사되었습니다!");}}
+                onClick={() => {navigator.clipboard.writeText(PI_INVITE_CODE); alert("초대 코드가 제국 통신망에 복사되었습니다!");}}
               >
                 {PI_INVITE_CODE}
               </div>
@@ -219,14 +228,14 @@ export default function KedheonEmpireFinalMaster() {
           </div>
         ) : (
           /* ============================================================
-             TAB 02: PIONEER (ECONOMIC & MASTER SYSTEMS)
+             SECTION B: PIONEER (ECONOMIC SYSTEM)
              ============================================================ */
           <div className="flex flex-col gap-24 py-8 text-left animate-in slide-in-from-bottom-20 duration-1000">
             
-            {/* 00. ASSET COMMAND DASHBOARD */}
+            {/* 00. ASSET COMMAND CENTER */}
             <div className="bg-gray-50 p-12 md:p-32 rounded-[100px] border-[12px] border-black shadow-[0_100px_150px_-50px_rgba(0,0,0,0.5)] flex flex-col md:flex-row justify-between items-center relative overflow-hidden group">
                 <div className="absolute -top-40 -left-40 p-4 opacity-5 pointer-events-none select-none rotate-45">
-                  <h1 className="text-[50rem] font-black italic uppercase">WHALE</h1>
+                  <h1 className="text-[50rem] font-black italic uppercase leading-none">WHALE</h1>
                 </div>
                 <div className="text-left z-10 space-y-10 w-full md:w-auto font-black">
                   <h3 className="text-gray-400 text-lg md:text-5xl uppercase tracking-[1em] font-black leading-none">{L.assets}</h3>
@@ -238,8 +247,8 @@ export default function KedheonEmpireFinalMaster() {
                     </p>
                   </div>
                   <div className="flex flex-wrap gap-8 pt-10 font-black">
-                    <div className="bg-black text-white px-12 py-6 rounded-[35px] text-lg md:text-5xl font-mono font-bold border-[8px] border-white/5 shadow-[0_40px_80px_rgba(0,0,0,0.6)] transition-transform hover:scale-110 cursor-help">Index: {currentBeomValue.toFixed(2)} / PI</div>
-                    <div className="bg-[#dc2626] text-white px-12 py-6 rounded-[35px] text-lg md:text-5xl font-mono font-bold animate-pulse shadow-[0_40px_80px_rgba(220,38,38,0.5)] border-[8px] border-white/5 transition-transform hover:scale-110 cursor-help">Social Return: {redistributionAmount.toLocaleString()}</div>
+                    <div className="bg-black text-white px-12 py-6 rounded-[35px] text-lg md:text-5xl font-mono font-bold border-[8px] border-white/5 shadow-[0_40px_80px_rgba(0,0,0,0.6)] transition-transform hover:scale-110">Value Index: {currentBeomValue.toFixed(2)} / PI</div>
+                    <div className="bg-[#dc2626] text-white px-12 py-6 rounded-[35px] text-lg md:text-5xl font-mono font-bold animate-pulse shadow-[0_40px_80px_rgba(220,38,38,0.5)] border-[8px] border-white/5 transition-transform hover:scale-110">Social Return: {redistributionAmount.toLocaleString()}</div>
                   </div>
                 </div>
                 <img src="/beom-token.png" className="w-56 h-56 md:w-[45rem] md:h-[45rem] object-contain group-hover:scale-125 group-hover:rotate-[25deg] transition-all duration-1000 mt-16 md:mt-0 drop-shadow-[0_80px_160px_rgba(0,0,0,0.6)]" alt="Imperial Asset" />
@@ -249,7 +258,7 @@ export default function KedheonEmpireFinalMaster() {
             <SectionHeader num="01" title={L.exchange} desc={L.exchangeDesc} />
             <div className="bg-white p-12 md:p-32 rounded-[80px] border-[20px] border-black flex flex-col md:flex-row justify-between items-center shadow-[0_60px_120px_-20px_rgba(0,0,0,0.4)] gap-16 hover:bg-gray-50 transition-all group">
               <div className="text-left leading-tight font-black w-full md:w-auto">
-                <p className="text-black text-5xl md:text-[12rem] font-black italic uppercase leading-none mb-10 group-hover:text-[#dc2626] transition-colors">Economic Bridge</p>
+                <p className="text-black text-5xl md:text-[12rem] font-black italic uppercase leading-none mb-10 group-hover:text-[#dc2626] transition-colors">Economic Terminal</p>
                 <div className="flex items-center gap-10">
                   <span className="w-12 h-12 bg-green-500 rounded-full animate-ping"></span>
                   <p className="text-gray-400 text-xl md:text-7xl font-bold uppercase tracking-[0.4em]">Fixed Rate: 1 Pi = 100 BEOM</p>
@@ -267,24 +276,24 @@ export default function KedheonEmpireFinalMaster() {
             <SectionHeader num="02" title={L.auth} desc={L.authDesc} />
             <div className="bg-gray-50 p-12 md:p-32 rounded-[100px] border-8 border-black/5 flex flex-col items-center gap-20 shadow-inner">
               <div className="flex gap-10 w-full max-w-6xl bg-white p-5 rounded-[60px] border-[12px] border-black font-black shadow-3xl">
-                <button onClick={() => { setQrState({ ...qrState, type: 'PERSONAL', active: false }); }} className={`flex-1 py-14 rounded-[45px] text-2xl md:text-7xl font-black transition-all ${qrState.type === 'PERSONAL' ? 'bg-black text-white shadow-3xl scale-105' : 'text-gray-300 hover:text-black'}`}>PERSONAL</button>
-                <button onClick={() => { setQrState({ ...qrState, type: 'BUSINESS', active: false }); }} className={`flex-1 py-14 rounded-[45px] text-2xl md:text-7xl font-black transition-all ${qrState.type === 'BUSINESS' ? 'bg-black text-white shadow-3xl scale-105' : 'text-gray-300 hover:text-black'}`}>BUSINESS</button>
+                <button onClick={() => { setQrType('PERSONAL'); setIsQrActive(false); }} className={`flex-1 py-14 rounded-[45px] text-2xl md:text-7xl font-black transition-all ${qrType === 'PERSONAL' ? 'bg-black text-white shadow-3xl scale-105' : 'text-gray-300 hover:text-black'}`}>PERSONAL</button>
+                <button onClick={() => { setQrType('BUSINESS'); setIsQrActive(false); }} className={`flex-1 py-14 rounded-[45px] text-2xl md:text-7xl font-black transition-all ${qrType === 'BUSINESS' ? 'bg-black text-white shadow-3xl scale-105' : 'text-gray-300 hover:text-black'}`}>BUSINESS</button>
               </div>
               
-              {qrState.type === 'BUSINESS' && (
+              {qrType === 'BUSINESS' && (
                  <input 
-                   value={qrState.biz} 
-                   onChange={(e) => setQrState({ ...qrState, biz: e.target.value.toUpperCase() })} 
+                   value={bizName} 
+                   onChange={(e) => setBizName(e.target.value.toUpperCase())} 
                    placeholder="ENTER ENTERPRISE NAME" 
                    className="w-full max-w-6xl bg-white border-[12px] border-black p-16 rounded-[60px] text-center text-black text-5xl md:text-[10rem] font-black outline-none focus:border-[#dc2626] shadow-[inset_0_8px_30px_rgba(0,0,0,0.3)] transition-all" 
                  />
               )}
 
-              <div className={`relative bg-white border-[24px] rounded-[120px] flex items-center justify-center transition-all duration-1000 shadow-[0_80px_160px_rgba(0,0,0,0.5)] ${qrState.type === 'PERSONAL' ? 'w-[30rem] h-[30rem] md:w-[65rem] md:h-[65rem]' : 'w-full max-w-[100rem] aspect-video'} ${qrState.active ? 'border-[#dc2626] opacity-100 scale-100' : 'opacity-5 border-black/10 scale-90 blur-[10px]'}`}>
-                {qrState.active ? (
+              <div className={`relative bg-white border-[24px] rounded-[120px] flex items-center justify-center transition-all duration-1000 shadow-[0_80px_160px_rgba(0,0,0,0.5)] ${qrType === 'PERSONAL' ? 'w-[30rem] h-[30rem] md:w-[65rem] md:h-[65rem]' : 'w-full max-w-[100rem] aspect-video'} ${isQrActive ? 'border-[#dc2626] opacity-100 scale-100' : 'opacity-5 border-black/10 scale-90 blur-[10px]'}`}>
+                {isQrActive ? (
                   <div className="flex flex-col items-center p-20 gap-16">
-                    <img src={qrState.type === 'PERSONAL' ? "/qr-personal.png" : "/qr-business.png"} className="h-full object-contain drop-shadow-[0_40px_80px_rgba(0,0,0,0.4)] animate-in zoom-in-50 duration-700" alt="Identity" />
-                    <p className="text-black text-2xl md:text-8xl font-black italic tracking-[0.5em] uppercase bg-gray-100 px-24 py-8 rounded-full shadow-inner border-4 border-black/10">{qrState.biz || "AUTHENTICATED"}</p>
+                    <img src={qrType === 'PERSONAL' ? "/qr-personal.png" : "/qr-business.png"} className="h-full object-contain drop-shadow-[0_40px_80px_rgba(0,0,0,0.4)] animate-in zoom-in-50 duration-700" alt="Identity" />
+                    <p className="text-black text-2xl md:text-8xl font-black italic tracking-[0.5em] uppercase bg-gray-100 px-24 py-8 rounded-full shadow-inner border-4 border-black/10">{bizName || "AUTHENTICATED"}</p>
                   </div>
                 ) : (
                   <div className="flex flex-col items-center">
@@ -294,7 +303,7 @@ export default function KedheonEmpireFinalMaster() {
                 )}
               </div>
               <button 
-                onClick={() => {if(beomToken < 50) return alert("자산이 부족합니다 (50 BEOM 필요)"); setBeomToken(p=>p-50); setQrState({ ...qrState, active: true });}} 
+                onClick={() => {if(beomToken < 50) return alert("자산이 부족합니다 (50 BEOM 필요)"); setBeomToken(p=>p-50); setIsQrActive(true);}} 
                 className="w-full max-w-7xl bg-black text-white py-16 md:py-32 rounded-[80px] text-4xl md:text-[11rem] border-[16px] border-black active:scale-95 uppercase font-black shadow-3xl hover:bg-[#dc2626] transition-all leading-none"
               >
                 {L.activate} (50 BEOM)
@@ -305,8 +314,8 @@ export default function KedheonEmpireFinalMaster() {
             <SectionHeader num="03" title={L.creative} desc={L.creativeDesc} />
             <div className="bg-white p-12 md:p-32 rounded-[110px] border-[12px] border-black/10 space-y-20 text-left shadow-[0_100px_200px_-50px_rgba(0,0,0,0.3)] font-black">
               <div className="flex gap-24 border-b-[20px] border-gray-100 pb-16 font-black">
-                 <button onClick={() => setBoardType('CREATIVE')} className={`text-4xl md:text-[10rem] uppercase font-black italic transition-all ${boardType === 'CREATIVE' ? 'text-black border-b-[30px] border-black pb-6' : 'text-gray-300 hover:text-gray-500'}`}>Creative Hub</button>
-                 <button onClick={() => setBoardType('FAN')} className={`text-4xl md:text-[10rem] uppercase font-black italic transition-all ${boardType === 'FAN' ? 'text-black border-b-[30px] border-black pb-6' : 'text-gray-300 hover:text-gray-500'}`}>Fan spirit</button>
+                 <button onClick={() => setBoardType('CREATIVE')} className={`text-4xl md:text-[10rem] uppercase font-black italic transition-all ${boardType === 'CREATIVE' ? 'text-black border-b-[30px] border-black pb-6' : 'text-gray-300 hover:text-gray-500'}`}>Creative</button>
+                 <button onClick={() => setBoardType('FAN')} className={`text-4xl md:text-[10rem] uppercase font-black italic transition-all ${boardType === 'FAN' ? 'text-black border-b-[30px] border-black pb-6' : 'text-gray-300 hover:text-gray-500'}`}>Fan Rooms</button>
               </div>
 
               <div className="space-y-16">
@@ -324,13 +333,13 @@ export default function KedheonEmpireFinalMaster() {
               </div>
               
               <div className="space-y-10 font-black pt-12">
-                <input value={feed.title} onChange={(e) => setFeed({ ...feed, title: e.target.value })} placeholder="제국을 전율케 할 제목 또는 팬심의 고백" className="w-full bg-gray-50 border-[12px] border-black/5 p-16 rounded-[50px] text-4xl md:text-[8rem] text-black outline-none focus:border-black font-black shadow-inner transition-all" />
-                <input value={feed.url} onChange={(e) => setFeed({ ...feed, url: e.target.value })} placeholder="미디어 URL 암호 연결 (Link)" className="w-full bg-gray-50 border-[12px] border-black/5 p-16 rounded-[50px] text-2xl md:text-5xl text-[#dc2626] outline-none focus:border-[#dc2626] shadow-inner transition-all" />
-                <textarea value={feed.desc} onChange={(e) => setFeed({ ...feed, desc: e.target.value })} placeholder="상세 내용을 기록하여 제국의 역사에 기여하십시오." className="w-full bg-gray-50 border-[12px] border-black/5 p-16 rounded-[50px] text-xl md:text-6xl text-black h-[50rem] outline-none focus:border-black font-bold shadow-inner leading-relaxed" />
+                <input value={newTitle} onChange={(e) => setNewTitle(e.target.value)} placeholder="제국을 전율케 할 제목 또는 팬심의 고백" className="w-full bg-gray-50 border-[12px] border-black/5 p-16 rounded-[50px] text-4xl md:text-[8rem] text-black outline-none focus:border-black font-black shadow-inner transition-all" />
+                <input value={newUrl} onChange={(e) => setNewUrl(e.target.value)} placeholder="미디어 URL 암호 연결 (Link)" className="w-full bg-gray-50 border-[12px] border-black/5 p-16 rounded-[50px] text-2xl md:text-5xl text-[#dc2626] outline-none focus:border-[#dc2626] shadow-inner transition-all" />
+                <textarea value={newDesc} onChange={(e) => setNewDesc(e.target.value)} placeholder="상세 내용을 기록하여 제국의 역사에 기여하십시오." className="w-full bg-gray-50 border-[12px] border-black/5 p-16 rounded-[50px] text-xl md:text-6xl text-black h-[50rem] outline-none focus:border-black font-bold shadow-inner leading-relaxed" />
               </div>
               
               <div className="flex gap-10 font-black">
-                  <button onClick={() => {if(!feed.title) return alert("내용을 입력하십시오."); setBeomToken(p=>p-10); alert("제국 통신망에 성공적으로 송출되었습니다."); setFeed({title:'', desc:'', url:''});}} className="flex-[4] bg-black text-white py-16 md:py-32 rounded-[60px] text-4xl md:text-[10rem] border-[16px] border-black active:scale-95 uppercase font-black shadow-3xl hover:bg-[#dc2626] transition-all leading-none">{L.post} (10 BEOM)</button>
+                  <button onClick={() => {if(!newTitle) return alert("내용을 입력하십시오."); setBeomToken(p=>p-10); alert("제국 통신망에 성공적으로 송출되었습니다."); setNewTitle(''); setNewDesc(''); setNewUrl('');}} className="flex-[4] bg-black text-white py-16 md:py-32 rounded-[60px] text-4xl md:text-[10rem] border-[16px] border-black active:scale-95 uppercase font-black shadow-3xl hover:bg-[#dc2626] transition-all leading-none">{L.post} (10 BEOM)</button>
                   <button onClick={() => alert("팬룸 개설은 별도의 승인 절차가 필요합니다 (500 BEOM 소요).")} className="flex-1 bg-white text-black py-16 md:py-32 rounded-[60px] text-xl md:text-5xl border-[16px] border-black uppercase font-black shadow-2xl hover:bg-gray-100 transition-all">🚩 OPEN</button>
               </div>
               <p className="text-gray-400 text-xl md:text-5xl font-bold bg-gray-50 p-16 rounded-[60px] italic border-l-[32px] border-[#dc2626] leading-snug">※ {L.fanRoomDesc}</p>
@@ -365,7 +374,7 @@ export default function KedheonEmpireFinalMaster() {
                <div className="grid grid-cols-1 md:grid-cols-2 gap-20 pt-40 border-t-[20px] border-gray-50">
                   {goods.map(g => (
                     <div key={g.id} className="bg-white p-12 md:p-24 rounded-[80px] md:rounded-[120px] border-[12px] border-black/10 shadow-3xl flex flex-col group transition-all hover:border-[#dc2626] hover:shadow-[0_100px_200px_-50px_rgba(220,38,38,0.5)] relative">
-                      <div className="w-full aspect-square bg-gray-50 rounded-[60px] md:rounded-[100px] border-[10px] border-black/5 mb-16 overflow-hidden flex items-center justify-center relative shadow-inner">
+                      <div className="w-full aspect-square bg-gray-50 rounded-[60px] mb-16 overflow-hidden flex items-center justify-center relative shadow-inner">
                         <div className="absolute top-12 right-12 bg-black text-white px-12 py-5 rounded-full text-xl md:text-5xl font-mono font-black shadow-2xl z-20">EMPIRE VERIFIED</div>
                         <img src={g.img} className="w-64 h-64 md:w-[40rem] md:h-[40rem] object-contain group-hover:scale-[1.3] group-hover:rotate-[10deg] transition-transform duration-[2000ms]" alt="Empire Goods" />
                       </div>
@@ -384,7 +393,7 @@ export default function KedheonEmpireFinalMaster() {
 
             {/* 05. BUSINESS PARTNERSHIP PORTAL */}
             <SectionHeader num="05" title={L.partnership} desc={L.partnershipDesc} />
-            <div className="bg-black p-16 md:p-48 rounded-[120px] border-[30px] border-[#dc2626] space-y-24 text-left shadow-[0_120px_250px_-50px_rgba(220,38,38,0.7)] relative overflow-hidden">
+            <div className="bg-black p-12 md:p-48 rounded-[120px] border-[30px] border-[#dc2626] space-y-24 text-left shadow-[0_120px_250px_-50px_rgba(220,38,38,0.7)] relative overflow-hidden">
                 <div className="absolute -top-60 -right-60 opacity-10 pointer-events-none select-none">
                     <img src="/kedheon-character.png" className="w-[80rem] h-[80rem] grayscale" alt="Empire Seal" />
                 </div>
