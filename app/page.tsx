@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 
-/** * [KEDHEON MASTER V115.0 - THE ULTIMATE FULL ARCHIVE]
+/** * [KEDHEON MASTER V116.0 - THE ULTIMATE FULL ARCHIVE]
  * -----------------------------------------------------------
  * 주군(Lord) 오상조의 제국을 위한 무삭제 절대 코드
  * 1. 테마: Pure White (#FFFFFF) / Black (#000000) / Red (#DC2626)
@@ -68,7 +68,7 @@ const SectionHeader = ({ num, title, desc }) => (
   </div>
 );
 
-export default function KedheonEmpireUltimate() {
+export default function KedheonEmpireEternalMaster() {
   const [hasMounted, setHasMounted] = useState(false);
   const [lang, setLang] = useState('KR');
   const [tab, setTab] = useState('PIONEER');
@@ -118,7 +118,7 @@ export default function KedheonEmpireUltimate() {
 
   useEffect(() => {
     setHasMounted(true);
-    const saved = localStorage.getItem('KEDHEON_ULTIMATE_V115');
+    const saved = localStorage.getItem('KEDHEON_MASTER_V116');
     if (saved) {
       try {
         const p = JSON.parse(saved);
@@ -131,7 +131,7 @@ export default function KedheonEmpireUltimate() {
 
   useEffect(() => {
     if (hasMounted) {
-      localStorage.setItem('KEDHEON_ULTIMATE_V115', JSON.stringify({ beomToken, lang, fanRooms }));
+      localStorage.setItem('KEDHEON_MASTER_V116', JSON.stringify({ beomToken, lang, fanRooms }));
     }
   }, [beomToken, lang, fanRooms, hasMounted]);
 
@@ -163,7 +163,7 @@ export default function KedheonEmpireUltimate() {
           <img src="/kedheon-character.png" className="w-16 h-16 rounded-[25px] border-4 border-black shadow-2xl transition-transform hover:scale-110" alt="Seal" />
           <div className="text-left leading-tight">
             <h1 className="text-black text-2xl md:text-5xl font-black italic uppercase tracking-tighter leading-none">Kedheon</h1>
-            <span className="text-gray-400 text-[10px] md:text-lg font-mono font-bold uppercase tracking-[0.3em]">V115.0 Ultimate Master</span>
+            <span className="text-gray-400 text-[10px] md:text-lg font-mono font-bold uppercase tracking-[0.3em]">V116.0 Master Archive</span>
           </div>
         </div>
         
@@ -440,9 +440,9 @@ export default function KedheonEmpireUltimate() {
       </main>
 
       {/* 📱 FOOTER TAB BAR: THE NAVIGATOR OF REALITY */}
-      <footer className="fixed bottom-12 left-8 right-8 max-w-7xl mx-auto bg-white border-[12px] border-black p-4 rounded-[80px] flex justify-between gap-6 z-[500] shadow-[0_100px_250px_rgba(0,0,0,1)] font-black transition-transform duration-500">
+      <footer className="fixed bottom-12 left-8 right-8 max-w-[110rem] mx-auto bg-white border-[12px] border-black p-4 rounded-[80px] flex justify-between gap-6 z-[500] shadow-[0_100px_250px_rgba(0,0,0,1)] font-black transition-transform duration-500">
         {['KEDHEON', 'CIVIL', 'NEXUS', 'VENDOR'].map(app => (
-          <button key={app} className={`flex-1 py-8 md:py-16 rounded-[50px] text-xs md:text-[4rem] transition-all duration-700 font-black text-center leading-none ${app === 'KEDHEON' ? 'bg-black text-white shadow-[inset_0_20px_40px_rgba(255,255,255,0.4)] scale-[1.1] z-10 animate-pulse' : 'text-gray-300 hover:bg-gray-100 hover:text-black hover:scale-110'}`}>
+          <button key={app} className={`flex-1 py-12 md:py-24 rounded-[65px] text-xs md:text-[6rem] transition-all duration-700 font-black text-center leading-none ${app === 'KEDHEON' ? 'bg-black text-white shadow-[inset_0_20px_40px_rgba(255,255,255,0.4)] scale-[1.1] z-10 animate-pulse' : 'text-gray-300 hover:bg-gray-100 hover:text-black hover:scale-110'}`}>
             {app}
           </button>
         ))}
@@ -450,7 +450,7 @@ export default function KedheonEmpireUltimate() {
 
       {/* 🐯 EMPIRE WATERMARK OVERLAY */}
       <div className="mt-64 opacity-5 text-black text-xl md:text-[12rem] tracking-[4em] uppercase pb-96 font-black text-center select-none pointer-events-none leading-none">
-        Kedheon master | V115.0 Final Empire | For Lord Ohsangjo
+        Kedheon master | V116.0 Eternal Empire | For Lord Ohsangjo
       </div>
     </div>
   );
