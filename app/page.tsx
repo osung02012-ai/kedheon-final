@@ -1,13 +1,12 @@
 'use client';
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 
-/** * [KEDHEON MASTER V105.6 - TOTAL SYSTEM INTEGRATION]
+/** * [KEDHEON MASTER V105.7 - FULL COMMAND CENTER]
  * -----------------------------------------------------------
  * 1. 테마: Pure White (#FFFFFF) / Black (#000000) / Red (#DC2626)
- * 2. 레이아웃: 모바일 최적화 촘촘한(Compact) 간격 및 박스 설계 유지
- * 3. 기능: BUSINESS PARTNERSHIP (L4 Portal) 섹션 및 기업명 입력박스 완벽 통합
- * 4. 경제: Max(3% Total Sales, 8% Net Profit) 사회적 환원 자동 계산 [로직수정]
- * 5. 인프라: 88쓰레드 / 18.02 노드 점수 / Protocol V23 완벽 싱크
+ * 2. 레이아웃: 모바일 최적화 촘촘한(Compact) 간격 및 박스 설계
+ * 3. 업데이트: ROOKIE 섹션 앱 다운로드 버튼 시인성 극대화
+ * 4. 경제: Max(3% Total Sales, 8% Net Profit) 사회적 환원 자동 계산
  * -----------------------------------------------------------
  */
 
@@ -17,7 +16,7 @@ const DICT = {
   KR: {
     rookie: "ROOKIE", pioneer: "PIONEER", exchange: "EXCHANGE", auth: "SECURE AUTH", creative: "CREATIVE & FAN", market: "MARKET", partnership: "PARTNERSHIP",
     invitation: "Web3 초대합니다.", procedure: "파이코인 가입절차 안내", assets: "ASSETS", activate: "보안 QR 활성화",
-    convert: "1 PI 환전", post: "피드 등록", buy: "구매하기", register: "상품 등록", submit: "제안서 제출", download: "앱 다운로드",
+    convert: "1 PI 환전", post: "피드 등록", buy: "구매하기", register: "상품 등록", submit: "제안서 제출", download: "공식 앱 다운로드",
     exchangeDesc: "채굴 기여도를 BEOM으로 즉시 전환하십시오.",
     authDesc: "개인/비즈니스 보안 QR코드를 발급받으십시오.",
     creativeDesc: "창작물과 팬심을 공유하고 호응을 이끌어내십시오.",
@@ -58,7 +57,7 @@ const DICT = {
   }
 };
 
-export default function KedheonEmpireFinalMaster() {
+export default function KedheonEmpireV105_7() {
   const [hasMounted, setHasMounted] = useState(false);
   const [lang, setLang] = useState('KR');
   const [tab, setTab] = useState('PIONEER');
@@ -94,7 +93,6 @@ export default function KedheonEmpireFinalMaster() {
 
   const currentBeomValue = useMemo(() => (0.18 * 100) + (5000 * 0.01) + 1, []);
   
-  // [로직 수정 완료] 매출 3%와 순이익 8% 중 큰 금액 산출
   const redistributionAmount = useMemo(() => 
     Math.max(totalRevenue * 0.03, netIncome * 0.08), 
     [totalRevenue, netIncome]
@@ -102,7 +100,7 @@ export default function KedheonEmpireFinalMaster() {
 
   useEffect(() => {
     setHasMounted(true);
-    const saved = localStorage.getItem('KEDHEON_COMPACT_V105_6');
+    const saved = localStorage.getItem('KEDHEON_V105_7');
     if (saved) {
       try {
         const p = JSON.parse(saved);
@@ -115,7 +113,7 @@ export default function KedheonEmpireFinalMaster() {
 
   useEffect(() => {
     if (hasMounted) {
-      localStorage.setItem('KEDHEON_COMPACT_V105_6', JSON.stringify({ beomToken, lang, fanRooms }));
+      localStorage.setItem('KEDHEON_V105_7', JSON.stringify({ beomToken, lang, fanRooms }));
     }
   }, [beomToken, lang, fanRooms, hasMounted]);
 
@@ -148,7 +146,7 @@ export default function KedheonEmpireFinalMaster() {
           <img src="/kedheon-character.png" className="w-8 h-8 rounded-lg border border-black shadow-sm" alt="K" />
           <div className="text-left leading-tight">
             <h1 className="text-black text-sm md:text-lg font-black italic uppercase tracking-tighter">Kedheon</h1>
-            <span className="text-gray-400 text-[7px] font-mono font-bold uppercase">V105.6 MASTER</span>
+            <span className="text-gray-400 text-[7px] font-mono font-bold uppercase">V105.7 MASTER</span>
           </div>
         </div>
         
@@ -158,7 +156,7 @@ export default function KedheonEmpireFinalMaster() {
             <button onClick={() => setLang('EN')} className={`px-2 py-0.5 rounded text-[8px] md:text-xs font-black transition-all ${lang === 'EN' ? 'bg-black text-white' : 'text-gray-400'}`}>EN</button>
           </div>
           <div className="flex gap-1">
-            <button onClick={() => setTab('ROOKIE')} className={`px-2 py-1 rounded-md text-[8px] md:text-xs font-black border transition-all ${tab === 'ROOKIE' ? 'bg-black text-white border-black' : 'border-black/5 text-gray-400'}`}>{L.rookie}</button>
+            <button onClick={() => setTab('ROOKIE')} className={`px-2 py-1 rounded-md text-[8px] md:text-xs font-black border transition-all ${tab === 'ROOKIE' ? 'bg-[#dc2626] text-white border-[#dc2626]' : 'border-black/5 text-gray-400'}`}>{L.rookie}</button>
             <button onClick={() => setTab('PIONEER')} className={`px-2 py-1 rounded-md text-[8px] md:text-xs font-black border transition-all ${tab === 'PIONEER' ? 'bg-black text-white border-black' : 'border-black/5 text-gray-400'}`}>{L.pioneer}</button>
           </div>
         </div>
@@ -171,24 +169,27 @@ export default function KedheonEmpireFinalMaster() {
               <img src="/kedheon-character.png" className="w-24 h-24 md:w-32 md:h-32 rounded-2xl border-2 border-black shadow-lg" alt="M" />
               <div className="px-2">
                 <h1 className="text-black text-xl md:text-3xl uppercase mb-0.5 font-black">{L.invitation}</h1>
-                <p className="text-black text-sm md:text-xl uppercase tracking-widest border-b border-black pb-0.5 inline-block font-black">{L.procedure}</p>
+                <p className="text-[#dc2626] text-sm md:text-xl uppercase tracking-widest border-b-2 border-[#dc2626] pb-0.5 inline-block font-black">{L.procedure}</p>
               </div>
             </div>
             <div className="grid grid-cols-1 gap-2">
               {L.steps.map((step, i) => (
-                <div key={i} className={`p-4 bg-white rounded-xl border flex items-center gap-4 transition-all ${i >= 5 ? 'border-[#dc2626] bg-red-50/10' : 'border-black/5'}`}>
-                  <span className="text-black text-lg md:text-2xl font-black italic">0{i+1}</span>
+                <div key={i} className={`p-4 bg-white rounded-xl border flex items-center gap-4 transition-all ${i === 0 ? 'border-[#dc2626] bg-red-50/5 shadow-sm' : 'border-black/5'}`}>
+                  <span className={`text-lg md:text-2xl font-black italic ${i === 0 ? 'text-[#dc2626]' : 'text-black'}`}>0{i+1}</span>
                   <div className="flex-1">
                     <h3 className="text-black text-xs md:text-lg font-black uppercase italic mb-0.5">{step.t}</h3>
                     <p className="text-gray-600 text-[10px] md:text-sm font-bold leading-tight">{step.d}</p>
                     {step.link && (
-                      <button onClick={() => window.open(step.link, '_blank')} className="mt-2 bg-black text-white px-4 py-1.5 rounded-lg text-[9px] md:text-xs font-black uppercase hover:bg-[#dc2626] transition-all shadow-md">
-                        {L.download}
+                      <button onClick={() => window.open(step.link, '_blank')} className="mt-3 bg-[#dc2626] text-white px-5 py-2 rounded-lg text-[10px] md:text-sm font-black uppercase hover:bg-black transition-all shadow-lg flex items-center gap-2">
+                        <span className="animate-bounce">↓</span> {L.download}
                       </button>
                     )}
                   </div>
                 </div>
               ))}
+            </div>
+            <div className="p-4 bg-black text-white rounded-2xl text-center">
+              <p className="text-[10px] md:text-sm font-black italic">초대 코드: <span className="text-[#dc2626] text-lg md:text-2xl ml-2">{PI_INVITE_CODE}</span></p>
             </div>
           </div>
         ) : (
@@ -368,7 +369,7 @@ export default function KedheonEmpireFinalMaster() {
       </footer>
 
       <div className="mt-20 opacity-20 text-black text-[9px] md:text-xl tracking-[1em] uppercase pb-20 font-black text-center">
-        Kedheon master | V105.6 Final Empire | @Ohsangjo
+        Kedheon master | V105.7 Final Empire | @Ohsangjo
       </div>
     </div>
   );
