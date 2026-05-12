@@ -1,8 +1,9 @@
 'use client';
+
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 
 /** 
- * [KEDHEON MASTER V160.0 - SUPREME STABLE FINAL]
+ * [KEDHEON MASTER V160.0 - SUPREME STABLE FINAL REFACTORED]
  * -----------------------------------------------------------
  * 1. 테마: Pure White / Black / Red (#DC2626)
  * 2. 복구: 루키 01단계 파이코인 공식 앱 다운로드 박스 100% 포함
@@ -10,7 +11,9 @@ import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react'
  * -----------------------------------------------------------
  */
 
+// --- Constants ---
 const PI_INVITE_CODE = 'ohsangjo';
+const THEME_RED = '#DC2626';
 
 const DICT = {
   KR: {
@@ -50,6 +53,7 @@ const DICT = {
   }
 };
 
+// --- Sub-Components ---
 const SectionHeader = ({ num, title, desc }) => (
   <div className="w-full border-t-4 border-[#dc2626] pt-10 mb-8 text-left">
     <h2 className="text-black text-3xl md:text-5xl font-black uppercase italic mb-2 border-l-[20px] border-black pl-6 tracking-tighter">
@@ -60,31 +64,29 @@ const SectionHeader = ({ num, title, desc }) => (
 );
 
 export default function KedheonEmpireEternal() {
+  // Hydration State
   const [hasMounted, setHasMounted] = useState(false);
-  const [tab, setTab] = useState('PIONEER');
   
+  // UI States
+  const [tab, setTab] = useState('PIONEER');
   const [beomToken, setBeomToken] = useState(7891.88);
   const [totalRevenue, setTotalRevenue] = useState(188500);
   const [netIncome] = useState(72300);
 
   const [qrState, setQrState] = useState({ type: 'PERSONAL', biz: '', active: false });
   const [boardType, setBoardType] = useState('CREATIVE');
-  const [postCategory, setPostCategory] = useState('TECH');
-  const [fanRooms] = useState(['케데헌', '헌트릭스', '파이Nexus']);
   const [feed, setFeed] = useState({ title: '', desc: '', url: '' });
-
   const [sellItem, setSellItem] = useState({ name: '', price: '', desc: '', img: '' });
   const [goods, setGoods] = useState([
     { id: 1, name: "GOLD BADGE", price: 1000, img: "/beom-token.png", desc: "Empire Honor" },
     { id: 2, name: "V23 NODE KEY", price: 5000, img: "/node-icon.png", desc: "Node Key" }
   ]);
-
   const [partner, setPartner] = useState({ corp: '', contact: '', msg: '' });
 
   const fileInputRef = useRef(null);
   const L = DICT['KR'];
-  const cats = ['MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'];
 
+  // Memoized Calculation
   const redistributionAmount = useMemo(() => 
     Math.max(totalRevenue * 0.03, netIncome * 0.08), 
     [totalRevenue, netIncome]
@@ -94,6 +96,7 @@ export default function KedheonEmpireEternal() {
     setHasMounted(true);
   }, []);
 
+  // Handlers
   const handleImageUpload = useCallback((e) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -118,6 +121,7 @@ export default function KedheonEmpireEternal() {
     }
   }, []);
 
+  // Prevent Hydration Error while keeping layout
   if (!hasMounted) return <div className="bg-white min-h-screen" />;
 
   return (
@@ -126,7 +130,7 @@ export default function KedheonEmpireEternal() {
       {/* NAVIGATION */}
       <nav className="w-full max-w-7xl flex justify-between items-center px-6 py-6 sticky top-0 bg-white/95 backdrop-blur-2xl z-[300] border-b-8 border-black/5 shadow-md">
         <div className="flex items-center gap-6">
-          <img src="/kedheon-character.png" className="w-16 h-16 rounded-2xl border-4 border-black" alt="Empire" />
+          <img src="/kedheon-character.png" className="w-16 h-16 rounded-2xl border-4 border-black" alt="Empire" loading="eager" />
           <div className="text-left leading-tight font-black">
             <h1 className="text-black text-2xl md:text-4xl italic uppercase">Kedheon</h1>
             <span className="text-gray-400 text-xs md:text-sm font-mono tracking-widest">V160.0 FINAL</span>
@@ -141,6 +145,7 @@ export default function KedheonEmpireEternal() {
       <main className="w-full max-w-7xl px-6 py-12">
         {tab === 'ROOKIE' ? (
           <div className="flex flex-col gap-12 text-left animate-in fade-in duration-500">
+            {/* INVITATION BOX */}
             <div className="flex flex-col items-center text-center gap-10 py-24 bg-gray-50 rounded-3xl border-4 border-black/5 relative shadow-inner overflow-hidden font-black">
               <div className="absolute top-0 left-0 w-full h-4 bg-[#dc2626]"></div>
               <img src="/kedheon-character.png" className="w-48 h-48 md:w-80 md:h-96 rounded-2xl border-8 border-black shadow-xl" alt="Character" />
@@ -149,6 +154,8 @@ export default function KedheonEmpireEternal() {
                 <p className="text-[#dc2626] text-2xl md:text-6xl uppercase tracking-widest border-b-8 border-[#dc2626] pb-4 inline-block italic">{L.procedure}</p>
               </div>
             </div>
+
+            {/* STEPS */}
             <div className="grid grid-cols-1 gap-8">
               {L.steps.map((step, i) => (
                 <div key={i} className={`p-10 bg-white rounded-3xl border-4 flex flex-col gap-6 transition-all ${i === 0 ? 'border-[#dc2626] bg-red-50/10 shadow-lg' : 'border-black/5 opacity-90'}`}>
@@ -159,7 +166,7 @@ export default function KedheonEmpireEternal() {
                       <p className="text-gray-600 text-base md:text-4xl font-bold leading-snug">{step.d}</p>
                     </div>
                   </div>
-                  {/* [복구 완료] 파이코인 공식 앱 다운로드 박스 - 루키 01단계 필수 표시 */}
+                  {/* [복구 완료] 파이코인 공식 앱 다운로드 박스 */}
                   {step.link && (
                     <div className="w-full p-8 bg-gray-50 rounded-2xl border-4 border-dashed border-[#dc2626] flex flex-col md:flex-row items-center justify-between gap-6">
                       <div className="text-left font-black uppercase">
@@ -174,6 +181,8 @@ export default function KedheonEmpireEternal() {
                 </div>
               ))}
             </div>
+            
+            {/* CODE BOX */}
             <div className="p-20 bg-black text-white rounded-3xl text-center shadow-2xl border-8 border-black font-black">
               <p className="text-2xl md:text-6xl italic text-gray-500 uppercase tracking-widest">Imperial Code</p>
               <div className="text-[#dc2626] text-6xl md:text-9xl tracking-widest cursor-pointer hover:scale-105 transition-transform" onClick={handleCopy}>
@@ -182,7 +191,9 @@ export default function KedheonEmpireEternal() {
             </div>
           </div>
         ) : (
+          /* PIONEER TAB CONTENT */
           <div className="flex flex-col gap-24 py-8 text-left animate-in slide-in-from-bottom-5 duration-500 font-black">
+            
             {/* ASSET DASHBOARD */}
             <div className="bg-gray-50 p-12 md:p-32 rounded-3xl border-8 border-black shadow-2xl flex flex-col md:flex-row justify-between items-center relative group overflow-hidden">
                 <div className="text-left z-10 space-y-10 w-full md:w-auto">
@@ -200,19 +211,19 @@ export default function KedheonEmpireEternal() {
                 <img src="/beom-token.png" className="w-56 h-56 md:w-96 md:h-96 object-contain group-hover:rotate-6 transition-all duration-700 mt-10 md:mt-0" alt="Token" />
             </div>
 
-            {/* EXCHANGE */}
+            {/* EXCHANGE (Section 01) */}
             <SectionHeader num="01" title={L.exchange} desc={L.exchangeDesc} />
             <div className="bg-white p-12 md:p-24 rounded-3xl border-8 border-black flex flex-col md:flex-row justify-between items-center shadow-xl gap-16 group hover:bg-gray-50 transition-all">
               <div className="text-left leading-tight font-black w-full md:w-auto">
                 <p className="text-black text-5xl md:text-8xl italic uppercase mb-6 group-hover:text-[#dc2626]">Terminal</p>
                 <div className="flex items-center gap-4 font-black"><span className="w-6 h-6 bg-green-500 rounded-full animate-ping"></span><p className="text-gray-400 text-lg md:text-4xl uppercase tracking-widest">Protocol V23 Ready</p></div>
               </div>
-              <button onClick={() => {setBeomToken(p=>p+100); setTotalRevenue(p=>p+100); alert("SUCCESS");}} className="w-full md:w-auto bg-black text-white px-16 py-10 md:py-16 rounded-full text-2xl md:text-6xl font-black shadow-2xl hover:bg-[#dc2626] transition-all">
+              <button onClick={() => {setBeomToken(p=>p+1); setTotalRevenue(p=>p+100); alert("SUCCESS");}} className="w-full md:w-auto bg-black text-white px-16 py-10 md:py-16 rounded-full text-2xl md:text-6xl font-black shadow-2xl hover:bg-[#dc2626] transition-all">
                 {L.convert}
               </button>
             </div>
 
-            {/* AUTH */}
+            {/* AUTH (Section 02) */}
             <SectionHeader num="02" title={L.auth} desc={L.authDesc} />
             <div className="bg-gray-50 p-12 md:p-24 rounded-3xl border-4 border-black/5 flex flex-col items-center gap-16 shadow-inner font-black">
               <div className="flex gap-4 w-full max-w-4xl bg-white p-3 rounded-2xl border-4 border-black">
@@ -235,7 +246,7 @@ export default function KedheonEmpireEternal() {
               </button>
             </div>
 
-            {/* CREATIVE */}
+            {/* CREATIVE (Section 03) */}
             <SectionHeader num="03" title={L.creative} desc={L.creativeDesc} />
             <div className="bg-white p-12 md:p-24 rounded-3xl border-4 border-black/10 space-y-16 text-left shadow-xl font-black">
               <div className="flex gap-10 border-b-4 border-gray-100 pb-10">
@@ -250,7 +261,7 @@ export default function KedheonEmpireEternal() {
               <p className="text-gray-400 text-lg md:text-3xl font-bold bg-gray-50 p-8 rounded-2xl border-l-[24px] border-[#dc2626] italic">Note: {L.fanRoomDesc}</p>
             </div>
 
-            {/* MARKET */}
+            {/* MARKET (Section 04) */}
             <SectionHeader num="04" title={L.market} desc={L.marketDesc} />
             <div className="bg-white p-12 md:p-24 rounded-3xl border-4 border-black/10 space-y-16 shadow-xl text-left font-black">
                <h3 className="text-black text-3xl md:text-7xl font-black uppercase italic border-l-[24px] border-[#dc2626] pl-10">Market</h3>
@@ -276,7 +287,7 @@ export default function KedheonEmpireEternal() {
                     <div key={g.id} className="bg-white p-6 md:p-10 rounded-3xl border-4 border-black/5 shadow-xl flex flex-col group transition-all hover:border-[#dc2626] relative overflow-hidden font-black">
                       <div className="w-full aspect-square bg-gray-100 rounded-2xl mb-8 overflow-hidden flex items-center justify-center relative shadow-inner">
                         <div className="absolute top-6 right-6 bg-black text-white px-5 py-2 rounded-full text-xs md:text-2xl font-black shadow-lg z-20">VERIFIED</div>
-                        <img src={g.img} className="w-48 h-48 md:w-80 md:h-80 object-contain group-hover:scale-110 transition-transform duration-700" alt="Item" />
+                        <img src={g.img} className="w-48 h-48 md:w-80 md:h-80 object-contain group-hover:scale-110 transition-transform duration-700" alt="Item" loading="lazy" />
                       </div>
                       <h4 className="text-black text-2xl md:text-5xl uppercase mb-4 font-black truncate">{g.name}</h4>
                       <div className="mt-auto">
@@ -288,7 +299,7 @@ export default function KedheonEmpireEternal() {
                </div>
             </div>
 
-            {/* PARTNERSHIP */}
+            {/* PARTNERSHIP (Section 05) */}
             <SectionHeader num="05" title={L.partnership} desc={L.partnershipDesc} />
             <div className="bg-black p-12 md:p-24 rounded-3xl border-[20px] border-[#dc2626] space-y-16 text-left shadow-2xl relative overflow-hidden font-black">
                 <div className="absolute -top-40 -right-40 opacity-10 pointer-events-none select-none grayscale">
@@ -320,7 +331,7 @@ export default function KedheonEmpireEternal() {
         )}
       </main>
 
-      {/* FOOTER */}
+      {/* FOOTER NAVIGATION */}
       <footer className="fixed bottom-10 left-6 right-6 max-w-7xl mx-auto bg-white border-8 border-black p-4 rounded-3xl flex justify-between gap-4 z-[500] shadow-2xl font-black">
         {['KEDHEON', 'CIVIL', 'NEXUS', 'VENDOR'].map(app => (
           <button key={app} className={`flex-1 py-12 rounded-2xl text-xs md:text-5xl transition-all font-black text-center leading-none ${app === 'KEDHEON' ? 'bg-black text-white scale-[1.05] shadow-lg' : 'text-gray-300'}`}>{app}</button>
