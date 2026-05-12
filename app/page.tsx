@@ -5,7 +5,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
  * -----------------------------------------------------------
  * 1. 테마: Pure White / Black / Red (#DC2626)
  * 2. 복구: ROOKIE 8단계 + PIONEER 01~05 전 섹션 100% 통합
- * 3. 수정: 누락되었던 boardType 및 postCategory 상태 연동 완료
+ * 3. 수정: handleImageUpload 에러 해결 및 상태 연동 보완
  * 4. 경제: Max(매출 3%, 순이익 8%) 사회적 환원 자동 계산
  * -----------------------------------------------------------
  */
@@ -100,6 +100,18 @@ export default function KedheonEmpireEternal() {
   useEffect(() => {
     setHasMounted(true);
   }, []);
+
+  // 이미지 업로드 핸들러 추가
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSellItem(prev => ({ ...prev, img: reader.result }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   if (!hasMounted) return <div className="bg-white min-h-screen" />;
 
@@ -235,7 +247,7 @@ export default function KedheonEmpireEternal() {
                </div>
                <div className="w-full font-black">
                   <input type="file" accept="image/*" onChange={handleImageUpload} ref={fileInputRef} className="hidden" />
-                  <button onClick={() => fileInputRef.current?.click()} className="w-full bg-gray-50 border-[15px] border-dashed border-black/10 p-40 rounded-[80px] text-gray-400 text-center hover:border-black transition-all font-black uppercase tracking-[0.8em] text-2xl md:text-8xl shadow-inner">
+                  <button onClick={() => fileInputRef.current?.click()} className="w-full bg-gray-50 border-[15px] border-dashed border-black/10 p-40 rounded-[80px] text-gray-400 text-center hover:border-black transition-all font-black uppercase tracking-[0.8em] text-2xl md:text-8xl shadow-inner overflow-hidden">
                     {sellItem.img ? <img src={sellItem.img} className="h-[40rem] mx-auto rounded-[60px] border-[20px] border-black" alt="P" /> : "📸 UPLOAD PRODUCT IMAGE"}
                   </button>
                </div>
@@ -248,9 +260,9 @@ export default function KedheonEmpireEternal() {
                         <img src={g.img} className="w-64 h-64 md:w-[40rem] md:h-[40rem] object-contain group-hover:scale-[1.3] duration-[2000ms]" alt="G" />
                       </div>
                       <h4 className="text-black text-4xl md:text-[8rem] uppercase mb-6 font-black leading-tight line-clamp-1">{g.name}</h4>
-                      <p className="text-gray-500 text-xl md:text-5xl mb-16 font-bold leading-snug italic line-clamp-3">"{g.desc}"</p>
+                      <p className="text-gray-500 text-xl md:text-5xl mb-16 font-bold leading-snug italic line-clamp-3">"{g.desc || "Empire Certified Product"}"</p>
                       <div className="mt-auto">
-                        <p className="text-black text-6xl md:text-[16rem] mb-20 font-black tracking-tighter leading-none">{g.price.toLocaleString()} <span className="text-2xl md:text-8xl text-[#dc2626]">BEOM</span></p>
+                        <p className="text-black text-6xl md:text-[16rem] mb-20 font-black tracking-tighter leading-none">{Number(g.price).toLocaleString()} <span className="text-2xl md:text-8xl text-[#dc2626]">BEOM</span></p>
                         <button onClick={()=>alert("Imperial Engine Syncing...")} className="w-full py-14 md:py-28 bg-black text-white rounded-[60px] text-3xl md:text-[8rem] border-[10px] border-black uppercase font-black shadow-3xl hover:bg-[#dc2626] leading-none"> {L.buy} </button>
                       </div>
                     </div>
