@@ -1,11 +1,11 @@
 'use client';
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 
-/** * [KEDHEON MASTER V160.0 - FINAL STABLE]
+/** * [KEDHEON MASTER V160.0 - ULTRA STABLE]
  * -----------------------------------------------------------
  * 1. 테마: Pure White / Black / Red (#DC2626)
- * 2. 수정보완: handleImageUpload 정의 및 이스케이프 문자 처리
- * 3. 인프라: Next.js 16 Turbopack 최적화 대응
+ * 2. 수정: 특수문자 이스케이프 및 핸들러 무결성 확보
+ * 3. 최적화: Turbopack 빌드 충돌 요소(scrollbar-hide 등) 제거
  * -----------------------------------------------------------
  */
 
@@ -19,7 +19,7 @@ const DICT = {
     exchangeDesc: "채굴 기여도를 BEOM으로 즉시 전환하여 가치를 보존하십시오.",
     authDesc: "제국 시민을 위한 개인/비즈니스 보안 QR코드를 발급받으십시오.",
     creativeDesc: "시민의 창작물과 팬심을 공유하고 호응을 이끌어내십시오.",
-    fanRoomDesc: "🚩 팬룸 개설(500 BEOM): 90% 수익 환원 및 거버넌스 권한 부여.",
+    fanRoomDesc: "팬룸 개설(500 BEOM): 90% 수익 환원 및 거버넌스 권한 부여.",
     marketDesc: "검증된 다양한 GOODS를 거래하고 가치를 확인하십시오.",
     partnershipDesc: "제국과 미래를 함께 설계할 글로벌 기업 파트너를 기다립니다.",
     steps: [
@@ -61,7 +61,6 @@ const SectionHeader = ({ num, title, desc }) => (
 
 export default function KedheonEmpireEternal() {
   const [hasMounted, setHasMounted] = useState(false);
-  const [lang] = useState('KR');
   const [tab, setTab] = useState('PIONEER');
   
   const [beomToken, setBeomToken] = useState(7891.88);
@@ -83,10 +82,9 @@ export default function KedheonEmpireEternal() {
   const [partner, setPartner] = useState({ corp: '', contact: '', msg: '' });
 
   const fileInputRef = useRef(null);
-  const L = DICT[lang];
+  const L = DICT['KR']; // 초기 언어 고정으로 충돌 방지
   const cats = ['MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'];
 
-  const currentBeomValue = useMemo(() => (0.18 * 100) + (5000 * 0.01) + 1, []);
   const redistributionAmount = useMemo(() => 
     Math.max(totalRevenue * 0.03, netIncome * 0.08), 
     [totalRevenue, netIncome]
@@ -96,30 +94,33 @@ export default function KedheonEmpireEternal() {
     setHasMounted(true);
   }, []);
 
-  // [수정] 이미지 업로드 핸들러 정의
-  const handleImageUpload = (e) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setSellItem(prev => ({ ...prev, img: reader.result?.toString() || '' }));
-      };
-      reader.readAsDataURL(file);
+  const handleImageUpload = useCallback((e) => {
+    try {
+      const file = e.target.files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setSellItem(prev => ({ ...prev, img: reader.result?.toString() || '' }));
+        };
+        reader.readAsDataURL(file);
+      }
+    } catch (err) {
+      console.error("Upload error", err);
     }
-  };
+  }, []);
 
   if (!hasMounted) return <div className="bg-white min-h-screen" />;
 
   return (
     <div className="flex flex-col items-center bg-white min-h-screen text-black font-sans w-full pb-96 font-black overflow-x-hidden selection:bg-red-50">
       
-      {/* 🧭 NAVIGATION */}
+      {/* NAVIGATION */}
       <nav className="w-full max-w-7xl flex justify-between items-center px-6 py-6 sticky top-0 bg-white/95 backdrop-blur-2xl z-[300] border-b-8 border-black/5 shadow-xl">
         <div className="flex items-center gap-6">
-          <img src="/kedheon-character.png" className="w-16 h-16 rounded-[25px] border-4 border-black" alt="Kedheon Logo" />
+          <img src="/kedheon-character.png" className="w-16 h-16 rounded-[25px] border-4 border-black" alt="Empire Logo" />
           <div className="text-left leading-tight">
             <h1 className="text-black text-2xl md:text-4xl font-black italic uppercase">Kedheon</h1>
-            <span className="text-gray-400 text-[10px] md:text-sm font-mono font-bold uppercase tracking-[0.3em]">V160.0 INTEGRATED</span>
+            <span className="text-gray-400 text-[10px] md:text-sm font-mono font-bold uppercase tracking-[0.3em]">V160.0 STABLE</span>
           </div>
         </div>
         <div className="flex items-center gap-4">
@@ -133,7 +134,7 @@ export default function KedheonEmpireEternal() {
           <div className="flex flex-col gap-12 text-left animate-in fade-in slide-in-from-top-12 duration-1000">
             <div className="flex flex-col items-center text-center gap-10 py-24 bg-gray-50 rounded-[80px] border-4 border-black/5 relative shadow-inner overflow-hidden">
               <div className="absolute top-0 left-0 w-full h-4 bg-[#dc2626] animate-pulse"></div>
-              <img src="/kedheon-character.png" className="w-48 h-48 md:w-[20rem] md:h-[25rem] rounded-[60px] border-[10px] border-black shadow-2xl transition-all" alt="Main Character" />
+              <img src="/kedheon-character.png" className="w-48 h-48 md:w-[20rem] md:h-[25rem] rounded-[60px] border-[10px] border-black shadow-2xl transition-all" alt="Kedheon Character" />
               <div className="px-10">
                 <h1 className="text-black text-5xl md:text-[8rem] uppercase font-black tracking-tighter leading-none">{L.invitation}</h1>
                 <p className="text-[#dc2626] text-2xl md:text-6xl uppercase tracking-[0.5em] border-b-[15px] border-[#dc2626] pb-4 inline-block font-black italic">{L.procedure}</p>
@@ -155,15 +156,9 @@ export default function KedheonEmpireEternal() {
                 </div>
               ))}
             </div>
-            <div className="p-20 bg-black text-white rounded-[80px] text-center shadow-2xl border-[20px] border-black group">
+            <div className="p-20 bg-black text-white rounded-[80px] text-center shadow-2xl border-[20px] border-black">
               <p className="text-2xl md:text-6xl font-black italic text-gray-500 uppercase tracking-[0.6em]">Imperial Code</p>
-              <div className="text-[#dc2626] text-8xl md:text-[20rem] font-black tracking-[0.1em] drop-shadow-2xl cursor-pointer" 
-                   onClick={() => {
-                     if (typeof window !== 'undefined' && navigator.clipboard) {
-                       navigator.clipboard.writeText(PI_INVITE_CODE);
-                       alert("Copied!");
-                     }
-                   }}>
+              <div className="text-[#dc2626] text-8xl md:text-[20rem] font-black tracking-[0.1em] drop-shadow-2xl cursor-pointer" onClick={() => {if(typeof window !== 'undefined'){navigator.clipboard.writeText(PI_INVITE_CODE); alert("Copied!");}}}>
                 {PI_INVITE_CODE}
               </div>
             </div>
@@ -180,21 +175,21 @@ export default function KedheonEmpireEternal() {
                     <span className="ml-10 text-3xl md:text-[12rem] italic uppercase text-[#dc2626]">BEOM</span>
                   </p>
                   <div className="flex flex-wrap gap-8 pt-10 font-black">
-                    <div className="bg-black text-white px-12 py-6 rounded-[35px] text-lg md:text-5xl font-mono font-bold shadow-2xl transition-transform hover:scale-110">Value Index: {currentBeomValue.toFixed(2)} / PI</div>
-                    <div className="bg-[#dc2626] text-white px-12 py-6 rounded-[35px] text-lg md:text-5xl font-mono font-bold animate-pulse shadow-2xl border-[8px] border-white/5 transition-transform hover:scale-110">Social Return: {redistributionAmount.toLocaleString()}</div>
+                    <div className="bg-black text-white px-12 py-6 rounded-[35px] text-lg md:text-5xl font-mono font-bold shadow-2xl">Value: 18.01 / PI</div>
+                    <div className="bg-[#dc2626] text-white px-12 py-6 rounded-[35px] text-lg md:text-5xl font-mono font-bold animate-pulse shadow-2xl">Return: {redistributionAmount.toLocaleString()}</div>
                   </div>
                 </div>
-                <img src="/beom-token.png" className="w-56 h-56 md:w-[40rem] md:h-[40rem] object-contain group-hover:scale-125 transition-all duration-1000 mt-16 md:mt-0 drop-shadow-[0_80px_160px_rgba(0,0,0,0.6)]" alt="Asset Token" />
+                <img src="/beom-token.png" className="w-56 h-56 md:w-[40rem] md:h-[40rem] object-contain group-hover:scale-110 transition-all duration-1000" alt="Beom Token" />
             </div>
 
             {/* 01. EXCHANGE */}
             <SectionHeader num="01" title={L.exchange} desc={L.exchangeDesc} />
-            <div className="bg-white p-12 md:p-32 rounded-[80px] border-[20px] border-black flex flex-col md:flex-row justify-between items-center shadow-2xl gap-16 hover:bg-gray-50 transition-all group">
+            <div className="bg-white p-12 md:p-32 rounded-[80px] border-[20px] border-black flex flex-col md:flex-row justify-between items-center shadow-2xl gap-16 group">
               <div className="text-left leading-tight font-black w-full md:w-auto">
                 <p className="text-black text-5xl md:text-[12rem] font-black italic uppercase leading-none mb-10 group-hover:text-[#dc2626] transition-colors">Economic Terminal</p>
-                <div className="flex items-center gap-10"><span className="w-12 h-12 bg-green-500 rounded-full animate-ping"></span><p className="text-gray-400 text-xl md:text-7xl font-bold uppercase tracking-[0.4em]">Protocol V23 Synchronized</p></div>
+                <div className="flex items-center gap-10"><span className="w-12 h-12 bg-green-500 rounded-full animate-ping"></span><p className="text-gray-400 text-xl md:text-7xl font-bold uppercase tracking-[0.4em]">Protocol V23 Ready</p></div>
               </div>
-              <button onClick={() => {setBeomToken(p=>p+100); setTotalRevenue(p=>p+100); alert("전환 성공");}} className="w-full md:w-auto bg-black text-white px-20 py-12 md:px-40 md:py-24 rounded-[60px] text-4xl md:text-[10rem] border-[16px] border-black active:scale-90 font-black shadow-2xl hover:bg-[#dc2626] leading-none">
+              <button onClick={() => {setBeomToken(p=>p+100); setTotalRevenue(p=>p+100); alert("전환 성공");}} className="w-full md:w-auto bg-black text-white px-20 py-12 md:px-40 md:py-24 rounded-[60px] text-4xl md:text-[10rem] border-[16px] border-black font-black shadow-2xl hover:bg-[#dc2626] leading-none">
                 {L.convert}
               </button>
             </div>
@@ -202,22 +197,22 @@ export default function KedheonEmpireEternal() {
             {/* 02. AUTH */}
             <SectionHeader num="02" title={L.auth} desc={L.authDesc} />
             <div className="bg-gray-50 p-12 md:p-32 rounded-[100px] border-8 border-black/5 flex flex-col items-center gap-20 shadow-inner">
-              <div className="flex gap-10 w-full max-w-6xl bg-white p-5 rounded-[60px] border-[12px] border-black font-black shadow-3xl">
-                <button onClick={() => setQrState({ ...qrState, type: 'PERSONAL', active: false })} className={`flex-1 py-14 rounded-[45px] text-2xl md:text-7xl font-black transition-all ${qrState.type === 'PERSONAL' ? 'bg-black text-white shadow-3xl' : 'text-gray-300 hover:text-black'}`}>PERSONAL</button>
-                <button onClick={() => setQrState({ ...qrState, type: 'BUSINESS', active: false })} className={`flex-1 py-14 rounded-[45px] text-2xl md:text-7xl font-black transition-all ${qrState.type === 'BUSINESS' ? 'bg-black text-white shadow-3xl' : 'text-gray-300 hover:text-black'}`}>BUSINESS</button>
+              <div className="flex gap-10 w-full max-w-6xl bg-white p-5 rounded-[60px] border-[12px] border-black font-black">
+                <button onClick={() => setQrState({ ...qrState, type: 'PERSONAL', active: false })} className={`flex-1 py-14 rounded-[45px] text-2xl md:text-7xl font-black transition-all ${qrState.type === 'PERSONAL' ? 'bg-black text-white' : 'text-gray-300'}`}>PERSONAL</button>
+                <button onClick={() => setQrState({ ...qrState, type: 'BUSINESS', active: false })} className={`flex-1 py-14 rounded-[45px] text-2xl md:text-7xl font-black transition-all ${qrState.type === 'BUSINESS' ? 'bg-black text-white' : 'text-gray-300'}`}>BUSINESS</button>
               </div>
               {qrState.type === 'BUSINESS' && (
-                 <input value={qrState.biz} onChange={(e) => setQrState({ ...qrState, biz: e.target.value.toUpperCase() })} placeholder="BIZ NAME" className="w-full max-w-6xl bg-white border-[12px] border-black p-16 rounded-[60px] text-center text-black text-5xl md:text-[10rem] font-black outline-none focus:border-[#dc2626] shadow-inner" />
+                 <input value={qrState.biz} onChange={(e) => setQrState({ ...qrState, biz: e.target.value.toUpperCase() })} placeholder="BIZ NAME" className="w-full max-w-6xl bg-white border-[12px] border-black p-16 rounded-[60px] text-center text-5xl md:text-[10rem] font-black outline-none" />
               )}
-              <div className={`relative bg-white border-[24px] rounded-[120px] flex items-center justify-center transition-all duration-1000 shadow-2xl ${qrState.type === 'PERSONAL' ? 'w-[30rem] h-[30rem] md:w-[60rem] md:h-[65rem]' : 'w-full max-w-[100rem] aspect-video'} ${qrState.active ? 'border-[#dc2626] opacity-100 scale-100' : 'opacity-5 blur-[10px]'}`}>
+              <div className={`relative bg-white border-[24px] rounded-[120px] flex items-center justify-center transition-all duration-1000 shadow-2xl ${qrState.type === 'PERSONAL' ? 'w-[30rem] h-[30rem] md:w-[60rem] md:h-[65rem]' : 'w-full max-w-[100rem] aspect-video'} ${qrState.active ? 'border-[#dc2626] opacity-100' : 'opacity-5 blur-[10px]'}`}>
                 {qrState.active ? (
                   <div className="flex flex-col items-center p-20 gap-16">
-                    <img src={qrState.type === 'PERSONAL' ? "/qr-personal.png" : "/qr-business.png"} className="h-full object-contain" alt="QR Code" />
+                    <img src={qrState.type === 'PERSONAL' ? "/qr-personal.png" : "/qr-business.png"} className="h-full object-contain" alt="Identity QR" />
                     <p className="text-black text-2xl md:text-8xl font-black italic bg-gray-100 px-24 py-8 rounded-full border-4 border-black/10">{qrState.biz || "AUTHENTICATED"}</p>
                   </div>
-                ) : <p className="text-black text-7xl md:text-[25rem] font-black uppercase italic tracking-[0.5em] animate-pulse">Encoded</p>}
+                ) : <p className="text-black text-7xl md:text-[25rem] font-black uppercase italic animate-pulse">Encoded</p>}
               </div>
-              <button onClick={() => {if(beomToken < 50) return alert("자산 부족"); setBeomToken(p=>p-50); setQrState({ ...qrState, active: true });}} className="w-full max-w-7xl bg-black text-white py-16 md:py-32 rounded-[80px] text-4xl md:text-[11rem] border-[16px] border-black active:scale-95 uppercase font-black shadow-3xl hover:bg-[#dc2626] leading-none">
+              <button onClick={() => {if(beomToken < 50) return alert("자산 부족"); setBeomToken(p=>p-50); setQrState({ ...qrState, active: true });}} className="w-full max-w-7xl bg-black text-white py-16 md:py-32 rounded-[80px] text-4xl md:text-[11rem] border-[16px] border-black font-black shadow-3xl hover:bg-[#dc2626] leading-none">
                 {L.activate} (50 BEOM)
               </button>
             </div>
@@ -229,16 +224,16 @@ export default function KedheonEmpireEternal() {
                  <button onClick={() => setBoardType('CREATIVE')} className={`text-4xl md:text-[9rem] uppercase font-black italic transition-all ${boardType === 'CREATIVE' ? 'text-black border-b-[30px] border-black pb-6' : 'text-gray-300'}`}>Creative</button>
                  <button onClick={() => setBoardType('FAN')} className={`text-4xl md:text-[9rem] uppercase font-black italic transition-all ${boardType === 'FAN' ? 'text-black border-b-[30px] border-black pb-6' : 'text-gray-300'}`}>Fan Rooms</button>
               </div>
-              <div className="space-y-16">
-                 <div className="flex gap-10 overflow-x-auto pb-10 scrollbar-hide font-black">{cats.map(cat => (<button key={cat} onClick={() => setPostCategory(cat)} className={`px-16 py-8 rounded-[40px] text-xl md:text-5xl font-black border-[8px] transition-all whitespace-nowrap ${postCategory === cat ? 'bg-black text-white' : 'text-gray-400 border-black/5'}`}>{cat}</button>))}</div>
-                 <div className="flex gap-10 overflow-x-auto pb-10 scrollbar-hide border-t-[12px] border-gray-50 pt-20 font-black">{fanRooms.map(room => (<button key={room} onClick={() => setPostCategory(room)} className={`px-16 py-8 rounded-[40px] text-xl md:text-5xl font-black border-[8px] transition-all whitespace-nowrap ${postCategory === room ? 'bg-[#dc2626] text-white shadow-3xl scale-110' : 'border-red-50 text-[#dc2626]'}`}>&nbsp;🚩 {room}</button>))}</div>
+              <div className="space-y-16 overflow-x-auto">
+                 <div className="flex gap-10 pb-4 font-black">{cats.map(cat => (<button key={cat} onClick={() => setPostCategory(cat)} className={`px-16 py-8 rounded-[40px] text-xl md:text-5xl font-black border-[8px] transition-all whitespace-nowrap ${postCategory === cat ? 'bg-black text-white' : 'text-gray-400 border-black/5'}`}>{cat}</button>))}</div>
+                 <div className="flex gap-10 pb-4 border-t-[12px] border-gray-50 pt-20 font-black">{fanRooms.map(room => (<button key={room} onClick={() => setPostCategory(room)} className={`px-16 py-8 rounded-[40px] text-xl md:text-5xl font-black border-[8px] transition-all whitespace-nowrap ${postCategory === room ? 'bg-[#dc2626] text-white' : 'border-red-50 text-[#dc2626]'}`}>Room: {room}</button>))}</div>
               </div>
               <div className="space-y-10 font-black pt-12">
-                <input value={feed.title} onChange={(e) => setFeed({ ...feed, title: e.target.value })} placeholder="제목" className="w-full bg-gray-50 border-[12px] border-black/5 p-16 rounded-[50px] text-4xl md:text-[8rem] text-black outline-none focus:border-black font-black shadow-inner" />
-                <textarea value={feed.desc} onChange={(e) => setFeed({ ...feed, desc: e.target.value })} placeholder="상세 내용..." className="w-full bg-gray-50 border-[12px] border-black/5 p-16 rounded-[50px] text-xl md:text-6xl text-black h-[50rem] outline-none focus:border-black font-bold shadow-inner leading-relaxed" />
+                <input value={feed.title} onChange={(e) => setFeed({ ...feed, title: e.target.value })} placeholder="제목" className="w-full bg-gray-50 border-[12px] border-black/5 p-16 rounded-[50px] text-4xl md:text-[8rem] text-black outline-none focus:border-black font-black" />
+                <textarea value={feed.desc} onChange={(e) => setFeed({ ...feed, desc: e.target.value })} placeholder="상세 내용..." className="w-full bg-gray-50 border-[12px] border-black/5 p-16 rounded-[50px] text-xl md:text-6xl text-black h-[50rem] outline-none focus:border-black font-bold leading-relaxed" />
               </div>
-              <button onClick={() => {if(!feed.title) return alert("내용을 입력하십시오."); setBeomToken(p=>p-10); alert("등록 성공"); setFeed({title:'', desc:'', url:''});}} className="w-full bg-black text-white py-16 md:py-32 rounded-[60px] text-4xl md:text-[10rem] border-[16px] border-black active:scale-95 uppercase font-black shadow-3xl hover:bg-[#dc2626] leading-none">{L.post} (10 BEOM)</button>
-              <p className="text-gray-400 text-xl md:text-5xl font-bold bg-gray-50 p-16 rounded-[60px] italic border-l-[32px] border-[#dc2626] leading-snug">※ {L.fanRoomDesc}</p>
+              <button onClick={() => {if(!feed.title) return alert("내용을 입력하십시오."); setBeomToken(p=>p-10); alert("등록 성공"); setFeed({title:'', desc:'', url:''});}} className="w-full bg-black text-white py-16 md:py-32 rounded-[60px] text-4xl md:text-[10rem] border-[16px] border-black font-black shadow-3xl hover:bg-[#dc2626] leading-none">{L.post} (10 BEOM)</button>
+              <p className="text-gray-400 text-xl md:text-5xl font-bold bg-gray-50 p-16 rounded-[60px] border-l-[32px] border-[#dc2626]">Note: {L.fanRoomDesc}</p>
             </div>
 
             {/* 04. MARKET */}
@@ -252,7 +247,7 @@ export default function KedheonEmpireEternal() {
                <div className="w-full font-black">
                   <input type="file" accept="image/*" onChange={handleImageUpload} ref={fileInputRef} className="hidden" />
                   <button onClick={() => fileInputRef.current?.click()} className="w-full bg-gray-50 border-[15px] border-dashed border-black/10 p-40 rounded-[80px] text-gray-400 text-center hover:border-black transition-all font-black uppercase tracking-[0.8em] text-2xl md:text-8xl shadow-inner overflow-hidden">
-                    {sellItem.img ? <img src={sellItem.img} className="h-[40rem] mx-auto rounded-[60px] border-[20px] border-black" alt="Product Preview" /> : "📸 UPLOAD PRODUCT IMAGE"}
+                    {sellItem.img ? <img src={sellItem.img} className="h-[40rem] mx-auto rounded-[60px] border-[20px] border-black" alt="Product Preview" /> : "UPLOAD PRODUCT IMAGE"}
                   </button>
                </div>
                <button onClick={()=>{
@@ -267,10 +262,10 @@ export default function KedheonEmpireEternal() {
                     <div key={g.id} className="bg-white p-12 md:p-24 rounded-[80px] md:rounded-[120px] border-[12px] border-black/10 shadow-3xl flex flex-col group transition-all relative hover:border-[#dc2626]">
                       <div className="w-full aspect-square bg-gray-50 rounded-[60px] mb-16 overflow-hidden flex items-center justify-center relative shadow-inner">
                         <div className="absolute top-12 right-12 bg-black text-white px-12 py-5 rounded-full text-xl md:text-5xl font-mono font-black shadow-2xl z-20">VERIFIED</div>
-                        <img src={g.img} className="w-64 h-64 md:w-[40rem] md:h-[40rem] object-contain group-hover:scale-[1.3] duration-[2000ms]" alt="Goods Thumbnail" />
+                        <img src={g.img} className="w-64 h-64 md:w-[40rem] md:h-[40rem] object-contain group-hover:scale-110 duration-1000" alt="Goods Item" />
                       </div>
                       <h4 className="text-black text-4xl md:text-[8rem] uppercase mb-6 font-black leading-tight line-clamp-1">{g.name}</h4>
-                      <p className="text-gray-500 text-xl md:text-5xl mb-16 font-bold leading-snug italic line-clamp-3">&quot;{g.desc || "Empire Certified"}&quot;</p>
+                      <p className="text-gray-500 text-xl md:text-5xl mb-16 font-bold leading-snug italic line-clamp-3">Empire Certified Product</p>
                       <div className="mt-auto">
                         <p className="text-black text-6xl md:text-[16rem] mb-20 font-black tracking-tighter leading-none">{Number(g.price).toLocaleString()} <span className="text-2xl md:text-8xl text-[#dc2626]">BEOM</span></p>
                         <button onClick={()=>alert("Imperial Engine Syncing...")} className="w-full py-14 md:py-28 bg-black text-white rounded-[60px] text-3xl md:text-[8rem] border-[10px] border-black uppercase font-black shadow-3xl hover:bg-[#dc2626] leading-none"> {L.buy} </button>
@@ -284,7 +279,7 @@ export default function KedheonEmpireEternal() {
             <SectionHeader num="05" title={L.partnership} desc={L.partnershipDesc} />
             <div className="bg-black p-16 md:p-48 rounded-[120px] border-[30px] border-[#dc2626] space-y-24 text-left shadow-2xl relative overflow-hidden font-black">
                 <div className="absolute -top-60 -right-60 opacity-10 pointer-events-none select-none">
-                  <img src="/kedheon-character.png" className="w-[80rem] h-[80rem] grayscale" alt="Background Character" />
+                  <img src="/kedheon-character.png" className="w-[80rem] h-[80rem] grayscale" alt="Character BG" />
                 </div>
                 <h3 className="text-white text-6xl md:text-[15rem] font-black italic border-l-[45px] border-[#dc2626] pl-20 z-10 relative uppercase">Business Portal</h3>
                 <div className="space-y-16 relative z-10 font-black">
@@ -297,12 +292,11 @@ export default function KedheonEmpireEternal() {
                 <button onClick={()=>{if(!partner.corp||!partner.msg)return alert("내용을 채워주십시오."); alert("제안서가 접수되었습니다."); setPartner({corp:'', contact:'', msg:''});}} className="w-full bg-[#dc2626] text-white py-20 md:py-48 rounded-[100px] text-5xl md:text-[12rem] border-[20px] border-[#dc2626] hover:bg-white hover:text-[#dc2626] transition-all font-black shadow-2xl uppercase tracking-[0.5em] active:scale-95 leading-none">{L.submit}</button>
             </div>
 
-            {/* 🛰️ INFRA BAR */}
-            <div className="mt-24 py-20 px-24 bg-gray-100 rounded-[80px] flex flex-wrap justify-center md:justify-between items-center gap-20 border-[10px] border-black/5 shadow-inner">
-                <div className="flex items-center gap-10"><div className="w-10 h-10 bg-red-600 rounded-full animate-ping"></div><span className="text-black text-2xl md:text-6xl font-mono font-black uppercase italic tracking-tighter">Infrastructure: 88-Threads Dual Xeon Gold Node</span></div>
-                <div className="flex items-center gap-16 font-black uppercase text-lg md:text-[4rem] text-gray-500 leading-none">
-                  <span>Node: 18.02 Top-Tier</span><span className="opacity-20 text-9xl font-thin">|</span>
-                  <span>Protocol: V23.0 Synchronized</span><span className="opacity-20 text-9xl font-thin">|</span>
+            {/* INFRA BAR */}
+            <div className="mt-24 py-20 px-24 bg-gray-100 rounded-[80px] flex flex-wrap justify-center md:justify-between items-center gap-20 border-[10px] border-black/5 shadow-inner font-black">
+                <div className="flex items-center gap-10"><div className="w-10 h-10 bg-red-600 rounded-full animate-ping"></div><span className="text-black text-2xl md:text-6xl font-mono uppercase italic tracking-tighter">Infrastructure: 88-Threads Node</span></div>
+                <div className="flex items-center gap-16 uppercase text-lg md:text-[4rem] text-gray-500">
+                  <span>Node: 18.02 Top-Tier</span>
                   <span>Auth: Lord @Ohsangjo</span>
                 </div>
             </div>
@@ -310,15 +304,15 @@ export default function KedheonEmpireEternal() {
         )}
       </main>
 
-      {/* 📱 FOOTER */}
-      <footer className="fixed bottom-12 left-8 right-8 max-w-[110rem] mx-auto bg-white border-[12px] border-black p-4 rounded-[80px] flex justify-between gap-6 z-[500] shadow-[0_100px_250px_rgba(0,0,0,1)] font-black">
+      {/* FOOTER */}
+      <footer className="fixed bottom-12 left-8 right-8 max-w-[110rem] mx-auto bg-white border-[12px] border-black p-4 rounded-[80px] flex justify-between gap-6 z-[500] shadow-2xl font-black">
         {['KEDHEON', 'CIVIL', 'NEXUS', 'VENDOR'].map(app => (
-          <button key={app} className={`flex-1 py-12 md:py-24 rounded-[65px] text-xs md:text-[6rem] transition-all duration-700 font-black text-center leading-none ${app === 'KEDHEON' ? 'bg-black text-white shadow-inner scale-[1.1] animate-pulse' : 'text-gray-300 hover:bg-gray-100 hover:text-black hover:scale-110'}`}>{app}</button>
+          <button key={app} className={`flex-1 py-12 md:py-24 rounded-[65px] text-xs md:text-[6rem] transition-all font-black text-center ${app === 'KEDHEON' ? 'bg-black text-white scale-[1.05]' : 'text-gray-300 hover:text-black'}`}>{app}</button>
         ))}
       </footer>
 
-      {/* 🐯 WATERMARK */}
-      <div className="mt-64 opacity-5 text-black text-xl md:text-[12rem] tracking-[4em] uppercase pb-96 font-black text-center select-none pointer-events-none leading-none"> Kedheon Master | Final Legacy | Lord Ohsangjo </div>
+      {/* WATERMARK */}
+      <div className="mt-64 opacity-5 text-black text-xl md:text-[12rem] tracking-[4em] uppercase pb-96 font-black text-center select-none pointer-events-none leading-none"> Kedheon Master | Lord Ohsangjo </div>
     </div>
   );
 }
