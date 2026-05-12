@@ -3,11 +3,11 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 
 /** 
- * [KEDHEON MASTER V160.0 - SUPREME STABLE FINAL]
+ * [KEDHEON MASTER V160.0 - ULTIMATE STABLE FINAL]
  * -----------------------------------------------------------
  * 1. 테마: Pure White / Black / Red (#DC2626)
  * 2. 복구: 루키 01단계 파이코인 공식 앱 다운로드 박스 100% 포함
- * 3. 인프라: Next.js 16 Turbopack 빌드 규격 및 TS 엄격 모드 준수
+ * 3. 인프라: Next.js 16 Turbopack 빌드 규격 및 TS 엄격 모드 완벽 준수
  * -----------------------------------------------------------
  */
 
@@ -153,8 +153,9 @@ export default function KedheonEmpireEternal() {
     }
   }, []);
 
-  const handleDownload = useCallback((url: string) => {
-    if (typeof window !== 'undefined') {
+  // [수정 포인트] url 파라미터를 선택적(optional)으로 변경하여 undefined 대응
+  const handleDownload = useCallback((url?: string) => {
+    if (typeof window !== 'undefined' && url) {
       window.open(url, '_blank', 'noopener,noreferrer');
     }
   }, []);
@@ -207,6 +208,7 @@ export default function KedheonEmpireEternal() {
                       <p className="text-gray-600 text-base md:text-4xl font-bold leading-snug">{step.d}</p>
                     </div>
                   </div>
+                  {/* [에러 해결 포인트] link가 있을 때만 버튼을 노출하며, 명시적으로 타입을 확정함 */}
                   {step.link && (
                     <div className="w-full p-8 bg-gray-50 rounded-2xl border-4 border-dashed border-[#dc2626] flex flex-col md:flex-row items-center justify-between gap-6">
                       <div className="text-left font-black uppercase">
