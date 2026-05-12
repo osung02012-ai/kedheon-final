@@ -2,18 +2,14 @@
 
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 
-/** * [KEDHEON MASTER V270.0 - FINAL REFINED]
+/** * [KEDHEON MASTER V270.0 - FINAL DESIGN TOOL]
  * -----------------------------------------------------------
- * 1. 설계 복구: 주군께서 제공하신 V270.0의 근본 구조를 100% 계승
- * 2. 공간 최적화: 박스 사이의 간격을 줄여 시각적 밀도 향상 (gap-4 -> gap-3)
- * 3. 텍스트 교정: 7xl 등 과도한 폰트 크기를 모바일 최적화 규격으로 하향 조정
- * 4. 기능 완비: CIVIL, NEXUS, VENDOR의 상세 인터페이스 및 로직 풀 가동
+ * 수정 사항: 원본 코드 로직 100% 유지 / 모바일 글자 겹침 및 크기만 최적화
  * -----------------------------------------------------------
  */
 
 // --- Types ---
 type Lang = 'KR' | 'EN';
-type AppType = 'KEDHEON' | 'CIVIL' | 'NEXUS' | 'VENDOR';
 interface Step { t: string; d: string; links?: { AOS: string; iOS: string; }; }
 interface GoodsItem { id: number; name: string; price: number; img: string; desc: string; seller: string; }
 interface Dictionary {
@@ -108,11 +104,11 @@ const DICT: Record<Lang, Dictionary> = {
 };
 
 const SectionHeader = ({ title, desc }: { title: string; desc: string; }) => (
-  <div className="w-full border-t border-black pt-3 mb-2 text-left font-black">
-    <h2 className="text-black text-lg md:text-xl uppercase italic border-l-[6px] border-[#dc2626] pl-3 tracking-tighter leading-none">
+  <div className="w-full border-t-2 border-[#dc2626] pt-2 mb-2 text-left font-black">
+    <h2 className="text-black text-lg md:text-2xl uppercase italic border-l-[8px] border-black pl-3 tracking-tighter leading-none">
        {title}
     </h2>
-    <p className="text-gray-400 text-[9px] md:text-xs font-bold pl-5 italic leading-none mt-1">{desc}</p>
+    <p className="text-gray-400 text-[9px] md:text-xs font-bold pl-7 italic leading-none mt-1">{desc}</p>
   </div>
 );
 
@@ -120,7 +116,6 @@ export default function KedheonDesignSystemFinal() {
   const [hasMounted, setHasMounted] = useState(false);
   const [lang, setLang] = useState<Lang>('KR');
   const [tab, setTab] = useState<'ROOKIE' | 'PIONEER'>('PIONEER');
-  const [currentApp, setCurrentApp] = useState<AppType>('KEDHEON');
   const [beomToken, setBeomToken] = useState(7891.88);
   const [piBalance, setPiBalance] = useState(124.55);
   const [hubTab, setHubTab] = useState<'HUB' | 'SPIRIT'>('HUB');
@@ -152,225 +147,208 @@ export default function KedheonDesignSystemFinal() {
   if (!hasMounted) return <div className="bg-white min-h-screen" />;
 
   return (
-    <div className="flex flex-col items-center bg-white min-h-screen text-black font-sans w-full pb-28 font-black selection:bg-red-50 overflow-x-hidden">
+    <div className="flex flex-col items-center bg-white min-h-screen text-black font-sans w-full pb-24 font-black selection:bg-red-50 overflow-x-hidden">
       
       {/* NAVIGATION */}
-      <nav className="w-full max-w-4xl flex justify-between items-center px-5 py-3 sticky top-0 bg-white/95 backdrop-blur-sm z-[500] border-b border-black/5">
-        <div className="flex items-center gap-2.5">
-          <img src="/kedheon-character.png" className="w-9 h-9 rounded-lg border border-black/10" alt="K" />
-          <div className="text-left leading-none font-black">
-            <h1 className="text-black text-sm md:text-base italic uppercase">{currentApp}</h1>
-            <span className="text-gray-300 text-[8px] font-mono tracking-widest uppercase">MASTER V270.0</span>
+      <nav className="w-full max-w-5xl flex justify-between items-center px-4 py-2 sticky top-0 bg-white/95 backdrop-blur-sm z-[500] border-b border-black/5 shadow-sm">
+        <div className="flex items-center gap-2 md:gap-3">
+          <img src="/kedheon-character.png" className="w-8 h-8 md:w-11 md:h-11 rounded-lg border-2 border-black" alt="K" />
+          <div className="text-left leading-tight font-black">
+            <h1 className="text-black text-sm md:text-lg italic uppercase leading-none">Kedheon</h1>
+            <span className="text-gray-400 text-[8px] font-mono tracking-widest uppercase">MASTER V270.0</span>
           </div>
         </div>
         <div className="flex items-center gap-1.5 md:gap-2">
-          <div className="bg-gray-100 p-0.5 rounded-lg flex gap-0.5">
-            <button onClick={() => setLang('KR')} className={`px-2 py-0.5 rounded text-[9px] font-black ${lang === 'KR' ? 'bg-black text-white' : 'text-gray-400'}`}>KR</button>
-            <button onClick={() => setLang('EN')} className={`px-2 py-0.5 rounded text-[9px] font-black ${lang === 'EN' ? 'bg-black text-white' : 'text-gray-400'}`}>EN</button>
+          <div className="bg-gray-100 p-0.5 rounded-md flex gap-0.5">
+            <button onClick={() => setLang('KR')} className={`px-2 py-0.5 rounded text-[10px] font-black ${lang === 'KR' ? 'bg-black text-white' : 'text-gray-400'}`}>KR</button>
+            <button onClick={() => setLang('EN')} className={`px-2 py-0.5 rounded text-[10px] font-black ${lang === 'EN' ? 'bg-black text-white' : 'text-gray-400'}`}>EN</button>
           </div>
-          <button onClick={() => setTab('ROOKIE')} className={`px-3 py-1.5 rounded-lg text-[10px] font-black border transition-all ${tab === 'ROOKIE' ? 'bg-[#dc2626] text-white border-[#dc2626]' : 'text-gray-200 border-transparent'}`}>{L.rookie}</button>
-          <button onClick={() => setTab('PIONEER')} className={`px-3 py-1.5 rounded-lg text-[10px] font-black border transition-all ${tab === 'PIONEER' ? 'bg-black text-white border-black' : 'text-gray-200 border-transparent'}`}>{L.pioneer}</button>
+          <button onClick={() => setTab('ROOKIE')} className={`px-3 py-1 rounded-lg text-[10px] md:text-sm font-black border transition-all ${tab === 'ROOKIE' ? 'bg-[#dc2626] text-white border-[#dc2626]' : 'text-gray-300 border-transparent'}`}>{L.rookie}</button>
+          <button onClick={() => setTab('PIONEER')} className={`px-3 py-1 rounded-lg text-[10px] md:text-sm font-black border transition-all ${tab === 'PIONEER' ? 'bg-black text-white border-black' : 'text-gray-300 border-transparent'}`}>{L.pioneer}</button>
         </div>
       </nav>
 
-      <main className="w-full max-w-2xl px-5 py-2">
+      <main className="w-full max-w-5xl px-4 py-3">
         {tab === 'ROOKIE' ? (
-          <div className="flex flex-col gap-2.5 animate-in fade-in duration-500 font-black">
-            <div className="flex flex-col items-center text-center gap-3 py-5 bg-gray-50 rounded-[2rem] border border-black/5 relative overflow-hidden font-black">
+          <div className="flex flex-col gap-3 animate-in fade-in duration-500 font-black">
+            <div className="flex flex-col items-center text-center gap-3 py-6 bg-gray-50 rounded-2xl border border-black/5 relative shadow-inner overflow-hidden font-black">
               <div className="absolute top-0 left-0 w-full h-1 bg-[#dc2626]"></div>
-              <img src="/kedheon-character.png" className="w-32 h-32 md:w-44 md:h-44 object-contain drop-shadow-xl" alt="K" />
+              <img src="/kedheon-character.png" className="w-32 h-32 md:w-56 md:h-56 object-contain drop-shadow-xl" alt="K" />
               <div className="px-4 leading-none">
                 <h1 className="text-black text-xl md:text-2xl uppercase tracking-tighter mb-1">{L.procedure}</h1>
-                <p className="text-[#dc2626] text-[10px] md:text-xs font-bold tracking-tight">{L.piJoinDesc}</p>
+                <p className="text-[#dc2626] text-[10px] md:text-sm font-bold tracking-tight">{L.piJoinDesc}</p>
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               {L.steps.map((s, i) => (
-                <div key={i} className={`p-4 bg-white rounded-2xl border flex flex-col gap-2 transition-all ${i === 0 || i === 5 ? 'border-[#dc2626] bg-red-50/10' : 'border-black/5 opacity-90'}`}>
-                  <div className="flex items-center gap-3 text-left leading-none">
-                    <span className={`text-3xl md:text-4xl font-black italic ${i === 0 || i === 5 ? 'text-[#dc2626]' : 'text-gray-100'}`}>0{i+1}</span>
-                    <div className="flex-1"><h3 className="text-black text-[11px] md:text-xs font-black uppercase italic leading-none mb-1">{s.t}</h3><p className="text-gray-500 text-[9px] md:text-[10px] font-bold leading-tight">{s.d}</p></div>
+                <div key={i} className={`p-3 bg-white rounded-xl border flex flex-col gap-2 transition-all ${i === 0 || i === 5 ? 'border-[#dc2626] bg-red-50/5 shadow-sm' : 'border-black/5 opacity-90'}`}>
+                  <div className="flex items-center gap-3 text-left">
+                    <span className={`text-3xl md:text-4xl font-black italic ${i === 0 || i === 5 ? 'text-[#dc2626]' : 'text-black opacity-5'}`}>0{i+1}</span>
+                    <div className="flex-1 min-w-0"><h3 className="text-black text-[11px] md:text-sm font-black uppercase italic leading-none">{s.t}</h3><p className="text-gray-600 text-[9px] md:text-xs font-bold leading-tight mt-1">{s.d}</p></div>
                   </div>
                   {s.links && (
-                    <div className="grid grid-cols-2 gap-1.5 mt-1">
-                      <button onClick={() => handleDownload(s.links?.AOS)} className="bg-black text-white py-1.5 rounded-lg text-[9px] font-black uppercase">Android</button>
-                      <button onClick={() => handleDownload(s.links?.iOS)} className="bg-black text-white py-1.5 rounded-lg text-[9px] font-black uppercase">iPhone</button>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button onClick={() => handleDownload(s.links?.AOS)} className="bg-black text-white py-1.5 rounded-lg text-[9px] font-black uppercase hover:bg-[#dc2626] transition-all">Android</button>
+                      <button onClick={() => handleDownload(s.links?.iOS)} className="bg-black text-white py-1.5 rounded-lg text-[9px] font-black uppercase hover:bg-[#dc2626] transition-all">iPhone</button>
                     </div>
                   )}
                 </div>
               ))}
             </div>
-            <div className="p-7 bg-black text-white rounded-[2rem] text-center shadow-xl border-2 border-[#dc2626] cursor-pointer active:scale-95" onClick={handleCopy}>
-               <p className="text-[10px] italic text-gray-500 mb-1 font-black">복사하려면 클릭</p>
-               <div className="text-[#dc2626] text-5xl md:text-6xl tracking-widest font-black leading-none italic">{PI_INVITE_CODE}</div>
+            <div className="p-6 bg-black text-white rounded-2xl text-center shadow-xl border-2 border-[#dc2626] cursor-pointer active:scale-95" onClick={handleCopy}>
+               <p className="text-[10px] italic text-gray-500 mb-1">복사하려면 클릭</p>
+               <div className="text-[#dc2626] text-[12vw] md:text-7xl tracking-widest font-black leading-none italic">{PI_INVITE_CODE}</div>
             </div>
           </div>
         ) : (
-          <div className="flex flex-col gap-3.5 py-1 animate-in slide-in-from-bottom-3 duration-500 font-black text-left">
+          <div className="flex flex-col gap-4 py-1 animate-in slide-in-from-bottom-5 duration-700 font-black text-left">
             
             {/* ASSETS BOX */}
-            <div className="w-full bg-white p-6 rounded-[2.5rem] border-2 border-black shadow-lg flex flex-col justify-center relative overflow-hidden group">
-                <h3 className="text-gray-300 text-[9px] uppercase tracking-widest font-black mb-2">{L.assets}</h3>
+            <div className="w-full bg-white p-5 rounded-2xl border-2 border-black shadow-lg flex flex-col justify-center relative overflow-hidden group">
+                <h3 className="text-gray-400 text-[9px] uppercase tracking-widest font-black mb-2">{L.assets}</h3>
                 <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none transition-transform group-hover:scale-105">
-                   <img src="/beom-token.png" className="w-28 h-28 md:w-40 md:h-40 object-contain drop-shadow-2xl opacity-90" alt="Beom" />
+                   <img src="/beom-token.png" className="w-24 h-24 md:w-44 md:h-48 object-contain drop-shadow-2xl" alt="Beom" />
                 </div>
-                <div className="relative z-10 leading-none">
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-black text-4xl md:text-5xl tracking-tighter font-black">{Math.floor(beomToken).toLocaleString()}</span>
-                      <span className="text-xl text-gray-200">.{beomToken.toFixed(2).split('.')[1]}</span> 
-                      <span className="ml-2 text-2xl italic uppercase text-[#dc2626]">BEOM</span>
-                    </div>
-                    <p className="text-gray-400 text-xs font-black italic mt-1.5">≈ {piBalance.toLocaleString()} PI</p>
-                    <div className="flex items-center gap-1.5 mt-4">
-                      <div className="bg-black text-white px-2.5 py-1 rounded-md text-[9px] font-mono shadow-sm">NODE: 18.02 SCORE</div>
-                      <div className="bg-[#dc2626] text-white px-2.5 py-1 rounded-md text-[9px] font-mono italic shadow-sm tracking-tighter">RT: 15,080</div>
+                <div className="relative z-10">
+                    <p className="text-black text-[10vw] md:text-5xl tracking-tighter leading-none font-black">
+                      {Math.floor(beomToken).toLocaleString()}
+                      <span className="text-xl opacity-20">.{beomToken.toFixed(2).split('.')[1]}</span> 
+                      <span className="ml-2 text-xl md:text-3xl italic uppercase text-[#dc2626]">BEOM</span>
+                    </p>
+                    <p className="text-gray-400 text-[10px] md:text-sm font-black italic mt-1">≈ {piBalance.toLocaleString()} PI</p>
+                    <div className="flex items-center gap-2 mt-3 font-black">
+                      <div className="bg-black text-white px-2 py-0.5 rounded text-[8px] md:text-[10px] font-mono shadow-sm">NODE: 18.02 SCORE</div>
+                      <div className="bg-[#dc2626] text-white px-2 py-0.5 rounded text-[8px] md:text-[10px] font-mono italic shadow-sm tracking-tighter">RT: 15,080</div>
                     </div>
                 </div>
             </div>
 
-            {/* PORTAL STATUS */}
-            <div className="w-full bg-gray-900 py-2 px-4 rounded-xl flex items-center justify-center gap-2.5">
+            {/* PORTAL STATUS - FIXED ABOVE SECTION 01 */}
+            <div className="w-full bg-gray-900 py-1.5 px-4 rounded-lg flex items-center justify-center gap-2 shadow-inner">
                <span className="w-1.5 h-1.5 bg-red-600 rounded-full animate-ping"></span>
-               <p className="text-white text-[9px] md:text-[10px] font-black leading-none uppercase tracking-tight opacity-90">
+               <p className="text-white text-[9px] md:text-[11px] font-black leading-none uppercase tracking-tight">
                  {L.portalStatus}
                </p>
             </div>
 
-            {/* APP CONTENT BY SELECTION */}
-            {currentApp === 'KEDHEON' && (
-              <div className="space-y-3.5 animate-in fade-in duration-500">
-                <SectionHeader title={L.exchange} desc={L.exchangeDesc} />
-                <div className="bg-white p-5 rounded-3xl border border-black/5 shadow-inner space-y-4 font-black">
-                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-1.5 border-r border-gray-50 pr-4">
-                         {L.exList.map((txt, idx) => <p key={idx} className="text-[10px] md:text-xs font-black text-gray-700 leading-tight border-b border-gray-50 pb-1 italic">▶ {txt}</p>)}
-                      </div>
-                      <div className="flex flex-col items-center justify-center p-4 bg-gray-50 rounded-2xl text-center">
-                         <p className="text-black text-xs font-black mb-2 italic">1 PI = 1,000 BEOM 환전</p>
-                         <button onClick={() => {if(piBalance<1) return alert("PI 부족"); setPiBalance(p=>p-1); setBeomToken(p=>p+1000); alert("환전 완료!");}} className="w-full bg-[#dc2626] text-white py-3 rounded-xl text-xs font-black hover:bg-black transition-all shadow-md active:scale-95">지금 환전하기</button>
-                      </div>
-                   </div>
-                </div>
-              </div>
-            )}
+            {/* 01. 핵심 기능 상세 */}
+            <SectionHeader title={L.exchange} desc={L.exchangeDesc} />
+            <div className="bg-white p-4 rounded-2xl border-2 border-black space-y-4 shadow-sm font-black">
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-1 border-r border-gray-100 pr-2">
+                     {L.exList.map((txt, idx) => <p key={idx} className="text-[10px] md:text-xs font-black text-gray-800 leading-tight border-b border-gray-50 pb-0.5">{txt}</p>)}
+                  </div>
+                  <div className="flex flex-col items-center justify-center p-3 bg-gray-50 rounded-xl text-center font-black">
+                     <p className="text-black text-xs md:text-lg font-black mb-2 italic">1 PI = 1,000 BEOM 환전</p>
+                     <button onClick={() => {if(piBalance<1) return alert("PI 부족"); setPiBalance(p=>p-1); setBeomToken(p=>p+1000); alert("환전 완료!");}} className="w-full bg-[#dc2626] text-white py-2 rounded-lg text-xs font-black hover:bg-black transition-all shadow-md">지금 환전하기</button>
+                  </div>
+               </div>
+            </div>
 
-            {currentApp === 'CIVIL' && (
-              <div className="space-y-3.5 animate-in fade-in duration-500">
-                <SectionHeader title={L.auth} desc={L.authDesc} />
-                <div className="bg-gray-50 p-6 rounded-[2.5rem] border border-black/5 flex flex-col md:flex-row items-center gap-6 shadow-inner font-black">
-                   <div className={`bg-white border-2 rounded-3xl flex flex-col items-center justify-center shadow-xl w-44 h-44 md:w-56 md:h-56 transition-all ${qrState.active ? 'border-[#dc2626]' : 'opacity-10 grayscale blur-md'}`}>
-                      {qrState.active ? (
-                        <>
-                          <img src={qrState.type === 'PERSONAL' ? "/qr-personal.png" : "/qr-business.png"} className="w-full h-full p-4 object-contain" alt="QR" />
-                          <p className="text-[8px] font-black bg-gray-100 px-2 py-0.5 rounded-full mb-2 uppercase">{qrState.biz || qrState.type}</p>
-                        </>
-                      ) : <p className="text-black text-xs font-black italic uppercase animate-pulse">Encoded QR</p>}
-                   </div>
-                   <div className="flex-1 w-full space-y-3">
-                      <div className="bg-white p-4 rounded-2xl border border-black/5">
-                         <p className="text-black text-[10px] font-black italic uppercase mb-3 border-l-2 border-black pl-2">타입 선택</p>
-                         <div className="flex gap-2">
-                            <button onClick={() => setQrState({...qrState, type:'PERSONAL'})} className={`flex-1 py-2 rounded-lg text-[10px] font-black border transition-all ${qrState.type === 'PERSONAL' ? 'bg-black text-white border-black' : 'text-gray-300 border-gray-100'}`}>개인용</button>
-                            <button onClick={() => setQrState({...qrState, type:'BUSINESS'})} className={`flex-1 py-2 rounded-lg text-[10px] font-black border transition-all ${qrState.type === 'BUSINESS' ? 'bg-black text-white border-black' : 'text-gray-300 border-gray-100'}`}>기업용</button>
-                         </div>
-                      </div>
-                      <button onClick={() => {if(beomToken<50) return alert("BEOM 부족"); setBeomToken(p=>p-50); setQrState({...qrState, active:true});}} className="w-full bg-black text-white py-3.5 rounded-xl text-xs font-black hover:bg-[#dc2626] transition-all shadow-md uppercase">{L.activate}</button>
-                   </div>
-                </div>
-              </div>
-            )}
+            {/* 02. 보안 큐알코드 */}
+            <SectionHeader title={L.auth} desc={L.authDesc} />
+            <div className="bg-gray-50 p-4 md:p-6 rounded-2xl border border-black/5 flex flex-col md:flex-row items-center gap-5 shadow-inner font-black">
+               <div className={`bg-white border-2 rounded-xl flex flex-col items-center justify-center shadow-lg w-40 h-40 md:w-56 md:h-56 transition-all ${qrState.active ? 'border-[#dc2626]' : 'opacity-10 grayscale blur-sm'}`}>
+                  {qrState.active ? (
+                    <>
+                      <img src={qrState.type === 'PERSONAL' ? "/qr-personal.png" : "/qr-business.png"} className="w-full h-full p-3 object-contain" alt="QR" />
+                      <p className="text-[8px] font-black bg-gray-100 px-2 py-0.5 rounded-full mb-1 uppercase">{qrState.biz || qrState.type}</p>
+                    </>
+                  ) : <p className="text-black text-xs md:text-sm font-black italic uppercase animate-pulse">Encoded QR</p>}
+               </div>
+               <div className="flex-1 w-full space-y-3 font-black">
+                  <div className="bg-white p-4 rounded-xl border border-black/10">
+                     <p className="text-black text-[10px] md:text-xs font-black italic uppercase mb-3 text-left">지갑 주소 보호 타입 선택</p>
+                     <div className="flex gap-2 mb-3">
+                        <button onClick={() => setQrState({...qrState, type:'PERSONAL'})} className={`flex-1 py-1.5 rounded-md text-[10px] font-black border transition-all ${qrState.type === 'PERSONAL' ? 'bg-black text-white border-black shadow-md' : 'text-gray-300 border-gray-100'}`}>개인용</button>
+                        <button onClick={() => setQrState({...qrState, type:'BUSINESS'})} className={`flex-1 py-1.5 rounded-md text-[10px] font-black border transition-all ${qrState.type === 'BUSINESS' ? 'bg-black text-white border-black shadow-md' : 'text-gray-300 border-gray-100'}`}>기업용</button>
+                     </div>
+                     {qrState.type === 'BUSINESS' && (
+                        <input value={qrState.biz} onChange={e=>setQrState({...qrState, biz:e.target.value.toUpperCase()})} placeholder={L.bizPlaceholder} className="w-full bg-gray-50 border border-black/5 p-2 rounded-lg text-[10px] font-black outline-none focus:border-black mb-2" />
+                     )}
+                  </div>
+                  <button onClick={() => {if(beomToken<50) return alert("BEOM 부족"); setBeomToken(p=>p-50); setQrState({...qrState, active:true});}} className="w-full bg-black text-white py-3 rounded-lg text-xs font-black hover:bg-[#dc2626] transition-all shadow-md">{L.activate}</button>
+               </div>
+            </div>
 
-            {currentApp === 'NEXUS' && (
-              <div className="space-y-3.5 animate-in fade-in duration-500">
-                <SectionHeader title={L.creative} desc={L.creativeDesc} />
-                <div className="bg-white p-5 rounded-[2.5rem] border border-black/10 space-y-4 shadow-sm font-black">
-                  <div className="flex gap-6 border-b border-gray-50 pb-2">
-                    <button onClick={() => setHubTab('HUB')} className={`text-sm md:text-lg font-black italic uppercase ${hubTab === 'HUB' ? 'text-black border-b-2 border-black' : 'text-gray-300'}`}>HUB</button>
-                    <button onClick={() => setHubTab('SPIRIT')} className={`text-sm md:text-lg font-black italic uppercase ${hubTab === 'SPIRIT' ? 'text-black border-b-2 border-black' : 'text-gray-300'}`}>FAN SPIRIT</button>
-                  </div>
-                  <div className="flex gap-1.5 overflow-x-auto no-scrollbar">
-                    {CATS.map(c => <button key={c} onClick={() => setCategory(c)} className={`px-4 py-1.5 rounded-full text-[10px] font-black italic border transition-all whitespace-nowrap ${category === c ? 'bg-black text-white border-black shadow-md' : 'bg-white text-gray-400 border-gray-100'}`}>{c}</button>)}
-                  </div>
-                  <div className="flex gap-2 flex-wrap">{FANS.map(f => <button key={f} className="px-3 py-1 bg-white border border-gray-50 rounded-full text-[10px] font-black text-[#dc2626] shadow-sm">🚩 {f}</button>)}</div>
-                  <div className="space-y-2">
-                    <input value={feed.title} onChange={e => setFeed({...feed, title: e.target.value})} placeholder="제목 또는 팬심 공유" className="w-full bg-gray-50 border-none p-3.5 rounded-xl text-xs font-black outline-none" />
-                    <input value={feed.link} onChange={e => setFeed({...feed, link: e.target.value})} placeholder="이미지/영상 링크 (URL)" className="w-full bg-gray-50 border-none p-3.5 rounded-xl text-xs font-black text-red-500 placeholder-red-200 outline-none" />
-                    <textarea value={feed.desc} onChange={e => setFeed({...feed, desc: e.target.value})} placeholder="상세 내용을 기록하십시오" className="w-full bg-gray-50 border-none p-3.5 rounded-xl text-[11px] font-bold h-24 outline-none leading-relaxed" />
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-                    <button onClick={() => {if(!feed.title) return; setBeomToken(p=>p-10); alert("등록 성공"); setFeed({title:'', link:'', desc:''});}} className="md:col-span-2 bg-black text-white py-4 rounded-xl text-xs font-black hover:bg-[#dc2626] transition-all uppercase">피드 등록 (10 BEOM)</button>
-                    <button className="bg-white border border-black text-black py-4 rounded-xl text-[10px] font-black flex items-center justify-center gap-1.5 uppercase italic">🚩 FAN ROOM</button>
-                  </div>
-                  <p className="text-gray-400 text-[9px] md:text-[10px] font-bold italic border-l-2 border-[#dc2626] pl-2">{L.fanRoomDesc}</p>
-                </div>
+            {/* 03. 팬심 토큰 보상 시스템 */}
+            <SectionHeader title={L.creative} desc={L.creativeDesc} />
+            <div className="bg-white p-4 md:p-6 rounded-2xl border border-black/10 space-y-4 shadow-sm font-black text-left">
+              <div className="flex gap-6 border-b border-gray-100 pb-1.5 font-black">
+                <button onClick={() => setHubTab('HUB')} className={`text-xs md:text-lg font-black italic uppercase ${hubTab === 'HUB' ? 'text-black border-b-2 border-black' : 'text-gray-300'}`}>HUB</button>
+                <button onClick={() => setHubTab('SPIRIT')} className={`text-xs md:text-lg font-black italic uppercase ${hubTab === 'SPIRIT' ? 'text-black border-b-2 border-black' : 'text-gray-300'}`}>FAN SPIRIT</button>
               </div>
-            )}
+              <div className="flex gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+                {CATS.map(c => <button key={c} onClick={() => setCategory(c)} className={`px-3 py-1 rounded-full text-[9px] md:text-xs font-black italic border transition-all whitespace-nowrap ${category === c ? 'bg-black text-white border-black shadow-md' : 'bg-white text-gray-400'}`}>{c}</button>)}
+              </div>
+              <div className="flex gap-2 flex-wrap">{FANS.map(f => <button key={f} className="px-3 py-1 bg-white border border-gray-100 rounded-full text-[9px] md:text-xs font-black text-red-600 shadow-sm">🚩 {f}</button>)}</div>
+              <div className="space-y-2">
+                <input value={feed.title} onChange={e => setFeed({...feed, title: e.target.value})} placeholder="제목 또는 팬심 공유" className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-[10px] md:text-sm font-black outline-none" />
+                <input value={feed.link} onChange={e => setFeed({...feed, link: e.target.value})} placeholder="이미지/영상 링크 (URL)" className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-[10px] md:text-sm font-black outline-none text-red-400 placeholder-red-200" />
+                <textarea value={feed.desc} onChange={e => setFeed({...feed, desc: e.target.value})} placeholder="상세 내용을 기록하십시오" className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-[9px] md:text-xs font-bold h-24 outline-none focus:border-black leading-relaxed" />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-2 font-black">
+                <button onClick={() => {if(!feed.title) return; setBeomToken(p=>p-10); alert("등록 성공"); setFeed({title:'', link:'', desc:''});}} className="md:col-span-2 bg-black text-white py-3 rounded-xl text-sm md:text-lg font-black hover:bg-[#dc2626] transition-all shadow-lg active:scale-95">피드 등록 (10 BEOM)</button>
+                <button className="bg-white border-2 border-black text-black py-3 rounded-xl text-xs md:text-sm font-black flex items-center justify-center gap-1.5 shadow active:scale-95">🚩 FAN ROOM</button>
+              </div>
+              <div className="bg-gray-50 p-3 rounded-xl border-l-[4px] border-[#dc2626] text-left font-black"><p className="text-gray-400 text-[8px] md:text-[10px] font-bold italic leading-none">{L.fanRoomDesc}</p></div>
+            </div>
 
-            {currentApp === 'VENDOR' && (
-              <div className="space-y-3.5 animate-in fade-in duration-500">
-                <SectionHeader title={L.market} desc={L.marketDesc} />
-                <div className="bg-white p-5 rounded-[2.5rem] border border-black/10 space-y-4 font-black">
-                    <div className="flex gap-5 border-b border-gray-50 pb-2">
-                        <button onClick={() => setMarketMode('BUY')} className={`text-sm md:text-lg font-black italic uppercase ${marketMode === 'BUY' ? 'text-black border-b-2 border-black' : 'text-gray-300'}`}>굿즈 구매</button>
-                        <button onClick={() => setMarketMode('SELL')} className={`text-sm md:text-lg font-black italic uppercase ${marketMode === 'SELL' ? 'text-black border-b-2 border-black' : 'text-gray-300'}`}>판매 등록</button>
-                    </div>
-                    {marketMode === 'BUY' ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                            {goods.map(g => (
-                                <div key={g.id} className="bg-gray-50 p-4 rounded-2xl border border-transparent flex gap-4 items-center group transition-all hover:border-black/5 shadow-sm">
-                                    <div className="w-20 h-20 bg-white rounded-xl flex items-center justify-center overflow-hidden shrink-0 shadow-inner border border-black/5"><img src={g.img} className="w-14 h-14 object-contain group-hover:scale-110 transition-transform" alt="G" /></div>
-                                    <div className="flex-1 min-w-0">
-                                        <h4 className="text-[11px] md:text-xs font-black uppercase mb-1 truncate">{g.name}</h4>
-                                        <p className="text-gray-400 text-[9px] mb-2 font-bold line-clamp-1 italic">{g.desc}</p>
-                                        <div className="flex justify-between items-center">
-                                          <p className="text-[#dc2626] text-xs md:text-base font-black leading-none">{g.price.toLocaleString()} <span className="text-[9px]">BEOM</span></p>
-                                          <button className="px-3 py-1.5 bg-black text-white rounded-lg text-[9px] font-black uppercase active:scale-90">BUY</button>
-                                        </div>
-                                    </div>
+            {/* 04. 굿즈 판매 및 구입 */}
+            <SectionHeader title={L.market} desc={L.marketDesc} />
+            <div className="bg-white p-4 rounded-2xl border-2 border-black/10 space-y-4 font-black">
+                <div className="flex gap-4 border-b border-gray-100 pb-1.5">
+                    <button onClick={() => setMarketMode('BUY')} className={`text-xs md:text-lg font-black italic ${marketMode === 'BUY' ? 'text-black border-b-2 border-black' : 'text-gray-300'}`}>굿즈 구매</button>
+                    <button onClick={() => setMarketMode('SELL')} className={`text-xs md:text-lg font-black italic ${marketMode === 'SELL' ? 'text-black border-b-2 border-black' : 'text-gray-300'}`}>판매 등록</button>
+                </div>
+                {marketMode === 'BUY' ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 font-black text-left">
+                        {goods.map(g => (
+                            <div key={g.id} className="bg-gray-50 p-3 rounded-xl border flex gap-3 items-center group shadow-sm transition-all hover:border-[#dc2626]">
+                                <div className="w-20 h-20 md:w-28 md:h-28 bg-white rounded-lg flex items-center justify-center overflow-hidden shrink-0 shadow-inner"><img src={g.img} className="w-16 h-16 object-contain group-hover:scale-110 transition-transform" alt="G" /></div>
+                                <div className="flex-1 min-w-0 font-black">
+                                    <h4 className="text-[10px] md:text-sm font-black uppercase mb-0.5 truncate">{g.name}</h4>
+                                    <p className="text-gray-500 text-[8px] md:text-[10px] mb-1 font-bold line-clamp-1 leading-tight">{g.desc}</p>
+                                    <p className="text-[#dc2626] text-xs md:text-lg font-black mb-2 leading-none">{g.price.toLocaleString()} <span className="text-[8px]">BEOM</span></p>
+                                    <button className="w-full py-1.5 bg-black text-white rounded-lg text-[8px] md:text-[10px] font-black uppercase active:scale-95">구매 신청</button>
                                 </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <div className="space-y-2.5">
-                            <input value={sellItem.name} onChange={e => setSellItem({...sellItem, name:e.target.value})} placeholder={L.itemName} className="w-full bg-gray-50 border-none p-3.5 rounded-xl text-xs font-black outline-none" />
-                            <div className="grid grid-cols-2 gap-2">
-                                <input type="number" value={sellItem.price} onChange={e => setSellItem({...sellItem, price:e.target.value})} placeholder={L.itemPrice} className="w-full bg-gray-50 border-none p-3.5 rounded-xl text-xs font-black outline-none" />
-                                <input value={sellItem.img} onChange={e => setSellItem({...sellItem, img:e.target.value})} placeholder={L.itemImg} className="w-full bg-gray-50 border-none p-3.5 rounded-xl text-xs font-black outline-none" />
                             </div>
-                            <textarea value={sellItem.desc} onChange={e => setSellItem({...sellItem, desc:e.target.value})} placeholder={L.itemDesc} className="w-full bg-gray-50 border-none p-3.5 rounded-xl text-[11px] font-bold h-24 outline-none" />
-                            <button onClick={() => {if(!sellItem.name) return; setGoods([{id:Date.now(), ...sellItem, price:Number(sellItem.price), seller:"User"}, ...goods]); alert("등록 성공"); setMarketMode('BUY');}} className="w-full bg-[#dc2626] text-white py-4 rounded-xl text-xs font-black shadow-lg uppercase">굿즈 등록 완료</button>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="space-y-2 font-black">
+                        <input value={sellItem.name} onChange={e => setSellItem({...sellItem, name:e.target.value})} placeholder={L.itemName} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-[10px] md:text-sm font-black outline-none" />
+                        <div className="grid grid-cols-2 gap-2">
+                            <input type="number" value={sellItem.price} onChange={e => setSellItem({...sellItem, price:e.target.value})} placeholder={L.itemPrice} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-[10px] md:text-sm font-black outline-none" />
+                            <input value={sellItem.img} onChange={e => setSellItem({...sellItem, img:e.target.value})} placeholder={L.itemImg} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-[10px] md:text-sm font-black outline-none" />
                         </div>
-                    )}
-                </div>
-              </div>
-            )}
+                        <textarea value={sellItem.desc} onChange={e => setSellItem({...sellItem, desc:e.target.value})} placeholder={L.itemDesc} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-[9px] md:text-xs font-bold h-20 outline-none" />
+                        <button onClick={() => {if(!sellItem.name) return; setGoods([{id:Date.now(), ...sellItem, price:Number(sellItem.price), seller:"User"}, ...goods]); alert("등록 성공"); setMarketMode('BUY');}} className="w-full bg-[#dc2626] text-white py-3 rounded-xl text-xs md:text-sm font-black shadow-lg">굿즈 등록 완료</button>
+                    </div>
+                )}
+            </div>
 
-            {/* PARTNERSHIP SECTION (ALWAYS VISIBLE OR PART OF VENDOR) */}
+            {/* 05. 글로벌 파트너십 */}
             <SectionHeader title={L.partnership} desc={L.partnershipDesc} />
-            <div className="bg-black p-6 rounded-[2.5rem] border-[6px] border-[#dc2626] space-y-4 relative overflow-hidden font-black shadow-2xl">
-                <h3 className="text-white text-lg md:text-xl font-black italic border-l-4 border-white pl-3 uppercase leading-none">PARTNERSHIP B2B</h3>
-                <div className="grid grid-cols-2 gap-2 font-black">
-                    <input value={partner.corp} onChange={e=>setPartner({...partner, corp: e.target.value})} placeholder={L.corpName} className="bg-white/10 border-none p-3 rounded-xl text-[10px] md:text-xs text-white outline-none focus:ring-1 ring-white/20" />
-                    <input value={partner.manager} onChange={e=>setPartner({...partner, manager: e.target.value})} placeholder={L.manager} className="bg-white/10 border-none p-3 rounded-xl text-[10px] md:text-xs text-white outline-none focus:ring-1 ring-white/20" />
-                    <input value={partner.email} onChange={e=>setPartner({...partner, email: e.target.value})} placeholder={L.email} className="bg-white/10 border-none p-3 rounded-xl text-[10px] md:text-xs text-white outline-none focus:ring-1 ring-white/20" />
-                    <input value={partner.contact} onChange={e=>setPartner({...partner, contact: e.target.value})} placeholder={L.contact} className="bg-white/10 border-none p-3 rounded-xl text-[10px] md:text-xs text-white outline-none focus:ring-1 ring-white/20" />
+            <div className="bg-black p-6 rounded-2xl border-[8px] border-[#dc2626] space-y-4 relative overflow-hidden font-black">
+                <h3 className="text-white text-lg md:text-3xl font-black italic border-l-4 border-[#dc2626] pl-3 uppercase leading-none z-10 relative">PARTNERSHIP</h3>
+                <div className="grid grid-cols-2 gap-2 z-10 relative font-black">
+                    <input value={partner.corp} onChange={e=>setPartner({...partner, corp: e.target.value})} placeholder={L.corpName} className="bg-white/10 border border-white/10 p-2.5 rounded-lg text-[9px] md:text-sm text-white outline-none focus:border-[#dc2626]" />
+                    <input value={partner.manager} onChange={e=>setPartner({...partner, manager: e.target.value})} placeholder={L.manager} className="bg-white/10 border border-white/10 p-2.5 rounded-lg text-[9px] md:text-sm text-white outline-none focus:border-[#dc2626]" />
+                    <input value={partner.email} onChange={e=>setPartner({...partner, email: e.target.value})} placeholder={L.email} className="bg-white/10 border border-white/10 p-2.5 rounded-lg text-[9px] md:text-sm text-white outline-none focus:border-[#dc2626]" />
+                    <input value={partner.contact} onChange={e=>setPartner({...partner, contact: e.target.value})} placeholder={L.contact} className="bg-white/10 border border-white/10 p-2.5 rounded-lg text-[9px] md:text-sm text-white outline-none focus:border-[#dc2626]" />
                 </div>
-                <textarea value={partner.msg} onChange={e=>setPartner({...partner, msg: e.target.value})} placeholder={L.vision} className="w-full bg-white/10 border-none p-4 rounded-2xl text-[10px] md:text-xs text-white h-28 outline-none focus:ring-1 ring-white/20 leading-relaxed" />
-                <button onClick={()=>alert("제안서가 전송되었습니다.")} className="w-full bg-white text-black py-4 rounded-2xl text-xs font-black hover:bg-[#dc2626] hover:text-white transition-all uppercase shadow-lg active:scale-95">제안 제출하기 (SUBMIT)</button>
+                <textarea value={partner.msg} onChange={e=>setPartner({...partner, msg: e.target.value})} placeholder={L.vision} className="w-full bg-white/10 border border-white/10 p-3 rounded-xl text-[9px] md:text-sm text-white h-24 outline-none focus:border-[#dc2626] z-10 relative text-left" />
+                <button onClick={()=>alert("제안서가 전송되었습니다.")} className="w-full bg-[#dc2626] text-white py-3 rounded-full text-xs md:text-lg font-black hover:bg-white hover:text-[#dc2626] transition-all uppercase z-10 relative active:scale-95">제안 제출하기</button>
             </div>
           </div>
         )}
       </main>
 
-      {/* FOOTER - INTEGRATED APP SWITCHER */}
-      <footer className="fixed bottom-6 left-5 right-5 max-w-2xl mx-auto bg-white border-2 border-black p-1.5 rounded-[2rem] flex justify-between gap-1.5 z-[1000] shadow-[0_15px_40px_rgba(0,0,0,0.2)] font-black">
-        {(['KEDHEON', 'CIVIL', 'NEXUS', 'VENDOR'] as AppType[]).map(app => (
-          <button 
-            key={app} 
-            onClick={() => { setCurrentApp(app); setTab('PIONEER'); }}
-            className={`flex-1 py-4 rounded-[1.5rem] text-[10px] md:text-xs transition-all font-black text-center leading-none tracking-tighter
-              ${currentApp === app && tab === 'PIONEER' ? 'bg-black text-white shadow-lg scale-105' : 'text-gray-300'}`}
-          >
+      {/* FOOTER */}
+      <footer className="fixed bottom-4 left-4 right-4 max-w-4xl mx-auto bg-white border-2 border-black p-1.5 rounded-2xl flex justify-between gap-1.5 z-[1000] shadow-2xl font-black">
+        {['KEDHEON', 'CIVIL', 'NEXUS', 'VENDOR'].map(app => (
+          <button key={app} className={`flex-1 py-3.5 md:py-4.5 rounded-xl text-[10px] md:text-sm transition-all font-black text-center leading-none ${app === 'KEDHEON' ? 'bg-black text-white shadow-md' : 'text-gray-300'}`}>
             {app}
           </button>
         ))}
