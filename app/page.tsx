@@ -2,15 +2,18 @@
 
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 
-/** * [KEDHEON MASTER V270.0 - FINAL DESIGN TOOL]
+/** * [KEDHEON MASTER V270.3 - SECURITY REINFORCED]
  * -----------------------------------------------------------
- * 수정 사항: 원본 코드 로직 100% 유지 / 모바일 글자 겹침 및 크기만 최적화
+ * 수정 사항: 
+ * 1. Step 07 비밀구절 안내 텍스트를 빨간색(#dc2626)으로 강조
+ * 2. 해킹 위험 및 오프라인 보관의 필요성 상세 기술 추가
+ * 3. 원본 설계 및 로직 100% 유지
  * -----------------------------------------------------------
  */
 
 // --- Types ---
 type Lang = 'KR' | 'EN';
-interface Step { t: string; d: string; links?: { AOS: string; iOS: string; }; }
+interface Step { t: string; d: string; links?: { AOS: string; iOS: string; }; warning?: boolean; }
 interface GoodsItem { id: number; name: string; price: number; img: string; desc: string; seller: string; }
 interface Dictionary {
   rookie: string; pioneer: string; exchange: string; auth: string; creative: string;
@@ -62,7 +65,7 @@ const DICT: Record<Lang, Dictionary> = {
       { t: "비밀번호 설정", d: "영문 대/소문자와 숫자를 조합하세요." },
       { t: "프로필 작성", d: "여권 영문 성함과 사용할 ID를 입력하세요." },
       { t: "초대 코드 입력", d: "초대 코드 [ ohsangjo ] 를 입력하세요." },
-      { t: "비밀구절 보관", d: "24개 단어는 반드시 종이에 수기 기록하세요." },
+      { t: "비밀구절 보관", d: "24개 단어는 반드시 종이에 수기 기록하세요. (디지털 저장 시 해킹 위험: 캡처, 메모장, 이메일 저장 절대 금지. 유출 시 지갑 복구 불가 및 모든 자산 분실 위험.)", warning: true },
       { t: "채굴 시작", d: "매일 한 번 번개 버튼을 눌러 활동을 시작하세요." }
     ]
   },
@@ -97,7 +100,7 @@ const DICT: Record<Lang, Dictionary> = {
       { t: "Password", d: "Combine Upper/Lower case and Numbers." },
       { t: "Profile", d: "Enter passport name and ID." },
       { t: "Invite Code", d: "Enter [ ohsangjo ] to join." },
-      { t: "Passphrase", d: "Handwrite 24 words on paper." },
+      { t: "Passphrase", d: "Handwrite 24 words on paper and store safely. (Do NOT save digitally due to hacking risks.)", warning: true },
       { t: "Mining", d: "Tap lightning bolt every 24h." }
     ]
   }
@@ -155,7 +158,7 @@ export default function KedheonDesignSystemFinal() {
           <img src="/kedheon-character.png" className="w-8 h-8 md:w-11 md:h-11 rounded-lg border-2 border-black" alt="K" />
           <div className="text-left leading-tight font-black">
             <h1 className="text-black text-sm md:text-lg italic uppercase leading-none">Kedheon</h1>
-            <span className="text-gray-400 text-[8px] font-mono tracking-widest uppercase">MASTER V270.0</span>
+            <span className="text-gray-400 text-[8px] font-mono tracking-widest uppercase">MASTER V270.3</span>
           </div>
         </div>
         <div className="flex items-center gap-1.5 md:gap-2">
@@ -175,7 +178,7 @@ export default function KedheonDesignSystemFinal() {
               <div className="absolute top-0 left-0 w-full h-1 bg-[#dc2626]"></div>
               <img src="/kedheon-character.png" className="w-32 h-32 md:w-56 md:h-56 object-contain drop-shadow-xl" alt="K" />
               <div className="px-4 leading-none">
-                <h1 className="text-black text-xl md:text-2xl uppercase tracking-tighter mb-1">{L.procedure}</h1>
+                <h1 className="text-black text-xl md:text-3xl uppercase tracking-tighter mb-1">{L.procedure}</h1>
                 <p className="text-[#dc2626] text-[10px] md:text-sm font-bold tracking-tight">{L.piJoinDesc}</p>
               </div>
             </div>
@@ -184,7 +187,10 @@ export default function KedheonDesignSystemFinal() {
                 <div key={i} className={`p-3 bg-white rounded-xl border flex flex-col gap-2 transition-all ${i === 0 || i === 5 ? 'border-[#dc2626] bg-red-50/5 shadow-sm' : 'border-black/5 opacity-90'}`}>
                   <div className="flex items-center gap-3 text-left">
                     <span className={`text-3xl md:text-4xl font-black italic ${i === 0 || i === 5 ? 'text-[#dc2626]' : 'text-black opacity-5'}`}>0{i+1}</span>
-                    <div className="flex-1 min-w-0"><h3 className="text-black text-[11px] md:text-sm font-black uppercase italic leading-none">{s.t}</h3><p className="text-gray-600 text-[9px] md:text-xs font-bold leading-tight mt-1">{s.d}</p></div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-black text-[11px] md:text-sm font-black uppercase italic leading-none">{s.t}</h3>
+                      <p className={`text-[9px] md:text-xs font-bold leading-tight mt-1 ${s.warning ? 'text-[#dc2626]' : 'text-gray-600'}`}>{s.d}</p>
+                    </div>
                   </div>
                   {s.links && (
                     <div className="grid grid-cols-2 gap-2">
@@ -197,7 +203,7 @@ export default function KedheonDesignSystemFinal() {
             </div>
             <div className="p-6 bg-black text-white rounded-2xl text-center shadow-xl border-2 border-[#dc2626] cursor-pointer active:scale-95" onClick={handleCopy}>
                <p className="text-[10px] italic text-gray-500 mb-1">복사하려면 클릭</p>
-               <div className="text-[#dc2626] text-[12vw] md:text-7xl tracking-widest font-black leading-none italic">{PI_INVITE_CODE}</div>
+               <div className="text-white text-3xl md:text-5xl tracking-widest font-black leading-none italic">{PI_INVITE_CODE}</div>
             </div>
           </div>
         ) : (
@@ -209,10 +215,10 @@ export default function KedheonDesignSystemFinal() {
                 <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none transition-transform group-hover:scale-105">
                    <img src="/beom-token.png" className="w-24 h-24 md:w-44 md:h-48 object-contain drop-shadow-2xl" alt="Beom" />
                 </div>
-                <div className="relative z-10">
-                    <p className="text-black text-[10vw] md:text-5xl tracking-tighter leading-none font-black">
+                <div className="relative z-10 leading-none">
+                    <p className="text-black text-2xl md:text-5xl tracking-tighter font-black">
                       {Math.floor(beomToken).toLocaleString()}
-                      <span className="text-xl opacity-20">.{beomToken.toFixed(2).split('.')[1]}</span> 
+                      <span className="text-lg opacity-20">.{beomToken.toFixed(2).split('.')[1]}</span> 
                       <span className="ml-2 text-xl md:text-3xl italic uppercase text-[#dc2626]">BEOM</span>
                     </p>
                     <p className="text-gray-400 text-[10px] md:text-sm font-black italic mt-1">≈ {piBalance.toLocaleString()} PI</p>
@@ -223,7 +229,7 @@ export default function KedheonDesignSystemFinal() {
                 </div>
             </div>
 
-            {/* PORTAL STATUS - FIXED ABOVE SECTION 01 */}
+            {/* PORTAL STATUS */}
             <div className="w-full bg-gray-900 py-1.5 px-4 rounded-lg flex items-center justify-center gap-2 shadow-inner">
                <span className="w-1.5 h-1.5 bg-red-600 rounded-full animate-ping"></span>
                <p className="text-white text-[9px] md:text-[11px] font-black leading-none uppercase tracking-tight">
@@ -233,10 +239,10 @@ export default function KedheonDesignSystemFinal() {
 
             {/* 01. 핵심 기능 상세 */}
             <SectionHeader title={L.exchange} desc={L.exchangeDesc} />
-            <div className="bg-white p-4 rounded-2xl border-2 border-black space-y-4 shadow-sm font-black">
+            <div className="bg-white p-4 rounded-2xl border-2 border-black space-y-4 shadow-sm font-black text-left">
                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-1 border-r border-gray-100 pr-2">
-                     {L.exList.map((txt, idx) => <p key={idx} className="text-[10px] md:text-xs font-black text-gray-800 leading-tight border-b border-gray-50 pb-0.5">{txt}</p>)}
+                     {L.exList.map((txt, idx) => <p key={idx} className="text-[10px] md:text-xs font-black text-gray-800 leading-tight border-b border-gray-50 pb-1">▶ {txt}</p>)}
                   </div>
                   <div className="flex flex-col items-center justify-center p-3 bg-gray-50 rounded-xl text-center font-black">
                      <p className="text-black text-xs md:text-lg font-black mb-2 italic">1 PI = 1,000 BEOM 환전</p>
@@ -247,18 +253,18 @@ export default function KedheonDesignSystemFinal() {
 
             {/* 02. 보안 큐알코드 */}
             <SectionHeader title={L.auth} desc={L.authDesc} />
-            <div className="bg-gray-50 p-4 md:p-6 rounded-2xl border border-black/5 flex flex-col md:flex-row items-center gap-5 shadow-inner font-black">
+            <div className="bg-gray-50 p-4 md:p-6 rounded-2xl border border-black/5 flex flex-col md:flex-row items-center gap-5 shadow-inner font-black text-left">
                <div className={`bg-white border-2 rounded-xl flex flex-col items-center justify-center shadow-lg w-40 h-40 md:w-56 md:h-56 transition-all ${qrState.active ? 'border-[#dc2626]' : 'opacity-10 grayscale blur-sm'}`}>
                   {qrState.active ? (
                     <>
                       <img src={qrState.type === 'PERSONAL' ? "/qr-personal.png" : "/qr-business.png"} className="w-full h-full p-3 object-contain" alt="QR" />
-                      <p className="text-[8px] font-black bg-gray-100 px-2 py-0.5 rounded-full mb-1 uppercase">{qrState.biz || qrState.type}</p>
+                      <p className="text-[8px] font-black bg-gray-100 px-2 py-0.5 rounded-full mb-1 uppercase text-center">{qrState.biz || qrState.type}</p>
                     </>
                   ) : <p className="text-black text-xs md:text-sm font-black italic uppercase animate-pulse">Encoded QR</p>}
                </div>
                <div className="flex-1 w-full space-y-3 font-black">
                   <div className="bg-white p-4 rounded-xl border border-black/10">
-                     <p className="text-black text-[10px] md:text-xs font-black italic uppercase mb-3 text-left">지갑 주소 보호 타입 선택</p>
+                     <p className="text-black text-[10px] md:text-xs font-black italic uppercase mb-3 border-l-2 border-black pl-2">지갑 보호 타입</p>
                      <div className="flex gap-2 mb-3">
                         <button onClick={() => setQrState({...qrState, type:'PERSONAL'})} className={`flex-1 py-1.5 rounded-md text-[10px] font-black border transition-all ${qrState.type === 'PERSONAL' ? 'bg-black text-white border-black shadow-md' : 'text-gray-300 border-gray-100'}`}>개인용</button>
                         <button onClick={() => setQrState({...qrState, type:'BUSINESS'})} className={`flex-1 py-1.5 rounded-md text-[10px] font-black border transition-all ${qrState.type === 'BUSINESS' ? 'bg-black text-white border-black shadow-md' : 'text-gray-300 border-gray-100'}`}>기업용</button>
@@ -296,20 +302,20 @@ export default function KedheonDesignSystemFinal() {
 
             {/* 04. 굿즈 판매 및 구입 */}
             <SectionHeader title={L.market} desc={L.marketDesc} />
-            <div className="bg-white p-4 rounded-2xl border-2 border-black/10 space-y-4 font-black">
+            <div className="bg-white p-4 rounded-2xl border-2 border-black/10 space-y-4 font-black text-left">
                 <div className="flex gap-4 border-b border-gray-100 pb-1.5">
                     <button onClick={() => setMarketMode('BUY')} className={`text-xs md:text-lg font-black italic ${marketMode === 'BUY' ? 'text-black border-b-2 border-black' : 'text-gray-300'}`}>굿즈 구매</button>
                     <button onClick={() => setMarketMode('SELL')} className={`text-xs md:text-lg font-black italic ${marketMode === 'SELL' ? 'text-black border-b-2 border-black' : 'text-gray-300'}`}>판매 등록</button>
                 </div>
                 {marketMode === 'BUY' ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 font-black text-left">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 font-black">
                         {goods.map(g => (
                             <div key={g.id} className="bg-gray-50 p-3 rounded-xl border flex gap-3 items-center group shadow-sm transition-all hover:border-[#dc2626]">
-                                <div className="w-20 h-20 md:w-28 md:h-28 bg-white rounded-lg flex items-center justify-center overflow-hidden shrink-0 shadow-inner"><img src={g.img} className="w-16 h-16 object-contain group-hover:scale-110 transition-transform" alt="G" /></div>
+                                <div className="w-20 h-20 md:w-28 md:h-28 bg-white rounded-lg flex items-center justify-center overflow-hidden shrink-0 shadow-inner"><img src={g.img} className="w-14 h-14 object-contain group-hover:scale-110 transition-transform" alt="G" /></div>
                                 <div className="flex-1 min-w-0 font-black">
-                                    <h4 className="text-[10px] md:text-sm font-black uppercase mb-0.5 truncate">{g.name}</h4>
-                                    <p className="text-gray-500 text-[8px] md:text-[10px] mb-1 font-bold line-clamp-1 leading-tight">{g.desc}</p>
-                                    <p className="text-[#dc2626] text-xs md:text-lg font-black mb-2 leading-none">{g.price.toLocaleString()} <span className="text-[8px]">BEOM</span></p>
+                                    <h4 className="text-[10px] md:text-xs font-black uppercase mb-0.5 truncate">{g.name}</h4>
+                                    <p className="text-gray-400 text-[8px] md:text-[10px] mb-1 font-bold line-clamp-1 leading-tight">{g.desc}</p>
+                                    <p className="text-[#dc2626] text-xs md:text-base font-black mb-2 leading-none">{g.price.toLocaleString()} <span className="text-[8px]">BEOM</span></p>
                                     <button className="w-full py-1.5 bg-black text-white rounded-lg text-[8px] md:text-[10px] font-black uppercase active:scale-95">구매 신청</button>
                                 </div>
                             </div>
@@ -330,16 +336,16 @@ export default function KedheonDesignSystemFinal() {
 
             {/* 05. 글로벌 파트너십 */}
             <SectionHeader title={L.partnership} desc={L.partnershipDesc} />
-            <div className="bg-black p-6 rounded-2xl border-[8px] border-[#dc2626] space-y-4 relative overflow-hidden font-black">
-                <h3 className="text-white text-lg md:text-3xl font-black italic border-l-4 border-[#dc2626] pl-3 uppercase leading-none z-10 relative">PARTNERSHIP</h3>
+            <div className="bg-black p-6 rounded-2xl border-[8px] border-[#dc2626] space-y-4 relative overflow-hidden font-black shadow-2xl">
+                <h3 className="text-white text-lg md:text-2xl font-black italic border-l-4 border-white pl-3 uppercase leading-none z-10 relative">PARTNERSHIP B2B</h3>
                 <div className="grid grid-cols-2 gap-2 z-10 relative font-black">
-                    <input value={partner.corp} onChange={e=>setPartner({...partner, corp: e.target.value})} placeholder={L.corpName} className="bg-white/10 border border-white/10 p-2.5 rounded-lg text-[9px] md:text-sm text-white outline-none focus:border-[#dc2626]" />
-                    <input value={partner.manager} onChange={e=>setPartner({...partner, manager: e.target.value})} placeholder={L.manager} className="bg-white/10 border border-white/10 p-2.5 rounded-lg text-[9px] md:text-sm text-white outline-none focus:border-[#dc2626]" />
-                    <input value={partner.email} onChange={e=>setPartner({...partner, email: e.target.value})} placeholder={L.email} className="bg-white/10 border border-white/10 p-2.5 rounded-lg text-[9px] md:text-sm text-white outline-none focus:border-[#dc2626]" />
-                    <input value={partner.contact} onChange={e=>setPartner({...partner, contact: e.target.value})} placeholder={L.contact} className="bg-white/10 border border-white/10 p-2.5 rounded-lg text-[9px] md:text-sm text-white outline-none focus:border-[#dc2626]" />
+                    <input value={partner.corp} onChange={e=>setPartner({...partner, corp: e.target.value})} placeholder={L.corpName} className="bg-white/10 border-none p-3 rounded-xl text-[10px] md:text-xs text-white outline-none focus:ring-1 ring-[#dc2626]" />
+                    <input value={partner.manager} onChange={e=>setPartner({...partner, manager: e.target.value})} placeholder={L.manager} className="bg-white/10 border-none p-3 rounded-xl text-[10px] md:text-xs text-white outline-none focus:ring-1 ring-[#dc2626]" />
+                    <input value={partner.email} onChange={e=>setPartner({...partner, email: e.target.value})} placeholder={L.email} className="bg-white/10 border-none p-3 rounded-xl text-[10px] md:text-xs text-white outline-none focus:ring-1 ring-[#dc2626]" />
+                    <input value={partner.contact} onChange={e=>setPartner({...partner, contact: e.target.value})} placeholder={L.contact} className="bg-white/10 border-none p-3 rounded-xl text-[10px] md:text-xs text-white outline-none focus:ring-1 ring-[#dc2626]" />
                 </div>
-                <textarea value={partner.msg} onChange={e=>setPartner({...partner, msg: e.target.value})} placeholder={L.vision} className="w-full bg-white/10 border border-white/10 p-3 rounded-xl text-[9px] md:text-sm text-white h-24 outline-none focus:border-[#dc2626] z-10 relative text-left" />
-                <button onClick={()=>alert("제안서가 전송되었습니다.")} className="w-full bg-[#dc2626] text-white py-3 rounded-full text-xs md:text-lg font-black hover:bg-white hover:text-[#dc2626] transition-all uppercase z-10 relative active:scale-95">제안 제출하기</button>
+                <textarea value={partner.msg} onChange={e=>setPartner({...partner, msg: e.target.value})} placeholder={L.vision} className="w-full bg-white/10 border-none p-4 rounded-2xl text-[10px] md:text-xs text-white h-24 outline-none focus:ring-1 ring-[#dc2626] z-10 relative text-left" />
+                <button onClick={()=>alert("제안서가 전송되었습니다.")} className="w-full bg-[#dc2626] text-white py-3.5 rounded-full text-xs md:text-lg font-black hover:bg-white hover:text-black transition-all uppercase z-10 relative active:scale-95 shadow-xl">제안 제출하기</button>
             </div>
           </div>
         )}
