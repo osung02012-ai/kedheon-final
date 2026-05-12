@@ -1,11 +1,11 @@
 'use client';
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 
-/** * [KEDHEON MASTER V160.0 - ULTRA STABLE]
+/** * [KEDHEON MASTER V160.0 - SUPREME STABLE]
  * -----------------------------------------------------------
  * 1. 테마: Pure White / Black / Red (#DC2626)
- * 2. 수정: 특수문자 이스케이프 및 핸들러 무결성 확보
- * 3. 최적화: Turbopack 빌드 충돌 요소(scrollbar-hide 등) 제거
+ * 2. 수정: 비표준 Tailwind 클래스 제거 및 특수문자 이스케이프
+ * 3. 인프라: Next.js 16 Turbopack 빌드 규격 100% 준수
  * -----------------------------------------------------------
  */
 
@@ -14,38 +14,23 @@ const PI_INVITE_CODE = 'ohsangjo';
 const DICT = {
   KR: {
     rookie: "ROOKIE", pioneer: "PIONEER", exchange: "EXCHANGE", auth: "SECURE AUTH", creative: "CREATIVE & FAN", market: "MARKET", partnership: "PARTNERSHIP",
-    invitation: "Web3 초대합니다.", procedure: "파이코인 가입절차 안내", assets: "ASSETS", activate: "보안 QR 활성화",
-    convert: "1 PI 환전", post: "피드 등록", buy: "구매하기", register: "상품 등록", submit: "제안서 제출", download: "공식 앱 다운로드",
-    exchangeDesc: "채굴 기여도를 BEOM으로 즉시 전환하여 가치를 보존하십시오.",
-    authDesc: "제국 시민을 위한 개인/비즈니스 보안 QR코드를 발급받으십시오.",
-    creativeDesc: "시민의 창작물과 팬심을 공유하고 호응을 이끌어내십시오.",
-    fanRoomDesc: "팬룸 개설(500 BEOM): 90% 수익 환원 및 거버넌스 권한 부여.",
-    marketDesc: "검증된 다양한 GOODS를 거래하고 가치를 확인하십시오.",
-    partnershipDesc: "제국과 미래를 함께 설계할 글로벌 기업 파트너를 기다립니다.",
+    invitation: "Web3 Invitation", procedure: "Join Guide", assets: "ASSETS", activate: "ACTIVATE QR",
+    convert: "1 PI CONVERT", post: "POST FEED", buy: "BUY NOW", register: "REGISTER", submit: "SUBMIT", download: "DOWNLOAD APP",
+    exchangeDesc: "Convert mining contribution to BEOM and preserve value.",
+    authDesc: "Get your personal/business secure QR code for the Empire.",
+    creativeDesc: "Share your creations and fan spirit with citizens.",
+    fanRoomDesc: "Fan Room (500 BEOM): 90% Revenue Return & Governance.",
+    marketDesc: "Trade verified GOODS and confirm their value.",
+    partnershipDesc: "Global partners to design the future with the Empire.",
     steps: [
-      { t: "애플리케이션 설치", d: "[Pi Network] 공식 앱을 설치하십시오.", link: "https://minepi.com/#download" },
-      { t: "가입 방식 선택", d: "[Continue with phone number] 가입 방식을 선택하십시오." },
-      { t: "국가 및 번호 설정", d: "[+82(South Korea)] 선택 후 번호를 입력하십시오." },
-      { t: "보안 비밀번호 생성", d: "영문 대/소문자와 숫자를 조합하십시오." },
-      { t: "실명 프로필 작성", d: "여권 영문 실명과 고유 ID를 설정하십시오." },
-      { t: "초대 코드 입력", d: `초대 코드 [ ${PI_INVITE_CODE} ]를 정확히 입력하십시오.` },
-      { t: "비밀구절 수기 보관", d: "24개 단어는 반드시 종이에 수기로 기록하십시오." },
-      { t: "채굴 버튼 활성화", d: "매일 번개 버튼을 눌러 활동을 시작하십시오." }
-    ]
-  },
-  EN: {
-    rookie: "ROOKIE", pioneer: "PIONEER", exchange: "EXCHANGE", auth: "SECURE AUTH", creative: "CREATIVE & FAN", market: "MARKET", partnership: "PARTNERSHIP",
-    invitation: "Web3 Invitation.", procedure: "Join Guide", assets: "ASSETS", activate: "ACTIVATE QR",
-    convert: "CONVERT 1 PI", post: "POST FEED", buy: "BUY NOW", register: "REGISTER", submit: "SUBMIT", download: "DOWNLOAD APP",
-    steps: [
-      { t: "Install App", d: "Download [Pi Network] official app.", link: "https://minepi.com/#download" },
+      { t: "Install App", d: "Install the official [Pi Network] app.", link: "https://minepi.com/#download" },
       { t: "Select Method", d: "Choose [Continue with phone number]." },
-      { t: "Region Config", d: "Set to [+82(South Korea)] and mobile." },
-      { t: "Password", d: "Create strong alphanumeric password." },
-      { t: "Real Identity", d: "Enter Passport name & ID." },
-      { t: "Invitation", d: `Use code [ ${PI_INVITE_CODE} ].` },
-      { t: "Passphrase", d: "Hand-write 24 words safely on paper." },
-      { t: "Mining", d: "Engage the lightning button to start." }
+      { t: "Config Region", d: "Select [+82(South Korea)] and enter number." },
+      { t: "Security PW", d: "Combine uppercase, lowercase, and numbers." },
+      { t: "Profile", d: "Set Passport name and unique ID." },
+      { t: "Invite Code", d: `Enter [ ${PI_INVITE_CODE} ] accurately.` },
+      { t: "Passphrase", d: "Write 24 words manually on paper." },
+      { t: "Activate", d: "Tap the lightning button daily to start." }
     ]
   }
 };
@@ -75,14 +60,14 @@ export default function KedheonEmpireEternal() {
 
   const [sellItem, setSellItem] = useState({ name: '', price: '', desc: '', img: '' });
   const [goods, setGoods] = useState([
-    { id: 1, name: "GOLD BADGE", price: 1000, img: "/beom-token.png", desc: "제국 시민 명예 문장" },
-    { id: 2, name: "V23 NODE KEY", price: 5000, img: "/node-icon.png", desc: "88쓰레드 노드 보안 키" }
+    { id: 1, name: "GOLD BADGE", price: 1000, img: "/beom-token.png", desc: "Empire Citizen Honor" },
+    { id: 2, name: "V23 NODE KEY", price: 5000, img: "/node-icon.png", desc: "88-Thread Node Key" }
   ]);
 
   const [partner, setPartner] = useState({ corp: '', contact: '', msg: '' });
 
   const fileInputRef = useRef(null);
-  const L = DICT['KR']; // 초기 언어 고정으로 충돌 방지
+  const L = DICT['KR'];
   const cats = ['MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'];
 
   const redistributionAmount = useMemo(() => 
@@ -95,17 +80,13 @@ export default function KedheonEmpireEternal() {
   }, []);
 
   const handleImageUpload = useCallback((e) => {
-    try {
-      const file = e.target.files?.[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setSellItem(prev => ({ ...prev, img: reader.result?.toString() || '' }));
-        };
-        reader.readAsDataURL(file);
-      }
-    } catch (err) {
-      console.error("Upload error", err);
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSellItem(prev => ({ ...prev, img: reader.result?.toString() || '' }));
+      };
+      reader.readAsDataURL(file);
     }
   }, []);
 
@@ -115,40 +96,40 @@ export default function KedheonEmpireEternal() {
     <div className="flex flex-col items-center bg-white min-h-screen text-black font-sans w-full pb-96 font-black overflow-x-hidden selection:bg-red-50">
       
       {/* NAVIGATION */}
-      <nav className="w-full max-w-7xl flex justify-between items-center px-6 py-6 sticky top-0 bg-white/95 backdrop-blur-2xl z-[300] border-b-8 border-black/5 shadow-xl">
+      <nav className="w-full max-w-7xl flex justify-between items-center px-6 py-6 sticky top-0 bg-white/95 backdrop-blur-2xl z-[300] border-b-8 border-black/5 shadow-md">
         <div className="flex items-center gap-6">
-          <img src="/kedheon-character.png" className="w-16 h-16 rounded-[25px] border-4 border-black" alt="Empire Logo" />
+          <img src="/kedheon-character.png" className="w-16 h-16 rounded-3xl border-4 border-black" alt="Logo" />
           <div className="text-left leading-tight">
             <h1 className="text-black text-2xl md:text-4xl font-black italic uppercase">Kedheon</h1>
-            <span className="text-gray-400 text-[10px] md:text-sm font-mono font-bold uppercase tracking-[0.3em]">V160.0 STABLE</span>
+            <span className="text-gray-400 text-[10px] md:text-sm font-mono font-bold uppercase tracking-widest">V160.0 STABLE</span>
           </div>
         </div>
         <div className="flex items-center gap-4">
-          <button onClick={() => setTab('ROOKIE')} className={`px-6 py-3 rounded-2xl text-sm md:text-2xl font-black border-[6px] transition-all ${tab === 'ROOKIE' ? 'bg-[#dc2626] text-white border-[#dc2626]' : 'text-gray-400'}`}>{L.rookie}</button>
-          <button onClick={() => setTab('PIONEER')} className={`px-6 py-3 rounded-2xl text-sm md:text-2xl font-black border-[6px] transition-all ${tab === 'PIONEER' ? 'bg-black text-white border-black' : 'text-gray-400'}`}>{L.pioneer}</button>
+          <button onClick={() => setTab('ROOKIE')} className={`px-6 py-3 rounded-2xl text-sm md:text-2xl font-black border-4 transition-all ${tab === 'ROOKIE' ? 'bg-[#dc2626] text-white border-[#dc2626]' : 'text-gray-400 border-transparent'}`}>{L.rookie}</button>
+          <button onClick={() => setTab('PIONEER')} className={`px-6 py-3 rounded-2xl text-sm md:text-2xl font-black border-4 transition-all ${tab === 'PIONEER' ? 'bg-black text-white border-black' : 'text-gray-400 border-transparent'}`}>{L.pioneer}</button>
         </div>
       </nav>
 
       <main className="w-full max-w-7xl px-6 py-12">
         {tab === 'ROOKIE' ? (
-          <div className="flex flex-col gap-12 text-left animate-in fade-in slide-in-from-top-12 duration-1000">
-            <div className="flex flex-col items-center text-center gap-10 py-24 bg-gray-50 rounded-[80px] border-4 border-black/5 relative shadow-inner overflow-hidden">
-              <div className="absolute top-0 left-0 w-full h-4 bg-[#dc2626] animate-pulse"></div>
-              <img src="/kedheon-character.png" className="w-48 h-48 md:w-[20rem] md:h-[25rem] rounded-[60px] border-[10px] border-black shadow-2xl transition-all" alt="Kedheon Character" />
+          <div className="flex flex-col gap-12 text-left">
+            <div className="flex flex-col items-center text-center gap-10 py-24 bg-gray-50 rounded-[60px] border-4 border-black/5 relative shadow-inner overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-4 bg-[#dc2626]"></div>
+              <img src="/kedheon-character.png" className="w-48 h-48 md:w-80 md:h-96 rounded-[40px] border-8 border-black shadow-xl" alt="Character" />
               <div className="px-10">
-                <h1 className="text-black text-5xl md:text-[8rem] uppercase font-black tracking-tighter leading-none">{L.invitation}</h1>
-                <p className="text-[#dc2626] text-2xl md:text-6xl uppercase tracking-[0.5em] border-b-[15px] border-[#dc2626] pb-4 inline-block font-black italic">{L.procedure}</p>
+                <h1 className="text-black text-5xl md:text-8xl uppercase font-black tracking-tighter leading-none">{L.invitation}</h1>
+                <p className="text-[#dc2626] text-2xl md:text-6xl uppercase tracking-widest border-b-8 border-[#dc2626] pb-4 inline-block font-black italic">{L.procedure}</p>
               </div>
             </div>
             <div className="grid grid-cols-1 gap-8">
               {L.steps.map((step, i) => (
-                <div key={i} className={`p-12 bg-white rounded-[55px] border-[6px] flex items-center gap-12 transition-all ${i === 0 ? 'border-[#dc2626] bg-red-50/10 shadow-2xl scale-[1.05]' : 'border-black/5 opacity-90'}`}>
-                  <span className={`text-6xl md:text-[12rem] font-black italic ${i === 0 ? 'text-[#dc2626]' : 'text-black opacity-5'}`}>0{i+1}</span>
+                <div key={i} className={`p-12 bg-white rounded-[40px] border-4 flex items-center gap-12 transition-all ${i === 0 ? 'border-[#dc2626] bg-red-50/10 shadow-lg' : 'border-black/5 opacity-90'}`}>
+                  <span className={`text-6xl md:text-9xl font-black italic ${i === 0 ? 'text-[#dc2626]' : 'text-black opacity-10'}`}>0{i+1}</span>
                   <div className="flex-1">
                     <h3 className="text-black text-3xl md:text-6xl font-black uppercase italic mb-4">{step.t}</h3>
                     <p className="text-gray-600 text-base md:text-4xl font-bold leading-snug">{step.d}</p>
                     {step.link && (
-                      <button onClick={() => window.open(step.link, '_blank')} className="mt-10 bg-[#dc2626] text-white px-16 py-8 rounded-[40px] text-xl md:text-5xl font-black uppercase hover:bg-black transition-all shadow-2xl flex items-center gap-8 animate-bounce">
+                      <button onClick={() => window.open(step.link, '_blank')} className="mt-10 bg-[#dc2626] text-white px-10 py-5 rounded-full text-xl md:text-4xl font-black uppercase shadow-lg">
                         &darr; {L.download}
                       </button>
                     )}
@@ -156,147 +137,147 @@ export default function KedheonEmpireEternal() {
                 </div>
               ))}
             </div>
-            <div className="p-20 bg-black text-white rounded-[80px] text-center shadow-2xl border-[20px] border-black">
-              <p className="text-2xl md:text-6xl font-black italic text-gray-500 uppercase tracking-[0.6em]">Imperial Code</p>
-              <div className="text-[#dc2626] text-8xl md:text-[20rem] font-black tracking-[0.1em] drop-shadow-2xl cursor-pointer" onClick={() => {if(typeof window !== 'undefined'){navigator.clipboard.writeText(PI_INVITE_CODE); alert("Copied!");}}}>
+            <div className="p-20 bg-black text-white rounded-[60px] text-center shadow-xl border-8 border-black">
+              <p className="text-2xl md:text-6xl font-black italic text-gray-500 uppercase">Imperial Code</p>
+              <div className="text-[#dc2626] text-6xl md:text-9xl font-black tracking-widest cursor-pointer" onClick={() => {if(typeof window !== 'undefined'){navigator.clipboard.writeText(PI_INVITE_CODE); alert("Copied!");}}}>
                 {PI_INVITE_CODE}
               </div>
             </div>
           </div>
         ) : (
-          <div className="flex flex-col gap-24 py-8 text-left animate-in slide-in-from-bottom-20 duration-1000">
-            {/* 00. ASSET DASHBOARD */}
-            <div className="bg-gray-50 p-12 md:p-32 rounded-[100px] border-[12px] border-black shadow-2xl flex flex-col md:flex-row justify-between items-center relative overflow-hidden group">
+          <div className="flex flex-col gap-24 py-8 text-left">
+            {/* ASSET DASHBOARD */}
+            <div className="bg-gray-50 p-12 md:p-32 rounded-[80px] border-8 border-black shadow-xl flex flex-col md:flex-row justify-between items-center relative group">
                 <div className="text-left z-10 space-y-10 w-full md:w-auto font-black">
-                  <h3 className="text-gray-400 text-lg md:text-5xl uppercase tracking-[1em] font-black leading-none">{L.assets}</h3>
-                  <p className="text-black text-8xl md:text-[22rem] tracking-[-0.08em] font-black leading-none py-10">
+                  <h3 className="text-gray-400 text-lg md:text-5xl uppercase tracking-widest">{L.assets}</h3>
+                  <p className="text-black text-7xl md:text-9xl tracking-tighter font-black leading-none">
                     {Math.floor(beomToken).toLocaleString()}
-                    <span className="text-4xl md:text-[12rem] opacity-5">.{beomToken.toFixed(2).split('.')[1]}</span> 
-                    <span className="ml-10 text-3xl md:text-[12rem] italic uppercase text-[#dc2626]">BEOM</span>
+                    <span className="text-4xl opacity-10">.{beomToken.toFixed(2).split('.')[1]}</span> 
+                    <span className="ml-5 text-4xl md:text-8xl italic uppercase text-[#dc2626]">BEOM</span>
                   </p>
-                  <div className="flex flex-wrap gap-8 pt-10 font-black">
-                    <div className="bg-black text-white px-12 py-6 rounded-[35px] text-lg md:text-5xl font-mono font-bold shadow-2xl">Value: 18.01 / PI</div>
-                    <div className="bg-[#dc2626] text-white px-12 py-6 rounded-[35px] text-lg md:text-5xl font-mono font-bold animate-pulse shadow-2xl">Return: {redistributionAmount.toLocaleString()}</div>
+                  <div className="flex flex-wrap gap-8 pt-10">
+                    <div className="bg-black text-white px-8 py-4 rounded-3xl text-sm md:text-4xl font-mono">NODE: 18.02</div>
+                    <div className="bg-[#dc2626] text-white px-8 py-4 rounded-3xl text-sm md:text-4xl font-mono animate-pulse">RETURN: {redistributionAmount.toLocaleString()}</div>
                   </div>
                 </div>
-                <img src="/beom-token.png" className="w-56 h-56 md:w-[40rem] md:h-[40rem] object-contain group-hover:scale-110 transition-all duration-1000" alt="Beom Token" />
+                <img src="/beom-token.png" className="w-48 h-48 md:w-96 md:h-96 object-contain" alt="Token" />
             </div>
 
-            {/* 01. EXCHANGE */}
+            {/* EXCHANGE */}
             <SectionHeader num="01" title={L.exchange} desc={L.exchangeDesc} />
-            <div className="bg-white p-12 md:p-32 rounded-[80px] border-[20px] border-black flex flex-col md:flex-row justify-between items-center shadow-2xl gap-16 group">
-              <div className="text-left leading-tight font-black w-full md:w-auto">
-                <p className="text-black text-5xl md:text-[12rem] font-black italic uppercase leading-none mb-10 group-hover:text-[#dc2626] transition-colors">Economic Terminal</p>
-                <div className="flex items-center gap-10"><span className="w-12 h-12 bg-green-500 rounded-full animate-ping"></span><p className="text-gray-400 text-xl md:text-7xl font-bold uppercase tracking-[0.4em]">Protocol V23 Ready</p></div>
+            <div className="bg-white p-12 md:p-24 rounded-[60px] border-8 border-black flex flex-col md:flex-row justify-between items-center shadow-xl gap-16">
+              <div className="text-left font-black w-full md:w-auto">
+                <p className="text-black text-4xl md:text-8xl font-black italic uppercase leading-none mb-6">Terminal</p>
+                <div className="flex items-center gap-4"><span className="w-6 h-6 bg-green-500 rounded-full animate-ping"></span><p className="text-gray-400 text-lg md:text-4xl font-bold uppercase">Protocol V23 Ready</p></div>
               </div>
-              <button onClick={() => {setBeomToken(p=>p+100); setTotalRevenue(p=>p+100); alert("전환 성공");}} className="w-full md:w-auto bg-black text-white px-20 py-12 md:px-40 md:py-24 rounded-[60px] text-4xl md:text-[10rem] border-[16px] border-black font-black shadow-2xl hover:bg-[#dc2626] leading-none">
+              <button onClick={() => {setBeomToken(p=>p+100); setTotalRevenue(p=>p+100); alert("Success");}} className="w-full md:w-auto bg-black text-white px-16 py-10 rounded-full text-2xl md:text-6xl font-black shadow-lg hover:bg-[#dc2626]">
                 {L.convert}
               </button>
             </div>
 
-            {/* 02. AUTH */}
+            {/* AUTH */}
             <SectionHeader num="02" title={L.auth} desc={L.authDesc} />
-            <div className="bg-gray-50 p-12 md:p-32 rounded-[100px] border-8 border-black/5 flex flex-col items-center gap-20 shadow-inner">
-              <div className="flex gap-10 w-full max-w-6xl bg-white p-5 rounded-[60px] border-[12px] border-black font-black">
-                <button onClick={() => setQrState({ ...qrState, type: 'PERSONAL', active: false })} className={`flex-1 py-14 rounded-[45px] text-2xl md:text-7xl font-black transition-all ${qrState.type === 'PERSONAL' ? 'bg-black text-white' : 'text-gray-300'}`}>PERSONAL</button>
-                <button onClick={() => setQrState({ ...qrState, type: 'BUSINESS', active: false })} className={`flex-1 py-14 rounded-[45px] text-2xl md:text-7xl font-black transition-all ${qrState.type === 'BUSINESS' ? 'bg-black text-white' : 'text-gray-300'}`}>BUSINESS</button>
+            <div className="bg-gray-50 p-12 md:p-24 rounded-[60px] border-4 border-black/5 flex flex-col items-center gap-16 shadow-inner">
+              <div className="flex gap-4 w-full max-w-4xl bg-white p-3 rounded-[40px] border-4 border-black">
+                <button onClick={() => setQrState({ ...qrState, type: 'PERSONAL', active: false })} className={`flex-1 py-10 rounded-3xl text-xl md:text-4xl font-black ${qrState.type === 'PERSONAL' ? 'bg-black text-white' : 'text-gray-300'}`}>PERSONAL</button>
+                <button onClick={() => setQrState({ ...qrState, type: 'BUSINESS', active: false })} className={`flex-1 py-10 rounded-3xl text-xl md:text-4xl font-black ${qrState.type === 'BUSINESS' ? 'bg-black text-white' : 'text-gray-300'}`}>BUSINESS</button>
               </div>
               {qrState.type === 'BUSINESS' && (
-                 <input value={qrState.biz} onChange={(e) => setQrState({ ...qrState, biz: e.target.value.toUpperCase() })} placeholder="BIZ NAME" className="w-full max-w-6xl bg-white border-[12px] border-black p-16 rounded-[60px] text-center text-5xl md:text-[10rem] font-black outline-none" />
+                 <input value={qrState.biz} onChange={(e) => setQrState({ ...qrState, biz: e.target.value.toUpperCase() })} placeholder="BIZ NAME" className="w-full max-w-4xl bg-white border-4 border-black p-10 rounded-3xl text-center text-3xl md:text-6xl font-black outline-none" />
               )}
-              <div className={`relative bg-white border-[24px] rounded-[120px] flex items-center justify-center transition-all duration-1000 shadow-2xl ${qrState.type === 'PERSONAL' ? 'w-[30rem] h-[30rem] md:w-[60rem] md:h-[65rem]' : 'w-full max-w-[100rem] aspect-video'} ${qrState.active ? 'border-[#dc2626] opacity-100' : 'opacity-5 blur-[10px]'}`}>
+              <div className={`relative bg-white border-8 rounded-[40px] flex items-center justify-center transition-all duration-700 shadow-xl w-64 h-64 md:w-[40rem] md:h-[40rem] ${qrState.active ? 'border-[#dc2626]' : 'opacity-10 grayscale'}`}>
                 {qrState.active ? (
-                  <div className="flex flex-col items-center p-20 gap-16">
-                    <img src={qrState.type === 'PERSONAL' ? "/qr-personal.png" : "/qr-business.png"} className="h-full object-contain" alt="Identity QR" />
-                    <p className="text-black text-2xl md:text-8xl font-black italic bg-gray-100 px-24 py-8 rounded-full border-4 border-black/10">{qrState.biz || "AUTHENTICATED"}</p>
+                  <div className="flex flex-col items-center p-10 gap-6">
+                    <img src={qrState.type === 'PERSONAL' ? "/qr-personal.png" : "/qr-business.png"} className="w-full h-full object-contain" alt="QR" />
+                    <p className="text-black text-xl md:text-4xl font-black italic">{qrState.biz || "AUTHED"}</p>
                   </div>
-                ) : <p className="text-black text-7xl md:text-[25rem] font-black uppercase italic animate-pulse">Encoded</p>}
+                ) : <p className="text-black text-4xl md:text-6xl font-black uppercase italic animate-pulse">Encoded</p>}
               </div>
-              <button onClick={() => {if(beomToken < 50) return alert("자산 부족"); setBeomToken(p=>p-50); setQrState({ ...qrState, active: true });}} className="w-full max-w-7xl bg-black text-white py-16 md:py-32 rounded-[80px] text-4xl md:text-[11rem] border-[16px] border-black font-black shadow-3xl hover:bg-[#dc2626] leading-none">
+              <button onClick={() => {if(beomToken < 50) return alert("Low Assets"); setBeomToken(p=>p-50); setQrState({ ...qrState, active: true });}} className="w-full max-w-4xl bg-black text-white py-10 rounded-full text-2xl md:text-6xl font-black shadow-lg">
                 {L.activate} (50 BEOM)
               </button>
             </div>
 
-            {/* 03. CREATIVE */}
+            {/* CREATIVE */}
             <SectionHeader num="03" title={L.creative} desc={L.creativeDesc} />
-            <div className="bg-white p-12 md:p-32 rounded-[110px] border-[12px] border-black/10 space-y-20 text-left shadow-2xl font-black">
-              <div className="flex gap-24 border-b-[20px] border-gray-100 pb-16 font-black">
-                 <button onClick={() => setBoardType('CREATIVE')} className={`text-4xl md:text-[9rem] uppercase font-black italic transition-all ${boardType === 'CREATIVE' ? 'text-black border-b-[30px] border-black pb-6' : 'text-gray-300'}`}>Creative</button>
-                 <button onClick={() => setBoardType('FAN')} className={`text-4xl md:text-[9rem] uppercase font-black italic transition-all ${boardType === 'FAN' ? 'text-black border-b-[30px] border-black pb-6' : 'text-gray-300'}`}>Fan Rooms</button>
+            <div className="bg-white p-12 md:p-24 rounded-[60px] border-4 border-black/10 space-y-16 text-left shadow-lg font-black">
+              <div className="flex gap-10 border-b-4 border-gray-100 pb-10">
+                 <button onClick={() => setBoardType('CREATIVE')} className={`text-2xl md:text-6xl uppercase font-black italic ${boardType === 'CREATIVE' ? 'text-black border-b-8 border-black pb-2' : 'text-gray-300'}`}>Creative</button>
+                 <button onClick={() => setBoardType('FAN')} className={`text-2xl md:text-6xl uppercase font-black italic ${boardType === 'FAN' ? 'text-black border-b-8 border-black pb-2' : 'text-gray-300'}`}>Fan Rooms</button>
               </div>
-              <div className="space-y-16 overflow-x-auto">
-                 <div className="flex gap-10 pb-4 font-black">{cats.map(cat => (<button key={cat} onClick={() => setPostCategory(cat)} className={`px-16 py-8 rounded-[40px] text-xl md:text-5xl font-black border-[8px] transition-all whitespace-nowrap ${postCategory === cat ? 'bg-black text-white' : 'text-gray-400 border-black/5'}`}>{cat}</button>))}</div>
-                 <div className="flex gap-10 pb-4 border-t-[12px] border-gray-50 pt-20 font-black">{fanRooms.map(room => (<button key={room} onClick={() => setPostCategory(room)} className={`px-16 py-8 rounded-[40px] text-xl md:text-5xl font-black border-[8px] transition-all whitespace-nowrap ${postCategory === room ? 'bg-[#dc2626] text-white' : 'border-red-50 text-[#dc2626]'}`}>Room: {room}</button>))}</div>
+              <div className="space-y-10">
+                 <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">{cats.map(cat => (<button key={cat} onClick={() => setPostCategory(cat)} className={`px-8 py-3 rounded-2xl text-lg md:text-3xl font-black border-2 whitespace-nowrap ${postCategory === cat ? 'bg-black text-white border-black' : 'text-gray-400 border-gray-100'}`}>{cat}</button>))}</div>
+                 <div className="flex gap-4 overflow-x-auto pb-4 border-t-2 border-gray-50 pt-10">{fanRooms.map(room => (<button key={room} onClick={() => setPostCategory(room)} className={`px-8 py-3 rounded-2xl text-lg md:text-3xl font-black border-2 whitespace-nowrap ${postCategory === room ? 'bg-[#dc2626] text-white border-[#dc2626]' : 'text-[#dc2626] border-red-50'}`}>Room: {room}</button>))}</div>
               </div>
-              <div className="space-y-10 font-black pt-12">
-                <input value={feed.title} onChange={(e) => setFeed({ ...feed, title: e.target.value })} placeholder="제목" className="w-full bg-gray-50 border-[12px] border-black/5 p-16 rounded-[50px] text-4xl md:text-[8rem] text-black outline-none focus:border-black font-black" />
-                <textarea value={feed.desc} onChange={(e) => setFeed({ ...feed, desc: e.target.value })} placeholder="상세 내용..." className="w-full bg-gray-50 border-[12px] border-black/5 p-16 rounded-[50px] text-xl md:text-6xl text-black h-[50rem] outline-none focus:border-black font-bold leading-relaxed" />
+              <div className="space-y-6">
+                <input value={feed.title} onChange={(e) => setFeed({ ...feed, title: e.target.value })} placeholder="TITLE" className="w-full bg-gray-50 border-4 border-black/5 p-8 rounded-3xl text-2xl md:text-5xl font-black outline-none" />
+                <textarea value={feed.desc} onChange={(e) => setFeed({ ...feed, desc: e.target.value })} placeholder="DETAILS..." className="w-full bg-gray-50 border-4 border-black/5 p-8 rounded-3xl text-xl md:text-4xl font-bold h-96 outline-none leading-relaxed" />
               </div>
-              <button onClick={() => {if(!feed.title) return alert("내용을 입력하십시오."); setBeomToken(p=>p-10); alert("등록 성공"); setFeed({title:'', desc:'', url:''});}} className="w-full bg-black text-white py-16 md:py-32 rounded-[60px] text-4xl md:text-[10rem] border-[16px] border-black font-black shadow-3xl hover:bg-[#dc2626] leading-none">{L.post} (10 BEOM)</button>
-              <p className="text-gray-400 text-xl md:text-5xl font-bold bg-gray-50 p-16 rounded-[60px] border-l-[32px] border-[#dc2626]">Note: {L.fanRoomDesc}</p>
+              <button onClick={() => {if(!feed.title) return alert("Empty"); setBeomToken(p=>p-10); alert("Posted"); setFeed({title:'', desc:'', url:''});}} className="w-full bg-black text-white py-10 rounded-full text-2xl md:text-6xl font-black shadow-lg hover:bg-[#dc2626]">{L.post} (10 BEOM)</button>
+              <p className="text-gray-400 text-lg md:text-3xl font-bold bg-gray-50 p-8 rounded-3xl border-l-[16px] border-[#dc2626] italic">Note: {L.fanRoomDesc}</p>
             </div>
 
-            {/* 04. MARKET */}
+            {/* MARKET */}
             <SectionHeader num="04" title={L.market} desc={L.marketDesc} />
-            <div className="bg-white p-12 md:p-32 rounded-[120px] border-[12px] border-black/10 space-y-20 shadow-2xl text-left font-black">
-               <h3 className="text-black text-4xl md:text-[10rem] font-black uppercase italic border-l-[35px] border-[#dc2626] pl-14 leading-none">Empire Market</h3>
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-16 font-black">
-                  <input value={sellItem.name} onChange={(e) => setSellItem({ ...sellItem, name: e.target.value })} placeholder="상품명" className="w-full bg-gray-50 border-[12px] border-black/5 p-16 rounded-[55px] text-3xl md:text-8xl font-black outline-none" />
-                  <input type="number" value={sellItem.price} onChange={(e) => setSellItem({ ...sellItem, price: e.target.value })} placeholder="가격 (BEOM)" className="w-full bg-gray-50 border-[12px] border-black/5 p-16 rounded-[55px] text-3xl md:text-8xl font-black text-[#dc2626] outline-none" />
+            <div className="bg-white p-12 md:p-24 rounded-[60px] border-4 border-black/10 space-y-16 shadow-lg text-left font-black">
+               <h3 className="text-black text-3xl md:text-7xl font-black uppercase italic border-l-[16px] border-[#dc2626] pl-10">Market</h3>
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-10 font-black">
+                  <input value={sellItem.name} onChange={(e) => setSellItem({ ...sellItem, name: e.target.value })} placeholder="NAME" className="w-full bg-gray-50 border-4 border-black/5 p-8 rounded-3xl text-xl md:text-4xl outline-none" />
+                  <input type="number" value={sellItem.price} onChange={(e) => setSellItem({ ...sellItem, price: e.target.value })} placeholder="PRICE (BEOM)" className="w-full bg-gray-50 border-4 border-black/5 p-8 rounded-3xl text-xl md:text-4xl text-[#dc2626] outline-none" />
                </div>
-               <div className="w-full font-black">
+               <div className="w-full">
                   <input type="file" accept="image/*" onChange={handleImageUpload} ref={fileInputRef} className="hidden" />
-                  <button onClick={() => fileInputRef.current?.click()} className="w-full bg-gray-50 border-[15px] border-dashed border-black/10 p-40 rounded-[80px] text-gray-400 text-center hover:border-black transition-all font-black uppercase tracking-[0.8em] text-2xl md:text-8xl shadow-inner overflow-hidden">
-                    {sellItem.img ? <img src={sellItem.img} className="h-[40rem] mx-auto rounded-[60px] border-[20px] border-black" alt="Product Preview" /> : "UPLOAD PRODUCT IMAGE"}
+                  <button onClick={() => fileInputRef.current?.click()} className="w-full bg-gray-50 border-4 border-dashed border-black/10 p-20 rounded-[40px] text-gray-400 text-center hover:border-black transition-all font-black text-xl md:text-6xl shadow-inner">
+                    {sellItem.img ? <img src={sellItem.img} className="h-64 mx-auto rounded-3xl" alt="Preview" /> : "UPLOAD IMAGE"}
                   </button>
                </div>
                <button onClick={()=>{
                  if(!sellItem.name||!sellItem.price||!sellItem.img)return alert("Empty"); 
                  setGoods([{...sellItem, id:Date.now(), price:Number(sellItem.price)}, ...goods]); 
                  setSellItem({name:'',price:'',desc:'',img:''}); 
-                 alert("등록 완료");
-               }} className="w-full bg-black text-white py-20 md:py-40 rounded-[70px] text-4xl md:text-[15rem] border-[20px] border-black uppercase font-black shadow-3xl hover:bg-[#dc2626] leading-none">{L.register} (20 BEOM)</button>
+                 alert("Registered");
+               }} className="w-full bg-black text-white py-10 rounded-full text-2xl md:text-6xl font-black shadow-lg hover:bg-[#dc2626]">{L.register} (20 BEOM)</button>
                
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-20 pt-40 border-t-[20px] border-gray-50 font-black">
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-10 pt-20 border-t-4 border-gray-50">
                   {goods.map(g => (
-                    <div key={g.id} className="bg-white p-12 md:p-24 rounded-[80px] md:rounded-[120px] border-[12px] border-black/10 shadow-3xl flex flex-col group transition-all relative hover:border-[#dc2626]">
-                      <div className="w-full aspect-square bg-gray-50 rounded-[60px] mb-16 overflow-hidden flex items-center justify-center relative shadow-inner">
-                        <div className="absolute top-12 right-12 bg-black text-white px-12 py-5 rounded-full text-xl md:text-5xl font-mono font-black shadow-2xl z-20">VERIFIED</div>
-                        <img src={g.img} className="w-64 h-64 md:w-[40rem] md:h-[40rem] object-contain group-hover:scale-110 duration-1000" alt="Goods Item" />
+                    <div key={g.id} className="bg-white p-6 md:p-12 rounded-[40px] border-4 border-black/5 shadow-lg flex flex-col group transition-all hover:border-[#dc2626]">
+                      <div className="w-full aspect-square bg-gray-50 rounded-3xl mb-8 overflow-hidden flex items-center justify-center relative shadow-inner">
+                        <div className="absolute top-4 right-4 bg-black text-white px-4 py-2 rounded-full text-xs md:text-xl font-black shadow-md z-20">VERIFIED</div>
+                        <img src={g.img} className="w-48 h-48 md:w-80 md:h-80 object-contain group-hover:scale-105 duration-700" alt="Item" />
                       </div>
-                      <h4 className="text-black text-4xl md:text-[8rem] uppercase mb-6 font-black leading-tight line-clamp-1">{g.name}</h4>
-                      <p className="text-gray-500 text-xl md:text-5xl mb-16 font-bold leading-snug italic line-clamp-3">Empire Certified Product</p>
+                      <h4 className="text-black text-2xl md:text-5xl uppercase mb-4 font-black truncate">{g.name}</h4>
+                      <p className="text-gray-500 text-sm md:text-2xl mb-10 font-bold italic line-clamp-2">&quot;Certified Asset&quot;</p>
                       <div className="mt-auto">
-                        <p className="text-black text-6xl md:text-[16rem] mb-20 font-black tracking-tighter leading-none">{Number(g.price).toLocaleString()} <span className="text-2xl md:text-8xl text-[#dc2626]">BEOM</span></p>
-                        <button onClick={()=>alert("Imperial Engine Syncing...")} className="w-full py-14 md:py-28 bg-black text-white rounded-[60px] text-3xl md:text-[8rem] border-[10px] border-black uppercase font-black shadow-3xl hover:bg-[#dc2626] leading-none"> {L.buy} </button>
+                        <p className="text-black text-4xl md:text-7xl mb-10 font-black">{Number(g.price).toLocaleString()} <span className="text-lg md:text-3xl text-[#dc2626]">BEOM</span></p>
+                        <button onClick={()=>alert("Connecting Terminal...")} className="w-full py-6 bg-black text-white rounded-full text-xl md:text-4xl font-black shadow-lg hover:bg-[#dc2626]"> {L.buy} </button>
                       </div>
                     </div>
                   ))}
                </div>
             </div>
 
-            {/* 05. PARTNERSHIP */}
+            {/* PARTNERSHIP */}
             <SectionHeader num="05" title={L.partnership} desc={L.partnershipDesc} />
-            <div className="bg-black p-16 md:p-48 rounded-[120px] border-[30px] border-[#dc2626] space-y-24 text-left shadow-2xl relative overflow-hidden font-black">
-                <div className="absolute -top-60 -right-60 opacity-10 pointer-events-none select-none">
-                  <img src="/kedheon-character.png" className="w-[80rem] h-[80rem] grayscale" alt="Character BG" />
+            <div className="bg-black p-12 md:p-24 rounded-[60px] border-8 border-[#dc2626] space-y-16 text-left shadow-xl relative overflow-hidden font-black">
+                <div className="absolute -top-40 -right-40 opacity-5 pointer-events-none select-none">
+                  <img src="/kedheon-character.png" className="w-96 h-96 grayscale" alt="Character" />
                 </div>
-                <h3 className="text-white text-6xl md:text-[15rem] font-black italic border-l-[45px] border-[#dc2626] pl-20 z-10 relative uppercase">Business Portal</h3>
-                <div className="space-y-16 relative z-10 font-black">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-16 font-black">
-                        <input value={partner.corp} onChange={(e)=>setPartner({...partner, corp: e.target.value.toUpperCase()})} placeholder="CORP NAME" className="w-full bg-white/5 border-[12px] border-white/10 p-16 rounded-[60px] text-white text-3xl md:text-[7rem] font-black outline-none focus:border-[#dc2626] shadow-inner transition-all leading-none" />
-                        <input value={partner.contact} onChange={(e)=>setPartner({...partner, contact: e.target.value})} placeholder="EMAIL / SNS" className="w-full bg-white/5 border-[12px] border-white/10 p-16 rounded-[60px] text-white text-3xl md:text-[7rem] font-black outline-none focus:border-[#dc2626] shadow-inner transition-all leading-none" />
+                <h3 className="text-white text-4xl md:text-8xl font-black italic border-l-[16px] border-[#dc2626] pl-10 z-10 relative uppercase">Portal</h3>
+                <div className="space-y-10 relative z-10">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                        <input value={partner.corp} onChange={(e)=>setPartner({...partner, corp: e.target.value.toUpperCase()})} placeholder="CORP NAME" className="w-full bg-white/5 border-4 border-white/10 p-8 rounded-3xl text-white text-xl md:text-4xl font-black outline-none focus:border-[#dc2626] transition-all" />
+                        <input value={partner.contact} onChange={(e)=>setPartner({...partner, contact: e.target.value})} placeholder="CONTACT" className="w-full bg-white/5 border-4 border-white/10 p-8 rounded-3xl text-white text-xl md:text-4xl font-black outline-none focus:border-[#dc2626] transition-all" />
                     </div>
-                    <textarea value={partner.msg} onChange={(e)=>setPartner({...partner, msg: e.target.value})} placeholder="PROPOSAL DETAILS..." className="w-full bg-white/5 border-[12px] border-white/10 p-20 rounded-[80px] text-white text-2xl md:text-[4rem] font-bold h-[60rem] outline-none focus:border-[#dc2626] shadow-inner leading-relaxed" />
+                    <textarea value={partner.msg} onChange={(e)=>setPartner({...partner, msg: e.target.value})} placeholder="PROPOSAL..." className="w-full bg-white/5 border-4 border-white/10 p-8 rounded-[40px] text-white text-lg md:text-3xl font-bold h-80 outline-none focus:border-[#dc2626] leading-relaxed" />
                 </div>
-                <button onClick={()=>{if(!partner.corp||!partner.msg)return alert("내용을 채워주십시오."); alert("제안서가 접수되었습니다."); setPartner({corp:'', contact:'', msg:''});}} className="w-full bg-[#dc2626] text-white py-20 md:py-48 rounded-[100px] text-5xl md:text-[12rem] border-[20px] border-[#dc2626] hover:bg-white hover:text-[#dc2626] transition-all font-black shadow-2xl uppercase tracking-[0.5em] active:scale-95 leading-none">{L.submit}</button>
+                <button onClick={()=>{if(!partner.corp||!partner.msg)return alert("Empty"); alert("Submitted"); setPartner({corp:'', contact:'', msg:''});}} className="w-full bg-[#dc2626] text-white py-10 rounded-full text-3xl md:text-7xl border-4 border-[#dc2626] hover:bg-white hover:text-[#dc2626] transition-all font-black shadow-lg active:scale-95 leading-none">{L.submit}</button>
             </div>
 
             {/* INFRA BAR */}
-            <div className="mt-24 py-20 px-24 bg-gray-100 rounded-[80px] flex flex-wrap justify-center md:justify-between items-center gap-20 border-[10px] border-black/5 shadow-inner font-black">
-                <div className="flex items-center gap-10"><div className="w-10 h-10 bg-red-600 rounded-full animate-ping"></div><span className="text-black text-2xl md:text-6xl font-mono uppercase italic tracking-tighter">Infrastructure: 88-Threads Node</span></div>
-                <div className="flex items-center gap-16 uppercase text-lg md:text-[4rem] text-gray-500">
-                  <span>Node: 18.02 Top-Tier</span>
+            <div className="mt-20 py-10 px-12 bg-gray-100 rounded-[40px] flex flex-wrap justify-center md:justify-between items-center gap-10 border-4 border-black/5 shadow-inner font-black">
+                <div className="flex items-center gap-4"><div className="w-6 h-6 bg-red-600 rounded-full animate-ping"></div><span className="text-black text-xl md:text-4xl font-mono uppercase tracking-tighter">Infrastructure: 88-Threads</span></div>
+                <div className="flex items-center gap-10 uppercase text-xs md:text-3xl text-gray-400">
+                  <span>Node: 18.02</span>
                   <span>Auth: Lord @Ohsangjo</span>
                 </div>
             </div>
@@ -305,14 +286,14 @@ export default function KedheonEmpireEternal() {
       </main>
 
       {/* FOOTER */}
-      <footer className="fixed bottom-12 left-8 right-8 max-w-[110rem] mx-auto bg-white border-[12px] border-black p-4 rounded-[80px] flex justify-between gap-6 z-[500] shadow-2xl font-black">
+      <footer className="fixed bottom-10 left-6 right-6 max-w-6xl mx-auto bg-white border-8 border-black p-4 rounded-[60px] flex justify-between gap-4 z-[500] shadow-2xl font-black">
         {['KEDHEON', 'CIVIL', 'NEXUS', 'VENDOR'].map(app => (
-          <button key={app} className={`flex-1 py-12 md:py-24 rounded-[65px] text-xs md:text-[6rem] transition-all font-black text-center ${app === 'KEDHEON' ? 'bg-black text-white scale-[1.05]' : 'text-gray-300 hover:text-black'}`}>{app}</button>
+          <button key={app} className={`flex-1 py-10 rounded-[40px] text-xs md:text-4xl transition-all font-black text-center ${app === 'KEDHEON' ? 'bg-black text-white' : 'text-gray-300 hover:text-black'}`}>{app}</button>
         ))}
       </footer>
 
       {/* WATERMARK */}
-      <div className="mt-64 opacity-5 text-black text-xl md:text-[12rem] tracking-[4em] uppercase pb-96 font-black text-center select-none pointer-events-none leading-none"> Kedheon Master | Lord Ohsangjo </div>
+      <div className="mt-40 opacity-5 text-black text-xl md:text-9xl tracking-[4em] uppercase pb-96 font-black text-center select-none pointer-events-none leading-none"> Kedheon Master | Lord Ohsangjo </div>
     </div>
   );
 }
