@@ -9,6 +9,7 @@ import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react'
  * 2. 해킹 위험 및 오프라인 보관의 필요성 상세 기술 추가
  * 3. 원본 로직 100% 무손실 복원 (축약 없음)
  * 4. UI 내부 하드코딩된 한글 텍스트 완벽한 다국어(EN/KR) 연동
+ * 5. Vercel 빌드 에러 원인(L.submitBtn -> L.submit) 수정 완료
  * -----------------------------------------------------------
  */
 
@@ -367,7 +368,7 @@ export default function KedheonDesignSystemFinal() {
                     <input value={partner.contact} onChange={e=>setPartner({...partner, contact: e.target.value})} placeholder={L.contact} className="bg-white/10 border-none p-3 rounded-xl text-[10px] md:text-xs text-white outline-none focus:ring-1 ring-[#dc2626]" />
                 </div>
                 <textarea value={partner.msg} onChange={e=>setPartner({...partner, msg: e.target.value})} placeholder={L.vision} className="w-full bg-white/10 border-none p-4 rounded-2xl text-[10px] md:text-xs text-white h-24 outline-none focus:ring-1 ring-[#dc2626] z-10 relative text-left" />
-                <button onClick={()=>alert(L.propDoneAlert)} className="w-full bg-[#dc2626] text-white py-3.5 rounded-full text-xs md:text-lg font-black hover:bg-white hover:text-black transition-all uppercase z-10 relative active:scale-95 shadow-xl">{L.submitBtn}</button>
+                <button onClick={()=>alert(L.propDoneAlert)} className="w-full bg-[#dc2626] text-white py-3.5 rounded-full text-xs md:text-lg font-black hover:bg-white hover:text-black transition-all uppercase z-10 relative active:scale-95 shadow-xl">{L.submit}</button>
             </div>
           </div>
         )}
