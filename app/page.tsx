@@ -1,21 +1,19 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
-/** * [KEDHEON MASTER V270.3 - SECURITY REINFORCED]
+/** * [KEDHEON MASTER V270.4 - MULTILINGUAL & ECOSYSTEM EXPANDED]
  * -----------------------------------------------------------
  * 수정 사항: 
- * 1. Step 07 비밀구절 안내 텍스트를 빨간색(#dc2626)으로 강조
- * 2. 해킹 위험 및 오프라인 보관의 필요성 상세 기술 추가
- * 3. 원본 로직 100% 무손실 복원 (축약 없음)
- * 4. UI 내부 하드코딩된 한글 텍스트 완벽한 다국어(EN/KR) 연동
- * 5. Vercel 빌드 에러 원인(L.submitBtn -> L.submit) 수정 완료
- * 6. 카테고리, 팬 리스트, 굿즈 초기 데이터의 다국어 연동 완료
+ * 1. 글로벌 노출도 극대화를 위한 다국어(CN, JP) 추가 완벽 연동
+ * 2. ROOKIE 탭: 파이 코어팀 공식 개발자 모집 배너 및 링크 연결
+ * 3. Step 07 비밀구절 안내 텍스트 빨간색 강조 및 보안 문구 유지
+ * 4. 원본 로직 및 배열 100% 무손실 복원
  * -----------------------------------------------------------
  */
 
 // --- Types ---
-type Lang = 'KR' | 'EN';
+type Lang = 'KR' | 'EN' | 'CN' | 'JP';
 interface Step { t: string; d: string; links?: { AOS: string; iOS: string; }; warning?: boolean; }
 interface GoodsItem { id: number; name: string; price: number; img: string; desc: string; seller: string; }
 interface Dictionary {
@@ -31,7 +29,7 @@ interface Dictionary {
   exchangeDesc: string; authDesc: string; creativeDesc: string; fanRoomDesc: string;
   marketDesc: string; partnershipDesc: string;
   
-  // UI 변수화 추가
+  // UI 변수
   convertTitle: string; convertBtn: string;
   walletType: string; personal: string; corporate: string; encodedQR: string;
   feedTitle: string; feedLink: string; feedDesc: string; postBtn: string;
@@ -39,7 +37,10 @@ interface Dictionary {
   copyPrompt: string; copiedAlert: string; piLackAlert: string; convDoneAlert: string;
   beomLackAlert: string; regDoneAlert: string; propDoneAlert: string;
   
-  // 배열 데이터 다국어 연동
+  // 파이 코어팀 개발자 모집
+  devRecruitTitle: string; devRecruitDesc: string; devRecruitBtn: string;
+  
+  // 배열 데이터
   cats: string[];
   fans: string[];
   goodsMock: GoodsItem[];
@@ -88,6 +89,7 @@ const DICT: Record<Lang, Dictionary> = {
     marketBuyTab: "굿즈 구매", marketSellTab: "판매 등록", buyReqBtn: "구매 신청", sellDoneBtn: "굿즈 등록 완료",
     copyPrompt: "복사하려면 클릭", copiedAlert: "추천인 코드가 복사되었습니다!", piLackAlert: "PI 부족", convDoneAlert: "환전 완료!",
     beomLackAlert: "BEOM 부족", regDoneAlert: "등록 성공", propDoneAlert: "제안서가 전송되었습니다.",
+    devRecruitTitle: "파이 코어팀 개발자 공식 모집", devRecruitDesc: "파이 생태계를 함께 구축할 글로벌 개발자를 모집합니다.", devRecruitBtn: "공지 확인 및 지원하기",
     cats: ['CCM', '뮤지션', 'MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'],
     fans: ['케데헌', '헌트릭스', 'BTS'],
     goodsMock: [
@@ -135,11 +137,108 @@ const DICT: Record<Lang, Dictionary> = {
     marketBuyTab: "BUY GOODS", marketSellTab: "SELL ITEMS", buyReqBtn: "BUY REQUEST", sellDoneBtn: "COMPLETE REGISTRATION",
     copyPrompt: "Click to Copy", copiedAlert: "Invite Code Copied!", piLackAlert: "Not enough PI", convDoneAlert: "Conversion Complete!",
     beomLackAlert: "Not enough BEOM", regDoneAlert: "Registration Successful", propDoneAlert: "Proposal Submitted.",
+    devRecruitTitle: "Pi Core Team Developer Recruitment", devRecruitDesc: "Join the official global developers building the Pi ecosystem.", devRecruitBtn: "CHECK & APPLY",
     cats: ['CCM', 'MUSICIAN', 'MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'],
     fans: ['KEDHEON', 'HUNTRIX', 'BTS'],
     goodsMock: [
       { id: 1, name: "Gold Badge", price: 1000, desc: "Limited physical badge.", img: "/beom-token.png", seller: "System" },
       { id: 2, name: "V23 Node Key", price: 5000, desc: "Node digital master key.", img: "/node-icon.png", seller: "System" }
+    ]
+  },
+  CN: {
+    rookie: "新手", pioneer: "先锋", exchange: "01. BEOM 转换与核心功能", auth: "02. 安全二维码",
+    creative: "03. 粉丝奖励系统", market: "04. 商品市场", partnership: "05. 全球合作伙伴",
+    invitation: "Web3 邀请函", procedure: "加入指南", assets: "我的资产",
+    activate: "激活 (50 BEOM)", convert: "立即转换", post: "发布 (10 BEOM)",
+    buy: "购买", register: "出售注册", submit: "提交提案",
+    downloadAOS: "Android 下载", downloadiOS: "iPhone 下载", buyBeom: "购买 BEOM",
+    corpName: "公司名称", email: "电子邮件", contact: "联系方式", manager: "负责人", vision: "提案详情",
+    itemName: "商品名称", itemPrice: "价格 (BEOM)", itemDesc: "商品描述", itemImg: "图片链接", bizPlaceholder: "输入公司或企业名称",
+    portalStatus: "集成门户应用：子应用连接进行中。",
+    piJoinDesc: "加入全球最大的 Web3 网络生态系统。",
+    exchangeDesc: "将 Pi 转换为 BEOM 并探索核心功能。",
+    authDesc: "通过二维码安全支付和验证，无需暴露钱包地址。",
+    creativeDesc: "分享热情并支持创作者以获得 BEOM 奖励。",
+    fanRoomDesc: "※ 🚩 粉丝房间 (500 BEOM): 90% 回报和治理权。",
+    marketDesc: "交易独家商品并注册您自己的物品。",
+    partnershipDesc: "全球合作伙伴机会和商业提案。",
+    exList: [
+      "1. BEOM 转换 (1 PI = 1,000 BEOM 实时交换)",
+      "2. 二维码 (安全支付功能)",
+      "3. 粉丝奖励 (活动获取 BEOM 奖励)",
+      "4. 商品市场 (买卖独家物品)",
+      "5. 合作伙伴 (B2B 协作门户)"
+    ],
+    steps: [
+      { t: "安装", d: "下载官方应用程序。", links: { AOS: "#", iOS: "#" } },
+      { t: "方式", d: "选择使用手机号码继续。" },
+      { t: "国家", d: "选择 +82 并输入您的号码。" },
+      { t: "密码", d: "结合大小写字母和数字。" },
+      { t: "个人资料", d: "输入护照姓名和 ID。" },
+      { t: "邀请码", d: "输入 [ ohsangjo ] 加入。" },
+      { t: "助记词", d: "在纸上手写 24 个单词并妥善保存。(请勿数字保存，以防黑客攻击)", warning: true },
+      { t: "挖矿", d: "每 24 小时点击一次闪电图标。" }
+    ],
+    convertTitle: "1 PI = 1,000 BEOM 转换", convertBtn: "立即转换",
+    walletType: "钱包保护类型", personal: "个人", corporate: "企业", encodedQR: "加密二维码",
+    feedTitle: "标题或分享热情", feedLink: "图片/视频链接 (URL)", feedDesc: "详细描述您的活动", postBtn: "发布 (10 BEOM)",
+    marketBuyTab: "购买商品", marketSellTab: "出售物品", buyReqBtn: "购买请求", sellDoneBtn: "完成注册",
+    copyPrompt: "点击复制", copiedAlert: "邀请码已复制！", piLackAlert: "PI 余额不足", convDoneAlert: "转换完成！",
+    beomLackAlert: "BEOM 余额不足", regDoneAlert: "注册成功", propDoneAlert: "提案已提交。",
+    devRecruitTitle: "Pi 核心团队开发者招募", devRecruitDesc: "加入官方全球开发者团队，共同构建 Pi 生态系统。", devRecruitBtn: "查看并申请",
+    cats: ['CCM', '音乐家', 'MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'],
+    fans: ['KEDHEON', 'HUNTRIX', 'BTS'],
+    goodsMock: [
+      { id: 1, name: "纪念金徽章", price: 1000, desc: "限量版实体徽章。", img: "/beom-token.png", seller: "System" },
+      { id: 2, name: "V23 节点主密钥", price: 5000, desc: "节点运行数字主密钥。", img: "/node-icon.png", seller: "System" }
+    ]
+  },
+  JP: {
+    rookie: "ルーキー", pioneer: "パイオニア", exchange: "01. BEOM 変換と機能", auth: "02. セキュリティ QR コード",
+    creative: "03. ファン報酬システム", market: "04. グッズ市場", partnership: "05. グローバルパートナーシップ",
+    invitation: "Web3 招待状", procedure: "参加ガイド", assets: "資産",
+    activate: "アクティブ化 (50 BEOM)", convert: "今すぐ変換", post: "投稿 (10 BEOM)",
+    buy: "購入", register: "販売登録", submit: "提案を送信",
+    downloadAOS: "Android ダウンロード", downloadiOS: "iPhone ダウンロード", buyBeom: "BEOM を購入",
+    corpName: "会社名", email: "メールアドレス", contact: "連絡先", manager: "担当者", vision: "提案内容",
+    itemName: "商品名", itemPrice: "価格 (BEOM)", itemDesc: "商品説明", itemImg: "画像 URL", bizPlaceholder: "会社名を入力してください",
+    portalStatus: "統合ポータルアプリ: サブアプリの接続が進行中です。",
+    piJoinDesc: "最大の Web3 ネットワークエコシステムに参加してください。",
+    exchangeDesc: "Pi を BEOM に変換し、コア機能を探索します。",
+    authDesc: "アドレスを公開せずに、QR で安全に支払いと認証を行います。",
+    creativeDesc: "スピリットを共有し、クリエイターを支援して BEOM 報酬を獲得します。",
+    fanRoomDesc: "※ 🚩 ファンルーム (500 BEOM): 90% の還元とガバナンス権。",
+    marketDesc: "限定グッズを取引し、独自のアイテムを登録します。",
+    partnershipDesc: "グローバルパートナーシップの機会とビジネス提案。",
+    exList: [
+      "1. BEOM 変換 (1 PI = 1,000 BEOM 即時スワップ)",
+      "2. QR コード (アドレスを公開しない安全な支払い)",
+      "3. ファン報酬 (活動による BEOM 獲得システム)",
+      "4. グッズ市場 (限定アイテムの売買)",
+      "5. パートナーシップ (B2B コラボレーションポータル)"
+    ],
+    steps: [
+      { t: "インストール", d: "公式アプリをダウンロードします。", links: { AOS: "#", iOS: "#" } },
+      { t: "方法", d: "電話番号で続行を選択します。" },
+      { t: "国", d: "+82 を選択し、番号を入力します。" },
+      { t: "パスワード", d: "大文字、小文字、数字を組み合わせます。" },
+      { t: "プロフィール", d: "パスポートの名前と ID を入力します。" },
+      { t: "招待コード", d: "[ ohsangjo ] を入力して参加します。" },
+      { t: "パスフレーズ", d: "24個の単語を紙に手書きして安全に保管してください。(ハッキングのリスクがあるため、デジタル保存はしないでください)", warning: true },
+      { t: "マイニング", d: "24時間ごとに雷のアイコンをタップします。" }
+    ],
+    convertTitle: "1 PI = 1,000 BEOM 変換", convertBtn: "今すぐ変換",
+    walletType: "ウォレット保護タイプ", personal: "個人", corporate: "企業", encodedQR: "エンコードされた QR",
+    feedTitle: "タイトルまたはスピリットを共有", feedLink: "画像/動画リンク (URL)", feedDesc: "活動の詳細を説明してください", postBtn: "投稿 (10 BEOM)",
+    marketBuyTab: "グッズ購入", marketSellTab: "販売登録", buyReqBtn: "購入リクエスト", sellDoneBtn: "登録完了",
+    copyPrompt: "クリックしてコピー", copiedAlert: "招待コードがコピーされました！", piLackAlert: "PI が不足しています", convDoneAlert: "変換が完了しました！",
+    beomLackAlert: "BEOM が不足しています", regDoneAlert: "登録成功", propDoneAlert: "提案が送信されました。",
+    devRecruitTitle: "Pi コアチーム開発者募集", devRecruitDesc: "Pi エコシステムを構築する公式グローバル開発者に参加してください。", devRecruitBtn: "確認して応募",
+    cats: ['CCM', 'ミュージシャン', 'MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'],
+    fans: ['KEDHEON', 'HUNTRIX', 'BTS'],
+    goodsMock: [
+      { id: 1, name: "記念ゴールドバッジ", price: 1000, desc: "限定の物理バッジ。", img: "/beom-token.png", seller: "System" },
+      { id: 2, name: "V23 ノードマスターキー", price: 5000, desc: "ノード運用のデジタルマスターキー。", img: "/node-icon.png", seller: "System" }
     ]
   }
 };
@@ -156,7 +255,7 @@ const SectionHeader = ({ title, desc }: { title: string; desc: string; }) => (
 export default function KedheonDesignSystemFinal() {
   const [hasMounted, setHasMounted] = useState(false);
   const [lang, setLang] = useState<Lang>('KR');
-  const [tab, setTab] = useState<'ROOKIE' | 'PIONEER'>('PIONEER');
+  const [tab, setTab] = useState<'ROOKIE' | 'PIONEER'>('ROOKIE');
   const [beomToken, setBeomToken] = useState(7891.88);
   const [piBalance, setPiBalance] = useState(124.55);
   const [hubTab, setHubTab] = useState<'HUB' | 'SPIRIT'>('HUB');
@@ -195,13 +294,16 @@ export default function KedheonDesignSystemFinal() {
           <img src="/kedheon-character.png" className="w-8 h-8 md:w-11 md:h-11 rounded-lg border-2 border-black" alt="K" />
           <div className="text-left leading-tight font-black">
             <h1 className="text-black text-sm md:text-lg italic uppercase leading-none">Kedheon</h1>
-            <span className="text-gray-400 text-[8px] font-mono tracking-widest uppercase">MASTER V270.3</span>
+            <span className="text-gray-400 text-[8px] font-mono tracking-widest uppercase">MASTER V270.4</span>
           </div>
         </div>
         <div className="flex items-center gap-1.5 md:gap-2">
+          {/* 다국어 선택 (4개 국어) */}
           <div className="bg-gray-100 p-0.5 rounded-md flex gap-0.5">
-            <button onClick={() => setLang('KR')} className={`px-2 py-0.5 rounded text-[10px] font-black ${lang === 'KR' ? 'bg-black text-white' : 'text-gray-400'}`}>KR</button>
-            <button onClick={() => setLang('EN')} className={`px-2 py-0.5 rounded text-[10px] font-black ${lang === 'EN' ? 'bg-black text-white' : 'text-gray-400'}`}>EN</button>
+            <button onClick={() => setLang('KR')} className={`px-2 py-0.5 rounded text-[10px] font-black ${lang === 'KR' ? 'bg-black text-white shadow-sm' : 'text-gray-400'}`}>KR</button>
+            <button onClick={() => setLang('EN')} className={`px-2 py-0.5 rounded text-[10px] font-black ${lang === 'EN' ? 'bg-black text-white shadow-sm' : 'text-gray-400'}`}>EN</button>
+            <button onClick={() => setLang('CN')} className={`px-2 py-0.5 rounded text-[10px] font-black ${lang === 'CN' ? 'bg-black text-white shadow-sm' : 'text-gray-400'}`}>CN</button>
+            <button onClick={() => setLang('JP')} className={`px-2 py-0.5 rounded text-[10px] font-black ${lang === 'JP' ? 'bg-black text-white shadow-sm' : 'text-gray-400'}`}>JP</button>
           </div>
           <button onClick={() => setTab('ROOKIE')} className={`px-3 py-1 rounded-lg text-[10px] md:text-sm font-black border transition-all ${tab === 'ROOKIE' ? 'bg-[#dc2626] text-white border-[#dc2626]' : 'text-gray-300 border-transparent'}`}>{L.rookie}</button>
           <button onClick={() => setTab('PIONEER')} className={`px-3 py-1 rounded-lg text-[10px] md:text-sm font-black border transition-all ${tab === 'PIONEER' ? 'bg-black text-white border-black' : 'text-gray-300 border-transparent'}`}>{L.pioneer}</button>
@@ -238,7 +340,24 @@ export default function KedheonDesignSystemFinal() {
                 </div>
               ))}
             </div>
-            <div className="p-6 bg-black text-white rounded-2xl text-center shadow-xl border-2 border-[#dc2626] cursor-pointer active:scale-95" onClick={handleCopy}>
+            
+            {/* 파이 코어팀 개발자 모집 배너 (신규 추가) */}
+            <div className="w-full bg-black border-[3px] border-[#dc2626] rounded-2xl p-4 md:p-6 text-left shadow-2xl flex flex-col md:flex-row items-center gap-4 relative overflow-hidden mt-2">
+                <div className="absolute -right-4 -top-4 w-16 h-16 bg-[#dc2626] rotate-45 opacity-20"></div>
+                <div className="flex-1 z-10">
+                    <h3 className="text-white text-sm md:text-xl font-black italic uppercase border-l-4 border-[#dc2626] pl-2 leading-none">
+                      {L.devRecruitTitle}
+                    </h3>
+                    <p className="text-gray-400 text-[10px] md:text-xs mt-2 font-bold leading-tight">
+                      {L.devRecruitDesc}
+                    </p>
+                </div>
+                <button onClick={() => handleDownload("https://minepi.com/developers/")} className="w-full md:w-auto bg-[#dc2626] text-white px-5 py-3 rounded-xl text-[10px] md:text-xs font-black uppercase whitespace-nowrap active:scale-95 shadow-md hover:bg-white hover:text-black transition-all z-10 border border-transparent hover:border-black">
+                    {L.devRecruitBtn}
+                </button>
+            </div>
+
+            <div className="p-6 bg-black text-white rounded-2xl text-center shadow-xl border-2 border-[#dc2626] cursor-pointer active:scale-95 mt-2" onClick={handleCopy}>
                <p className="text-[10px] italic text-gray-500 mb-1">{L.copyPrompt}</p>
                <div className="text-white text-3xl md:text-5xl tracking-widest font-black leading-none italic">{PI_INVITE_CODE}</div>
             </div>
