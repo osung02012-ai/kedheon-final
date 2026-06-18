@@ -7,7 +7,8 @@ import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react'
  * 수정 사항: 
  * 1. Step 07 비밀구절 안내 텍스트를 빨간색(#dc2626)으로 강조
  * 2. 해킹 위험 및 오프라인 보관의 필요성 상세 기술 추가
- * 3. 원본 설계 및 로직 100% 유지
+ * 3. 원본 로직 100% 무손실 복원 (축약 없음)
+ * 4. UI 내부 하드코딩된 한글 텍스트 완벽한 다국어(EN/KR) 연동
  * -----------------------------------------------------------
  */
 
@@ -27,6 +28,14 @@ interface Dictionary {
   exList: string[];
   exchangeDesc: string; authDesc: string; creativeDesc: string; fanRoomDesc: string;
   marketDesc: string; partnershipDesc: string;
+  
+  // UI 변수화 추가 (한글/영문 혼용 방지)
+  convertTitle: string; convertBtn: string;
+  walletType: string; personal: string; corporate: string;
+  feedTitle: string; feedLink: string; feedDesc: string; postBtn: string;
+  marketBuyTab: string; marketSellTab: string; buyReqBtn: string; sellDoneBtn: string;
+  copyPrompt: string; copiedAlert: string; piLackAlert: string; convDoneAlert: string;
+  beomLackAlert: string; regDoneAlert: string; propDoneAlert: string; encodedQR: string;
 }
 
 const PI_INVITE_CODE = 'ohsangjo';
@@ -67,7 +76,13 @@ const DICT: Record<Lang, Dictionary> = {
       { t: "초대 코드 입력", d: "초대 코드 [ ohsangjo ] 를 입력하세요." },
       { t: "비밀구절 보관", d: "24개 단어는 반드시 종이에 수기 기록하세요. (디지털 저장 시 해킹 위험: 캡처, 메모장, 이메일 저장 절대 금지. 유출 시 지갑 복구 불가 및 모든 자산 분실 위험.)", warning: true },
       { t: "채굴 시작", d: "매일 한 번 번개 버튼을 눌러 활동을 시작하세요." }
-    ]
+    ],
+    convertTitle: "1 PI = 1,000 BEOM 환전", convertBtn: "지금 환전하기",
+    walletType: "지갑 보호 타입", personal: "개인용", corporate: "기업용", encodedQR: "Encoded QR",
+    feedTitle: "제목 또는 팬심 공유", feedLink: "이미지/영상 링크 (URL)", feedDesc: "상세 내용을 기록하십시오", postBtn: "피드 등록 (10 BEOM)",
+    marketBuyTab: "굿즈 구매", marketSellTab: "판매 등록", buyReqBtn: "구매 신청", sellDoneBtn: "굿즈 등록 완료",
+    copyPrompt: "복사하려면 클릭", copiedAlert: "추천인 코드가 복사되었습니다!", piLackAlert: "PI 부족", convDoneAlert: "환전 완료!",
+    beomLackAlert: "BEOM 부족", regDoneAlert: "등록 성공", propDoneAlert: "제안서가 전송되었습니다."
   },
   EN: {
     rookie: "ROOKIE", pioneer: "PIONEER", exchange: "01. BEOM CONVERSION & FEATURES", auth: "02. SECURE QR CODE",
@@ -76,14 +91,14 @@ const DICT: Record<Lang, Dictionary> = {
     activate: "ACTIVATE (50 BEOM)", convert: "CONVERT NOW", post: "POST (10 BEOM)",
     buy: "BUY", register: "SELL", submit: "SUBMIT PROPOSAL",
     downloadAOS: "Android", downloadiOS: "iPhone", buyBeom: "BUY BEOM",
-    corpName: "Company", email: "Email", contact: "Contact", manager: "Manager", vision: "Proposal",
-    itemName: "Item Name", itemPrice: "Price", itemDesc: "Desc", itemImg: "Img URL", bizPlaceholder: "Enter Company Name",
+    corpName: "Company", email: "Email", contact: "Contact", manager: "Manager", vision: "Proposal Details",
+    itemName: "Item Name", itemPrice: "Price (BEOM)", itemDesc: "Description", itemImg: "Image URL", bizPlaceholder: "Enter Company or Business Name",
     portalStatus: "Integrated Portal App: Sub-app connectivity in progress.",
     piJoinDesc: "Join the largest Web3 network ecosystem.",
     exchangeDesc: "Convert Pi to BEOM and explore the core features.",
     authDesc: "Pay and authenticate safely via QR without exposing address.",
     creativeDesc: "Get BEOM rewards by sharing spirit and supporting creators.",
-    fanRoomDesc: "※ 🚩 Fan Room (500 BEOM): 90% Return.",
+    fanRoomDesc: "※ 🚩 Fan Room (500 BEOM): 90% Return and Governance Rights.",
     marketDesc: "Trade exclusive goods and register your own items.",
     partnershipDesc: "Global partnership opportunities and proposals.",
     exList: [
@@ -102,7 +117,13 @@ const DICT: Record<Lang, Dictionary> = {
       { t: "Invite Code", d: "Enter [ ohsangjo ] to join." },
       { t: "Passphrase", d: "Handwrite 24 words on paper and store safely. (Do NOT save digitally due to hacking risks.)", warning: true },
       { t: "Mining", d: "Tap lightning bolt every 24h." }
-    ]
+    ],
+    convertTitle: "1 PI = 1,000 BEOM Conversion", convertBtn: "CONVERT NOW",
+    walletType: "Wallet Protection Type", personal: "Personal", corporate: "Corporate", encodedQR: "Encoded QR",
+    feedTitle: "Title or Share Spirit", feedLink: "Image/Video Link (URL)", feedDesc: "Describe your activity in detail", postBtn: "POST (10 BEOM)",
+    marketBuyTab: "BUY GOODS", marketSellTab: "SELL ITEMS", buyReqBtn: "BUY REQUEST", sellDoneBtn: "COMPLETE REGISTRATION",
+    copyPrompt: "Click to Copy", copiedAlert: "Invite Code Copied!", piLackAlert: "Not enough PI", convDoneAlert: "Conversion Complete!",
+    beomLackAlert: "Not enough BEOM", regDoneAlert: "Registration Successful", propDoneAlert: "Proposal Submitted."
   }
 };
 
@@ -135,6 +156,8 @@ export default function KedheonDesignSystemFinal() {
 
   useEffect(() => { setHasMounted(true); }, []);
 
+  const L = DICT[lang];
+
   const handleDownload = useCallback((url: string | undefined) => {
     if (typeof window !== 'undefined' && url) window.open(url, '_blank');
   }, []);
@@ -142,11 +165,10 @@ export default function KedheonDesignSystemFinal() {
   const handleCopy = useCallback(() => {
     if (typeof window !== 'undefined') {
       navigator.clipboard.writeText(PI_INVITE_CODE);
-      alert("추천인 코드가 복사되었습니다!");
+      alert(L.copiedAlert);
     }
-  }, []);
+  }, [L.copiedAlert]);
 
-  const L = DICT[lang];
   if (!hasMounted) return <div className="bg-white min-h-screen" />;
 
   return (
@@ -184,9 +206,9 @@ export default function KedheonDesignSystemFinal() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               {L.steps.map((s, i) => (
-                <div key={i} className={`p-3 bg-white rounded-xl border flex flex-col gap-2 transition-all ${i === 0 || i === 5 ? 'border-[#dc2626] bg-red-50/5 shadow-sm' : 'border-black/5 opacity-90'}`}>
+                <div key={i} className={`p-3 bg-white rounded-xl border flex flex-col gap-2 transition-all ${s.warning ? 'border-[#dc2626] bg-red-50/5 shadow-sm' : 'border-black/5 opacity-90'}`}>
                   <div className="flex items-center gap-3 text-left">
-                    <span className={`text-3xl md:text-4xl font-black italic ${i === 0 || i === 5 ? 'text-[#dc2626]' : 'text-black opacity-5'}`}>0{i+1}</span>
+                    <span className={`text-3xl md:text-4xl font-black italic ${s.warning ? 'text-[#dc2626]' : 'text-black opacity-5'}`}>0{i+1}</span>
                     <div className="flex-1 min-w-0">
                       <h3 className="text-black text-[11px] md:text-sm font-black uppercase italic leading-none">{s.t}</h3>
                       <p className={`text-[9px] md:text-xs font-bold leading-tight mt-1 ${s.warning ? 'text-[#dc2626]' : 'text-gray-600'}`}>{s.d}</p>
@@ -202,7 +224,7 @@ export default function KedheonDesignSystemFinal() {
               ))}
             </div>
             <div className="p-6 bg-black text-white rounded-2xl text-center shadow-xl border-2 border-[#dc2626] cursor-pointer active:scale-95" onClick={handleCopy}>
-               <p className="text-[10px] italic text-gray-500 mb-1">복사하려면 클릭</p>
+               <p className="text-[10px] italic text-gray-500 mb-1">{L.copyPrompt}</p>
                <div className="text-white text-3xl md:text-5xl tracking-widest font-black leading-none italic">{PI_INVITE_CODE}</div>
             </div>
           </div>
@@ -245,8 +267,8 @@ export default function KedheonDesignSystemFinal() {
                      {L.exList.map((txt, idx) => <p key={idx} className="text-[10px] md:text-xs font-black text-gray-800 leading-tight border-b border-gray-50 pb-1">▶ {txt}</p>)}
                   </div>
                   <div className="flex flex-col items-center justify-center p-3 bg-gray-50 rounded-xl text-center font-black">
-                     <p className="text-black text-xs md:text-lg font-black mb-2 italic">1 PI = 1,000 BEOM 환전</p>
-                     <button onClick={() => {if(piBalance<1) return alert("PI 부족"); setPiBalance(p=>p-1); setBeomToken(p=>p+1000); alert("환전 완료!");}} className="w-full bg-[#dc2626] text-white py-2 rounded-lg text-xs font-black hover:bg-black transition-all shadow-md">지금 환전하기</button>
+                     <p className="text-black text-xs md:text-lg font-black mb-2 italic">{L.convertTitle}</p>
+                     <button onClick={() => {if(piBalance<1) return alert(L.piLackAlert); setPiBalance(p=>p-1); setBeomToken(p=>p+1000); alert(L.convDoneAlert);}} className="w-full bg-[#dc2626] text-white py-2 rounded-lg text-xs font-black hover:bg-black transition-all shadow-md">{L.convertBtn}</button>
                   </div>
                </div>
             </div>
@@ -258,22 +280,22 @@ export default function KedheonDesignSystemFinal() {
                   {qrState.active ? (
                     <>
                       <img src={qrState.type === 'PERSONAL' ? "/qr-personal.png" : "/qr-business.png"} className="w-full h-full p-3 object-contain" alt="QR" />
-                      <p className="text-[8px] font-black bg-gray-100 px-2 py-0.5 rounded-full mb-1 uppercase text-center">{qrState.biz || qrState.type}</p>
+                      <p className="text-[8px] font-black bg-gray-100 px-2 py-0.5 rounded-full mb-1 uppercase text-center">{qrState.biz || (qrState.type === 'PERSONAL' ? L.personal : L.corporate)}</p>
                     </>
-                  ) : <p className="text-black text-xs md:text-sm font-black italic uppercase animate-pulse">Encoded QR</p>}
+                  ) : <p className="text-black text-xs md:text-sm font-black italic uppercase animate-pulse">{L.encodedQR}</p>}
                </div>
                <div className="flex-1 w-full space-y-3 font-black">
                   <div className="bg-white p-4 rounded-xl border border-black/10">
-                     <p className="text-black text-[10px] md:text-xs font-black italic uppercase mb-3 border-l-2 border-black pl-2">지갑 보호 타입</p>
+                     <p className="text-black text-[10px] md:text-xs font-black italic uppercase mb-3 border-l-2 border-black pl-2">{L.walletType}</p>
                      <div className="flex gap-2 mb-3">
-                        <button onClick={() => setQrState({...qrState, type:'PERSONAL'})} className={`flex-1 py-1.5 rounded-md text-[10px] font-black border transition-all ${qrState.type === 'PERSONAL' ? 'bg-black text-white border-black shadow-md' : 'text-gray-300 border-gray-100'}`}>개인용</button>
-                        <button onClick={() => setQrState({...qrState, type:'BUSINESS'})} className={`flex-1 py-1.5 rounded-md text-[10px] font-black border transition-all ${qrState.type === 'BUSINESS' ? 'bg-black text-white border-black shadow-md' : 'text-gray-300 border-gray-100'}`}>기업용</button>
+                        <button onClick={() => setQrState({...qrState, type:'PERSONAL'})} className={`flex-1 py-1.5 rounded-md text-[10px] font-black border transition-all ${qrState.type === 'PERSONAL' ? 'bg-black text-white border-black shadow-md' : 'text-gray-300 border-gray-100'}`}>{L.personal}</button>
+                        <button onClick={() => setQrState({...qrState, type:'BUSINESS'})} className={`flex-1 py-1.5 rounded-md text-[10px] font-black border transition-all ${qrState.type === 'BUSINESS' ? 'bg-black text-white border-black shadow-md' : 'text-gray-300 border-gray-100'}`}>{L.corporate}</button>
                      </div>
                      {qrState.type === 'BUSINESS' && (
                         <input value={qrState.biz} onChange={e=>setQrState({...qrState, biz:e.target.value.toUpperCase()})} placeholder={L.bizPlaceholder} className="w-full bg-gray-50 border border-black/5 p-2 rounded-lg text-[10px] font-black outline-none focus:border-black mb-2" />
                      )}
                   </div>
-                  <button onClick={() => {if(beomToken<50) return alert("BEOM 부족"); setBeomToken(p=>p-50); setQrState({...qrState, active:true});}} className="w-full bg-black text-white py-3 rounded-lg text-xs font-black hover:bg-[#dc2626] transition-all shadow-md">{L.activate}</button>
+                  <button onClick={() => {if(beomToken<50) return alert(L.beomLackAlert); setBeomToken(p=>p-50); setQrState({...qrState, active:true});}} className="w-full bg-black text-white py-3 rounded-lg text-xs font-black hover:bg-[#dc2626] transition-all shadow-md">{L.activate}</button>
                </div>
             </div>
 
@@ -289,12 +311,12 @@ export default function KedheonDesignSystemFinal() {
               </div>
               <div className="flex gap-2 flex-wrap">{FANS.map(f => <button key={f} className="px-3 py-1 bg-white border border-gray-100 rounded-full text-[9px] md:text-xs font-black text-red-600 shadow-sm">🚩 {f}</button>)}</div>
               <div className="space-y-2">
-                <input value={feed.title} onChange={e => setFeed({...feed, title: e.target.value})} placeholder="제목 또는 팬심 공유" className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-[10px] md:text-sm font-black outline-none" />
-                <input value={feed.link} onChange={e => setFeed({...feed, link: e.target.value})} placeholder="이미지/영상 링크 (URL)" className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-[10px] md:text-sm font-black outline-none text-red-400 placeholder-red-200" />
-                <textarea value={feed.desc} onChange={e => setFeed({...feed, desc: e.target.value})} placeholder="상세 내용을 기록하십시오" className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-[9px] md:text-xs font-bold h-24 outline-none focus:border-black leading-relaxed" />
+                <input value={feed.title} onChange={e => setFeed({...feed, title: e.target.value})} placeholder={L.feedTitle} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-[10px] md:text-sm font-black outline-none" />
+                <input value={feed.link} onChange={e => setFeed({...feed, link: e.target.value})} placeholder={L.feedLink} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-[10px] md:text-sm font-black outline-none text-red-400 placeholder-red-200" />
+                <textarea value={feed.desc} onChange={e => setFeed({...feed, desc: e.target.value})} placeholder={L.feedDesc} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-[9px] md:text-xs font-bold h-24 outline-none focus:border-black leading-relaxed" />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-2 font-black">
-                <button onClick={() => {if(!feed.title) return; setBeomToken(p=>p-10); alert("등록 성공"); setFeed({title:'', link:'', desc:''});}} className="md:col-span-2 bg-black text-white py-3 rounded-xl text-sm md:text-lg font-black hover:bg-[#dc2626] transition-all shadow-lg active:scale-95">피드 등록 (10 BEOM)</button>
+                <button onClick={() => {if(!feed.title) return; setBeomToken(p=>p-10); alert(L.regDoneAlert); setFeed({title:'', link:'', desc:''});}} className="md:col-span-2 bg-black text-white py-3 rounded-xl text-sm md:text-lg font-black hover:bg-[#dc2626] transition-all shadow-lg active:scale-95">{L.postBtn}</button>
                 <button className="bg-white border-2 border-black text-black py-3 rounded-xl text-xs md:text-sm font-black flex items-center justify-center gap-1.5 shadow active:scale-95">🚩 FAN ROOM</button>
               </div>
               <div className="bg-gray-50 p-3 rounded-xl border-l-[4px] border-[#dc2626] text-left font-black"><p className="text-gray-400 text-[8px] md:text-[10px] font-bold italic leading-none">{L.fanRoomDesc}</p></div>
@@ -304,8 +326,8 @@ export default function KedheonDesignSystemFinal() {
             <SectionHeader title={L.market} desc={L.marketDesc} />
             <div className="bg-white p-4 rounded-2xl border-2 border-black/10 space-y-4 font-black text-left">
                 <div className="flex gap-4 border-b border-gray-100 pb-1.5">
-                    <button onClick={() => setMarketMode('BUY')} className={`text-xs md:text-lg font-black italic ${marketMode === 'BUY' ? 'text-black border-b-2 border-black' : 'text-gray-300'}`}>굿즈 구매</button>
-                    <button onClick={() => setMarketMode('SELL')} className={`text-xs md:text-lg font-black italic ${marketMode === 'SELL' ? 'text-black border-b-2 border-black' : 'text-gray-300'}`}>판매 등록</button>
+                    <button onClick={() => setMarketMode('BUY')} className={`text-xs md:text-lg font-black italic ${marketMode === 'BUY' ? 'text-black border-b-2 border-black' : 'text-gray-300'}`}>{L.marketBuyTab}</button>
+                    <button onClick={() => setMarketMode('SELL')} className={`text-xs md:text-lg font-black italic ${marketMode === 'SELL' ? 'text-black border-b-2 border-black' : 'text-gray-300'}`}>{L.marketSellTab}</button>
                 </div>
                 {marketMode === 'BUY' ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 font-black">
@@ -316,7 +338,7 @@ export default function KedheonDesignSystemFinal() {
                                     <h4 className="text-[10px] md:text-xs font-black uppercase mb-0.5 truncate">{g.name}</h4>
                                     <p className="text-gray-400 text-[8px] md:text-[10px] mb-1 font-bold line-clamp-1 leading-tight">{g.desc}</p>
                                     <p className="text-[#dc2626] text-xs md:text-base font-black mb-2 leading-none">{g.price.toLocaleString()} <span className="text-[8px]">BEOM</span></p>
-                                    <button className="w-full py-1.5 bg-black text-white rounded-lg text-[8px] md:text-[10px] font-black uppercase active:scale-95">구매 신청</button>
+                                    <button className="w-full py-1.5 bg-black text-white rounded-lg text-[8px] md:text-[10px] font-black uppercase active:scale-95">{L.buyReqBtn}</button>
                                 </div>
                             </div>
                         ))}
@@ -329,7 +351,7 @@ export default function KedheonDesignSystemFinal() {
                             <input value={sellItem.img} onChange={e => setSellItem({...sellItem, img:e.target.value})} placeholder={L.itemImg} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-[10px] md:text-sm font-black outline-none" />
                         </div>
                         <textarea value={sellItem.desc} onChange={e => setSellItem({...sellItem, desc:e.target.value})} placeholder={L.itemDesc} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-[9px] md:text-xs font-bold h-20 outline-none" />
-                        <button onClick={() => {if(!sellItem.name) return; setGoods([{id:Date.now(), ...sellItem, price:Number(sellItem.price), seller:"User"}, ...goods]); alert("등록 성공"); setMarketMode('BUY');}} className="w-full bg-[#dc2626] text-white py-3 rounded-xl text-xs md:text-sm font-black shadow-lg">굿즈 등록 완료</button>
+                        <button onClick={() => {if(!sellItem.name) return; setGoods([{id:Date.now(), ...sellItem, price:Number(sellItem.price), seller:"User"}, ...goods]); alert(L.regDoneAlert); setMarketMode('BUY');}} className="w-full bg-[#dc2626] text-white py-3 rounded-xl text-xs md:text-sm font-black shadow-lg">{L.sellDoneBtn}</button>
                     </div>
                 )}
             </div>
@@ -345,7 +367,7 @@ export default function KedheonDesignSystemFinal() {
                     <input value={partner.contact} onChange={e=>setPartner({...partner, contact: e.target.value})} placeholder={L.contact} className="bg-white/10 border-none p-3 rounded-xl text-[10px] md:text-xs text-white outline-none focus:ring-1 ring-[#dc2626]" />
                 </div>
                 <textarea value={partner.msg} onChange={e=>setPartner({...partner, msg: e.target.value})} placeholder={L.vision} className="w-full bg-white/10 border-none p-4 rounded-2xl text-[10px] md:text-xs text-white h-24 outline-none focus:ring-1 ring-[#dc2626] z-10 relative text-left" />
-                <button onClick={()=>alert("제안서가 전송되었습니다.")} className="w-full bg-[#dc2626] text-white py-3.5 rounded-full text-xs md:text-lg font-black hover:bg-white hover:text-black transition-all uppercase z-10 relative active:scale-95 shadow-xl">제안 제출하기</button>
+                <button onClick={()=>alert(L.propDoneAlert)} className="w-full bg-[#dc2626] text-white py-3.5 rounded-full text-xs md:text-lg font-black hover:bg-white hover:text-black transition-all uppercase z-10 relative active:scale-95 shadow-xl">{L.submitBtn}</button>
             </div>
           </div>
         )}
