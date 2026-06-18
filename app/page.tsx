@@ -10,6 +10,7 @@ import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react'
  * 3. 원본 로직 100% 무손실 복원 (축약 없음)
  * 4. UI 내부 하드코딩된 한글 텍스트 완벽한 다국어(EN/KR) 연동
  * 5. Vercel 빌드 에러 원인(L.submitBtn -> L.submit) 수정 완료
+ * 6. 카테고리, 팬 리스트, 굿즈 초기 데이터의 다국어 연동 완료
  * -----------------------------------------------------------
  */
 
@@ -30,18 +31,21 @@ interface Dictionary {
   exchangeDesc: string; authDesc: string; creativeDesc: string; fanRoomDesc: string;
   marketDesc: string; partnershipDesc: string;
   
-  // UI 변수화 추가 (한글/영문 혼용 방지)
+  // UI 변수화 추가
   convertTitle: string; convertBtn: string;
-  walletType: string; personal: string; corporate: string;
+  walletType: string; personal: string; corporate: string; encodedQR: string;
   feedTitle: string; feedLink: string; feedDesc: string; postBtn: string;
   marketBuyTab: string; marketSellTab: string; buyReqBtn: string; sellDoneBtn: string;
   copyPrompt: string; copiedAlert: string; piLackAlert: string; convDoneAlert: string;
-  beomLackAlert: string; regDoneAlert: string; propDoneAlert: string; encodedQR: string;
+  beomLackAlert: string; regDoneAlert: string; propDoneAlert: string;
+  
+  // 배열 데이터 다국어 연동
+  cats: string[];
+  fans: string[];
+  goodsMock: GoodsItem[];
 }
 
 const PI_INVITE_CODE = 'ohsangjo';
-const CATS = ['CCM', '뮤지션', 'MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'];
-const FANS = ['케데헌', '헌트릭스', 'BTS'];
 
 const DICT: Record<Lang, Dictionary> = {
   KR: {
@@ -83,7 +87,13 @@ const DICT: Record<Lang, Dictionary> = {
     feedTitle: "제목 또는 팬심 공유", feedLink: "이미지/영상 링크 (URL)", feedDesc: "상세 내용을 기록하십시오", postBtn: "피드 등록 (10 BEOM)",
     marketBuyTab: "굿즈 구매", marketSellTab: "판매 등록", buyReqBtn: "구매 신청", sellDoneBtn: "굿즈 등록 완료",
     copyPrompt: "복사하려면 클릭", copiedAlert: "추천인 코드가 복사되었습니다!", piLackAlert: "PI 부족", convDoneAlert: "환전 완료!",
-    beomLackAlert: "BEOM 부족", regDoneAlert: "등록 성공", propDoneAlert: "제안서가 전송되었습니다."
+    beomLackAlert: "BEOM 부족", regDoneAlert: "등록 성공", propDoneAlert: "제안서가 전송되었습니다.",
+    cats: ['CCM', '뮤지션', 'MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'],
+    fans: ['케데헌', '헌트릭스', 'BTS'],
+    goodsMock: [
+      { id: 1, name: "기념 골드 뱃지", price: 1000, desc: "한정판 실물 뱃지입니다.", img: "/beom-token.png", seller: "System" },
+      { id: 2, name: "V23 노드 마스터키", price: 5000, desc: "노드 운영 디지털 마스터키입니다.", img: "/node-icon.png", seller: "System" }
+    ]
   },
   EN: {
     rookie: "ROOKIE", pioneer: "PIONEER", exchange: "01. BEOM CONVERSION & FEATURES", auth: "02. SECURE QR CODE",
@@ -124,7 +134,13 @@ const DICT: Record<Lang, Dictionary> = {
     feedTitle: "Title or Share Spirit", feedLink: "Image/Video Link (URL)", feedDesc: "Describe your activity in detail", postBtn: "POST (10 BEOM)",
     marketBuyTab: "BUY GOODS", marketSellTab: "SELL ITEMS", buyReqBtn: "BUY REQUEST", sellDoneBtn: "COMPLETE REGISTRATION",
     copyPrompt: "Click to Copy", copiedAlert: "Invite Code Copied!", piLackAlert: "Not enough PI", convDoneAlert: "Conversion Complete!",
-    beomLackAlert: "Not enough BEOM", regDoneAlert: "Registration Successful", propDoneAlert: "Proposal Submitted."
+    beomLackAlert: "Not enough BEOM", regDoneAlert: "Registration Successful", propDoneAlert: "Proposal Submitted.",
+    cats: ['CCM', 'MUSICIAN', 'MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'],
+    fans: ['KEDHEON', 'HUNTRIX', 'BTS'],
+    goodsMock: [
+      { id: 1, name: "Gold Badge", price: 1000, desc: "Limited physical badge.", img: "/beom-token.png", seller: "System" },
+      { id: 2, name: "V23 Node Key", price: 5000, desc: "Node digital master key.", img: "/node-icon.png", seller: "System" }
+    ]
   }
 };
 
@@ -149,15 +165,13 @@ export default function KedheonDesignSystemFinal() {
   const [qrState, setQrState] = useState({ type: 'PERSONAL', biz: '', active: false });
   const [marketMode, setMarketMode] = useState<'BUY' | 'SELL'>('BUY');
   const [sellItem, setSellItem] = useState({ name: '', price: '', desc: '', img: '' });
-  const [goods, setGoods] = useState<GoodsItem[]>([
-    { id: 1, name: "기념 골드 뱃지", price: 1000, desc: "한정판 실물 뱃지입니다.", img: "/beom-token.png", seller: "System" },
-    { id: 2, name: "V23 노드 마스터키", price: 5000, desc: "노드 운영 디지털 마스터키입니다.", img: "/node-icon.png", seller: "System" }
-  ]);
+  const [userGoods, setUserGoods] = useState<GoodsItem[]>([]);
   const [partner, setPartner] = useState({ corp: '', email: '', contact: '', manager: '', msg: '' });
 
   useEffect(() => { setHasMounted(true); }, []);
 
   const L = DICT[lang];
+  const displayGoods = [...userGoods, ...L.goodsMock];
 
   const handleDownload = useCallback((url: string | undefined) => {
     if (typeof window !== 'undefined' && url) window.open(url, '_blank');
@@ -308,9 +322,9 @@ export default function KedheonDesignSystemFinal() {
                 <button onClick={() => setHubTab('SPIRIT')} className={`text-xs md:text-lg font-black italic uppercase ${hubTab === 'SPIRIT' ? 'text-black border-b-2 border-black' : 'text-gray-300'}`}>FAN SPIRIT</button>
               </div>
               <div className="flex gap-1.5 overflow-x-auto pb-1 no-scrollbar">
-                {CATS.map(c => <button key={c} onClick={() => setCategory(c)} className={`px-3 py-1 rounded-full text-[9px] md:text-xs font-black italic border transition-all whitespace-nowrap ${category === c ? 'bg-black text-white border-black shadow-md' : 'bg-white text-gray-400'}`}>{c}</button>)}
+                {L.cats.map(c => <button key={c} onClick={() => setCategory(c)} className={`px-3 py-1 rounded-full text-[9px] md:text-xs font-black italic border transition-all whitespace-nowrap ${category === c ? 'bg-black text-white border-black shadow-md' : 'bg-white text-gray-400'}`}>{c}</button>)}
               </div>
-              <div className="flex gap-2 flex-wrap">{FANS.map(f => <button key={f} className="px-3 py-1 bg-white border border-gray-100 rounded-full text-[9px] md:text-xs font-black text-red-600 shadow-sm">🚩 {f}</button>)}</div>
+              <div className="flex gap-2 flex-wrap">{L.fans.map(f => <button key={f} className="px-3 py-1 bg-white border border-gray-100 rounded-full text-[9px] md:text-xs font-black text-red-600 shadow-sm">🚩 {f}</button>)}</div>
               <div className="space-y-2">
                 <input value={feed.title} onChange={e => setFeed({...feed, title: e.target.value})} placeholder={L.feedTitle} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-[10px] md:text-sm font-black outline-none" />
                 <input value={feed.link} onChange={e => setFeed({...feed, link: e.target.value})} placeholder={L.feedLink} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-[10px] md:text-sm font-black outline-none text-red-400 placeholder-red-200" />
@@ -332,7 +346,7 @@ export default function KedheonDesignSystemFinal() {
                 </div>
                 {marketMode === 'BUY' ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 font-black">
-                        {goods.map(g => (
+                        {displayGoods.map(g => (
                             <div key={g.id} className="bg-gray-50 p-3 rounded-xl border flex gap-3 items-center group shadow-sm transition-all hover:border-[#dc2626]">
                                 <div className="w-20 h-20 md:w-28 md:h-28 bg-white rounded-lg flex items-center justify-center overflow-hidden shrink-0 shadow-inner"><img src={g.img} className="w-14 h-14 object-contain group-hover:scale-110 transition-transform" alt="G" /></div>
                                 <div className="flex-1 min-w-0 font-black">
@@ -352,7 +366,7 @@ export default function KedheonDesignSystemFinal() {
                             <input value={sellItem.img} onChange={e => setSellItem({...sellItem, img:e.target.value})} placeholder={L.itemImg} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-[10px] md:text-sm font-black outline-none" />
                         </div>
                         <textarea value={sellItem.desc} onChange={e => setSellItem({...sellItem, desc:e.target.value})} placeholder={L.itemDesc} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-[9px] md:text-xs font-bold h-20 outline-none" />
-                        <button onClick={() => {if(!sellItem.name) return; setGoods([{id:Date.now(), ...sellItem, price:Number(sellItem.price), seller:"User"}, ...goods]); alert(L.regDoneAlert); setMarketMode('BUY');}} className="w-full bg-[#dc2626] text-white py-3 rounded-xl text-xs md:text-sm font-black shadow-lg">{L.sellDoneBtn}</button>
+                        <button onClick={() => {if(!sellItem.name) return; setUserGoods([{id:Date.now(), ...sellItem, price:Number(sellItem.price), seller:"User"}, ...userGoods]); alert(L.regDoneAlert); setMarketMode('BUY');}} className="w-full bg-[#dc2626] text-white py-3 rounded-xl text-xs md:text-sm font-black shadow-lg">{L.sellDoneBtn}</button>
                     </div>
                 )}
             </div>
