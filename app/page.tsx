@@ -2,18 +2,17 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 
-/** * [KEDHEON MASTER V270.4 - MULTILINGUAL & ECOSYSTEM EXPANDED]
+/** * [KEDHEON MASTER V270.6 - GLOBAL MULTILINGUAL EXPANDED]
  * -----------------------------------------------------------
  * 수정 사항: 
- * 1. 글로벌 노출도 극대화를 위한 다국어(CN, JP) 추가 완벽 연동
- * 2. ROOKIE 탭: 파이 코어팀 공식 개발자 모집 배너 및 링크 연결
- * 3. Step 07 비밀구절 안내 텍스트 빨간색 강조 및 보안 문구 유지
- * 4. 원본 로직 및 배열 100% 무손실 복원
+ * 1. 글로벌 확장을 위한 10개국어 지원 (KR, EN, CN, JP, ES, VN, FR, PT, RU, ID)
+ * 2. 다국어 선택기 UI 모바일 가로 스크롤 최적화 유지
+ * 3. 원본 로직(결제, 폼 전송, ROOKIE 파이 코어팀 모집 공고) 100% 무손실 복원
  * -----------------------------------------------------------
  */
 
 // --- Types ---
-type Lang = 'KR' | 'EN' | 'CN' | 'JP';
+type Lang = 'KR' | 'EN' | 'CN' | 'JP' | 'ES' | 'VN' | 'FR' | 'PT' | 'RU' | 'ID';
 interface Step { t: string; d: string; links?: { AOS: string; iOS: string; }; warning?: boolean; }
 interface GoodsItem { id: number; name: string; price: number; img: string; desc: string; seller: string; }
 interface Dictionary {
@@ -98,8 +97,8 @@ const DICT: Record<Lang, Dictionary> = {
     ]
   },
   EN: {
-    rookie: "ROOKIE", pioneer: "PIONEER", exchange: "01. BEOM CONVERSION & FEATURES", auth: "02. SECURE QR CODE",
-    creative: "03. FANDOM REWARD SYSTEM", market: "04. GOODS MARKET", partnership: "05. PARTNERSHIP",
+    rookie: "ROOKIE", pioneer: "PIONEER", exchange: "01. BEOM CONVERSION", auth: "02. SECURE QR CODE",
+    creative: "03. FANDOM REWARDS", market: "04. GOODS MARKET", partnership: "05. PARTNERSHIP",
     invitation: "Web3 Invitation", procedure: "Join Guide", assets: "ASSETS",
     activate: "ACTIVATE (50 BEOM)", convert: "CONVERT NOW", post: "POST (10 BEOM)",
     buy: "BUY", register: "SELL", submit: "SUBMIT PROPOSAL",
@@ -194,12 +193,12 @@ const DICT: Record<Lang, Dictionary> = {
     ]
   },
   JP: {
-    rookie: "ルーキー", pioneer: "パイオニア", exchange: "01. BEOM 変換と機能", auth: "02. セキュリティ QR コード",
-    creative: "03. ファン報酬システム", market: "04. グッズ市場", partnership: "05. グローバルパートナーシップ",
+    rookie: "ルーキー", pioneer: "パイオニア", exchange: "01. BEOM 変換", auth: "02. セキュリティ QR",
+    creative: "03. ファン報酬システム", market: "04. グッズ市場", partnership: "05. パートナーシップ",
     invitation: "Web3 招待状", procedure: "参加ガイド", assets: "資産",
     activate: "アクティブ化 (50 BEOM)", convert: "今すぐ変換", post: "投稿 (10 BEOM)",
     buy: "購入", register: "販売登録", submit: "提案を送信",
-    downloadAOS: "Android ダウンロード", downloadiOS: "iPhone ダウンロード", buyBeom: "BEOM を購入",
+    downloadAOS: "Android", downloadiOS: "iPhone", buyBeom: "BEOM を購入",
     corpName: "会社名", email: "メールアドレス", contact: "連絡先", manager: "担当者", vision: "提案内容",
     itemName: "商品名", itemPrice: "価格 (BEOM)", itemDesc: "商品説明", itemImg: "画像 URL", bizPlaceholder: "会社名を入力してください",
     portalStatus: "統合ポータルアプリ: サブアプリの接続が進行中です。",
@@ -224,11 +223,11 @@ const DICT: Record<Lang, Dictionary> = {
       { t: "パスワード", d: "大文字、小文字、数字を組み合わせます。" },
       { t: "プロフィール", d: "パスポートの名前と ID を入力します。" },
       { t: "招待コード", d: "[ ohsangjo ] を入力して参加します。" },
-      { t: "パスフレーズ", d: "24個の単語を紙に手書きして安全に保管してください。(ハッキングのリスクがあるため、デジタル保存はしないでください)", warning: true },
+      { t: "パスフレーズ", d: "24個の単語を紙に手書きして安全に保管してください。(デジタル保存禁止)", warning: true },
       { t: "マイニング", d: "24時間ごとに雷のアイコンをタップします。" }
     ],
     convertTitle: "1 PI = 1,000 BEOM 変換", convertBtn: "今すぐ変換",
-    walletType: "ウォレット保護タイプ", personal: "個人", corporate: "企業", encodedQR: "エンコードされた QR",
+    walletType: "保護タイプ", personal: "個人", corporate: "企業", encodedQR: "エンコードQR",
     feedTitle: "タイトルまたはスピリットを共有", feedLink: "画像/動画リンク (URL)", feedDesc: "活動の詳細を説明してください", postBtn: "投稿 (10 BEOM)",
     marketBuyTab: "グッズ購入", marketSellTab: "販売登録", buyReqBtn: "購入リクエスト", sellDoneBtn: "登録完了",
     copyPrompt: "クリックしてコピー", copiedAlert: "招待コードがコピーされました！", piLackAlert: "PI が不足しています", convDoneAlert: "変換が完了しました！",
@@ -239,6 +238,294 @@ const DICT: Record<Lang, Dictionary> = {
     goodsMock: [
       { id: 1, name: "記念ゴールドバッジ", price: 1000, desc: "限定の物理バッジ。", img: "/beom-token.png", seller: "System" },
       { id: 2, name: "V23 ノードマスターキー", price: 5000, desc: "ノード運用のデジタルマスターキー。", img: "/node-icon.png", seller: "System" }
+    ]
+  },
+  ES: {
+    rookie: "NOVATO", pioneer: "PIONERO", exchange: "01. CONVERSIÓN BEOM", auth: "02. CÓDIGO QR SEGURO",
+    creative: "03. RECOMPENSAS FANDOM", market: "04. MERCADO DE BIENES", partnership: "05. ASOCIACIÓN",
+    invitation: "Invitación Web3", procedure: "Guía de Ingreso", assets: "ACTIVOS",
+    activate: "ACTIVAR (50 BEOM)", convert: "CONVERTIR AHORA", post: "PUBLICAR (10 BEOM)",
+    buy: "COMPRAR", register: "VENDER", submit: "ENVIAR PROPUESTA",
+    downloadAOS: "Android", downloadiOS: "iPhone", buyBeom: "COMPRAR BEOM",
+    corpName: "Empresa", email: "Correo", contact: "Contacto", manager: "Gerente", vision: "Detalles",
+    itemName: "Nombre", itemPrice: "Precio (BEOM)", itemDesc: "Descripción", itemImg: "URL de Imagen", bizPlaceholder: "Ingrese Nombre de Empresa",
+    portalStatus: "Portal Integrado: Conexión de sub-aplicaciones en curso.",
+    piJoinDesc: "Únete al mayor ecosistema de red Web3.",
+    exchangeDesc: "Convierte Pi a BEOM y explora las funciones principales.",
+    authDesc: "Paga y autentica de forma segura mediante QR sin exponer la dirección.",
+    creativeDesc: "Obtén recompensas BEOM compartiendo tu espíritu.",
+    fanRoomDesc: "※ 🚩 Sala de Fans (500 BEOM): 90% de retorno y derechos de gobernanza.",
+    marketDesc: "Comercializa bienes exclusivos y registra tus propios artículos.",
+    partnershipDesc: "Oportunidades de asociación global y propuestas comerciales.",
+    exList: [
+      "1. Conversión BEOM (1 PI = 1,000 BEOM intercambio instantáneo)",
+      "2. Código QR (Pago seguro sin exponer la dirección de la billetera)",
+      "3. Recompensas (Sistema para ganar BEOM a través de actividades)",
+      "4. Mercado (Venta y compra de artículos limitados)",
+      "5. Asociación (Portal de colaboración B2B)"
+    ],
+    steps: [
+      { t: "Instalar", d: "Descarga la aplicación oficial.", links: { AOS: "#", iOS: "#" } },
+      { t: "Método", d: "Selecciona 'Continuar con número de teléfono'." },
+      { t: "País", d: "Selecciona +82 e ingresa tu número." },
+      { t: "Contraseña", d: "Combina mayúsculas, minúsculas y números." },
+      { t: "Perfil", d: "Ingresa nombre del pasaporte e ID." },
+      { t: "Código", d: "Ingresa [ ohsangjo ] para unirte." },
+      { t: "Frase", d: "Escribe 24 palabras en papel y guárdalas. (NO digital por hackeos)", warning: true },
+      { t: "Minería", d: "Toca el rayo cada 24h." }
+    ],
+    convertTitle: "1 PI = 1,000 BEOM", convertBtn: "CONVERTIR AHORA",
+    walletType: "Tipo de Billetera", personal: "Personal", corporate: "Corporativo", encodedQR: "QR Codificado",
+    feedTitle: "Título o Espíritu", feedLink: "Enlace (URL)", feedDesc: "Describe tu actividad", postBtn: "PUBLICAR (10 BEOM)",
+    marketBuyTab: "COMPRAR", marketSellTab: "VENDER", buyReqBtn: "SOLICITAR COMPRA", sellDoneBtn: "REGISTRO COMPLETO",
+    copyPrompt: "Clic para Copiar", copiedAlert: "¡Código copiado!", piLackAlert: "Falta PI", convDoneAlert: "¡Conversión Completa!",
+    beomLackAlert: "Falta BEOM", regDoneAlert: "Registro Exitoso", propDoneAlert: "Propuesta Enviada.",
+    devRecruitTitle: "Reclutamiento del Core Team", devRecruitDesc: "Únete a los desarrolladores oficiales de Pi.", devRecruitBtn: "REVISAR Y APLICAR",
+    cats: ['CCM', 'MÚSICA', 'MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'],
+    fans: ['KEDHEON', 'HUNTRIX', 'BTS'],
+    goodsMock: [
+      { id: 1, name: "Insignia de Oro", price: 1000, desc: "Insignia física limitada.", img: "/beom-token.png", seller: "System" },
+      { id: 2, name: "Llave de Nodo V23", price: 5000, desc: "Llave maestra digital.", img: "/node-icon.png", seller: "System" }
+    ]
+  },
+  VN: {
+    rookie: "NGƯỜI MỚI", pioneer: "TIÊN PHONG", exchange: "01. CHUYỂN ĐỔI BEOM", auth: "02. MÃ QR BẢO MẬT",
+    creative: "03. PHẦN THƯỞNG FANDOM", market: "04. THỊ TRƯỜNG", partnership: "05. ĐỐI TÁC",
+    invitation: "Lời mời Web3", procedure: "Hướng dẫn Tham gia", assets: "TÀI SẢN",
+    activate: "KÍCH HOẠT (50 BEOM)", convert: "CHUYỂN ĐỔI NGAY", post: "ĐĂNG BÀI (10 BEOM)",
+    buy: "MUA", register: "BÁN", submit: "GỬI ĐỀ XUẤT",
+    downloadAOS: "Tải Android", downloadiOS: "Tải iPhone", buyBeom: "MUA BEOM",
+    corpName: "Công ty", email: "Email", contact: "Liên hệ", manager: "Người quản lý", vision: "Chi tiết",
+    itemName: "Tên sản phẩm", itemPrice: "Giá (BEOM)", itemDesc: "Mô tả", itemImg: "URL hình ảnh", bizPlaceholder: "Nhập tên công ty",
+    portalStatus: "Cổng thông vị: Đang kết nối ứng dụng phụ.",
+    piJoinDesc: "Tham gia hệ sinh thái Web3 lớn nhất.",
+    exchangeDesc: "Chuyển Pi sang BEOM và khám phá các tính năng.",
+    authDesc: "Thanh toán an toàn qua QR không lộ địa chỉ ví.",
+    creativeDesc: "Nhận BEOM bằng cách chia sẻ tinh thần.",
+    fanRoomDesc: "※ 🚩 Phòng Fan (500 BEOM): 90% Lợi nhuận và Quyền quản trị.",
+    marketDesc: "Giao dịch hàng hóa độc quyền và đăng ký bán.",
+    partnershipDesc: "Cơ hội hợp tác toàn cầu và đề xuất kinh doanh.",
+    exList: [
+      "1. Chuyển đổi BEOM (1 PI = 1,000 BEOM ngay lập tức)",
+      "2. Mã QR (Thanh toán an toàn không lộ ví)",
+      "3. Phần thưởng (Hệ thống kiếm BEOM qua hoạt động)",
+      "4. Thị trường (Mua bán các vật phẩm giới hạn)",
+      "5. Đối tác (Cổng hợp tác B2B)"
+    ],
+    steps: [
+      { t: "Cài đặt", d: "Tải ứng dụng chính thức.", links: { AOS: "#", iOS: "#" } },
+      { t: "Phương thức", d: "Chọn 'Tiếp tục với số điện thoại'." },
+      { t: "Quốc gia", d: "Chọn +82 và nhập số điện thoại." },
+      { t: "Mật khẩu", d: "Kết hợp chữ Hoa, thường và Số." },
+      { t: "Hồ sơ", d: "Nhập tên hộ chiếu và ID." },
+      { t: "Mã mời", d: "Nhập [ ohsangjo ] để tham gia." },
+      { t: "Cụm mật khẩu", d: "Ghi 24 từ ra giấy. (Không lưu kỹ thuật số để tránh bị hack)", warning: true },
+      { t: "Khai thác", d: "Nhấn nút tia sét mỗi 24 giờ." }
+    ],
+    convertTitle: "1 PI = 1,000 BEOM", convertBtn: "CHUYỂN ĐỔI NGAY",
+    walletType: "Loại bảo vệ ví", personal: "Cá nhân", corporate: "Doanh nghiệp", encodedQR: "QR Mã hóa",
+    feedTitle: "Tiêu đề", feedLink: "Liên kết Ảnh/Video", feedDesc: "Mô tả hoạt động của bạn", postBtn: "ĐĂNG BÀI (10 BEOM)",
+    marketBuyTab: "MUA HÀNG", marketSellTab: "BÁN HÀNG", buyReqBtn: "YÊU CẦU MUA", sellDoneBtn: "HOÀN TẤT ĐĂNG KÝ",
+    copyPrompt: "Nhấn để sao chép", copiedAlert: "Đã sao chép mã mời!", piLackAlert: "Không đủ PI", convDoneAlert: "Chuyển đổi thành công!",
+    beomLackAlert: "Không đủ BEOM", regDoneAlert: "Đăng ký thành công", propDoneAlert: "Đã gửi đề xuất.",
+    devRecruitTitle: "Tuyển dụng Nhà phát triển Pi", devRecruitDesc: "Tham gia nhóm phát triển xây dựng hệ sinh thái Pi.", devRecruitBtn: "KIỂM TRA & ỨNG TUYỂN",
+    cats: ['CCM', 'NHẠC SĨ', 'MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'],
+    fans: ['KEDHEON', 'HUNTRIX', 'BTS'],
+    goodsMock: [
+      { id: 1, name: "Huy hiệu vàng", price: 1000, desc: "Huy hiệu vật lý giới hạn.", img: "/beom-token.png", seller: "System" },
+      { id: 2, name: "Khóa Node V23", price: 5000, desc: "Khóa chủ kỹ thuật số Node.", img: "/node-icon.png", seller: "System" }
+    ]
+  },
+  FR: {
+    rookie: "NOVICE", pioneer: "PIONNIER", exchange: "01. CONVERSION BEOM", auth: "02. QR SÉCURISÉ",
+    creative: "03. RÉCOMPENSES", market: "04. MARCHÉ", partnership: "05. PARTENARIAT",
+    invitation: "Invitation Web3", procedure: "Guide d'inscription", assets: "ACTIFS",
+    activate: "ACTIVER (50 BEOM)", convert: "CONVERTIR", post: "PUBLIER (10 BEOM)",
+    buy: "ACHETER", register: "VENDRE", submit: "SOUMETTRE",
+    downloadAOS: "Télécharger Android", downloadiOS: "Télécharger iPhone", buyBeom: "ACHETER BEOM",
+    corpName: "Entreprise", email: "E-mail", contact: "Contact", manager: "Gérant", vision: "Détails",
+    itemName: "Nom", itemPrice: "Prix (BEOM)", itemDesc: "Description", itemImg: "URL de l'image", bizPlaceholder: "Nom de l'entreprise",
+    portalStatus: "Portail intégré: Connexion en cours.",
+    piJoinDesc: "Rejoignez le plus grand écosystème Web3.",
+    exchangeDesc: "Convertissez Pi en BEOM et explorez les fonctionnalités.",
+    authDesc: "Payez en toute sécurité via QR sans exposer l'adresse.",
+    creativeDesc: "Obtenez des récompenses BEOM en partageant votre esprit.",
+    fanRoomDesc: "※ 🚩 Fan Room (500 BEOM): 90% de retour et droits de gouvernance.",
+    marketDesc: "Échangez des biens exclusifs et enregistrez les vôtres.",
+    partnershipDesc: "Opportunités de partenariat mondial.",
+    exList: [
+      "1. Conversion BEOM (1 PI = 1,000 BEOM)",
+      "2. QR Code (Paiement sécurisé)",
+      "3. Récompenses (Gagnez des BEOM)",
+      "4. Marché (Achetez et vendez)",
+      "5. Partenariat (Portail B2B)"
+    ],
+    steps: [
+      { t: "Installer", d: "Téléchargez l'application officielle.", links: { AOS: "#", iOS: "#" } },
+      { t: "Méthode", d: "Sélectionnez 'Continuer avec le numéro'." },
+      { t: "Pays", d: "Sélectionnez +82 et entrez votre numéro." },
+      { t: "Mot de passe", d: "Combinez majuscules, minuscules et chiffres." },
+      { t: "Profil", d: "Entrez votre nom et ID." },
+      { t: "Code d'invitation", d: "Entrez [ ohsangjo ] pour rejoindre." },
+      { t: "Phrase secrète", d: "Écrivez 24 mots sur papier. (Ne pas sauvegarder numériquement)", warning: true },
+      { t: "Minage", d: "Appuyez sur l'éclair toutes les 24h." }
+    ],
+    convertTitle: "1 PI = 1 000 BEOM", convertBtn: "CONVERTIR",
+    walletType: "Type de portefeuille", personal: "Personnel", corporate: "Entreprise", encodedQR: "QR Encodé",
+    feedTitle: "Titre", feedLink: "Lien Image/Vidéo", feedDesc: "Décrivez votre activité", postBtn: "PUBLIER (10 BEOM)",
+    marketBuyTab: "ACHETER", marketSellTab: "VENDRE", buyReqBtn: "DEMANDER", sellDoneBtn: "TERMINÉ",
+    copyPrompt: "Cliquez pour copier", copiedAlert: "Code copié !", piLackAlert: "PI insuffisant", convDoneAlert: "Conversion réussie !",
+    beomLackAlert: "BEOM insuffisant", regDoneAlert: "Succès", propDoneAlert: "Proposition soumise.",
+    devRecruitTitle: "Recrutement Core Team Pi", devRecruitDesc: "Rejoignez les développeurs mondiaux officiels.", devRecruitBtn: "POSTULER",
+    cats: ['CCM', 'MUSICIEN', 'MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'],
+    fans: ['KEDHEON', 'HUNTRIX', 'BTS'],
+    goodsMock: [
+      { id: 1, name: "Badge en or", price: 1000, desc: "Badge physique limité.", img: "/beom-token.png", seller: "System" },
+      { id: 2, name: "Clé de nœud V23", price: 5000, desc: "Clé numérique maître.", img: "/node-icon.png", seller: "System" }
+    ]
+  },
+  PT: {
+    rookie: "NOVATO", pioneer: "PIONEIRO", exchange: "01. CONVERSÃO BEOM", auth: "02. QR SEGURO",
+    creative: "03. RECOMPENSAS", market: "04. MERCADO", partnership: "05. PARCERIA",
+    invitation: "Convite Web3", procedure: "Guia de Entrada", assets: "ATIVOS",
+    activate: "ATIVAR (50 BEOM)", convert: "CONVERTER", post: "PUBLICAR (10 BEOM)",
+    buy: "COMPRAR", register: "VENDER", submit: "ENVIAR",
+    downloadAOS: "Baixar Android", downloadiOS: "Baixar iPhone", buyBeom: "COMPRAR BEOM",
+    corpName: "Empresa", email: "E-mail", contact: "Contato", manager: "Gerente", vision: "Detalhes",
+    itemName: "Nome", itemPrice: "Preço (BEOM)", itemDesc: "Descrição", itemImg: "URL da Imagem", bizPlaceholder: "Nome da Empresa",
+    portalStatus: "Portal Integrado: Conexão em andamento.",
+    piJoinDesc: "Junte-se ao maior ecossistema Web3.",
+    exchangeDesc: "Converta Pi para BEOM e explore os recursos.",
+    authDesc: "Pague com segurança via QR.",
+    creativeDesc: "Obtenha recompensas BEOM.",
+    fanRoomDesc: "※ 🚩 Sala de Fãs (500 BEOM): 90% de retorno.",
+    marketDesc: "Troque bens exclusivos.",
+    partnershipDesc: "Oportunidades de parceria global.",
+    exList: [
+      "1. Conversão BEOM (1 PI = 1.000 BEOM)",
+      "2. Código QR (Pagamento seguro)",
+      "3. Recompensas (Ganhe BEOM)",
+      "4. Mercado (Compre e venda)",
+      "5. Parceria (Portal B2B)"
+    ],
+    steps: [
+      { t: "Instalar", d: "Baixe o aplicativo oficial.", links: { AOS: "#", iOS: "#" } },
+      { t: "Método", d: "Selecione 'Continuar com número'." },
+      { t: "País", d: "Selecione +82 e insira seu número." },
+      { t: "Senha", d: "Combine maiúsculas, minúsculas e números." },
+      { t: "Perfil", d: "Insira nome e ID." },
+      { t: "Código", d: "Insira [ ohsangjo ] para entrar." },
+      { t: "Frase secreta", d: "Escreva 24 palavras no papel.", warning: true },
+      { t: "Mineração", d: "Toque no raio a cada 24h." }
+    ],
+    convertTitle: "1 PI = 1.000 BEOM", convertBtn: "CONVERTER",
+    walletType: "Tipo de Carteira", personal: "Pessoal", corporate: "Corporativo", encodedQR: "QR Codificado",
+    feedTitle: "Título", feedLink: "Link da Imagem", feedDesc: "Descreva sua atividade", postBtn: "PUBLICAR",
+    marketBuyTab: "COMPRAR", marketSellTab: "VENDER", buyReqBtn: "SOLICITAR", sellDoneBtn: "CONCLUÍDO",
+    copyPrompt: "Clique para copiar", copiedAlert: "Copiado!", piLackAlert: "PI insuficiente", convDoneAlert: "Conversão concluída!",
+    beomLackAlert: "BEOM insuficiente", regDoneAlert: "Sucesso", propDoneAlert: "Proposta enviada.",
+    devRecruitTitle: "Recrutamento Core Team", devRecruitDesc: "Junte-se aos desenvolvedores globais.", devRecruitBtn: "CANDIDATAR-SE",
+    cats: ['CCM', 'MÚSICO', 'MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'],
+    fans: ['KEDHEON', 'HUNTRIX', 'BTS'],
+    goodsMock: [
+      { id: 1, name: "Emblema de Ouro", price: 1000, desc: "Emblema físico limitado.", img: "/beom-token.png", seller: "System" },
+      { id: 2, name: "Chave Node V23", price: 5000, desc: "Chave digital mestre.", img: "/node-icon.png", seller: "System" }
+    ]
+  },
+  RU: {
+    rookie: "НОВИЧОК", pioneer: "ПИОНЕР", exchange: "01. КОНВЕРСИЯ BEOM", auth: "02. БЕЗОПАСНЫЙ QR",
+    creative: "03. НАГРАДЫ FANDOM", market: "04. РЫНОК", partnership: "05. ПАРТНЕРСТВО",
+    invitation: "Приглашение Web3", procedure: "Гид по входу", assets: "АКТИВЫ",
+    activate: "АКТИВИРОВАТЬ (50 BEOM)", convert: "КОНВЕРТИРОВАТЬ", post: "ОПУБЛИКОВАТЬ",
+    buy: "КУПИТЬ", register: "ПРОДАТЬ", submit: "ОТПРАВИТЬ",
+    downloadAOS: "Скачать Android", downloadiOS: "Скачать iPhone", buyBeom: "КУПИТЬ BEOM",
+    corpName: "Компания", email: "E-mail", contact: "Контакт", manager: "Менеджер", vision: "Детали",
+    itemName: "Название", itemPrice: "Цена (BEOM)", itemDesc: "Описание", itemImg: "URL картинки", bizPlaceholder: "Название компании",
+    portalStatus: "Интегрированный портал: подключение.",
+    piJoinDesc: "Присоединяйтесь к крупнейшей экосистеме Web3.",
+    exchangeDesc: "Конвертируйте Pi в BEOM.",
+    authDesc: "Безопасная оплата через QR.",
+    creativeDesc: "Получайте награды BEOM.",
+    fanRoomDesc: "※ 🚩 Fan Room (500 BEOM): 90% возврата.",
+    marketDesc: "Торгуйте эксклюзивными товарами.",
+    partnershipDesc: "Глобальное партнерство.",
+    exList: [
+      "1. Конверсия BEOM (1 PI = 1,000 BEOM)",
+      "2. QR-код (Безопасная оплата)",
+      "3. Награды (Заработайте BEOM)",
+      "4. Рынок (Покупка и продажа)",
+      "5. Партнерство (B2B портал)"
+    ],
+    steps: [
+      { t: "Установка", d: "Скачайте приложение.", links: { AOS: "#", iOS: "#" } },
+      { t: "Метод", d: "Выберите 'Продолжить с номером'." },
+      { t: "Страна", d: "Выберите +82 и введите номер." },
+      { t: "Пароль", d: "Смешайте буквы и цифры." },
+      { t: "Профиль", d: "Введите имя и ID." },
+      { t: "Код", d: "Введите [ ohsangjo ]." },
+      { t: "Фраза", d: "Запишите 24 слова на бумаге.", warning: true },
+      { t: "Майнинг", d: "Нажимайте молнию каждые 24ч." }
+    ],
+    convertTitle: "1 PI = 1,000 BEOM", convertBtn: "КОНВЕРТИРОВАТЬ",
+    walletType: "Тип кошелька", personal: "Личный", corporate: "Корпоративный", encodedQR: "Закодированный QR",
+    feedTitle: "Заголовок", feedLink: "Ссылка URL", feedDesc: "Описание активности", postBtn: "ОПУБЛИКОВАТЬ",
+    marketBuyTab: "КУПИТЬ", marketSellTab: "ПРОДАТЬ", buyReqBtn: "ЗАПРОСИТЬ", sellDoneBtn: "ГОТОВО",
+    copyPrompt: "Копировать", copiedAlert: "Скопировано!", piLackAlert: "Недостаточно PI", convDoneAlert: "Готово!",
+    beomLackAlert: "Недостаточно BEOM", regDoneAlert: "Успех", propDoneAlert: "Отправлено.",
+    devRecruitTitle: "Набор Core Team", devRecruitDesc: "Присоединяйтесь к разработчикам.", devRecruitBtn: "ПОДАТЬ ЗАЯВКУ",
+    cats: ['CCM', 'МУЗЫКАНТ', 'MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'],
+    fans: ['KEDHEON', 'HUNTRIX', 'BTS'],
+    goodsMock: [
+      { id: 1, name: "Золотой значок", price: 1000, desc: "Лимитированный значок.", img: "/beom-token.png", seller: "System" },
+      { id: 2, name: "Ключ Node V23", price: 5000, desc: "Цифровой мастер-ключ.", img: "/node-icon.png", seller: "System" }
+    ]
+  },
+  ID: {
+    rookie: "PEMULA", pioneer: "PELOPOR", exchange: "01. KONVERSI BEOM", auth: "02. QR AMAN",
+    creative: "03. HADIAH FANDOM", market: "04. PASAR", partnership: "05. KEMITRAAN",
+    invitation: "Undangan Web3", procedure: "Panduan Bergabung", assets: "ASET",
+    activate: "AKTIFKAN (50 BEOM)", convert: "KONVERSI", post: "POSTING (10 BEOM)",
+    buy: "BELI", register: "JUAL", submit: "KIRIM",
+    downloadAOS: "Unduh Android", downloadiOS: "Unduh iPhone", buyBeom: "BELI BEOM",
+    corpName: "Perusahaan", email: "Email", contact: "Kontak", manager: "Manajer", vision: "Detail",
+    itemName: "Nama", itemPrice: "Harga (BEOM)", itemDesc: "Deskripsi", itemImg: "URL Gambar", bizPlaceholder: "Nama Perusahaan",
+    portalStatus: "Portal Terintegrasi: Koneksi sedang berlangsung.",
+    piJoinDesc: "Bergabunglah dengan ekosistem Web3 terbesar.",
+    exchangeDesc: "Konversi Pi ke BEOM dan jelajahi fitur.",
+    authDesc: "Bayar aman via QR.",
+    creativeDesc: "Dapatkan hadiah BEOM.",
+    fanRoomDesc: "※ 🚩 Ruang Penggemar (500 BEOM): 90% pengembalian.",
+    marketDesc: "Perdagangkan barang eksklusif.",
+    partnershipDesc: "Peluang kemitraan global.",
+    exList: [
+      "1. Konversi BEOM (1 PI = 1.000 BEOM)",
+      "2. Kode QR (Pembayaran aman)",
+      "3. Hadiah (Dapatkan BEOM)",
+      "4. Pasar (Beli dan jual)",
+      "5. Kemitraan (Portal B2B)"
+    ],
+    steps: [
+      { t: "Instal", d: "Unduh aplikasi resmi.", links: { AOS: "#", iOS: "#" } },
+      { t: "Metode", d: "Pilih 'Lanjutkan dengan nomor'." },
+      { t: "Negara", d: "Pilih +82 dan masukkan nomor." },
+      { t: "Sandi", d: "Gabungkan huruf dan angka." },
+      { t: "Profil", d: "Masukkan nama dan ID." },
+      { t: "Kode", d: "Masukkan [ ohsangjo ]." },
+      { t: "Frasa", d: "Tulis 24 kata di kertas.", warning: true },
+      { t: "Menambang", d: "Ketuk petir setiap 24 jam." }
+    ],
+    convertTitle: "1 PI = 1.000 BEOM", convertBtn: "KONVERSI",
+    walletType: "Jenis Dompet", personal: "Pribadi", corporate: "Perusahaan", encodedQR: "QR Enkode",
+    feedTitle: "Judul", feedLink: "Tautan URL", feedDesc: "Deskripsikan aktivitas", postBtn: "POSTING",
+    marketBuyTab: "BELI", marketSellTab: "JUAL", buyReqBtn: "MINTA", sellDoneBtn: "SELESAI",
+    copyPrompt: "Klik untuk menyalin", copiedAlert: "Tersalin!", piLackAlert: "PI tidak cukup", convDoneAlert: "Konversi selesai!",
+    beomLackAlert: "BEOM tidak cukup", regDoneAlert: "Sukses", propDoneAlert: "Proposal terkirim.",
+    devRecruitTitle: "Rekrutmen Core Team", devRecruitDesc: "Bergabunglah dengan pengembang.", devRecruitBtn: "DAFTAR",
+    cats: ['CCM', 'MUSISI', 'MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'],
+    fans: ['KEDHEON', 'HUNTRIX', 'BTS'],
+    goodsMock: [
+      { id: 1, name: "Lencana Emas", price: 1000, desc: "Lencana fisik terbatas.", img: "/beom-token.png", seller: "System" },
+      { id: 2, name: "Kunci Node V23", price: 5000, desc: "Kunci master digital.", img: "/node-icon.png", seller: "System" }
     ]
   }
 };
@@ -294,19 +581,18 @@ export default function KedheonDesignSystemFinal() {
           <img src="/kedheon-character.png" className="w-8 h-8 md:w-11 md:h-11 rounded-lg border-2 border-black" alt="K" />
           <div className="text-left leading-tight font-black">
             <h1 className="text-black text-sm md:text-lg italic uppercase leading-none">Kedheon</h1>
-            <span className="text-gray-400 text-[8px] font-mono tracking-widest uppercase">MASTER V270.4</span>
+            <span className="text-gray-400 text-[8px] font-mono tracking-widest uppercase">MASTER V270.6</span>
           </div>
         </div>
-        <div className="flex items-center gap-1.5 md:gap-2">
-          {/* 다국어 선택 (4개 국어) */}
-          <div className="bg-gray-100 p-0.5 rounded-md flex gap-0.5">
-            <button onClick={() => setLang('KR')} className={`px-2 py-0.5 rounded text-[10px] font-black ${lang === 'KR' ? 'bg-black text-white shadow-sm' : 'text-gray-400'}`}>KR</button>
-            <button onClick={() => setLang('EN')} className={`px-2 py-0.5 rounded text-[10px] font-black ${lang === 'EN' ? 'bg-black text-white shadow-sm' : 'text-gray-400'}`}>EN</button>
-            <button onClick={() => setLang('CN')} className={`px-2 py-0.5 rounded text-[10px] font-black ${lang === 'CN' ? 'bg-black text-white shadow-sm' : 'text-gray-400'}`}>CN</button>
-            <button onClick={() => setLang('JP')} className={`px-2 py-0.5 rounded text-[10px] font-black ${lang === 'JP' ? 'bg-black text-white shadow-sm' : 'text-gray-400'}`}>JP</button>
+        <div className="flex items-center gap-1.5 md:gap-2 overflow-hidden">
+          {/* 다국어 선택 (10개 국어) - 모바일 스크롤 지원 */}
+          <div className="bg-gray-100 p-0.5 rounded-md flex gap-0.5 overflow-x-auto no-scrollbar max-w-[120px] sm:max-w-none">
+            {['KR', 'EN', 'CN', 'JP', 'ES', 'VN', 'FR', 'PT', 'RU', 'ID'].map((l) => (
+              <button key={l} onClick={() => setLang(l as Lang)} className={`px-2 py-0.5 rounded text-[10px] font-black shrink-0 ${lang === l ? 'bg-black text-white shadow-sm' : 'text-gray-400'}`}>{l}</button>
+            ))}
           </div>
-          <button onClick={() => setTab('ROOKIE')} className={`px-3 py-1 rounded-lg text-[10px] md:text-sm font-black border transition-all ${tab === 'ROOKIE' ? 'bg-[#dc2626] text-white border-[#dc2626]' : 'text-gray-300 border-transparent'}`}>{L.rookie}</button>
-          <button onClick={() => setTab('PIONEER')} className={`px-3 py-1 rounded-lg text-[10px] md:text-sm font-black border transition-all ${tab === 'PIONEER' ? 'bg-black text-white border-black' : 'text-gray-300 border-transparent'}`}>{L.pioneer}</button>
+          <button onClick={() => setTab('ROOKIE')} className={`px-3 py-1 rounded-lg text-[10px] md:text-sm font-black border transition-all whitespace-nowrap ${tab === 'ROOKIE' ? 'bg-[#dc2626] text-white border-[#dc2626]' : 'text-gray-300 border-transparent'}`}>{L.rookie}</button>
+          <button onClick={() => setTab('PIONEER')} className={`px-3 py-1 rounded-lg text-[10px] md:text-sm font-black border transition-all whitespace-nowrap ${tab === 'PIONEER' ? 'bg-black text-white border-black' : 'text-gray-300 border-transparent'}`}>{L.pioneer}</button>
         </div>
       </nav>
 
@@ -341,7 +627,7 @@ export default function KedheonDesignSystemFinal() {
               ))}
             </div>
             
-            {/* 파이 코어팀 개발자 모집 배너 (신규 추가) */}
+            {/* 파이 코어팀 개발자 모집 배너 (유지) */}
             <div className="w-full bg-black border-[3px] border-[#dc2626] rounded-2xl p-4 md:p-6 text-left shadow-2xl flex flex-col md:flex-row items-center gap-4 relative overflow-hidden mt-2">
                 <div className="absolute -right-4 -top-4 w-16 h-16 bg-[#dc2626] rotate-45 opacity-20"></div>
                 <div className="flex-1 z-10">
