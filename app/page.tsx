@@ -2,12 +2,12 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 
-/** * [KEDHEON MASTER V270.6 - GLOBAL MULTILINGUAL EXPANDED]
+/** * [KEDHEON MASTER V270.7 - UI/UX PATCH]
  * -----------------------------------------------------------
  * 수정 사항: 
- * 1. 글로벌 확장을 위한 10개국어 지원 (KR, EN, CN, JP, ES, VN, FR, PT, RU, ID)
- * 2. 다국어 선택기 UI 모바일 가로 스크롤 최적화 유지
- * 3. 원본 로직(결제, 폼 전송, ROOKIE 파이 코어팀 모집 공고) 100% 무손실 복원
+ * 1. 파이 브라우저 해상도 붕괴 방지를 위한 다국어 선택기 수직 Dropdown(Select) 전환
+ * 2. 코어팀 가시성 확보를 위한 직관적인 UI 압축 및 국기 이모지 적용
+ * 3. 노드 최고점수 19.02 반영
  * -----------------------------------------------------------
  */
 
@@ -266,7 +266,7 @@ const DICT: Record<Lang, Dictionary> = {
     ],
     steps: [
       { t: "Instalar", d: "Descarga la aplicación oficial.", links: { AOS: "#", iOS: "#" } },
-      { t: "Método", d: "Selecciona 'Continuar con número de teléfono'." },
+      { t: "Método", d: "Selecciona 'Continuar con número'." },
       { t: "País", d: "Selecciona +82 e ingresa tu número." },
       { t: "Contraseña", d: "Combina mayúsculas, minúsculas y números." },
       { t: "Perfil", d: "Ingresa nombre del pasaporte e ID." },
@@ -581,18 +581,36 @@ export default function KedheonDesignSystemFinal() {
           <img src="/kedheon-character.png" className="w-8 h-8 md:w-11 md:h-11 rounded-lg border-2 border-black" alt="K" />
           <div className="text-left leading-tight font-black">
             <h1 className="text-black text-sm md:text-lg italic uppercase leading-none">Kedheon</h1>
-            <span className="text-gray-400 text-[8px] font-mono tracking-widest uppercase">MASTER V270.6</span>
+            <span className="text-gray-400 text-[8px] font-mono tracking-widest uppercase">MASTER V270.7</span>
           </div>
         </div>
-        <div className="flex items-center gap-1.5 md:gap-2 overflow-hidden">
-          {/* 다국어 선택 (10개 국어) - 모바일 스크롤 지원 */}
-          <div className="bg-gray-100 p-0.5 rounded-md flex gap-0.5 overflow-x-auto no-scrollbar max-w-[120px] sm:max-w-none">
-            {['KR', 'EN', 'CN', 'JP', 'ES', 'VN', 'FR', 'PT', 'RU', 'ID'].map((l) => (
-              <button key={l} onClick={() => setLang(l as Lang)} className={`px-2 py-0.5 rounded text-[10px] font-black shrink-0 ${lang === l ? 'bg-black text-white shadow-sm' : 'text-gray-400'}`}>{l}</button>
-            ))}
+        
+        <div className="flex items-center gap-1.5 md:gap-2">
+          {/* 다국어 수직 선택기 (Dropdown) 적용 */}
+          <div className="relative">
+            <select
+              value={lang}
+              onChange={(e) => setLang(e.target.value as Lang)}
+              className="appearance-none bg-gray-100 border border-gray-200 text-black text-[10px] md:text-xs font-black rounded-lg pl-2 pr-5 py-1 outline-none cursor-pointer shadow-sm focus:border-black transition-colors"
+            >
+              <option value="KR">🇰🇷 KR</option>
+              <option value="EN">🇺🇸 EN</option>
+              <option value="CN">🇨🇳 CN</option>
+              <option value="JP">🇯🇵 JP</option>
+              <option value="ES">🇪🇸 ES</option>
+              <option value="VN">🇻🇳 VN</option>
+              <option value="FR">🇫🇷 FR</option>
+              <option value="PT">🇵🇹 PT</option>
+              <option value="RU">🇷🇺 RU</option>
+              <option value="ID">🇮🇩 ID</option>
+            </select>
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-1.5 text-gray-400">
+              <svg className="fill-current h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+            </div>
           </div>
-          <button onClick={() => setTab('ROOKIE')} className={`px-3 py-1 rounded-lg text-[10px] md:text-sm font-black border transition-all whitespace-nowrap ${tab === 'ROOKIE' ? 'bg-[#dc2626] text-white border-[#dc2626]' : 'text-gray-300 border-transparent'}`}>{L.rookie}</button>
-          <button onClick={() => setTab('PIONEER')} className={`px-3 py-1 rounded-lg text-[10px] md:text-sm font-black border transition-all whitespace-nowrap ${tab === 'PIONEER' ? 'bg-black text-white border-black' : 'text-gray-300 border-transparent'}`}>{L.pioneer}</button>
+
+          <button onClick={() => setTab('ROOKIE')} className={`px-2 py-1 rounded-lg text-[10px] md:text-sm font-black border transition-all whitespace-nowrap ${tab === 'ROOKIE' ? 'bg-[#dc2626] text-white border-[#dc2626]' : 'text-gray-300 border-transparent'}`}>{L.rookie}</button>
+          <button onClick={() => setTab('PIONEER')} className={`px-2 py-1 rounded-lg text-[10px] md:text-sm font-black border transition-all whitespace-nowrap ${tab === 'PIONEER' ? 'bg-black text-white border-black' : 'text-gray-300 border-transparent'}`}>{L.pioneer}</button>
         </div>
       </nav>
 
@@ -665,7 +683,8 @@ export default function KedheonDesignSystemFinal() {
                     </p>
                     <p className="text-gray-400 text-[10px] md:text-sm font-black italic mt-1">≈ {piBalance.toLocaleString()} PI</p>
                     <div className="flex items-center gap-2 mt-3 font-black">
-                      <div className="bg-black text-white px-2 py-0.5 rounded text-[8px] md:text-[10px] font-mono shadow-sm">NODE: 18.02 SCORE</div>
+                      {/* 노드 점수 19.02 갱신 */}
+                      <div className="bg-black text-white px-2 py-0.5 rounded text-[8px] md:text-[10px] font-mono shadow-sm">NODE: 19.02 SCORE</div>
                       <div className="bg-[#dc2626] text-white px-2 py-0.5 rounded text-[8px] md:text-[10px] font-mono italic shadow-sm tracking-tighter">RT: 15,080</div>
                     </div>
                 </div>
