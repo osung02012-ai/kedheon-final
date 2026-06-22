@@ -2,12 +2,12 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 
-/** * [KEDHEON MASTER V270.7 - UI & CORE INTEGRATION PATCH]
+/** * [KEDHEON MASTER V271.0 - FINANCE CORE RELEASE]
  * -----------------------------------------------------------
  * 패치 내역: 
  * 1. 파이 브라우저 해상도 붕괴 방지를 위한 다국어 수직 Dropdown 유지
  * 2. 노드 최고 점수 19.02 마킹 반영
- * 3. 825열 코드 베이스 확장 대비 정밀 금융 연산 Core Logic(BigInt) 결합
+ * 3. 핵심 금융 연산 Core Logic(BigInt Engine) 통합에 따른 V271.0 메이저 버전 격상
  * 4. IEEE 754 부동소수점 반올림 오차 방지 마이크론(μPi) 단위 변환 엔진 내장
  * -----------------------------------------------------------
  */
@@ -239,8 +239,8 @@ const DICT: Record<Lang, Dictionary> = {
     walletType: "钱包保护类型", personal: "个人", corporate: "企业", encodedQR: "加密二维码",
     feedTitle: "标题或分享热情", feedLink: "图片/视频链接 (URL)", feedDesc: "详细描述您的活动", postBtn: "发布 (10 BEOM)",
     marketBuyTab: "购买商品", marketSellTab: "出售物品", buyReqBtn: "购买请求", sellDoneBtn: "完成注册",
-    copyPrompt: "点击复制", copiedAlert: "邀请码已复制！", piLackAlert: "PI 余额不足", convDoneAlert: "转换完成！",
-    beomLackAlert: "BEOM 余额不足", regDoneAlert: "注册成功", propDoneAlert: "提案已提交。",
+    copyPrompt: "点击复制", copiedAlert: "邀请码已复制！", piLackAlert: "PI 进额不足", convDoneAlert: "转换完成！",
+    beomLackAlert: "BEOM 进额不足", regDoneAlert: "注册成功", propDoneAlert: "提案已提交。",
     devRecruitTitle: "Pi 核心团队开发者招募", devRecruitDesc: "加入官方全球开发者团队，共同构建 Pi 生态系统。", devRecruitBtn: "查看并申请",
     cats: ['CCM', '音乐家', 'MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'],
     fans: ['KEDHEON', 'HUNTRIX', 'BTS'],
@@ -564,7 +564,7 @@ const DICT: Record<Lang, Dictionary> = {
     steps: [
       { t: "Instal", d: "Unduh aplikasi resmi.", links: { AOS: "#", iOS: "#" } },
       { t: "Metode", d: "Pilih 'Lanjutkan dengan nomor'." },
-      { t: "Negara", d: "Pilih +82 dan masukkan nomor." },
+      { t: "Negara", d: "Pilih +82 e masukkan nomor." },
       { t: "Sandi", d: "Gabungkan huruf dan angka." },
       { t: "Profil", d: "Masukkan nama dan ID." },
       { t: "Kode", d: "Masukkan [ ohsangjo ]." },
@@ -652,7 +652,7 @@ export default function KedheonDesignSystemFinal() {
           <img src="/kedheon-character.png" className="w-8 h-8 md:w-11 md:h-11 rounded-lg border-2 border-black" alt="K" />
           <div className="text-left leading-tight font-black">
             <h1 className="text-black text-sm md:text-lg italic uppercase leading-none">Kedheon</h1>
-            <span className="text-gray-400 text-[8px] font-mono tracking-widest uppercase">MASTER V270.7</span>
+            <span className="text-gray-400 text-[8px] font-mono tracking-widest uppercase">MASTER V271.0</span>
           </div>
         </div>
         
@@ -748,7 +748,7 @@ export default function KedheonDesignSystemFinal() {
                 </div>
                 <div className="relative z-10 leading-none">
                     <p className="text-black text-2xl md:text-5xl tracking-tighter font-black">
-                      {...[Math.floor(beomToken).toLocaleString()]}
+                      {Math.floor(beomToken).toLocaleString()}
                       <span className="text-lg opacity-20">.{beomToken.toFixed(2).split('.')[1]}</span> 
                       <span className="ml-2 text-xl md:text-3xl italic uppercase text-[#dc2626]">BEOM</span>
                     </p>
