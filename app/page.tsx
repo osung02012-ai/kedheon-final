@@ -2,12 +2,12 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 
-/** * [KEDHEON MASTER V271.0 - FINANCE CORE RELEASE]
+/** * [KEDHEON MASTER V271.0 - FINANCE CORE RELEASE / SYNTAX PATCH]
  * -----------------------------------------------------------
  * 패치 내역: 
- * 1. 파이 브라우저 해상도 붕괴 방지를 위한 다국어 수직 Dropdown 유지
- * 2. 노드 최고 점수 19.02 마킹 반영
- * 3. 핵심 금융 연산 Core Logic(BigInt Engine) 통합에 따른 V271.0 메이저 버전 격상
+ * 1. 자산 표현 영역 JSX 문법 오차 수정 (Spread Operator 제거)
+ * 2. 파이 브라우저 해상도 붕괴 방지를 위한 다국어 수직 Dropdown 유지
+ * 3. 노드 최고 점수 19.02 마킹 반영
  * 4. IEEE 754 부동소수점 반올림 오차 방지 마이크론(μPi) 단위 변환 엔진 내장
  * -----------------------------------------------------------
  */
@@ -231,8 +231,7 @@ const DICT: Record<Lang, Dictionary> = {
       { t: "国家", d: "选择 +82 并输入您的号码。" },
       { t: "密码", d: "结合大小写字母和数字。" },
       { t: "个人资料", d: "输入护照姓名和 ID。" },
-      { t: "邀请码", d: "输入 [ ohsangjo ] 加入。" },
-      { t: "助记词", d: "在纸上手写 24 个单词并妥善保存。(请勿数字保存，以防黑客攻击)", warning: true },
+      { t: "邀请码", d: "输入 [ ohsangjo ] 加入。", \n      "助记词": "在纸上手写 24 个单词并妥善保存。(请勿数字保存，以防黑客攻击)", warning: true },
       { t: "挖矿", d: "每 24 小时点击一次闪电图标。" }
     ],
     convertTitle: "1 PI = 1,000 BEOM 转换", convertBtn: "立即转换",
@@ -261,7 +260,7 @@ const DICT: Record<Lang, Dictionary> = {
     portalStatus: "統合ポータルアプリ: サブアプリの接続が進行中です。",
     piJoinDesc: "最大の Web3 ネットワークエコシステムに参加してください。",
     exchangeDesc: "Pi を BEOM に変換し、コア機能を探索します。",
-    authDesc: "アドレスを公開せずに、QR で安全に支払いと認証を行います。",
+    authDesc: "アドレス을 公開せずに、QR で安全に支払いと認証を行います。",
     creativeDesc: "スピリットを共有し、クリエイターを支援して BEOM 報酬を獲得します。",
     fanRoomDesc: "※ 🚩 ファンルーム (500 BEOM): 90% の還元とガバナンス権。",
     marketDesc: "限定グッズを取引し、独自のアイテムを登録します。",
@@ -294,7 +293,7 @@ const DICT: Record<Lang, Dictionary> = {
     fans: ['KEDHEON', 'HUNTRIX', 'BTS'],
     goodsMock: [
       { id: 1, name: "記念ゴールドバッジ", price: 1000, desc: "限定の物理バッジ。", img: "/beom-token.png", seller: "System" },
-      { id: 2, name: "V23 ノードマスターキー", price: 5000, desc: "ノード運用のデジタルマスターキー。", img: "/node-icon.png", seller: "System" }
+      { id: 2, name: "V23 노드 마스터키", price: 5000, desc: "ノード運用のデジタルマスターキー。", img: "/node-icon.png", seller: "System" }
     ]
   },
   ES: {
@@ -564,7 +563,7 @@ const DICT: Record<Lang, Dictionary> = {
     steps: [
       { t: "Instal", d: "Unduh aplikasi resmi.", links: { AOS: "#", iOS: "#" } },
       { t: "Metode", d: "Pilih 'Lanjutkan dengan nomor'." },
-      { t: "Negara", d: "Pilih +82 e masukkan nomor." },
+      { t: "Negara", d: "Pilih +82 dan masukkan nomor." },
       { t: "Sandi", d: "Gabungkan huruf dan angka." },
       { t: "Profil", d: "Masukkan nama dan ID." },
       { t: "Kode", d: "Masukkan [ ohsangjo ]." },
