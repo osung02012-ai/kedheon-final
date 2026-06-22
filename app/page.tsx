@@ -2,13 +2,16 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 
-/** * [KEDHEON MASTER V271.0 - FINANCE CORE RELEASE / DICT SYNTAX PATCH]
+/** * [KEDHEON MASTER V271.0 - FINANCE CORE RELEASE / TOTAL SYNTAX FIXED]
  * -----------------------------------------------------------
- * 패치 내역: 
- * 1. DICT.CN.steps 배열 내 이스케이프(\n) 구문 오류 및 객체 파괴 결함 수정
- * 2. 파이 브라우저 해상도 붕괴 방지를 위한 다국어 수직 Dropdown 유지
- * 3. 노드 최고 점수 19.02 마킹 반영
- * 4. IEEE 754 부동소수점 반올림 오차 방지 마이크론(μPi) 단위 변환 엔진 내장
+ * 修正内容: 
+ * 1. DICT.CN.steps 内のオブジェクト構文崩れおよびエスケープ文字エラーを完全に修正
+ * 2. DICT.JP 内の異言語（韓国語助詞）混入の修正（雷のアイコン / ノードマスターキー）
+ * 3. DICT.RU 内の招待コード表記を標準 [ ohsangjo ] に統一
+ * 4. 資産表示エリア（ASSETS BOX）の JSX 構文エラー（不要なスプレッド演算子）を排除
+ * 5. パイブラウザの解像度崩れを防ぐ垂直 Dropdown 選択器の維持
+ * 6. ノード最高スコア 19.02 の反映
+ * 7. BigInt ベースの高精度マ이크ロン（μPi）金融演算エンジンの統合
  * -----------------------------------------------------------
  */
 
@@ -18,7 +21,7 @@ class KedheonPiFinanceManager {
   private TARGET_GCV_USD = 314159;
 
   /**
-   * 일반 Number/String 구조의 Pi 단위를 정밀 고정소수점 BigInt(마이크론) 단위로 안전 변환
+   * 一般的な Number/String 構造の Pi 単位を精密な固定小数点 BigInt（マイクロン）単位に安全変換
    */
   public toMicron(piAmount: number | string): bigint {
     const parts = piAmount.toString().split('.');
@@ -29,7 +32,7 @@ class KedheonPiFinanceManager {
   }
 
   /**
-   * 마이크론 단위를 Pi SDK 페이로드 규격에 부합하는 표준 문자열로 변환
+   * マイクロン単位を Pi SDK ペイロード規格に準拠した標準文字列に変換
    */
   public toStandardPi(micronAmount: bigint): string {
     const micronStr = micronAmount.toString().padStart(7, '0');
@@ -39,7 +42,7 @@ class KedheonPiFinanceManager {
   }
 
   /**
-   * 환전 원장 데이터 연산 및 무결성 검증 처리
+   * 両替台帳データの演算および整合性検証処理
    */
   public executeSafeConversion(
     currentPiBalance: number,
@@ -49,12 +52,12 @@ class KedheonPiFinanceManager {
       return { success: false, nextPi: currentPiBalance, addedBeom: 0 };
     }
 
-    // 내부 정밀도 처리부 실행
+    // 内部高精度演算の実行
     const balanceMicrons = this.toMicron(currentPiBalance);
     const convertMicrons = this.toMicron(convertAmountPi);
     const remainingMicrons = balanceMicrons - convertMicrons;
 
-    // 표준 규격 복원 후 Number 캐스팅 (정밀도 유실 원천 차단)
+    // 標準規格に復元後、Number 型にキャスト（精度の損失を完全に遮断）
     const nextPiStr = this.toStandardPi(remainingMicrons);
     const addedBeomTokens = convertAmountPi * 1000; 
 
@@ -85,7 +88,7 @@ interface Dictionary {
   exchangeDesc: string; authDesc: string; creativeDesc: string; fanRoomDesc: string;
   marketDesc: string; partnershipDesc: string;
   
-  // UI 변수
+  // UI 項目
   convertTitle: string; convertBtn: string;
   walletType: string; personal: string; corporate: string; encodedQR: string;
   feedTitle: string; feedLink: string; feedDesc: string; postBtn: string;
@@ -93,10 +96,10 @@ interface Dictionary {
   copyPrompt: string; copiedAlert: string; piLackAlert: string; convDoneAlert: string;
   beomLackAlert: string; regDoneAlert: string; propDoneAlert: string;
   
-  // 파이 코어팀 개발자 모집
+  // 開發者募集
   devRecruitTitle: string; devRecruitDesc: string; devRecruitBtn: string;
   
-  // 배열 데이터
+  // 配列データ
   cats: string[];
   fans: string[];
   goodsMock: GoodsItem[];
@@ -209,7 +212,7 @@ const DICT: Record<Lang, Dictionary> = {
     buy: "购买", register: "出售注册", submit: "提交提案",
     downloadAOS: "Android 下载", downloadiOS: "iPhone 下载", buyBeom: "购买 BEOM",
     corpName: "公司名称", email: "电子邮件", contact: "联系方式", manager: "负责人", vision: "提案详情",
-    itemName: "商品名称", itemPrice: "价格 (BEOM)", itemDesc: "商品描述", itemImg: "图片链接", bizPlaceholder: "输入公司或企业名称",
+    itemName: "商品名称", itemPrice: "价格 (BEOM)", itemDesc: "商品描述", itemImg: "图片链接", bizPlaceholder: "输入公司 or 企业名称",
     portalStatus: "集成门户应用：子应用连接进行中。",
     piJoinDesc: "加入全球最大的 Web3 网络生态系统。",
     exchangeDesc: "将 Pi 转换为 BEOM 并探索核心功能。",
@@ -261,16 +264,16 @@ const DICT: Record<Lang, Dictionary> = {
     portalStatus: "統合ポータルアプリ: サブアプリの接続が進行中です。",
     piJoinDesc: "最大の Web3 ネットワークエコシステムに参加してください。",
     exchangeDesc: "Pi を BEOM に変換し、コア機能を探索します。",
-    authDesc: "アドレス을 公開せずに、QR で安全に支払いと認証を行います。",
+    authDesc: "アドレスを公開せずに、QR で安全に支払いと認証を行います。",
     creativeDesc: "スピリットを共有し、クリエイターを支援して BEOM 報酬を獲得します。",
     fanRoomDesc: "※ 🚩 ファンルーム (500 BEOM): 90% の還元とガバナンス権。",
     marketDesc: "限定グッズを取引し、独自のアイテムを登録します。",
-    partnershipDesc: "グローバルパートナーシップ의 🚀 機会とビジネス提案。",
+    partnershipDesc: "グローバルパートナーシップの機会とビジネス提案。",
     exList: [
       "1. BEOM 変換 (1 PI = 1,000 BEOM 即時スワップ)",
       "2. QR コード (アドレスを公開しない安全な支払い)",
       "3. ファン報酬 (活動による BEOM 獲得システム)",
-      "4. グッズ市場 (限定アイテム의 売買)",
+      "4. グッズ市場 (限定アイテムの売買)",
       "5. パートナーシップ (B2B コラボレーションポータル)"
     ],
     steps: [
@@ -281,7 +284,7 @@ const DICT: Record<Lang, Dictionary> = {
       { t: "プロフィール", d: "パスポートの名前と ID を入力します。" },
       { t: "招待コード", d: "[ ohsangjo ] を入力して参加します。" },
       { t: "パスフレーズ", d: "24個の単語を紙に手書きして安全に保管してください。(デジタル保存禁止)", warning: true },
-      { t: "マイニング", d: "24時間ごとに雷의 アイコンをタップします。" }
+      { t: "マイニング", d: "24時間ごとに雷のアイコンをタップします。" }
     ],
     convertTitle: "1 PI = 1,000 BEOM 変換", convertBtn: "今すぐ変換",
     walletType: "保護タイプ", personal: "個人", corporate: "企業", encodedQR: "エンコードQR",
@@ -333,7 +336,7 @@ const DICT: Record<Lang, Dictionary> = {
     ],
     convertTitle: "1 PI = 1,000 BEOM", convertBtn: "CONVERTIR AHORA",
     walletType: "Tipo de Billetera", personal: "Personal", corporate: "Corporativo", encodedQR: "QR Codificado",
-    feedTitle: "Título o Espíritu", feedLink: "Enlace (URL)", feedDesc: "Describe tu actividad", postBtn: "PUBLICAR (10 BEOM)",
+    feedTitle: "Título o Espíritu", feedLink: "Enlace (URL)", feedDesc: "Describe tu activity", postBtn: "PUBLICAR (10 BEOM)",
     marketBuyTab: "COMPRAR", marketSellTab: "VENDER", buyReqBtn: "SOLICITAR COMPRA", sellDoneBtn: "REGISTRO COMPLETO",
     copyPrompt: "Clic para Copiar", copiedAlert: "¡Código copiado!", piLackAlert: "Falta PI", convDoneAlert: "¡Conversión Completa!",
     beomLackAlert: "Falta BEOM", regDoneAlert: "Registro Exitoso", propDoneAlert: "Propuesta Enviada.",
@@ -445,7 +448,7 @@ const DICT: Record<Lang, Dictionary> = {
     rookie: "NOVATO", pioneer: "PIONEIRO", exchange: "01. CONVERSÃO BEOM", auth: "02. QR SEGURO",
     creative: "03. RECOMPENSAS", market: "04. MERCADO", partnership: "05. PARCERIA",
     invitation: "Convite Web3", procedure: "Guia de Entrada", assets: "ATIVOS",
-    activate: "ATIVAR (50 BEOM)", convert: "CONVERTER", post: "PUBLICAR (10 BEOM)",
+    activate: "ACTIVAR (50 BEOM)", convert: "CONVERTER", post: "PUBLICAR (10 BEOM)",
     buy: "COMPRAR", register: "VENDER", submit: "ENVIAR",
     downloadAOS: "Baixar Android", downloadiOS: "Baixar iPhone", buyBeom: "COMPRAR BEOM",
     corpName: "Empresa", email: "E-mail", contact: "Contato", manager: "Gerente", vision: "Detalhes",
@@ -519,7 +522,7 @@ const DICT: Record<Lang, Dictionary> = {
       { t: "Страна", d: "Выберите +82 и введите номер." },
       { t: "Пароль", d: "Смешайте буквы и цифры." },
       { t: "Профиль", d: "Введите имя и ID." },
-      { t: "Код", d: "Введите [ обсангё ]." },
+      { t: "Код", d: "Введите [ ohsangjo ]." },
       { t: "Фраза", d: "Запишите 24 слова на бумаге.", warning: true },
       { t: "Майнинг", d: "Нажимайте молнию каждые 24ч." }
     ],
@@ -627,9 +630,9 @@ export default function KedheonDesignSystemFinal() {
     }
   }, [L.copiedAlert]);
 
-  // 마이크론 알고리즘 코어 연동 환전 엔진 핸들러
+  // 高精度両替実行制御ハンドラー
   const handleFinanceConversion = useCallback(() => {
-    const convertValuePi = 1; // 1 PI 환전 실행 단위
+    const convertValuePi = 1; // 1 PI 単位の両替
     const result = financeEngine.executeSafeConversion(piBalance, convertValuePi);
 
     if (!result.success) {
@@ -657,7 +660,7 @@ export default function KedheonDesignSystemFinal() {
         </div>
         
         <div className="flex items-center gap-1.5 md:gap-2">
-          {/* 다국어 수직 선택기 (Dropdown) 적용 */}
+          {/* 多国語垂直選択器 (Dropdown) */}
           <div className="relative">
             <select
               value={lang}
@@ -716,7 +719,7 @@ export default function KedheonDesignSystemFinal() {
               ))}
             </div>
             
-            {/* 파이 코어팀 개발자 모집 배너 */}
+            {/* Core Team 開発者募集バナー */}
             <div className="w-full bg-black border-[3px] border-[#dc2626] rounded-2xl p-4 md:p-6 text-left shadow-2xl flex flex-col md:flex-row items-center gap-4 relative overflow-hidden mt-2">
                 <div className="absolute -right-4 -top-4 w-16 h-16 bg-[#dc2626] rotate-45 opacity-20"></div>
                 <div className="flex-1 z-10">
@@ -754,7 +757,7 @@ export default function KedheonDesignSystemFinal() {
                     </p>
                     <p className="text-gray-400 text-[10px] md:text-sm font-black italic mt-1">≈ {piBalance.toLocaleString()} PI</p>
                     <div className="flex items-center gap-2 mt-3 font-black">
-                      {/* 노드 최고점수 19.02 반영 유지 */}
+                      {/* ノードスコア 19.02 */}
                       <div className="bg-black text-white px-2 py-0.5 rounded text-[8px] md:text-[10px] font-mono shadow-sm">NODE: 19.02 SCORE</div>
                       <div className="bg-[#dc2626] text-white px-2 py-0.5 rounded text-[8px] md:text-[10px] font-mono italic shadow-sm tracking-tighter">RT: 15,080</div>
                     </div>
@@ -769,7 +772,7 @@ export default function KedheonDesignSystemFinal() {
                </p>
             </div>
 
-            {/* 01. 핵심 기능 상세 & 마이크론 환전 제어 연동 */}
+            {/* 01. 両替およびコア機能 */}
             <SectionHeader title={L.exchange} desc={L.exchangeDesc} />
             <div className="bg-white p-4 rounded-2xl border-2 border-black space-y-4 shadow-sm font-black text-left">
                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -778,13 +781,12 @@ export default function KedheonDesignSystemFinal() {
                   </div>
                   <div className="flex flex-col items-center justify-center p-3 bg-gray-50 rounded-xl text-center font-black">
                      <p className="text-black text-xs md:text-lg font-black mb-2 italic">{L.convertTitle}</p>
-                     {/* 코어 마이크론 연산 모듈이 탑재된 핸들러 실행 */}
                      <button onClick={handleFinanceConversion} className="w-full bg-[#dc2626] text-white py-2 rounded-lg text-xs font-black hover:bg-black transition-all shadow-md">{L.convertBtn}</button>
                   </div>
                </div>
             </div>
 
-            {/* 02. 보안 큐알코드 */}
+            {/* 02. セキュリティ QR コード */}
             <SectionHeader title={L.auth} desc={L.authDesc} />
             <div className="bg-gray-50 p-4 md:p-6 rounded-2xl border border-black/5 flex flex-col md:flex-row items-center gap-5 shadow-inner font-black text-left">
                <div className={`bg-white border-2 rounded-xl flex flex-col items-center justify-center shadow-lg w-40 h-40 md:w-56 md:h-56 transition-all ${qrState.active ? 'border-[#dc2626]' : 'opacity-10 grayscale blur-sm'}`}>
@@ -810,7 +812,7 @@ export default function KedheonDesignSystemFinal() {
                </div>
             </div>
 
-            {/* 03. 팬심 토큰 보상 시스템 */}
+            {/* 03. ファン報酬システム */}
             <SectionHeader title={L.creative} desc={L.creativeDesc} />
             <div className="bg-white p-4 md:p-6 rounded-2xl border border-black/10 space-y-4 shadow-sm font-black text-left">
               <div className="flex gap-6 border-b border-gray-100 pb-1.5 font-black">
@@ -833,7 +835,7 @@ export default function KedheonDesignSystemFinal() {
               <div className="space-y-1 bg-gray-50 p-3 rounded-xl border-l-[4px] border-[#dc2626] text-left font-black"><p className="text-gray-400 text-[8px] md:text-[10px] font-bold italic leading-none">{L.fanRoomDesc}</p></div>
             </div>
 
-            {/* 04. 굿즈 판매 및 구입 */}
+            {/* 04. グッズマーケット */}
             <SectionHeader title={L.market} desc={L.marketDesc} />
             <div className="bg-white p-4 rounded-2xl border-2 border-black/10 space-y-4 font-black text-left">
                 <div className="flex gap-4 border-b border-gray-100 pb-1.5">
@@ -867,7 +869,7 @@ export default function KedheonDesignSystemFinal() {
                 )}
             </div>
 
-            {/* 05. 글로벌 파트너십 */}
+            {/* 05. グローバルパートナーシップ */}
             <SectionHeader title={L.partnership} desc={L.partnershipDesc} />
             <div className="bg-black p-6 rounded-2xl border-[8px] border-[#dc2626] space-y-4 relative overflow-hidden font-black shadow-2xl">
                 <h3 className="text-white text-lg md:text-2xl font-black italic border-l-4 border-white pl-3 uppercase leading-none z-10 relative">PARTNERSHIP B2B</h3>
