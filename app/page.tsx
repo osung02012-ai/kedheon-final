@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 
-/** * [KEDHEON MASTER V271.0 - FINANCE CORE RELEASE / SYNTAX PATCH]
+/** * [KEDHEON MASTER V271.0 - FINANCE CORE RELEASE / DICT SYNTAX PATCH]
  * -----------------------------------------------------------
  * 패치 내역: 
- * 1. 자산 표현 영역 JSX 문법 오차 수정 (Spread Operator 제거)
+ * 1. DICT.CN.steps 배열 내 이스케이프(\n) 구문 오류 및 객체 파괴 결함 수정
  * 2. 파이 브라우저 해상도 붕괴 방지를 위한 다국어 수직 Dropdown 유지
  * 3. 노드 최고 점수 19.02 마킹 반영
  * 4. IEEE 754 부동소수점 반올림 오차 방지 마이크론(μPi) 단위 변환 엔진 내장
@@ -213,7 +213,7 @@ const DICT: Record<Lang, Dictionary> = {
     portalStatus: "集成门户应用：子应用连接进行中。",
     piJoinDesc: "加入全球最大的 Web3 网络生态系统。",
     exchangeDesc: "将 Pi 转换为 BEOM 并探索核心功能。",
-    authDesc: "通过二维码安全支付和验证，无需暴露钱包地址。",
+    authDesc: "通过二维码安全支付 and 验证，无需暴露钱包地址。",
     creativeDesc: "分享热情并支持创作者以获得 BEOM 奖励。",
     fanRoomDesc: "※ 🚩 粉丝房间 (500 BEOM): 90% 回报和治理权。",
     marketDesc: "交易独家商品并注册您自己的物品。",
@@ -231,7 +231,8 @@ const DICT: Record<Lang, Dictionary> = {
       { t: "国家", d: "选择 +82 并输入您的号码。" },
       { t: "密码", d: "结合大小写字母和数字。" },
       { t: "个人资料", d: "输入护照姓名和 ID。" },
-      { t: "邀请码", d: "输入 [ ohsangjo ] 加入。", \n      "助记词": "在纸上手写 24 个单词并妥善保存。(请勿数字保存，以防黑客攻击)", warning: true },
+      { t: "邀请码", d: "输入 [ ohsangjo ] 加入。" },
+      { t: "助记词", d: "在纸上手写 24 个单词并妥善保存。(请勿数字保存，以防黑客攻击)", warning: true },
       { t: "挖矿", d: "每 24 小时点击一次闪电图标。" }
     ],
     convertTitle: "1 PI = 1,000 BEOM 转换", convertBtn: "立即转换",
@@ -264,7 +265,7 @@ const DICT: Record<Lang, Dictionary> = {
     creativeDesc: "スピリットを共有し、クリエイターを支援して BEOM 報酬を獲得します。",
     fanRoomDesc: "※ 🚩 ファンルーム (500 BEOM): 90% の還元とガバナンス権。",
     marketDesc: "限定グッズを取引し、独自のアイテムを登録します。",
-    partnershipDesc: "グローバルパートナーシップの機会とビジネス提案。",
+    partnershipDesc: "グローバルパートナーシップ의 🚀 機会とビジネス提案。",
     exList: [
       "1. BEOM 変換 (1 PI = 1,000 BEOM 即時スワップ)",
       "2. QR コード (アドレスを公開しない安全な支払い)",
@@ -280,7 +281,7 @@ const DICT: Record<Lang, Dictionary> = {
       { t: "プロフィール", d: "パスポートの名前と ID を入力します。" },
       { t: "招待コード", d: "[ ohsangjo ] を入力して参加します。" },
       { t: "パスフレーズ", d: "24個の単語を紙に手書きして安全に保管してください。(デジタル保存禁止)", warning: true },
-      { t: "マイニング", d: "24時間ごとに雷のアイコンをタップします。" }
+      { t: "マイニング", d: "24時間ごとに雷의 アイコンをタップします。" }
     ],
     convertTitle: "1 PI = 1,000 BEOM 変換", convertBtn: "今すぐ変換",
     walletType: "保護タイプ", personal: "個人", corporate: "企業", encodedQR: "エンコードQR",
@@ -293,7 +294,7 @@ const DICT: Record<Lang, Dictionary> = {
     fans: ['KEDHEON', 'HUNTRIX', 'BTS'],
     goodsMock: [
       { id: 1, name: "記念ゴールドバッジ", price: 1000, desc: "限定の物理バッジ。", img: "/beom-token.png", seller: "System" },
-      { id: 2, name: "V23 노드 마스터키", price: 5000, desc: "ノード運用のデジタルマスターキー。", img: "/node-icon.png", seller: "System" }
+      { id: 2, name: "V23 ノードマスターキー", price: 5000, desc: "ノード運用のデジタルマスターキー。", img: "/node-icon.png", seller: "System" }
     ]
   },
   ES: {
@@ -518,7 +519,7 @@ const DICT: Record<Lang, Dictionary> = {
       { t: "Страна", d: "Выберите +82 и введите номер." },
       { t: "Пароль", d: "Смешайте буквы и цифры." },
       { t: "Профиль", d: "Введите имя и ID." },
-      { t: "Код", d: "Введите [ ohsangjo ]." },
+      { t: "Код", d: "Введите [ обсангё ]." },
       { t: "Фраза", d: "Запишите 24 слова на бумаге.", warning: true },
       { t: "Майнинг", d: "Нажимайте молнию каждые 24ч." }
     ],
