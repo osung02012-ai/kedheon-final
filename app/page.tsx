@@ -2,14 +2,71 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 
-/** * [KEDHEON MASTER V270.7 - UI/UX PATCH]
+/** * [KEDHEON MASTER V270.7 - UI & CORE INTEGRATION PATCH]
  * -----------------------------------------------------------
- * 수정 사항: 
- * 1. 파이 브라우저 해상도 붕괴 방지를 위한 다국어 선택기 수직 Dropdown(Select) 전환
- * 2. 코어팀 가시성 확보를 위한 직관적인 UI 압축 및 국기 이모지 적용
- * 3. 노드 최고점수 19.02 반영
+ * 패치 내역: 
+ * 1. 파이 브라우저 해상도 붕괴 방지를 위한 다국어 수직 Dropdown 유지
+ * 2. 노드 최고 점수 19.02 마킹 반영
+ * 3. 825열 코드 베이스 확장 대비 정밀 금융 연산 Core Logic(BigInt) 결합
+ * 4. IEEE 754 부동소수점 반올림 오차 방지 마이크론(μPi) 단위 변환 엔진 내장
  * -----------------------------------------------------------
  */
+
+// --- Core Finance Calculation Engine (BigInt Precision) ---
+class KedheonPiFinanceManager {
+  private MICRON_MULTIPLIER = 1000000n; // 1 Pi = 1,000,000 μPi
+  private TARGET_GCV_USD = 314159;
+
+  /**
+   * 일반 Number/String 구조의 Pi 단위를 정밀 고정소수점 BigInt(마이크론) 단위로 안전 변환
+   */
+  public toMicron(piAmount: number | string): bigint {
+    const parts = piAmount.toString().split('.');
+    const integerPart = parts[0];
+    let decimalPart = parts[1] || '';
+    decimalPart = decimalPart.padEnd(6, '0').slice(0, 6);
+    return BigInt(integerPart + decimalPart);
+  }
+
+  /**
+   * 마이크론 단위를 Pi SDK 페이로드 규격에 부합하는 표준 문자열로 변환
+   */
+  public toStandardPi(micronAmount: bigint): string {
+    const micronStr = micronAmount.toString().padStart(7, '0');
+    const integerPart = micronStr.slice(0, -6) || '0';
+    const decimalPart = micronStr.slice(-6).replace(/0+$/, '');
+    return decimalPart.length > 0 ? `${integerPart}.${decimalPart}` : integerPart;
+  }
+
+  /**
+   * 환전 원장 데이터 연산 및 무결성 검증 처리
+   */
+  public executeSafeConversion(
+    currentPiBalance: number,
+    convertAmountPi: number
+  ): { success: boolean; nextPi: number; addedBeom: number } {
+    if (currentPiBalance < convertAmountPi) {
+      return { success: false, nextPi: currentPiBalance, addedBeom: 0 };
+    }
+
+    // 내부 정밀도 처리부 실행
+    const balanceMicrons = this.toMicron(currentPiBalance);
+    const convertMicrons = this.toMicron(convertAmountPi);
+    const remainingMicrons = balanceMicrons - convertMicrons;
+
+    // 표준 규격 복원 후 Number 캐스팅 (정밀도 유실 원천 차단)
+    const nextPiStr = this.toStandardPi(remainingMicrons);
+    const addedBeomTokens = convertAmountPi * 1000; 
+
+    return {
+      success: true,
+      nextPi: Number(nextPiStr),
+      addedBeom: addedBeomTokens
+    };
+  }
+}
+
+const financeEngine = new KedheonPiFinanceManager();
 
 // --- Types ---
 type Lang = 'KR' | 'EN' | 'CN' | 'JP' | 'ES' | 'VN' | 'FR' | 'PT' | 'RU' | 'ID';
@@ -213,7 +270,7 @@ const DICT: Record<Lang, Dictionary> = {
       "1. BEOM 変換 (1 PI = 1,000 BEOM 即時スワップ)",
       "2. QR コード (アドレスを公開しない安全な支払い)",
       "3. ファン報酬 (活動による BEOM 獲得システム)",
-      "4. グッズ市場 (限定アイテムの売買)",
+      "4. グッズ市場 (限定アイテム의 売買)",
       "5. パートナーシップ (B2B コラボレーションポータル)"
     ],
     steps: [
@@ -570,6 +627,20 @@ export default function KedheonDesignSystemFinal() {
     }
   }, [L.copiedAlert]);
 
+  // 마이크론 알고리즘 코어 연동 환전 엔진 핸들러
+  const handleFinanceConversion = useCallback(() => {
+    const convertValuePi = 1; // 1 PI 환전 실행 단위
+    const result = financeEngine.executeSafeConversion(piBalance, convertValuePi);
+
+    if (!result.success) {
+      return alert(L.piLackAlert);
+    }
+
+    setPiBalance(result.nextPi);
+    setBeomToken(p => p + result.addedBeom);
+    alert(L.convDoneAlert);
+  }, [piBalance, L.piLackAlert, L.convDoneAlert]);
+
   if (!hasMounted) return <div className="bg-white min-h-screen" />;
 
   return (
@@ -645,7 +716,7 @@ export default function KedheonDesignSystemFinal() {
               ))}
             </div>
             
-            {/* 파이 코어팀 개발자 모집 배너 (유지) */}
+            {/* 파이 코어팀 개발자 모집 배너 */}
             <div className="w-full bg-black border-[3px] border-[#dc2626] rounded-2xl p-4 md:p-6 text-left shadow-2xl flex flex-col md:flex-row items-center gap-4 relative overflow-hidden mt-2">
                 <div className="absolute -right-4 -top-4 w-16 h-16 bg-[#dc2626] rotate-45 opacity-20"></div>
                 <div className="flex-1 z-10">
@@ -677,13 +748,13 @@ export default function KedheonDesignSystemFinal() {
                 </div>
                 <div className="relative z-10 leading-none">
                     <p className="text-black text-2xl md:text-5xl tracking-tighter font-black">
-                      {Math.floor(beomToken).toLocaleString()}
+                      {...[Math.floor(beomToken).toLocaleString()]}
                       <span className="text-lg opacity-20">.{beomToken.toFixed(2).split('.')[1]}</span> 
                       <span className="ml-2 text-xl md:text-3xl italic uppercase text-[#dc2626]">BEOM</span>
                     </p>
                     <p className="text-gray-400 text-[10px] md:text-sm font-black italic mt-1">≈ {piBalance.toLocaleString()} PI</p>
                     <div className="flex items-center gap-2 mt-3 font-black">
-                      {/* 노드 점수 19.02 갱신 */}
+                      {/* 노드 최고점수 19.02 반영 유지 */}
                       <div className="bg-black text-white px-2 py-0.5 rounded text-[8px] md:text-[10px] font-mono shadow-sm">NODE: 19.02 SCORE</div>
                       <div className="bg-[#dc2626] text-white px-2 py-0.5 rounded text-[8px] md:text-[10px] font-mono italic shadow-sm tracking-tighter">RT: 15,080</div>
                     </div>
@@ -698,7 +769,7 @@ export default function KedheonDesignSystemFinal() {
                </p>
             </div>
 
-            {/* 01. 핵심 기능 상세 */}
+            {/* 01. 핵심 기능 상세 & 마이크론 환전 제어 연동 */}
             <SectionHeader title={L.exchange} desc={L.exchangeDesc} />
             <div className="bg-white p-4 rounded-2xl border-2 border-black space-y-4 shadow-sm font-black text-left">
                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -707,7 +778,8 @@ export default function KedheonDesignSystemFinal() {
                   </div>
                   <div className="flex flex-col items-center justify-center p-3 bg-gray-50 rounded-xl text-center font-black">
                      <p className="text-black text-xs md:text-lg font-black mb-2 italic">{L.convertTitle}</p>
-                     <button onClick={() => {if(piBalance<1) return alert(L.piLackAlert); setPiBalance(p=>p-1); setBeomToken(p=>p+1000); alert(L.convDoneAlert);}} className="w-full bg-[#dc2626] text-white py-2 rounded-lg text-xs font-black hover:bg-black transition-all shadow-md">{L.convertBtn}</button>
+                     {/* 코어 마이크론 연산 모듈이 탑재된 핸들러 실행 */}
+                     <button onClick={handleFinanceConversion} className="w-full bg-[#dc2626] text-white py-2 rounded-lg text-xs font-black hover:bg-black transition-all shadow-md">{L.convertBtn}</button>
                   </div>
                </div>
             </div>
@@ -758,7 +830,7 @@ export default function KedheonDesignSystemFinal() {
                 <button onClick={() => {if(!feed.title) return; setBeomToken(p=>p-10); alert(L.regDoneAlert); setFeed({title:'', link:'', desc:''});}} className="md:col-span-2 bg-black text-white py-3 rounded-xl text-sm md:text-lg font-black hover:bg-[#dc2626] transition-all shadow-lg active:scale-95">{L.postBtn}</button>
                 <button className="bg-white border-2 border-black text-black py-3 rounded-xl text-xs md:text-sm font-black flex items-center justify-center gap-1.5 shadow active:scale-95">🚩 FAN ROOM</button>
               </div>
-              <div className="bg-gray-50 p-3 rounded-xl border-l-[4px] border-[#dc2626] text-left font-black"><p className="text-gray-400 text-[8px] md:text-[10px] font-bold italic leading-none">{L.fanRoomDesc}</p></div>
+              <div className="space-y-1 bg-gray-50 p-3 rounded-xl border-l-[4px] border-[#dc2626] text-left font-black"><p className="text-gray-400 text-[8px] md:text-[10px] font-bold italic leading-none">{L.fanRoomDesc}</p></div>
             </div>
 
             {/* 04. 굿즈 판매 및 구입 */}
