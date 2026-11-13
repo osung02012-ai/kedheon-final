@@ -97,8 +97,8 @@ export default function FactFilterPage() {
     setTargetDetail('');
     setPoints(p => p + 10);
     alert(lang === 'KO' 
-      ? '악의적 왜곡 제보가 블록체인 검증 원장에 접수되었습니다! (+10 FP 적립)' 
-      : 'Whistleblower report submitted to the ledger! (+10 FP)');
+      ? '악의적 왜곡 제보가 블록체인 검증 원장에 접수되었습니다! (+10 BEOM 적립)' 
+      : 'Whistleblower report submitted to the ledger! (+10 BEOM)');
   };
 
   const handleSealEvidence = () => {
@@ -107,8 +107,8 @@ export default function FactFilterPage() {
     setVaultHash(mockHash);
     setPoints(p => p + 5);
     alert(lang === 'KO' 
-      ? '증거 지문이 위변조 불가 타임스탬프로 영구 봉인되었습니다! (+5 FP)' 
-      : 'Evidence sealed with immutable timestamp! (+5 FP)');
+      ? '증거 지문이 위변조 불가 타임스탬프로 영구 봉인되었습니다! (+5 BEOM)' 
+      : 'Evidence sealed with immutable timestamp! (+5 BEOM)');
   };
 
   return (
@@ -131,7 +131,7 @@ export default function FactFilterPage() {
 
         <div className="flex items-center gap-2">
           <div className="bg-white/5 border border-cyan-500/30 px-2.5 py-1 rounded-full text-[11px] font-bold text-cyan-300 flex items-center gap-1">
-            <span>🛡️</span> {points} <span className="text-[9px] text-gray-400">FP</span>
+            <span>🐾</span> {points} <span className="text-[9px] text-gray-400">BEOM</span>
           </div>
           <button
             onClick={() => setLang(l => l === 'KO' ? 'EN' : 'KO')}
@@ -341,14 +341,14 @@ export default function FactFilterPage() {
               </div>
 
               <div className="bg-cyan-950/30 border border-cyan-800/40 p-3 rounded-xl text-[11px] text-cyan-300/80">
-                🔒 {lang === 'KO' ? '제보자의 신원은 영구 비공개 암호화되며, 허위 악성 제보 방지를 위해 파이 KYC 실명 인증자만 제보할 수 있습니다. 정상 제보 접수 시 +10 FP가 적립됩니다.' : 'Whistleblower identity is cryptographically protected. +10 FP reward on submission.'}
+                🔒 {lang === 'KO' ? '제보자의 신원은 영구 비공개 암호화되며, 허위 악성 제보 방지를 위해 파이 KYC 실명 인증자만 제보할 수 있습니다. 정상 제보 접수 시 +10 BEOM (범 포인트)가 적립됩니다.' : 'Whistleblower identity is cryptographically protected. +10 BEOM reward on submission.'}
               </div>
 
               <button
                 type="submit"
                 className="w-full bg-cyan-500 hover:bg-cyan-400 text-black font-black py-3 rounded-xl text-sm transition-all shadow-xl cursor-pointer"
               >
-                {lang === 'KO' ? '블록체인 검증 원장에 제보 등록 (+10 FP)' : 'Submit Report to Ledger (+10 FP)'}
+                {lang === 'KO' ? '블록체인 검증 원장에 제보 등록 (+10 BEOM)' : 'Submit Report to Ledger (+10 BEOM)'}
               </button>
             </form>
           </div>
@@ -391,7 +391,7 @@ export default function FactFilterPage() {
                   <div className="flex justify-between items-center pt-1 text-[11px] text-gray-500">
                     <span>👥 {item.votes} {lang === 'KO' ? '시민 검증 참여' : 'Pioneers Verified'}</span>
                     <button
-                      onClick={() => alert(lang === 'KO' ? '검증 지지 투표가 완료되었습니다 (+1 FP)' : 'Verification vote cast (+1 FP)')}
+                      onClick={() => alert(lang === 'KO' ? '검증 지지 투표가 완료되었습니다 (+1 BEOM)' : 'Verification vote cast (+1 BEOM)')}
                       className="text-cyan-400 hover:text-cyan-300 font-bold cursor-pointer"
                     >
                       {lang === 'KO' ? '👍 검증 지지 투표' : '👍 Endorse Proof'}
@@ -429,7 +429,7 @@ export default function FactFilterPage() {
               onClick={handleSealEvidence}
               className="w-full bg-cyan-500 hover:bg-cyan-400 text-black font-black py-3 rounded-xl text-sm transition-all shadow-xl cursor-pointer"
             >
-              {lang === 'KO' ? '위변조 불가 타임스탬프로 영구 봉인 (+5 FP)' : 'Seal Evidence to Blockchain (+5 FP)'}
+              {lang === 'KO' ? '위변조 불가 타임스탬프로 영구 봉인 (+5 BEOM)' : 'Seal Evidence to Blockchain (+5 BEOM)'}
             </button>
 
             {vaultHash && (

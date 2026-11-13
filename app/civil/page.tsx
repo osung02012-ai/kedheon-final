@@ -13,21 +13,21 @@ export default function CivilPage() {
     if (checkedIn) return alert('오늘은 이미 출석체크를 완료했습니다.');
     setCheckedIn(true);
     setPoints(p => p + 5);
-    alert('출석체크 완료! +5 CP (기여 포인트)가 적립되었습니다.');
+    alert('출석체크 완료! +5 BEOM (범 포인트)가 적립되었습니다.');
   };
 
   const handleVote = (id: string, choice: 'YES' | 'NO') => {
     if (voted[id]) return alert('이미 투표에 참여하셨습니다 (1인 1표 보장).');
     setVoted(v => ({ ...v, [id]: choice }));
     setPoints(p => p + 1);
-    alert(`소중한 1표가 블록체인 원장에 안전하게 각인되었습니다! (+1 CP)`);
+    alert(`소중한 1표가 블록체인 원장에 안전하게 각인되었습니다! (+1 BEOM)`);
   };
 
   const handleDemand = (mall: string) => {
     if (demanded[mall]) return alert('이미 서명에 참여하셨습니다.');
     setDemanded(d => ({ ...d, [mall]: true }));
     setPoints(p => p + 1);
-    alert(`[${mall}] 파이 결제 도입 청원 서명 완료! (+1 CP)`);
+    alert(`[${mall}] 파이 결제 도입 청원 서명 완료! (+1 BEOM)`);
   };
 
   const malls = [
@@ -62,7 +62,7 @@ export default function CivilPage() {
             onClick={handleCheckin}
             className={`px-3 py-1.5 rounded-lg text-xs font-black transition-all ${checkedIn ? 'bg-gray-800 text-gray-500' : 'bg-blue-600 text-white hover:bg-blue-500 shadow-md active:scale-95'}`}
           >
-            {checkedIn ? '출석 완료' : '⚡ 출석체크 (+5 CP)'}
+            {checkedIn ? '출석 완료' : '⚡ 출석체크 (+5 BEOM)'}
           </button>
           <button
             onClick={() => window.location.href = '/'}
@@ -85,8 +85,8 @@ export default function CivilPage() {
             <h2 className="text-white text-xl md:text-2xl font-black mt-1">1인 1표 직접민주주의</h2>
           </div>
           <div className="text-right">
-            <p className="text-gray-400 text-xs font-bold">보유 기여 점수</p>
-            <p className="text-blue-400 text-2xl font-black">{points} <span className="text-sm text-gray-400">CP</span></p>
+            <p className="text-gray-400 text-xs font-bold">보유 범 포인트</p>
+            <p className="text-blue-400 text-2xl font-black">{points} <span className="text-sm text-gray-400">🐾 BEOM</span></p>
           </div>
         </div>
 
@@ -184,7 +184,7 @@ export default function CivilPage() {
             <h3 className="text-white text-lg font-black italic border-l-4 border-amber-500 pl-2">
               🛍️ 글로벌 쇼핑몰 파이 결제 도입 청원
             </h3>
-            <span className="text-amber-400 text-xs font-bold">+1 CP 적립</span>
+            <span className="text-amber-400 text-xs font-bold">+1 BEOM 적립</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
