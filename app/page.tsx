@@ -83,7 +83,7 @@ const DICT: Record<Lang, Dictionary> = {
     rookie: "ROOKIE", pioneer: "PIONEER", exchange: "01. 파이 결제 & 생태계 기여 리워드 (BEOM Rewards)", auth: "02. 스마트 보안 큐알 (Smart Security QR)",
     creative: "03. 팬심 토큰 보상 시스템", market: "04. 굿즈 판매 및 구입", partnership: "05. 글로벌 파트너십",
     invitation: "Web3 초대장", procedure: "파이코인 시작하기", assets: "보유 자산",
-    activate: "스마트 보안 QR 생성 (안심 결제)", convert: "지금 환전하기", post: "피드 등록 (10 BEOM)",
+    activate: "스마트 보안 QR 생성 (안심 결제)", convert: "출석 포인트 받기", post: "피드 등록 (10 BEOM)",
     buy: "구매하기", register: "판매 등록", submit: "제안 제출하기", 
     downloadAOS: "안드로이드 다운로드", downloadiOS: "아이폰 다운로드", buyBeom: "BEOM 구매",
     corpName: "기업/단체명", email: "메일 주소", contact: "연락처", manager: "담당자명", vision: "제안 내용 (상세)",
@@ -118,7 +118,7 @@ const DICT: Record<Lang, Dictionary> = {
     walletType: "지갑 보호 타입", personal: "개인용", corporate: "기업용", encodedQR: "Encoded QR",
     feedTitle: "제목 또는 팬심 공유", feedLink: "이미지/영상 링크 (URL)", feedDesc: "상세 내용을 기록하십시오", postBtn: "피드 등록 (10 BEOM)",
     marketBuyTab: "굿즈 구매", marketSellTab: "판매 등록", buyReqBtn: "구매 신청", sellDoneBtn: "굿즈 등록 완료",
-    copyPrompt: "복사하려면 클릭", copiedAlert: "추천인 코드가 복사되었습니다!", piLackAlert: "PI 부족", convDoneAlert: "환전 완료!",
+    copyPrompt: "복사하려면 클릭", copiedAlert: "추천인 코드가 복사되었습니다!", piLackAlert: "PI 부족", convDoneAlert: "리워드 적립 완료!",
     beomLackAlert: "BEOM 부족", regDoneAlert: "등록 성공", propDoneAlert: "제안서가 전송되었습니다.",
     devRecruitTitle: "파이 코어팀 개발자 공식 모집", devRecruitDesc: "파이 생태계를 함께 구축할 글로벌 개발자를 모집합니다.", devRecruitBtn: "공지 확인 및 지원하기",
     cats: ['CCM', '뮤지션', 'MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'],
@@ -146,7 +146,7 @@ const DICT: Record<Lang, Dictionary> = {
     marketDesc: "Trade exclusive goods and register your own items.",
     partnershipDesc: "Global partnership opportunities and proposals.",
     exList: [
-      "1. BEOM Conversion (1 PI = 1,000 BEOM instant swap)",
+      "1. Ecosystem Rewards (Earn BEOM points via Pi payment & activity)",
       "2. QR Code (Secure pay without exposing wallet address)",
       "3. Fandom Rewards (System to earn BEOM via activities)",
       "4. Goods Market (Selling and buying limited items)",
@@ -177,10 +177,10 @@ const DICT: Record<Lang, Dictionary> = {
     ]
   },
   CN: {
-    rookie: "新手", pioneer: "先锋", exchange: "01. BEOM 转换与核心功能", auth: "02. 安全二维码",
+    rookie: "新手", pioneer: "先锋", exchange: "01. PI 支付与生态贡献奖励", auth: "02. 安全二维码",
     creative: "03. 粉丝奖励系统", market: "04. 商品市场", partnership: "05. 全球合作伙伴",
     invitation: "Web3 邀请函", procedure: "加入指南", assets: "我的资产",
-    activate: "激活 (50 BEOM)", convert: "立即转换", post: "发布 (10 BEOM)",
+    activate: "生成智能安全二维码", convert: "领取奖励", post: "发布 (10 BEOM)",
     buy: "购买", register: "出售注册", submit: "提交提案",
     downloadAOS: "Android 下载", downloadiOS: "iPhone 下载", buyBeom: "购买 BEOM",
     corpName: "公司名称", email: "电子邮件", contact: "联系方式", manager: "负责人", vision: "提案详情",
@@ -194,7 +194,7 @@ const DICT: Record<Lang, Dictionary> = {
     marketDesc: "交易独家商品并注册您自己的物品。",
     partnershipDesc: "全球合作伙伴机会 and 商业提案。",
     exList: [
-      "1. BEOM 转换 (1 PI = 1,000 BEOM 实时交换)",
+      "1. 生态贡献奖励 (Pi 支付与活动自动获得 BEOM 积分)",
       "2. 二维码 (安全支付功能)",
       "3. 粉丝奖励 (活动获取 BEOM 奖励)",
       "4. 商品市场 (买卖独家物品)",
@@ -210,11 +210,11 @@ const DICT: Record<Lang, Dictionary> = {
       { t: "助记词", d: "在纸上手写 24 个单词并妥善保存。(请勿数字保存，以防黑客攻击)", warning: true },
       { t: "挖矿", d: "每 24 小时点击一次闪电图标。" }
     ],
-    convertTitle: "1 PI = 1,000 BEOM 转换", convertBtn: "立即转换",
+    convertTitle: "生态贡献奖励积分", convertBtn: "领取签到奖励 (+50 BEOM)",
     walletType: "钱包保护类型", personal: "个人", corporate: "企业", encodedQR: "加密二维码",
     feedTitle: "标题或分享热情", feedLink: "图片/视频链接 (URL)", feedDesc: "详细描述您的活动", postBtn: "发布 (10 BEOM)",
     marketBuyTab: "购买商品", marketSellTab: "出售物品", buyReqBtn: "购买请求", sellDoneBtn: "完成注册",
-    copyPrompt: "点击复制", copiedAlert: "邀请码已复制！", piLackAlert: "PI 进额不足", convDoneAlert: "转换完成！",
+    copyPrompt: "点击复制", copiedAlert: "邀请码已复制！", piLackAlert: "PI 进额不足", convDoneAlert: "奖励领取成功！",
     beomLackAlert: "BEOM 进额不足", regDoneAlert: "注册成功", propDoneAlert: "提案已提交。",
     devRecruitTitle: "Pi 核心团队开发者招募", devRecruitDesc: "加入官方全球开发者团队，共同构建 Pi 生态系统。", devRecruitBtn: "查看并申请",
     cats: ['CCM', '音乐家', 'MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'],
@@ -225,10 +225,10 @@ const DICT: Record<Lang, Dictionary> = {
     ]
   },
   JP: {
-    rookie: "ルーキー", pioneer: "パイオニア", exchange: "01. BEOM 変換", auth: "02. セキュリティ QR",
+    rookie: "ルーキー", pioneer: "パイオニア", exchange: "01. Pi 決済＆貢献リワード", auth: "02. セキュリティ QR",
     creative: "03. ファン報酬システム", market: "04. グッズ市場", partnership: "05. パートナーシップ",
     invitation: "Web3 招待状", procedure: "参加ガイド", assets: "資産",
-    activate: "アクティブ化 (50 BEOM)", convert: "今すぐ変換", post: "投稿 (10 BEOM)",
+    activate: "スマートセキュリティ QR 生成", convert: "リワード受取", post: "投稿 (10 BEOM)",
     buy: "購入", register: "販売登録", submit: "提案を送信",
     downloadAOS: "Android", downloadiOS: "iPhone", buyBeom: "BEOM を購入",
     corpName: "会社名", email: "メールアドレス", contact: "連絡先", manager: "担当者", vision: "提案内容",
@@ -242,7 +242,7 @@ const DICT: Record<Lang, Dictionary> = {
     marketDesc: "限定グッズを取引し、独自のアイテムを登録します。",
     partnershipDesc: "グローバルパートナーシップの機会とビジネス提案。",
     exList: [
-      "1. BEOM 変換 (1 PI = 1,000 BEOM 即時スワップ)",
+      "1. エコシステム貢献リワード (決済・活動で BEOM 獲得)",
       "2. QR コード (アドレスを公开しない安全な支払い)",
       "3. ファン報酬 (活動による BEOM 獲得システム)",
       "4. グッズ市場 (限定アイテムの売買)",
@@ -258,7 +258,7 @@ const DICT: Record<Lang, Dictionary> = {
       { t: "パスフレーズ", d: "24個の単語を紙に手書きして安全に保管してください。(デジタル保存禁止)", warning: true },
       { t: "マイニング", d: "24時間ごとに雷のアイコンをタップします。" }
     ],
-    convertTitle: "1 PI = 1,000 BEOM 変換", convertBtn: "今すぐ変換",
+    convertTitle: "エコシステム貢献リワード獲得", convertBtn: "出席リワードを受け取る (+50 BEOM)",
     walletType: "保護タイプ", personal: "個人", corporate: "企業", encodedQR: "エンコードQR",
     feedTitle: "タイトルまたはスピリットを共有", feedLink: "画像/動画リンク (URL)", feedDesc: "活動の詳細を説明してください", postBtn: "投稿 (10 BEOM)",
     marketBuyTab: "グッズ購入", marketSellTab: "販売登録", buyReqBtn: "購入リクエスト", sellDoneBtn: "登録完了",
@@ -273,10 +273,10 @@ const DICT: Record<Lang, Dictionary> = {
     ]
   },
   ES: {
-    rookie: "NOVATO", pioneer: "PIONERO", exchange: "01. CONVERSIÓN BEOM", auth: "02. CÓDIGO QR SEGURO",
+    rookie: "NOVATO", pioneer: "PIONERO", exchange: "01. PAGOS PI Y RECOMPENSAS BEOM", auth: "02. CÓDIGO QR SEGURO",
     creative: "03. RECOMPENSAS FANDOM", market: "04. MERCADO DE BIENES", partnership: "05. ASOCIACIÓN",
     invitation: "Invitación Web3", procedure: "Guía de Ingreso", assets: "ACTIVOS",
-    activate: "ACTIVAR (50 BEOM)", convert: "CONVERTIR AHORA", post: "PUBLICAR (10 BEOM)",
+    activate: "GENERAR QR DE SEGURIDAD", convert: "OBTENER", post: "PUBLICAR (10 BEOM)",
     buy: "COMPRAR", register: "VENDER", submit: "ENVIAR PROPUESTA",
     downloadAOS: "Android", downloadiOS: "iPhone", buyBeom: "COMPRAR BEOM",
     corpName: "Empresa", email: "Correo", contact: "Contacto", manager: "Gerente", vision: "Detalles",
@@ -290,7 +290,7 @@ const DICT: Record<Lang, Dictionary> = {
     marketDesc: "Comercializa bienes exclusivos y registra tus propios artículos.",
     partnershipDesc: "Oportunidades de asociación global y propuestas comerciales.",
     exList: [
-      "1. Conversión BEOM (1 PI = 1,000 BEOM intercambio instantáneo)",
+      "1. Ecosystem Rewards (Earn BEOM points via Pi payment & activity)",
       "2. Código QR (Pago seguro sin exponer la dirección de la billetera)",
       "3. Recompensas (Sistema para ganar BEOM a través de actividades)",
       "4. Mercado (Venta y compra de artículos limitados)",
@@ -306,11 +306,11 @@ const DICT: Record<Lang, Dictionary> = {
       { t: "Frase", d: "Escribe 24 palabras en papel y guárdalas. (NO digital por hackeos)", warning: true },
       { t: "Minería", d: "Toca el rayo cada 24h." }
     ],
-    convertTitle: "1 PI = 1,000 BEOM", convertBtn: "CONVERTIR AHORA",
+    convertTitle: "Ecosystem Contribution Rewards",
     walletType: "Tipo de Billetera", personal: "Personal", corporate: "Corporativo", encodedQR: "QR Codificado",
     feedTitle: "Título o Espíritu", feedLink: "Enlace (URL)", feedDesc: "Describe tu actividad", postBtn: "PUBLICAR (10 BEOM)",
     marketBuyTab: "COMPRAR", marketSellTab: "VENDER", buyReqBtn: "SOLICITAR COMPRA", sellDoneBtn: "REGISTRO COMPLETO",
-    copyPrompt: "Clic para Copiar", copiedAlert: "¡Código copiado!", piLackAlert: "Falta PI", convDoneAlert: "¡Conversión Completa!",
+    copyPrompt: "Clic para Copiar", copiedAlert: "¡Código copiado!", piLackAlert: "Falta PI", convDoneAlert: "¡Recompensa Recibida!",
     beomLackAlert: "Falta BEOM", regDoneAlert: "Registro Exitoso", propDoneAlert: "Propuesta Enviada.",
     devRecruitTitle: "Reclutamiento del Core Team", devRecruitDesc: "Únete a los desarrolladores oficiales de Pi.", devRecruitBtn: "REVISAR Y APLICAR",
     cats: ['CCM', 'MÚSICA', 'MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'],
@@ -321,10 +321,10 @@ const DICT: Record<Lang, Dictionary> = {
     ]
   },
   VN: {
-    rookie: "NGƯỜI MỚI", pioneer: "TIÊN PHONG", exchange: "01. CHUYỂN ĐỔI BEOM", auth: "02. MÃ QR BẢO MẬT",
+    rookie: "NGƯỜI MỚI", pioneer: "TIÊN PHONG", exchange: "01. THANH TOÁN PI & PHẦN THƯỞNG BEOM", auth: "02. MÃ QR BẢO MẬT",
     creative: "03. PHẦN THƯỞNG FANDOM", market: "04. THỊ TRƯỜNG", partnership: "05. ĐỐI TÁC",
     invitation: "Lời mời Web3", procedure: "Hướng dẫn Tham gia", assets: "TÀI SẢN",
-    activate: "KÍCH HOẠT (50 BEOM)", convert: "CHUYỂN ĐỔI NGAY", post: "ĐĂNG BÀI (10 BEOM)",
+    activate: "TẠO MÃ QR BẢO MẬT", convert: "NHẬN THƯỞNG", post: "ĐĂNG BÀI (10 BEOM)",
     buy: "MUA", register: "BÁN", submit: "GỬI ĐỀ XUẤT",
     downloadAOS: "Tải Android", downloadiOS: "Tải iPhone", buyBeom: "MUA BEOM",
     corpName: "Công ty", email: "Email", contact: "Liên hệ", manager: "Người quản lý", vision: "Chi tiết",
@@ -338,7 +338,7 @@ const DICT: Record<Lang, Dictionary> = {
     marketDesc: "Giao dịch hàng hóa độc quyền và đăng ký bán.",
     partnershipDesc: "Cơ hội hợp tác toàn cầu và đề xuất kinh doanh.",
     exList: [
-      "1. Chuyển đổi BEOM (1 PI = 1,000 BEOM ngay lập tức)",
+      "1. Ecosystem Rewards (Earn BEOM points via Pi payment & activity)",
       "2. Mã QR (Thanh toán an toàn không lộ ví)",
       "3. Phần thưởng (Hệ thống kiếm BEOM qua hoạt động)",
       "4. Thị trường (Mua bán các vật phẩm giới hạn)",
@@ -354,7 +354,7 @@ const DICT: Record<Lang, Dictionary> = {
       { t: "Cụm mật khẩu", d: "Ghi 24 từ ra giấy. (Không lưu kỹ thuật số để tránh bị hack)", warning: true },
       { t: "Khai thác", d: "Nhấn nút tia sét mỗi 24 giờ." }
     ],
-    convertTitle: "1 PI = 1,000 BEOM", convertBtn: "CHUYỂN ĐỔI NGAY",
+    convertTitle: "Ecosystem Contribution Rewards",
     walletType: "Loại bảo vệ ví", personal: "Cá nhân", corporate: "Doanh nghiệp", encodedQR: "QR Mã hóa",
     feedTitle: "Tiêu đề", feedLink: "Liên kết Ảnh/Video", feedDesc: "Mô tả hoạt động của bạn", postBtn: "ĐĂNG BÀI (10 BEOM)",
     marketBuyTab: "MUA HÀNG", marketSellTab: "BÁN HÀNG", buyReqBtn: "YÊU CẦU MUA", sellDoneBtn: "HOÀN TẤT ĐĂNG KÝ",
@@ -369,10 +369,10 @@ const DICT: Record<Lang, Dictionary> = {
     ]
   },
   FR: {
-    rookie: "NOVICE", pioneer: "PIONNIER", exchange: "01. CONVERSION BEOM", auth: "02. QR SÉCURISÉ",
+    rookie: "NOVICE", pioneer: "PIONNIER", exchange: "01. PAIEMENT PI & RÉCOMPENSES BEOM", auth: "02. QR SÉCURISÉ",
     creative: "03. RÉCOMPENSES", market: "04. MARCHÉ", partnership: "05. PARTENARIAT",
     invitation: "Invitation Web3", procedure: "Guide d'inscription", assets: "ACTIFS",
-    activate: "ACTIVER (50 BEOM)", convert: "CONVERTIR", post: "PUBLIER (10 BEOM)",
+    activate: "GÉNÉRER QR SÉCURISÉ", convert: "RÉCUPÉRER", post: "PUBLIER (10 BEOM)",
     buy: "ACHETER", register: "VENDRE", submit: "SOUMETTRE",
     downloadAOS: "Télécharger Android", downloadiOS: "Télécharger iPhone", buyBeom: "ACHETER BEOM",
     corpName: "Entreprise", email: "E-mail", contact: "Contact", manager: "Gérant", vision: "Détails",
@@ -386,7 +386,7 @@ const DICT: Record<Lang, Dictionary> = {
     marketDesc: "Échangez des biens exclusifs et enregistrez les vôtres.",
     partnershipDesc: "Opportunités de partenariat mondial.",
     exList: [
-      "1. Conversion BEOM (1 PI = 1,000 BEOM)",
+      "1. Ecosystem Rewards (Earn BEOM points via Pi payment & activity)",
       "2. QR Code (Paiement sécurisé)",
       "3. Récompenses (Gagnez des BEOM)",
       "4. Marché (Achetez et vendez)",
@@ -402,11 +402,11 @@ const DICT: Record<Lang, Dictionary> = {
       { t: "Phrase secrète", d: "Écrivez 24 mots sur papier. (Ne pas sauvegarder numériquement)", warning: true },
       { t: "Minage", d: "Appuyez sur l'éclair toutes les 24h." }
     ],
-    convertTitle: "1 PI = 1 000 BEOM", convertBtn: "CONVERTIR",
+    convertTitle: "1 PI = 1 000 BEOM", convertBtn: "RÉCUPÉRER RÉCOMPENSE (+50 BEOM)",
     walletType: "Type de portefeuille", personal: "Personnel", corporate: "Entreprise", encodedQR: "QR Encodé",
     feedTitle: "Titre", feedLink: "Lien Image/Vidéo", feedDesc: "Décrivez votre activité", postBtn: "PUBLIER (10 BEOM)",
     marketBuyTab: "ACHETER", marketSellTab: "VENDRE", buyReqBtn: "DEMANDER", sellDoneBtn: "TERMINÉ",
-    copyPrompt: "Cliquez pour copier", copiedAlert: "Code copié !", piLackAlert: "PI insuffisant", convDoneAlert: "Conversion réussie !",
+    copyPrompt: "Cliquez pour copier", copiedAlert: "Code copié !", piLackAlert: "PI insuffisant", convDoneAlert: "Récompense reçue !",
     beomLackAlert: "BEOM insuffisant", regDoneAlert: "Succès", propDoneAlert: "Proposition soumise.",
     devRecruitTitle: "Recrutement Core Team Pi", devRecruitDesc: "Rejoignez les développeurs mondiaux officiels.", devRecruitBtn: "POSTULER",
     cats: ['CCM', 'MUSICIEN', 'MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'],
@@ -417,10 +417,10 @@ const DICT: Record<Lang, Dictionary> = {
     ]
   },
   PT: {
-    rookie: "NOVATO", pioneer: "PIONEIRO", exchange: "01. CONVERSÃO BEOM", auth: "02. QR SEGURO",
+    rookie: "NOVATO", pioneer: "PIONEIRO", exchange: "01. PAGAMENTO PI & RECOMPENSAS BEOM", auth: "02. QR SEGURO",
     creative: "03. RECOMPENSAS", market: "04. MERCADO", partnership: "05. PARCERIA",
     invitation: "Convite Web3", procedure: "Guia de Entrada", assets: "ATIVOS",
-    activate: "ATIVAR (50 BEOM)", convert: "CONVERTER", post: "PUBLICAR (10 BEOM)",
+    activate: "GERAR QR SEGURO", convert: "RECEBER", post: "PUBLICAR (10 BEOM)",
     buy: "COMPRAR", register: "VENDER", submit: "ENVIAR",
     downloadAOS: "Baixar Android", downloadiOS: "Baixar iPhone", buyBeom: "COMPRAR BEOM",
     corpName: "Empresa", email: "E-mail", contact: "Contato", manager: "Gerente", vision: "Detalhes",
@@ -450,11 +450,11 @@ const DICT: Record<Lang, Dictionary> = {
       { t: "Frase secreta", d: "Escreva 24 palavras no papel.", warning: true },
       { t: "Mineração", d: "Toque no raio a cada 24h." }
     ],
-    convertTitle: "1 PI = 1.000 BEOM", convertBtn: "CONVERTER",
+    convertTitle: "1 PI = 1.000 BEOM", convertBtn: "RECEBER RECOMPENSA (+50 BEOM)",
     walletType: "Tipo de Carteira", personal: "Pessoal", corporate: "Corporativo", encodedQR: "QR Codificado",
     feedTitle: "Título", feedLink: "Link da Imagem", feedDesc: "Descreva sua atividade", postBtn: "PUBLICAR",
     marketBuyTab: "COMPRAR", marketSellTab: "VENDER", buyReqBtn: "SOLICITAR", sellDoneBtn: "CONCLUÍDO",
-    copyPrompt: "Clique para copiar", copiedAlert: "Copiado!", piLackAlert: "PI insuficiente", convDoneAlert: "Conversão concluída!",
+    copyPrompt: "Clique para copiar", copiedAlert: "Copiado!", piLackAlert: "PI insuficiente", convDoneAlert: "Recompensa recebida!",
     beomLackAlert: "BEOM insuficiente", regDoneAlert: "Sucesso", propDoneAlert: "Proposta enviada.",
     devRecruitTitle: "Recrutamento Core Team", devRecruitDesc: "Junte-se aos desenvolvedores globais.", devRecruitBtn: "CANDIDATAR-SE",
     cats: ['CCM', 'MÚSICO', 'MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'],
@@ -465,10 +465,10 @@ const DICT: Record<Lang, Dictionary> = {
     ]
   },
   RU: {
-    rookie: "НОВИЧОК", pioneer: "ПИОНЕР", exchange: "01. КОНВЕРСИЯ BEOM", auth: "02. БЕЗОПАСНЫЙ QR",
+    rookie: "НОВИЧОК", pioneer: "ПИОНЕР", exchange: "01. ОПЛАТА PI И НАГРАДЫ BEOM", auth: "02. БЕЗОПАСНЫЙ QR",
     creative: "03. НАГРАДЫ FANDOM", market: "04. РЫНОК", partnership: "05. ПАРТНЕРСТВО",
     invitation: "Приглашение Web3", procedure: "Гид по входу", assets: "АКТИВЫ",
-    activate: "АКТИВИРОВАТЬ (50 BEOM)", convert: "КОНВЕРТИРОВАТЬ", post: "ОПУБЛИКОВАТЬ",
+    activate: "СОЗДАТЬ БЕЗОПАСНЫЙ QR", convert: "ПОЛУЧИТЬ", post: "ОПУБЛИКОВАТЬ",
     buy: "КУПИТЬ", register: "ПРОДАТЬ", submit: "ОТПРАВИТЬ",
     downloadAOS: "Скачать Android", downloadiOS: "Скачать iPhone", buyBeom: "КУПИТЬ BEOM",
     corpName: "Компания", email: "E-mail", contact: "Контакт", manager: "Менеджер", vision: "Детали",
@@ -482,7 +482,7 @@ const DICT: Record<Lang, Dictionary> = {
     marketDesc: "Торгуйте эксклюзивными товарами.",
     partnershipDesc: "Глобальное партнерство.",
     exList: [
-      "1. Конверсия BEOM (1 PI = 1,000 BEOM)",
+      "1. Ecosystem Rewards (Earn BEOM points via Pi payment & activity)",
       "2. QR-код (Безопасная оплата)",
       "3. Награды (Заработайте BEOM)",
       "4. Рынок (Покупка и продажа)",
@@ -498,7 +498,7 @@ const DICT: Record<Lang, Dictionary> = {
       { t: "Фраза", d: "Запишите 24 слова на бумаге.", warning: true },
       { t: "Майнинг", d: "Нажимайте молнию каждые 24ч." }
     ],
-    convertTitle: "1 PI = 1,000 BEOM", convertBtn: "КОНВЕРТИРОВАТЬ",
+    convertTitle: "Ecosystem Contribution Rewards",
     walletType: "Тип кошелька", personal: "Личный", corporate: "Корпоративный", encodedQR: "Закодированный QR",
     feedTitle: "Заголовок", feedLink: "Ссылка URL", feedDesc: "Описание активности", postBtn: "ОПУБЛИКОВАТЬ",
     marketBuyTab: "КУПИТЬ", marketSellTab: "ПРОДАТЬ", buyReqBtn: "ЗАПРОСИТЬ", sellDoneBtn: "ГОТОВО",
@@ -513,10 +513,10 @@ const DICT: Record<Lang, Dictionary> = {
     ]
   },
   ID: {
-    rookie: "PEMULA", pioneer: "PELOPOR", exchange: "01. KONVERSI BEOM", auth: "02. QR AMAN",
+    rookie: "PEMULA", pioneer: "PELOPOR", exchange: "01. PEMBAYARAN PI & HADIAH BEOM", auth: "02. QR AMAN",
     creative: "03. HADIAH FANDOM", market: "04. PASAR", partnership: "05. KEMITRAAN",
     invitation: "Undangan Web3", procedure: "Panduan Bergabung", assets: "ASET",
-    activate: "AKTIFKAN (50 BEOM)", convert: "KONVERSI", post: "POSTING (10 BEOM)",
+    activate: "BUAT QR AMAN", convert: "KLAIM", post: "POSTING (10 BEOM)",
     buy: "BELI", register: "JUAL", submit: "KIRIM",
     downloadAOS: "Unduh Android", downloadiOS: "Unduh iPhone", buyBeom: "BELI BEOM",
     corpName: "Perusahaan", email: "Email", contact: "Kontak", manager: "Manajer", vision: "Detail",
@@ -546,7 +546,7 @@ const DICT: Record<Lang, Dictionary> = {
       { t: "Frasa", d: "Tulis 24 kata di kertas.", warning: true },
       { t: "Menambang", d: "Ketuk petir setiap 24 jam." }
     ],
-    convertTitle: "1 PI = 1.000 BEOM", convertBtn: "KONVERSI",
+    convertTitle: "1 PI = 1.000 BEOM", convertBtn: "KLAIM HADIAH (+50 BEOM)",
     walletType: "Jenis Dompet", personal: "Pribadi", corporate: "Perusahaan", encodedQR: "QR Enkode",
     feedTitle: "Judul", feedLink: "Tautan URL", feedDesc: "Deskripsikan aktivitas", postBtn: "POSTING",
     marketBuyTab: "BELI", marketSellTab: "JUAL", buyReqBtn: "MINTA", sellDoneBtn: "SELESAI",

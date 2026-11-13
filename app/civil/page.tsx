@@ -35,7 +35,12 @@ export default function CivilPage() {
     { name: '아마존 (Amazon)', tag: '글로벌 1위', signers: 38920 },
     { name: '알리익스프레스 (AliExpress)', tag: '해외직구', signers: 21450 },
     { name: '이베이 (eBay)', tag: '글로벌 P2P', signers: 9840 },
-    { name: '테무 (Temu)', tag: '글로벌 커머스', signers: 15300 }
+    { name: '월마트 (Walmart)', tag: '미국 리테일', signers: 18750 },
+    { name: '쇼피 (Shopee)', tag: '동남아 1위', signers: 12600 },
+    { name: '테무 (Temu)', tag: '글로벌 커머스', signers: 15300 },
+    { name: '메르카도리브레 (MercadoLibre)', tag: '남미 1위', signers: 11200 },
+    { name: '라쿠텐 (Rakuten)', tag: '일본 1위', signers: 8900 },
+    { name: '파이체인몰 (PiChainMall)', tag: 'Web3 생태계', signers: 45200 }
   ];
 
   return (
