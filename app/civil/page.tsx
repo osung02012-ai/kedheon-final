@@ -216,6 +216,7 @@ export default function CivilPage() {
         {[
           { label: 'KEDHEON', path: '/' },
           { label: 'CIVIL', path: '/civil' },
+          { label: 'FACTFILTER', path: '/factfilter' },
           { label: 'NEXUS', path: '#' },
           { label: 'VENDOR', path: '#' }
         ].map(item => (

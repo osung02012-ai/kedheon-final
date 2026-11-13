@@ -840,12 +840,14 @@ export default function KedheonDesignSystemFinal() {
       </main>
 
       <footer className="fixed bottom-4 left-4 right-4 max-w-4xl mx-auto bg-white border-2 border-black p-1.5 rounded-2xl flex justify-between gap-1.5 z-[1000] shadow-2xl font-black">
-        {['KEDHEON', 'CIVIL', 'NEXUS', 'VENDOR'].map(app => (
+        {['KEDHEON', 'CIVIL', 'FACTFILTER', 'NEXUS', 'VENDOR'].map(app => (
           <button
             key={app}
             onClick={() => {
               if (app === 'CIVIL') {
                 window.location.href = '/civil';
+              } else if (app === 'FACTFILTER') {
+                window.location.href = '/factfilter';
               } else if (app === 'KEDHEON') {
                 window.location.href = '/';
               } else {
