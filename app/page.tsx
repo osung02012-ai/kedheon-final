@@ -80,28 +80,29 @@ const PI_INVITE_CODE = 'ohsangjo';
 
 const DICT: Record<Lang, Dictionary> = {
   KR: {
-    rookie: "ROOKIE", pioneer: "PIONEER", exchange: "01. 범토큰 전환 및 핵심 기능", auth: "02. 보안 큐알코드 (지갑보호)",
+    rookie: "ROOKIE", pioneer: "PIONEER", exchange: "01. 파이 결제 & 생태계 기여 리워드 (BEOM Rewards)", auth: "02. 스마트 보안 큐알 (Smart Security QR)",
     creative: "03. 팬심 토큰 보상 시스템", market: "04. 굿즈 판매 및 구입", partnership: "05. 글로벌 파트너십",
     invitation: "Web3 초대장", procedure: "파이코인 시작하기", assets: "보유 자산",
-    activate: "보안 QR 활성화 (50 BEOM)", convert: "지금 환전하기", post: "피드 등록 (10 BEOM)",
+    activate: "스마트 보안 QR 생성 (안심 결제)", convert: "지금 환전하기", post: "피드 등록 (10 BEOM)",
     buy: "구매하기", register: "판매 등록", submit: "제안 제출하기", 
     downloadAOS: "안드로이드 다운로드", downloadiOS: "아이폰 다운로드", buyBeom: "BEOM 구매",
     corpName: "기업/단체명", email: "메일 주소", contact: "연락처", manager: "담당자명", vision: "제안 내용 (상세)",
     itemName: "상품명", itemPrice: "가격 (BEOM)", itemDesc: "상품 설명", itemImg: "이미지 URL", bizPlaceholder: "기업명 또는 사업자명을 입력하세요",
     portalStatus: "현재 하위 각 앱으로의 연동이 진행 중인 통합 포털 앱입니다.",
     piJoinDesc: "인류 최대의 네트워크 생태계에 합류하십시오.",
-    exchangeDesc: "채굴한 파이코인을 범토큰으로 전환하고 앱의 주요 기능을 확인하십시오.",
-    authDesc: "지갑 주소 노출 없이 큐알코드만으로 안전하게 결제하고 인증하십시오.",
+    exchangeDesc: "파이 결제 및 생태계 기여 활동에 참여하고 BEOM 리워드 포인트를 적립받으십시오.",
+    authDesc: "3분 일회용 다이내믹 결제, 스텔스 지갑 안심 보호, 전자 영수증 및 BEOM 리워드가 자동 적립됩니다.",
     creativeDesc: "팬심을 공유하여 범토큰 보상을 받고 창작 활동을 지원받으십시오.",
     fanRoomDesc: "※ 🚩 팬룸 개설(500 BEOM): 90% 수익 환원 및 거버넌스 권한 부여.",
     marketDesc: "굿즈를 안전하게 거래하거나 본인의 아이템을 판매하십시오.",
     partnershipDesc: "글로벌 파트너십을 위한 비즈니스 제안을 기다립니다.",
     exList: [
-      "1. 범토큰 전환 (1 PI = 1,000 BEOM 즉시 환전 기능)",
-      "2. 큐알코드 (지갑주소 노출없이 보안강화 결제 기능)",
-      "3. 팬덤 보상 (활동에 따라 범토큰을 받는 보상 시스템)",
-      "4. 굿즈 장터 (아이템을 직접 판매하고 구입하는 기능)",
-      "5. 파트너십 (기업 간 협력 및 비즈니스 제안 포털)"
+      "1. 생태계 기여 리워드 (파이 결제 및 활동 시 BEOM 포인트 자동 적립)",
+      "2. 스마트 보안 QR (3분 일회용 다이내믹 결제 & 스텔스 지갑 안심 보호)",
+      "3. 전자 영수증 & POS (결제 즉시 블록체인 영수증 발행 및 가맹점 정산)",
+      "4. 팬덤 보상 (창작 및 팬 활동에 따른 BEOM 리워드 시스템)",
+      "5. 굿즈 장터 (리워드 포인트로 한정 아이템 거래 및 판매)",
+      "6. 파트너십 (기업 간 B2B 협력 및 비즈니스 제안 포털)"
     ],
     steps: [
       { t: "공식 앱 설치", d: "스마트폰 기기에 맞는 앱을 설치하십시오.", links: { AOS: "https://minepi.com/#download", iOS: "https://minepi.com/#download" } },
@@ -113,7 +114,7 @@ const DICT: Record<Lang, Dictionary> = {
       { t: "비밀구절 보관", d: "24개 단어는 반드시 종이에 수기 기록하세요. (디지털 저장 시 해킹 위험: 캡처, 메모장, 이메일 저장 절대 금지. 유출 시 지갑 복구 불가 및 모든 자산 분실 위험.)", warning: true },
       { t: "채굴 시작", d: "매일 한 번 번개 버튼을 눌러 활동을 시작하세요." }
     ],
-    convertTitle: "1 PI = 1,000 BEOM 환전", convertBtn: "지금 환전하기",
+    convertTitle: "생태계 기여 보너스 적립", convertBtn: "출석 & 기여 리워드 받기 (+50 BEOM)",
     walletType: "지갑 보호 타입", personal: "개인용", corporate: "기업용", encodedQR: "Encoded QR",
     feedTitle: "제목 또는 팬심 공유", feedLink: "이미지/영상 링크 (URL)", feedDesc: "상세 내용을 기록하십시오", postBtn: "피드 등록 (10 BEOM)",
     marketBuyTab: "굿즈 구매", marketSellTab: "판매 등록", buyReqBtn: "구매 신청", sellDoneBtn: "굿즈 등록 완료",
@@ -128,10 +129,10 @@ const DICT: Record<Lang, Dictionary> = {
     ]
   },
   EN: {
-    rookie: "ROOKIE", pioneer: "PIONEER", exchange: "01. BEOM CONVERSION", auth: "02. SECURE QR CODE",
+    rookie: "ROOKIE", pioneer: "PIONEER", exchange: "01. PI PAY & BEOM REWARDS", auth: "02. SMART SECURITY QR",
     creative: "03. FANDOM REWARDS", market: "04. GOODS MARKET", partnership: "05. PARTNERSHIP",
     invitation: "Web3 Invitation", procedure: "Join Guide", assets: "ACTIVOS",
-    activate: "ACTIVATE (50 BEOM)", convert: "CONVERT NOW", post: "POST (10 BEOM)",
+    activate: "GENERATE SMART QR (SECURE)", convert: "CONVERT NOW", post: "POST (10 BEOM)",
     buy: "BUY", register: "SELL", submit: "SUBMIT PROPOSAL",
     downloadAOS: "Android", downloadiOS: "iPhone", buyBeom: "BUY BEOM",
     corpName: "Company", email: "Email", contact: "Contact", manager: "Manager", vision: "Proposal Details",
@@ -161,7 +162,7 @@ const DICT: Record<Lang, Dictionary> = {
       { t: "Passphrase", d: "Handwrite 24 words on paper and store safely. (Do NOT save digitally due to hacking risks.)", warning: true },
       { t: "Mining", d: "Tap lightning bolt every 24h." }
     ],
-    convertTitle: "1 PI = 1,000 BEOM Conversion", convertBtn: "CONVERT NOW",
+    convertTitle: "Ecosystem Contribution Rewards", convertBtn: "EARN REWARDS (+50 BEOM)",
     walletType: "Wallet Protection Type", personal: "Personal", corporate: "Corporate", encodedQR: "Encoded QR",
     feedTitle: "Title or Share Spirit", feedLink: "Image/Video Link (URL)", feedDesc: "Describe your activity in detail", postBtn: "POST (10 BEOM)",
     marketBuyTab: "BUY GOODS", marketSellTab: "SELL ITEMS", buyReqBtn: "BUY REQUEST", sellDoneBtn: "COMPLETE REGISTRATION",
@@ -602,17 +603,10 @@ export default function KedheonDesignSystemFinal() {
   }, [L.copiedAlert]);
 
   const handleFinanceConversion = useCallback(() => {
-    const convertValuePi = 1;
-    const result = executeSafeConversion(piBalance, convertValuePi);
-
-    if (!result.success) {
-      return alert(L.piLackAlert);
-    }
-
-    setPiBalance(result.nextPi);
-    setBeomToken(p => p + result.addedBeom);
-    alert(L.convDoneAlert);
-  }, [piBalance, L.piLackAlert, L.convDoneAlert]);
+    // Daily attendance & contribution reward (+50 BEOM)
+    setBeomToken(p => p + 50);
+    alert("출석 및 생태계 기여 리워드 +50 BEOM 적립 완료!");
+  }, []);
 
   if (!hasMounted) return <div className="bg-white min-h-screen" />;
 
@@ -847,7 +841,19 @@ export default function KedheonDesignSystemFinal() {
 
       <footer className="fixed bottom-4 left-4 right-4 max-w-4xl mx-auto bg-white border-2 border-black p-1.5 rounded-2xl flex justify-between gap-1.5 z-[1000] shadow-2xl font-black">
         {['KEDHEON', 'CIVIL', 'NEXUS', 'VENDOR'].map(app => (
-          <button key={app} className={`flex-1 py-3.5 md:py-4.5 rounded-xl text-[10px] md:text-sm transition-all font-black text-center leading-none ${app === 'KEDHEON' ? 'bg-black text-white shadow-md' : 'text-gray-300'}`}>
+          <button
+            key={app}
+            onClick={() => {
+              if (app === 'CIVIL') {
+                window.location.href = '/civil';
+              } else if (app === 'KEDHEON') {
+                window.location.href = '/';
+              } else {
+                alert(app + ' 서비스 연동 준비 중입니다.');
+              }
+            }}
+            className={`flex-1 py-3.5 md:py-4.5 rounded-xl text-[10px] md:text-sm transition-all font-black text-center leading-none cursor-pointer hover:scale-105 active:scale-95 ${app === 'KEDHEON' ? 'bg-black text-white shadow-md' : 'text-gray-400 hover:text-black'}`}
+          >
             {app}
           </button>
         ))}
