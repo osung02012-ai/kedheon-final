@@ -15,6 +15,24 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Kedheon | Web3 Infrastructure & Pi Ecosystem Portal",
   description: "Global standard for verifiable KYC voting, smart security QR, and Web3 ecosystem rewards. Powered by Kedheon.",
+  metadataBase: new URL("https://kedheon.com"),
+  openGraph: {
+    title: "Kedheon | Web3 Infrastructure & Pi Ecosystem Portal",
+    description: "Global standard for verifiable KYC voting, smart security QR, and Web3 ecosystem rewards. Powered by Kedheon.",
+    url: "https://kedheon.com",
+    siteName: "Kedheon",
+    locale: "ko_KR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Kedheon | Web3 Infrastructure & Pi Ecosystem Portal",
+    description: "Global standard for verifiable KYC voting, smart security QR, and Web3 ecosystem rewards.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
