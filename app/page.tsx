@@ -146,7 +146,7 @@ const DICT: Record<Lang, Dictionary> = {
     marketDesc: "Trade exclusive goods and register your own items.",
     partnershipDesc: "Global partnership opportunities and proposals.",
     exList: [
-      "1. Recompensas del Ecosistema (Gana puntos BEOM con pagos Pi y actividad)",
+      "1. Ecosystem Rewards (Earn BEOM points via Pi payment & activity)",
       "2. QR Code (Secure pay without exposing wallet address)",
       "3. Fandom Rewards (System to earn BEOM via activities)",
       "4. Goods Market (Selling and buying limited items)",
@@ -338,7 +338,7 @@ const DICT: Record<Lang, Dictionary> = {
     marketDesc: "Giao dịch hàng hóa độc quyền và đăng ký bán.",
     partnershipDesc: "Cơ hội hợp tác toàn cầu và đề xuất kinh doanh.",
     exList: [
-      "1. Recompensas del Ecosistema (Gana puntos BEOM con pagos Pi y actividad)",
+      "1. Phần thưởng Hệ sinh thái (Nhận điểm BEOM qua thanh toán Pi và hoạt động)",
       "2. Mã QR (Thanh toán an toàn không lộ ví)",
       "3. Phần thưởng (Hệ thống kiếm BEOM qua hoạt động)",
       "4. Thị trường (Mua bán các vật phẩm giới hạn)",
@@ -386,7 +386,7 @@ const DICT: Record<Lang, Dictionary> = {
     marketDesc: "Échangez des biens exclusifs et enregistrez les vôtres.",
     partnershipDesc: "Opportunités de partenariat mondial.",
     exList: [
-      "1. Recompensas del Ecosistema (Gana puntos BEOM con pagos Pi y actividad)",
+      "1. Récompenses d'Écosystème (Gagnez des points BEOM via paiement Pi et activité)",
       "2. QR Code (Paiement sécurisé)",
       "3. Récompenses (Gagnez des BEOM)",
       "4. Marché (Achetez et vendez)",
@@ -482,7 +482,7 @@ const DICT: Record<Lang, Dictionary> = {
     marketDesc: "Торгуйте эксклюзивными товарами.",
     partnershipDesc: "Глобальное партнерство.",
     exList: [
-      "1. Recompensas del Ecosistema (Gana puntos BEOM con pagos Pi y actividad)",
+      "1. Награды экосистемы (Получайте баллы BEOM за платежи Pi и активность)",
       "2. QR-код (Безопасная оплата)",
       "3. Награды (Заработайте BEOM)",
       "4. Рынок (Покупка и продажа)",
