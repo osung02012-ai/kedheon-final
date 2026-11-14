@@ -17,6 +17,11 @@ interface ReportItem {
   proof: string;
   status: string;
   votes: number;
+  typeEn?: string;
+  nameEn?: string;
+  titleEn?: string;
+  proofEn?: string;
+  statusEn?: string;
 }
 
 const SectionTitle = ({ title, desc }: { title: string; desc: string }) => (
@@ -52,28 +57,43 @@ export default function FactFilterPage() {
     {
       id: 'rep-1',
       type: '기자',
+      typeEn: 'Reporter',
       name: '김OO 기자 (OO경제)',
+      nameEn: 'Reporter Kim (OO Economy)',
       title: 'HACCP 공익신고 내부자 음해성 허위 왜곡 기사',
+      titleEn: 'Defamatory fabricated article targeting an HACCP whistleblower',
       proof: '고용노동부 및 권익위 공식 조사 결과와 정반대 날조',
+      proofEn: 'Fabricated in direct contradiction to MOEL and ACRC findings',
       status: '검증 완료 (블랙리스트 박제)',
+      statusEn: 'Verified (blacklisted)',
       votes: 1420
     },
     {
       id: 'rep-2',
       type: '유튜브 채널',
+      typeEn: 'YouTube Channel',
       name: '찌라시OO 이슈렉카',
+      nameEn: 'RumorOO Issue Wrecker',
       title: '조작된 합성 캡처로 기업 갑질 피해자 2차 가해',
+      titleEn: 'Doctored screenshots used to re-victimize a workplace abuse victim',
       proof: '원본 녹취록 대조 결과 악의적 편집 판명',
+      proofEn: 'Original transcript shows malicious editing',
       status: '검증 완료 (경고 등급: 위험)',
+      statusEn: 'Verified (risk level: high)',
       votes: 3890
     },
     {
       id: 'rep-3',
       type: '언론사',
+      typeEn: 'Media Outlet',
       name: 'OO일보 산업부',
+      nameEn: 'OO Daily Industry Desk',
       title: '임금체불 상습 기업 일방적 홍보 및 기사 거래 의혹',
+      titleEn: 'Suspected paid coverage promoting a habitual wage-theft employer',
       proof: '피해자 사실 확인 절차 완전 누락 및 허위 보도',
+      proofEn: 'No victim verification; false reporting',
       status: '시민 검증 진행 중 (신뢰도 14%)',
+      statusEn: 'Citizen review in progress (trust 14%)',
       votes: 920
     }
   ]);
@@ -396,16 +416,16 @@ export default function FactFilterPage() {
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div className="flex items-center gap-2 min-w-0">
                       <span className="text-[11px] md:text-xs font-black px-2 py-0.5 rounded bg-[#dc2626] text-white whitespace-nowrap">
-                        {item.type}
+                        {ko ? item.type : (item.typeEn || item.type)}
                       </span>
-                      <span className="text-sm md:text-base font-black text-black truncate">{item.name}</span>
+                      <span className="text-sm md:text-base font-black text-black truncate">{ko ? item.name : (item.nameEn || item.name)}</span>
                     </div>
-                    <span className="text-[11px] md:text-xs text-gray-500 font-bold">{item.status}</span>
+                    <span className="text-[11px] md:text-xs text-gray-500 font-bold">{ko ? item.status : (item.statusEn || item.status)}</span>
                   </div>
 
-                  <div className="text-sm md:text-base font-black text-black leading-snug">{item.title}</div>
+                  <div className="text-sm md:text-base font-black text-black leading-snug">{ko ? item.title : (item.titleEn || item.title)}</div>
                   <div className="text-[11px] md:text-xs text-gray-500 bg-gray-50 p-2.5 rounded-lg border border-black/10 font-bold break-all">
-                    <span className="text-black font-black">{ko ? '반박 증빙:' : 'Proof:'}</span> {item.proof}
+                    <span className="text-black font-black">{ko ? '반박 증빙:' : 'Proof:'}</span> {ko ? item.proof : (item.proofEn || item.proof)}
                   </div>
 
                   <div className="flex justify-between items-center pt-1 text-[11px] md:text-xs text-gray-400 font-bold">

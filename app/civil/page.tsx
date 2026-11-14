@@ -321,7 +321,7 @@ export default function CivilPage() {
                       </div>
                       <h3 className="text-black text-sm md:text-base font-black leading-snug mt-2">{ko ? a.title : a.titleEn}</h3>
                     </div>
-                    <span className="text-gray-400 text-[11px] md:text-xs font-mono shrink-0">마감 {a.deadline}</span>
+                    <span className="text-gray-400 text-[11px] md:text-xs font-mono shrink-0">{ko ? '마감' : 'Ends'} {a.deadline}</span>
                   </div>
 
                   <div className="space-y-1">
