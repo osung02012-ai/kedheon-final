@@ -119,7 +119,7 @@ const ZONES: Record<ZoneKey, Zone> = {
         { kr: '노들섬 인근 게스트하우스', en: 'Guesthouse near Nodeul Island', pi: 10 }
       ],
       culture: [
-        { kr: '국립박물관 뷰즈 대행 · 반가사유상 미니어처', en: 'Museum goods proxy · Pensive Bodhisattva miniature', pi: 5 },
+        { kr: '국립박물관 뮷즈 대행 · 반가사유상 미니어처', en: 'Museum goods proxy · Pensive Bodhisattva miniature', pi: 5 },
         { kr: '노들섬 루프탑 콘서트 입장', en: 'Nodeul Island rooftop concert entry', pi: 22 },
         { kr: '박물관 야간개장 가이드', en: 'Museum night-opening guide', pi: 4 }
       ],
@@ -157,8 +157,8 @@ interface GoodsItem {
 }
 
 const GOODS: GoodsItem[] = [
-  { id: 'pensive', kr: '국립박물관 뷰즈 · 반가사유상 미니어처 대행', en: 'National Museum goods · Pensive Bodhisattva miniature', pi: 4, icon: '🗿', grade: 'A' },
-  { id: 'magpie', kr: '까치호랑이 배지 · 뷰즈 대행', en: 'Magpie and Tiger badge · museum goods proxy', pi: 2, icon: '🐯', grade: 'A' },
+  { id: 'pensive', kr: '국립박물관 뮷즈 · 반가사유상 미니어처 대행', en: 'National Museum goods · Pensive Bodhisattva miniature', pi: 4, icon: '🗿', grade: 'A' },
+  { id: 'magpie', kr: '까치호랑이 배지 · 뮷즈 대행', en: 'Magpie and Tiger badge · museum goods proxy', pi: 2, icon: '🐯', grade: 'A' },
   { id: 'locker', kr: '공연장 짐보관 (3시간) · KYC 운영자', en: 'Venue luggage storage (3h) · KYC operator', pi: 2, icon: '🧳', grade: 'A' },
   { id: 'battery', kr: '보조배터리 대여 · 공연장 픽업', en: 'Power bank rental · venue pickup', pi: 1, icon: '🔋', grade: 'B' },
   { id: 'chimaek', kr: '한강 치맥 배달 대리 주문', en: 'Hangang chicken & beer proxy order', pi: 3, icon: '🍺', grade: 'A' }
@@ -319,7 +319,7 @@ export default function HangangPage() {
           </h2>
           <p className="text-gray-500 text-[11px] md:text-sm font-bold mt-3 max-w-2xl mx-auto leading-relaxed">
             {ko
-              ? 'Pi KYC 실명 안전망으로 콘서트·숙박·뷰즈·치안까지 한 번에 연결합니다. 수수료 0% 직거래, 모든 예약은 실명 1인 1건.'
+              ? 'Pi KYC 실명 안전망으로 콘서트·숙박·뮷즈·치안까지 한 번에 연결합니다. 수수료 0% 직거래, 모든 예약은 실명 1인 1건.'
               : 'Pi KYC identity links concerts, stays, museum goods and safety in one pass. 0% direct-deal fee, one verified human per booking.'}
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-1.5 md:gap-2 mt-5 max-w-3xl mx-auto">
@@ -450,7 +450,7 @@ export default function HangangPage() {
           no="02"
           title={ko ? 'K-굿즈 · 짐보관 · 치맥 대행 보드' : 'K-goods · luggage · chimaek board'}
           desc={ko
-            ? '국립박물관 뷰즈부터 공연장 짐보관, 한강 치맥 배달까지 KYC 호스트가 대신합니다. 요청 시 +2 BEOM.'
+            ? '국립박물관 뮷즈부터 공연장 짐보관, 한강 치맥 배달까지 KYC 호스트가 대신합니다. 요청 시 +2 BEOM.'
             : 'Museum goods, venue luggage storage and Hangang delivery, handled by KYC hosts. +2 BEOM per request.'}
         />
 
@@ -670,7 +670,7 @@ export default function HangangPage() {
             className={`notranslate flex-1 min-w-0 px-0.5 py-3.5 md:py-4.5 rounded-xl transition-all font-black text-center leading-none whitespace-nowrap cursor-pointer hover:scale-105 active:scale-95 ${
               app.name === 'HANGANG' ? 'bg-black text-white shadow-md' : 'text-gray-400 hover:text-black'
             }`}
-            style={{ fontSize: 'clamp(7.5px, 2.05vw, 14px)' }}
+            style={{ fontSize: 'clamp(7px, 2.05vw, 14px)' }}
           >
             {app.name}
           </button>

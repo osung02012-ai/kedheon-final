@@ -887,7 +887,7 @@ export default function KedheonDesignSystemFinal() {
               }
             }}
             className={`notranslate flex-1 min-w-0 px-0.5 py-3.5 md:py-4.5 rounded-xl transition-all font-black text-center leading-none whitespace-nowrap cursor-pointer hover:scale-105 active:scale-95 ${app.name === 'KEDHEON' ? 'bg-black text-white shadow-md' : 'text-gray-400 hover:text-black'}`}
-            style={{ fontSize: 'clamp(7.5px, 2.05vw, 14px)' }}
+            style={{ fontSize: 'clamp(7px, 2.05vw, 14px)' }}
           >
             {app.name}
           </button>

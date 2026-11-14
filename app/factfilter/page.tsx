@@ -1023,7 +1023,7 @@ export default function FactFilterPage() {
                 ? 'bg-black text-white shadow-md'
                 : 'text-gray-400 hover:text-black'
             }`}
-            style={{ fontSize: 'clamp(7.5px, 2.05vw, 14px)' }}
+            style={{ fontSize: 'clamp(7px, 2.05vw, 14px)' }}
           >
             {app.name}
           </button>
