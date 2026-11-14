@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Hangang | Seoul K-Culture Pass for Pi",
+  title: "Hangang | Korea-Wide K-Culture Pass for Pi",
   description:
-    "Seoul concert packages, National Museum goods, stays, transit and a safety shield — connected by Pi KYC identity. 0% direct-deal fee. Powered by Kedheon.",
+    "Concert, hanok, folk village, beach and island packages across 7 regions of Korea — Seoul, Yongin, Busan, Gyeongju, Jeju, Jeonju·Gangneung and the DMZ. Transit tips, tax refund and closing days in 10 languages. Pi KYC identity, 0% direct-deal fee.",
   metadataBase: new URL("https://hangang.kedheon.com"),
   openGraph: {
-    title: "Hangang | Seoul K-Culture Pass for Pi",
+    title: "Hangang | Korea-Wide K-Culture Pass for Pi",
     description:
-      "Concert packages across Jamsil, Sangam, Gocheok and Yongsan with stays, food, transit and a Seoul safety shield. Pi KYC verified.",
+      "7 regions of Korea in one Pi pass: Seoul concerts, Yongin Folk Village, Busan, Gyeongju, Jeju, Jeonju·Gangneung and the DMZ — with real transit tips and a nationwide safety shield. 10 languages, Pi KYC verified.",
     url: "https://hangang.kedheon.com",
     siteName: "Hangang",
     locale: "ko_KR",
@@ -18,15 +18,15 @@ export const metadata: Metadata = {
         url: "/hangang-hero.jpg",
         width: 1024,
         height: 1024,
-        alt: "Hangang tiger guardian — classic Korean minhwa painting, Seoul K-Culture Pass for Pi",
+        alt: "Hangang tiger guardian — classic Korean minhwa painting with hangang.pi nameplate, Korea-wide K-Culture Pass for Pi",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Hangang | Seoul K-Culture Pass for Pi",
+    title: "Hangang | Korea-Wide K-Culture Pass for Pi",
     description:
-      "Seoul concerts, museum goods, stays, transit and safety in one Pi pass.",
+      "Seoul, Yongin, Busan, Gyeongju, Jeju, Jeonju·Gangneung, DMZ — stays, culture, food and transit in one Pi pass.",
     images: ["/hangang-hero.jpg"],
   },
   robots: { index: true, follow: true },
