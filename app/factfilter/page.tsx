@@ -391,7 +391,7 @@ export default function FactFilterPage() {
     const el = bar.querySelector<HTMLElement>(`[data-cc="${viewCountry}"]`);
     if (!el) return;
     const delta = el.getBoundingClientRect().left - bar.getBoundingClientRect().left;
-    bar.scrollBy({ left: delta - 12, behavior: 'smooth' });
+    bar.scrollBy({ left: delta - Math.max(0, (bar.clientWidth - el.clientWidth) / 2 - 24), behavior: 'smooth' });
   }, [viewCountry]);
 
   // Check Tab State
