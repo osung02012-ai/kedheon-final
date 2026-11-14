@@ -68,7 +68,7 @@ interface Dictionary {
   walletType: string; personal: string; corporate: string; encodedQR: string;
   feedTitle: string; feedLink: string; feedDesc: string; postBtn: string;
   marketBuyTab: string; marketSellTab: string; buyReqBtn: string; sellDoneBtn: string;
-  copyPrompt: string; copiedAlert: string; piLackAlert: string; convDoneAlert: string;
+  copyPrompt: string; copiedAlert: string; inviteReveal: string; piLackAlert: string; convDoneAlert: string;
   beomLackAlert: string; regDoneAlert: string; propDoneAlert: string;
   devRecruitTitle: string; devRecruitDesc: string; devRecruitBtn: string;
   cats: string[];
@@ -110,7 +110,7 @@ const DICT: Record<Lang, Dictionary> = {
       { t: "국가 설정", d: "South Korea(+82)를 선택하고 번호를 입력하세요." },
       { t: "비밀번호 설정", d: "영문 대/소문자와 숫자를 조합하세요." },
       { t: "프로필 작성", d: "여권 영문 성함과 사용할 ID를 입력하세요." },
-      { t: "초대 코드 입력", d: "초대 코드 [ ohsangjo ] 를 입력하세요." },
+      { t: "초대 코드 입력", d: "아래 초대 코드 박스를 클릭해 확인한 뒤 입력하세요." },
       { t: "비밀구절 보관", d: "24개 단어는 반드시 종이에 수기 기록하세요. (디지털 저장 시 해킹 위험: 캡처, 메모장, 이메일 저장 절대 금지. 유출 시 지갑 복구 불가 및 모든 자산 분실 위험.)", warning: true },
       { t: "채굴 시작", d: "매일 한 번 번개 버튼을 눌러 활동을 시작하세요." }
     ],
@@ -118,7 +118,7 @@ const DICT: Record<Lang, Dictionary> = {
     walletType: "지갑 보호 타입", personal: "개인용", corporate: "기업용", encodedQR: "Encoded QR",
     feedTitle: "제목 또는 팬심 공유", feedLink: "이미지/영상 링크 (URL)", feedDesc: "상세 내용을 기록하십시오", postBtn: "피드 등록 (10 BEOM)",
     marketBuyTab: "굿즈 구매", marketSellTab: "판매 등록", buyReqBtn: "구매 신청", sellDoneBtn: "굿즈 등록 완료",
-    copyPrompt: "복사하려면 클릭", copiedAlert: "추천인 코드가 복사되었습니다!", piLackAlert: "PI 부족", convDoneAlert: "리워드 적립 완료!",
+    copyPrompt: "복사하려면 클릭", copiedAlert: "추천인 코드가 복사되었습니다!", inviteReveal: "초대 코드 확인 및 복사 (클릭)", piLackAlert: "PI 부족", convDoneAlert: "리워드 적립 완료!",
     beomLackAlert: "BEOM 부족", regDoneAlert: "등록 성공", propDoneAlert: "제안서가 전송되었습니다.",
     devRecruitTitle: "파이 코어팀 개발자 공식 모집", devRecruitDesc: "파이 생태계를 함께 구축할 글로벌 개발자를 모집합니다.", devRecruitBtn: "공지 확인 및 지원하기",
     cats: ['CCM', '뮤지션', 'MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'],
@@ -158,7 +158,7 @@ const DICT: Record<Lang, Dictionary> = {
       { t: "Country", d: "Select +82 and enter your number." },
       { t: "Password", d: "Combine Upper/Lower case and Numbers." },
       { t: "Profile", d: "Enter passport name and ID." },
-      { t: "Invite Code", d: "Enter [ ohsangjo ] to join." },
+      { t: "Invite Code", d: "Click the invite code box below to reveal and enter." },
       { t: "Passphrase", d: "Handwrite 24 words on paper and store safely. (Do NOT save digitally due to hacking risks.)", warning: true },
       { t: "Mining", d: "Tap lightning bolt every 24h." }
     ],
@@ -166,7 +166,7 @@ const DICT: Record<Lang, Dictionary> = {
     walletType: "Wallet Protection Type", personal: "Personal", corporate: "Corporate", encodedQR: "Encoded QR",
     feedTitle: "Title or Share Spirit", feedLink: "Image/Video Link (URL)", feedDesc: "Describe your activity in detail", postBtn: "POST (10 BEOM)",
     marketBuyTab: "BUY GOODS", marketSellTab: "SELL ITEMS", buyReqBtn: "BUY REQUEST", sellDoneBtn: "COMPLETE REGISTRATION",
-    copyPrompt: "Click to Copy", copiedAlert: "Invite Code Copied!", piLackAlert: "Not enough PI", convDoneAlert: "Conversion Complete!",
+    copyPrompt: "Click to Copy", copiedAlert: "Invite Code Copied!", inviteReveal: "Reveal & copy invite code (tap)", piLackAlert: "Not enough PI", convDoneAlert: "Conversion Complete!",
     beomLackAlert: "Not enough BEOM", regDoneAlert: "Registration Successful", propDoneAlert: "Proposal Submitted.",
     devRecruitTitle: "Pi Core Team Developer Recruitment", devRecruitDesc: "Join the official global developers building the Pi ecosystem.", devRecruitBtn: "CHECK & APPLY",
     cats: ['CCM', 'MUSICIAN', 'MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'],
@@ -206,7 +206,7 @@ const DICT: Record<Lang, Dictionary> = {
       { t: "国家", d: "选择 +82 并输入您的号码。" },
       { t: "密码", d: "结合大小写字母与数字。" },
       { t: "个人资料", d: "输入护照姓名与用户 ID。" },
-      { t: "邀请码", d: "输入 [ ohsangjo ] 加入。" },
+      { t: "邀请码", d: "点击下方邀请码框查看并输入。" },
       { t: "助记词", d: "在纸上手写 24 个单词并妥善保存。(请勿数字保存，以防黑客攻击)", warning: true },
       { t: "挖矿", d: "每 24 小时点击一次闪电图标。" }
     ],
@@ -214,7 +214,7 @@ const DICT: Record<Lang, Dictionary> = {
     walletType: "钱包保护类型", personal: "个人", corporate: "企业", encodedQR: "加密二维码",
     feedTitle: "标题或分享热情", feedLink: "图片/视频链接 (URL)", feedDesc: "详细描述您的活动", postBtn: "发布 (10 BEOM)",
     marketBuyTab: "购买商品", marketSellTab: "出售物品", buyReqBtn: "购买请求", sellDoneBtn: "完成注册",
-    copyPrompt: "点击复制", copiedAlert: "邀请码已复制！", piLackAlert: "PI 余额不足", convDoneAlert: "奖励领取成功！",
+    copyPrompt: "点击复制", copiedAlert: "邀请码已复制！", inviteReveal: "查看并复制邀请码（点击）", piLackAlert: "PI 余额不足", convDoneAlert: "奖励领取成功！",
     beomLackAlert: "BEOM 余额不足", regDoneAlert: "注册成功", propDoneAlert: "提案已提交。",
     devRecruitTitle: "Pi 核心团队开发者招募", devRecruitDesc: "加入官方全球开发者团队，共同构建 Pi 生态系统。", devRecruitBtn: "查看并申请",
     cats: ['CCM', '音乐家', 'MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'],
@@ -254,7 +254,7 @@ const DICT: Record<Lang, Dictionary> = {
       { t: "国", d: "+82 を選択し、番号を入力します。" },
       { t: "パスワード", d: "大文字、小文字、数字を組み合わせます。" },
       { t: "プロフィール", d: "パスポートの名前と ID を入力します。" },
-      { t: "招待コード", d: "[ ohsangjo ] を入力して参加します。" },
+      { t: "招待コード", d: "下の招待コード欄をタップして確認し、入力してください。" },
       { t: "パスフレーズ", d: "24個の単語を紙に手書きして安全に保管してください。(デジタル保存禁止)", warning: true },
       { t: "マイニング", d: "24時間ごとに雷のアイコンをタップします。" }
     ],
@@ -262,7 +262,7 @@ const DICT: Record<Lang, Dictionary> = {
     walletType: "保護タイプ", personal: "個人", corporate: "企業", encodedQR: "エンコードQR",
     feedTitle: "タイトルまたはスピリットを共有", feedLink: "画像/動画リンク (URL)", feedDesc: "活動の詳細を説明してください", postBtn: "投稿 (10 BEOM)",
     marketBuyTab: "グッズ購入", marketSellTab: "販売登録", buyReqBtn: "購入リクエスト", sellDoneBtn: "登録完了",
-    copyPrompt: "クリックしてコピー", copiedAlert: "招待コードがコピーされました！", piLackAlert: "PI が不足しています", convDoneAlert: "変換が完了しました！",
+    copyPrompt: "クリックしてコピー", copiedAlert: "招待コードがコピーされました！", inviteReveal: "招待コードを表示してコピー（タップ）", piLackAlert: "PI が不足しています", convDoneAlert: "変換が完了しました！",
     beomLackAlert: "BEOM が不足しています", regDoneAlert: "登録成功", propDoneAlert: "提案が送信されました。",
     devRecruitTitle: "Pi コアチーム開発者募集", devRecruitDesc: "Pi エコシステムを構築する公式グローバル開発者に参加してください。", devRecruitBtn: "確認して応募",
     cats: ['CCM', 'ミュージシャン', 'MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'],
@@ -302,7 +302,7 @@ const DICT: Record<Lang, Dictionary> = {
       { t: "País", d: "Selecciona +82 e ingresa tu número." },
       { t: "Contraseña", d: "Combina mayúsculas, minúsculas y números." },
       { t: "Perfil", d: "Ingresa nombre del pasaporte e ID." },
-      { t: "Código", d: "Ingresa [ ohsangjo ] para unirte." },
+      { t: "Código", d: "Toca el cuadro del código abajo para verlo e ingresarlo." },
       { t: "Frase", d: "Escribe 24 palabras en papel y guárdalas. (NO digital por hackeos)", warning: true },
       { t: "Minería", d: "Toca el rayo cada 24h." }
     ],
@@ -310,7 +310,7 @@ const DICT: Record<Lang, Dictionary> = {
     walletType: "Tipo de Billetera", personal: "Personal", corporate: "Corporativo", encodedQR: "QR Codificado",
     feedTitle: "Título o Espíritu", feedLink: "Enlace (URL)", feedDesc: "Describe tu actividad", postBtn: "PUBLICAR (10 BEOM)",
     marketBuyTab: "COMPRAR", marketSellTab: "VENDER", buyReqBtn: "SOLICITAR COMPRA", sellDoneBtn: "REGISTRO COMPLETO",
-    copyPrompt: "Clic para Copiar", copiedAlert: "¡Código copiado!", piLackAlert: "Falta PI", convDoneAlert: "¡Recompensa Recibida!",
+    copyPrompt: "Clic para Copiar", copiedAlert: "¡Código copiado!", inviteReveal: "Ver y copiar el código (toca aquí)", piLackAlert: "Falta PI", convDoneAlert: "¡Recompensa Recibida!",
     beomLackAlert: "Falta BEOM", regDoneAlert: "Registro Exitoso", propDoneAlert: "Propuesta Enviada.",
     devRecruitTitle: "Reclutamiento del Core Team", devRecruitDesc: "Únete a los desarrolladores oficiales de Pi.", devRecruitBtn: "REVISAR Y APLICAR",
     cats: ['CCM', 'MÚSICA', 'MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'],
@@ -350,7 +350,7 @@ const DICT: Record<Lang, Dictionary> = {
       { t: "Quốc gia", d: "Chọn +82 và nhập số điện thoại." },
       { t: "Mật khẩu", d: "Kết hợp chữ Hoa, thường và Số." },
       { t: "Hồ sơ", d: "Nhập tên hộ chiếu và ID." },
-      { t: "Mã mời", d: "Nhập [ ohsangjo ] để tham gia." },
+      { t: "Mã mời", d: "Nhấn vào ô mã mời bên dưới để xem và nhập." },
       { t: "Cụm mật khẩu", d: "Ghi 24 từ ra giấy. (Không lưu kỹ thuật số để tránh bị hack)", warning: true },
       { t: "Khai thác", d: "Nhấn nút tia sét mỗi 24 giờ." }
     ],
@@ -358,7 +358,7 @@ const DICT: Record<Lang, Dictionary> = {
     walletType: "Loại bảo vệ ví", personal: "Cá nhân", corporate: "Doanh nghiệp", encodedQR: "QR Mã hóa",
     feedTitle: "Tiêu đề", feedLink: "Liên kết Ảnh/Video", feedDesc: "Mô tả hoạt động của bạn", postBtn: "ĐĂNG BÀI (10 BEOM)",
     marketBuyTab: "MUA HÀNG", marketSellTab: "BÁN HÀNG", buyReqBtn: "YÊU CẦU MUA", sellDoneBtn: "HOÀN TẤT ĐĂNG KÝ",
-    copyPrompt: "Nhấn để sao chép", copiedAlert: "Đã sao chép mã mời!", piLackAlert: "Không đủ PI", convDoneAlert: "Chuyển đổi thành công!",
+    copyPrompt: "Nhấn để sao chép", copiedAlert: "Đã sao chép mã mời!", inviteReveal: "Xem và sao chép mã mời (nhấn)", piLackAlert: "Không đủ PI", convDoneAlert: "Chuyển đổi thành công!",
     beomLackAlert: "Không đủ BEOM", regDoneAlert: "Đăng ký thành công", propDoneAlert: "Đã gửi đề xuất.",
     devRecruitTitle: "Tuyển dụng Nhà phát triển Pi", devRecruitDesc: "Tham gia nhóm phát triển xây dựng hệ sinh thái Pi.", devRecruitBtn: "KIỂM TRA & ỨNG TUYỂN",
     cats: ['CCM', 'NHẠC SĨ', 'MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'],
@@ -398,7 +398,7 @@ const DICT: Record<Lang, Dictionary> = {
       { t: "Pays", d: "Sélectionnez +82 et entrez votre numéro." },
       { t: "Mot de passe", d: "Combinez majuscules, minuscules et chiffres." },
       { t: "Profil", d: "Entrez votre nom et ID." },
-      { t: "Code d'invitation", d: "Entrez [ ohsangjo ] pour rejoindre." },
+      { t: "Code d'invitation", d: "Touchez la case du code ci-dessous pour l'afficher et le saisir." },
       { t: "Phrase secrète", d: "Écrivez 24 mots sur papier. (Ne pas sauvegarder numériquement)", warning: true },
       { t: "Minage", d: "Appuyez sur l'éclair toutes les 24h." }
     ],
@@ -406,7 +406,7 @@ const DICT: Record<Lang, Dictionary> = {
     walletType: "Type de portefeuille", personal: "Personnel", corporate: "Entreprise", encodedQR: "QR Encodé",
     feedTitle: "Titre", feedLink: "Lien Image/Vidéo", feedDesc: "Décrivez votre activité", postBtn: "PUBLIER (10 BEOM)",
     marketBuyTab: "ACHETER", marketSellTab: "VENDRE", buyReqBtn: "DEMANDER", sellDoneBtn: "TERMINÉ",
-    copyPrompt: "Cliquez pour copier", copiedAlert: "Code copié !", piLackAlert: "PI insuffisant", convDoneAlert: "Récompense reçue !",
+    copyPrompt: "Cliquez pour copier", copiedAlert: "Code copié !", inviteReveal: "Afficher et copier le code (toucher)", piLackAlert: "PI insuffisant", convDoneAlert: "Récompense reçue !",
     beomLackAlert: "BEOM insuffisant", regDoneAlert: "Succès", propDoneAlert: "Proposition soumise.",
     devRecruitTitle: "Recrutement Core Team Pi", devRecruitDesc: "Rejoignez les développeurs mondiaux officiels.", devRecruitBtn: "POSTULER",
     cats: ['CCM', 'MUSICIEN', 'MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'],
@@ -446,7 +446,7 @@ const DICT: Record<Lang, Dictionary> = {
       { t: "País", d: "Selecione +82 e insira seu número." },
       { t: "Senha", d: "Combine maiúsculas, minúsculas e números." },
       { t: "Perfil", d: "Insira nome e ID." },
-      { t: "Código", d: "Insira [ ohsangjo ] para entrar." },
+      { t: "Código", d: "Insira o código do quadro abaixo para entrar." },
       { t: "Frase secreta", d: "Escreva 24 palavras no papel.", warning: true },
       { t: "Mineração", d: "Toque no raio a cada 24h." }
     ],
@@ -454,7 +454,7 @@ const DICT: Record<Lang, Dictionary> = {
     walletType: "Tipo de Carteira", personal: "Pessoal", corporate: "Corporativo", encodedQR: "QR Codificado",
     feedTitle: "Título", feedLink: "Link da Imagem", feedDesc: "Descreva sua atividade", postBtn: "PUBLICAR",
     marketBuyTab: "COMPRAR", marketSellTab: "VENDER", buyReqBtn: "SOLICITAR", sellDoneBtn: "CONCLUÍDO",
-    copyPrompt: "Clique para copiar", copiedAlert: "Copiado!", piLackAlert: "PI insuficiente", convDoneAlert: "Recompensa recebida!",
+    copyPrompt: "Clique para copiar", copiedAlert: "Copiado!", inviteReveal: "Ver e copiar o código (toque)", piLackAlert: "PI insuficiente", convDoneAlert: "Recompensa recebida!",
     beomLackAlert: "BEOM insuficiente", regDoneAlert: "Sucesso", propDoneAlert: "Proposta enviada.",
     devRecruitTitle: "Recrutamento Core Team", devRecruitDesc: "Junte-se aos desenvolvedores globais.", devRecruitBtn: "CANDIDATAR-SE",
     cats: ['CCM', 'MÚSICO', 'MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'],
@@ -494,7 +494,7 @@ const DICT: Record<Lang, Dictionary> = {
       { t: "Страна", d: "Выберите +82 и введите номер." },
       { t: "Пароль", d: "Смешайте буквы и цифры." },
       { t: "Профиль", d: "Введите имя и ID." },
-      { t: "Код", d: "Введите [ ohsangjo ]." },
+      { t: "Код", d: "Нажмите на поле кода ниже, чтобы увидеть его и ввести." },
       { t: "Фраза", d: "Запишите 24 слова на бумаге.", warning: true },
       { t: "Майнинг", d: "Нажимайте молнию каждые 24ч." }
     ],
@@ -502,7 +502,7 @@ const DICT: Record<Lang, Dictionary> = {
     walletType: "Тип кошелька", personal: "Личный", corporate: "Корпоративный", encodedQR: "Закодированный QR",
     feedTitle: "Заголовок", feedLink: "Ссылка URL", feedDesc: "Описание активности", postBtn: "ОПУБЛИКОВАТЬ",
     marketBuyTab: "КУПИТЬ", marketSellTab: "ПРОДАТЬ", buyReqBtn: "ЗАПРОСИТЬ", sellDoneBtn: "ГОТОВО",
-    copyPrompt: "Копировать", copiedAlert: "Скопировано!", piLackAlert: "Недостаточно PI", convDoneAlert: "Готово!",
+    copyPrompt: "Копировать", copiedAlert: "Скопировано!", inviteReveal: "Показать и скопировать код (нажмите)", piLackAlert: "Недостаточно PI", convDoneAlert: "Готово!",
     beomLackAlert: "Недостаточно BEOM", regDoneAlert: "Успех", propDoneAlert: "Отправлено.",
     devRecruitTitle: "Набор Core Team", devRecruitDesc: "Присоединяйтесь к разработчикам.", devRecruitBtn: "ПОДАТЬ ЗАЯВКУ",
     cats: ['CCM', 'МУЗЫКАНТ', 'MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'],
@@ -542,7 +542,7 @@ const DICT: Record<Lang, Dictionary> = {
       { t: "Negara", d: "Pilih +82 dan masukkan nomor." },
       { t: "Sandi", d: "Gabungkan huruf dan angka." },
       { t: "Profil", d: "Masukkan nama dan ID." },
-      { t: "Kode", d: "Masukkan [ ohsangjo ]." },
+      { t: "Kode", d: "Ketuk kotak kode di bawah untuk melihat dan memasukkannya." },
       { t: "Frasa", d: "Tulis 24 kata di kertas.", warning: true },
       { t: "Menambang", d: "Ketuk petir setiap 24 jam." }
     ],
@@ -550,7 +550,7 @@ const DICT: Record<Lang, Dictionary> = {
     walletType: "Jenis Dompet", personal: "Pribadi", corporate: "Perusahaan", encodedQR: "QR Enkode",
     feedTitle: "Judul", feedLink: "Tautan URL", feedDesc: "Deskripsikan aktivitas", postBtn: "POSTING",
     marketBuyTab: "BELI", marketSellTab: "JUAL", buyReqBtn: "MINTA", sellDoneBtn: "SELESAI",
-    copyPrompt: "Klik untuk menyalin", copiedAlert: "Tersalin!", piLackAlert: "PI tidak cukup", convDoneAlert: "Konversi selesai!",
+    copyPrompt: "Klik untuk menyalin", copiedAlert: "Tersalin!", inviteReveal: "Lihat & salin kode (ketuk)", piLackAlert: "PI tidak cukup", convDoneAlert: "Konversi selesai!",
     beomLackAlert: "BEOM tidak cukup", regDoneAlert: "Sukses", propDoneAlert: "Proposal terkirim.",
     devRecruitTitle: "Rekrutmen Core Team", devRecruitDesc: "Bergabunglah dengan pengembang.", devRecruitBtn: "DAFTAR",
     cats: ['CCM', 'MUSISI', 'MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'],
@@ -562,12 +562,33 @@ const DICT: Record<Lang, Dictionary> = {
   }
 };
 
+// Keep <html lang> aligned with the language the visitor actually picked, and shield brand
+// names / proper nouns from browser auto-translation (Chrome would turn "ohsangjo" into a
+// surname). Words matching these tokens are rendered inside translate="no" spans.
+const LANG_TAG: Record<Lang, string> = {
+  KR: 'ko', EN: 'en', CN: 'zh', JP: 'ja', ES: 'es', VN: 'vi', FR: 'fr', PT: 'pt', RU: 'ru', ID: 'id'
+};
+const NO_TRANSLATE_TOKENS = ['ohsangjo', 'KEDHEON', 'CIVIL', 'FACTFILTER', 'NEXUS', 'VENDOR', 'BEOM', 'KYC', 'PI', 'Pi', 'ROOKIE', 'PIONEER'];
+const NO_TRANSLATE_RE = new RegExp(`\\b(${NO_TRANSLATE_TOKENS.join('|')})\\b`, 'g');
+
+const SafeText = ({ text }: { text: string }) => (
+  <>
+    {(text || '').split(NO_TRANSLATE_RE).map((part, i) =>
+      NO_TRANSLATE_TOKENS.includes(part) ? (
+        <span key={i} translate="no" className="notranslate">{part}</span>
+      ) : (
+        <React.Fragment key={i}>{part}</React.Fragment>
+      )
+    )}
+  </>
+);
+
 const SectionHeader = ({ title, desc }: { title: string; desc: string; }) => (
   <div className="w-full border-t-2 border-[#dc2626] pt-2 mb-2 text-left font-black">
-    <h2 className="text-black text-lg md:text-2xl uppercase italic border-l-[8px] border-black pl-3 tracking-tighter leading-none">
+    <h2 className="text-black text-lg md:text-xl uppercase italic border-l-[8px] border-black pl-3 tracking-tighter leading-none">
        {title}
     </h2>
-    <p className="text-gray-400 text-[9px] md:text-xs font-bold pl-7 italic leading-none mt-1">{desc}</p>
+    <p className="text-gray-400 text-xs md:text-sm font-bold pl-7 italic leading-none mt-1">{desc}</p>
   </div>
 );
 
@@ -585,8 +606,13 @@ export default function KedheonDesignSystemFinal() {
   const [sellItem, setSellItem] = useState({ name: '', price: '', desc: '', img: '' });
   const [userGoods, setUserGoods] = useState<GoodsItem[]>([]);
   const [partner, setPartner] = useState({ corp: '', email: '', contact: '', manager: '', msg: '' });
+  const [showInviteCode, setShowInviteCode] = useState(false);
 
   useEffect(() => { setHasMounted(true); }, []);
+
+  useEffect(() => {
+    document.documentElement.lang = LANG_TAG[lang] || 'ko';
+  }, [lang]);
 
   const L = DICT[lang];
   const displayGoods = [...userGoods, ...L.goodsMock];
@@ -613,12 +639,12 @@ export default function KedheonDesignSystemFinal() {
   return (
     <div className="flex flex-col items-center bg-white min-h-screen text-black font-sans w-full pb-24 font-black selection:bg-red-50 overflow-x-hidden">
       
-      <nav className="w-full max-w-5xl flex justify-between items-center px-4 py-2 sticky top-0 bg-white/95 backdrop-blur-sm z-[500] border-b border-black/5 shadow-sm">
+      <nav className="w-full max-w-5xl flex justify-between items-center px-4 py-2 sticky top-0 bg-white/95 backdrop-blur-md z-[500] border-b border-black/10 shadow-sm">
         <div className="flex items-center gap-2 md:gap-3">
           <img src="/kedheon-character.png" className="w-8 h-8 md:w-11 md:h-11 rounded-lg border-2 border-black" alt="K" />
           <div className="text-left leading-tight font-black">
-            <h1 className="text-black text-sm md:text-lg italic uppercase leading-none">Kedheon</h1>
-            <span className="text-gray-400 text-[8px] font-mono tracking-widest uppercase">MASTER V271.0</span>
+            <h1 className="notranslate text-black text-sm md:text-base italic uppercase leading-none" translate="no">Kedheon</h1>
+            <span className="text-gray-400 text-[11px] font-mono tracking-widest uppercase">MASTER V271.0</span>
           </div>
         </div>
         
@@ -627,7 +653,7 @@ export default function KedheonDesignSystemFinal() {
             <select
               value={lang}
               onChange={(e) => setLang(e.target.value as Lang)}
-              className="appearance-none bg-gray-100 border border-gray-200 text-black text-[10px] md:text-xs font-black rounded-lg pl-2 pr-5 py-1 outline-none cursor-pointer shadow-sm focus:border-black transition-colors"
+              className="appearance-none bg-gray-100 border border-gray-200 text-black text-[11px] md:text-xs font-black rounded-lg pl-2 pr-5 py-1 outline-none cursor-pointer shadow-sm focus:border-black transition-colors"
             >
               <option value="KR">🇰🇷 KR</option>
               <option value="EN">🇺🇸 EN</option>
@@ -645,8 +671,8 @@ export default function KedheonDesignSystemFinal() {
             </div>
           </div>
 
-          <button onClick={() => setTab('ROOKIE')} className={`px-2 py-1 rounded-lg text-[10px] md:text-sm font-black border transition-all whitespace-nowrap ${tab === 'ROOKIE' ? 'bg-[#dc2626] text-white border-[#dc2626]' : 'text-gray-300 border-transparent'}`}>{L.rookie}</button>
-          <button onClick={() => setTab('PIONEER')} className={`px-2 py-1 rounded-lg text-[10px] md:text-sm font-black border transition-all whitespace-nowrap ${tab === 'PIONEER' ? 'bg-black text-white border-black' : 'text-gray-300 border-transparent'}`}>{L.pioneer}</button>
+          <button onClick={() => setTab('ROOKIE')} className={`px-2 py-1 rounded-lg text-xs md:text-sm font-black border transition-all whitespace-nowrap ${tab === 'ROOKIE' ? 'bg-[#dc2626] text-white border-[#dc2626]' : 'text-gray-500 border-black/10 hover:text-black'}`}>{L.rookie}</button>
+          <button onClick={() => setTab('PIONEER')} className={`px-2 py-1 rounded-lg text-xs md:text-sm font-black border transition-all whitespace-nowrap ${tab === 'PIONEER' ? 'bg-black text-white border-black' : 'text-gray-500 border-black/10 hover:text-black'}`}>{L.pioneer}</button>
         </div>
       </nav>
 
@@ -657,8 +683,8 @@ export default function KedheonDesignSystemFinal() {
               <div className="absolute top-0 left-0 w-full h-1 bg-[#dc2626]"></div>
               <img src="/kedheon-character.png" className="w-32 h-32 md:w-56 md:h-56 object-contain drop-shadow-xl" alt="K" />
               <div className="px-4 leading-none">
-                <h1 className="text-black text-xl md:text-3xl uppercase tracking-tighter mb-1">{L.procedure}</h1>
-                <p className="text-[#dc2626] text-[10px] md:text-sm font-bold tracking-tight">{L.piJoinDesc}</p>
+                <h1 className="text-black text-2xl md:text-3xl uppercase tracking-tighter mb-1">{L.procedure}</h1>
+                <p className="text-[#dc2626] text-xs md:text-sm font-bold tracking-tight">{L.piJoinDesc}</p>
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
@@ -667,14 +693,14 @@ export default function KedheonDesignSystemFinal() {
                   <div className="flex items-center gap-3 text-left">
                     <span className={`text-3xl md:text-4xl font-black italic ${s.warning ? 'text-[#dc2626]' : 'text-black opacity-5'}`}>0{i+1}</span>
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-black text-[11px] md:text-sm font-black uppercase italic leading-none">{s.t}</h3>
-                      <p className={`text-[9px] md:text-xs font-bold leading-tight mt-1 ${s.warning ? 'text-[#dc2626]' : 'text-gray-600'}`}>{s.d}</p>
+                      <h3 className="text-black text-sm md:text-base font-black uppercase italic leading-none"><SafeText text={s.t} /></h3>
+                      <p className={`text-xs md:text-sm font-bold leading-tight mt-1 ${s.warning ? 'text-[#dc2626]' : 'text-gray-600'}`}><SafeText text={s.d} /></p>
                     </div>
                   </div>
                   {s.links && (
                     <div className="grid grid-cols-2 gap-2">
-                      <button onClick={() => handleDownload(s.links?.AOS)} className="bg-black text-white py-1.5 rounded-lg text-[9px] font-black uppercase hover:bg-[#dc2626] transition-all">Android</button>
-                      <button onClick={() => handleDownload(s.links?.iOS)} className="bg-black text-white py-1.5 rounded-lg text-[9px] font-black uppercase hover:bg-[#dc2626] transition-all">iPhone</button>
+                      <button onClick={() => handleDownload(s.links?.AOS)} className="bg-black text-white py-1.5 rounded-lg text-[11px] font-black uppercase hover:bg-[#dc2626] transition-all">Android</button>
+                      <button onClick={() => handleDownload(s.links?.iOS)} className="bg-black text-white py-1.5 rounded-lg text-[11px] font-black uppercase hover:bg-[#dc2626] transition-all">iPhone</button>
                     </div>
                   )}
                 </div>
@@ -684,28 +710,28 @@ export default function KedheonDesignSystemFinal() {
             <div className="w-full bg-black border-[3px] border-[#dc2626] rounded-2xl p-4 md:p-6 text-left shadow-2xl flex flex-col md:flex-row items-center gap-4 relative overflow-hidden mt-2">
                 <div className="absolute -right-4 -top-4 w-16 h-16 bg-[#dc2626] rotate-45 opacity-20"></div>
                 <div className="flex-1 z-10">
-                    <h3 className="text-white text-sm md:text-xl font-black italic uppercase border-l-4 border-[#dc2626] pl-2 leading-none">
+                    <h3 className="text-white text-sm md:text-base font-black italic uppercase border-l-4 border-[#dc2626] pl-2 leading-none">
                       {L.devRecruitTitle}
                     </h3>
-                    <p className="text-gray-400 text-[10px] md:text-xs mt-2 font-bold leading-tight">
+                    <p className="text-gray-400 text-[11px] md:text-xs mt-2 font-bold leading-tight">
                       {L.devRecruitDesc}
                     </p>
                 </div>
-                <button onClick={() => handleDownload("https://minepi.com/developers/")} className="w-full md:w-auto bg-[#dc2626] text-white px-5 py-3 rounded-xl text-[10px] md:text-xs font-black uppercase whitespace-nowrap active:scale-95 shadow-md hover:bg-white hover:text-black transition-all z-10 border border-transparent hover:border-black">
+                <button onClick={() => handleDownload("https://minepi.com/developers/")} className="w-full md:w-auto bg-[#dc2626] text-white px-5 py-3 rounded-xl text-[11px] md:text-xs font-black uppercase whitespace-nowrap active:scale-95 shadow-md hover:bg-white hover:text-black transition-all z-10 border border-transparent hover:border-black">
                     {L.devRecruitBtn}
                 </button>
             </div>
 
-            <div className="p-6 bg-black text-white rounded-2xl text-center shadow-xl border-2 border-[#dc2626] cursor-pointer active:scale-95 mt-2" onClick={handleCopy}>
-               <p className="text-[10px] italic text-gray-500 mb-1">{L.copyPrompt}</p>
-               <div className="text-white text-3xl md:text-5xl tracking-widest font-black leading-none italic">{PI_INVITE_CODE}</div>
+            <div className="p-6 bg-black text-white rounded-2xl text-center shadow-xl border-2 border-[#dc2626] cursor-pointer active:scale-95 mt-2" onClick={() => { setShowInviteCode(true); handleCopy(); }}>
+               <p className="text-[11px] italic text-gray-500 mb-1">{showInviteCode ? L.copyPrompt : L.inviteReveal}</p>
+               <div translate="no" className="notranslate text-white text-3xl md:text-5xl tracking-widest font-black leading-none italic">{showInviteCode ? PI_INVITE_CODE : '••••••••'}</div>
             </div>
           </div>
         ) : (
           <div className="flex flex-col gap-4 py-1 animate-in slide-in-from-bottom-5 duration-700 font-black text-left">
             
             <div className="w-full bg-white p-5 rounded-2xl border-2 border-black shadow-lg flex flex-col justify-center relative overflow-hidden group">
-                <h3 className="text-gray-400 text-[9px] uppercase tracking-widest font-black mb-2">{L.assets}</h3>
+                <h3 className="text-gray-400 text-[11px] uppercase tracking-widest font-black mb-2">{L.assets}</h3>
                 <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none transition-transform group-hover:scale-105">
                    <img src="/beom-token.png" className="w-24 h-24 md:w-44 md:h-48 object-contain drop-shadow-2xl" alt="Beom" />
                 </div>
@@ -713,31 +739,31 @@ export default function KedheonDesignSystemFinal() {
                     <p className="text-black text-2xl md:text-5xl tracking-tighter font-black">
                       {Math.floor(beomToken).toLocaleString()}
                       <span className="text-lg opacity-20">.{beomToken.toFixed(2).split('.')[1]}</span> 
-                      <span className="ml-2 text-xl md:text-3xl italic uppercase text-[#dc2626]">BEOM</span>
+                      <span translate="no" className="notranslate ml-2 text-2xl md:text-3xl italic uppercase text-[#dc2626]">BEOM</span>
                     </p>
-                    <p className="text-gray-400 text-[10px] md:text-sm font-black italic mt-1">≈ {piBalance.toLocaleString()} PI</p>
+                    <p className="text-gray-400 text-xs md:text-sm font-black italic mt-1">≈ {piBalance.toLocaleString()} <span translate="no" className="notranslate">PI</span></p>
                     <div className="flex items-center gap-2 mt-3 font-black">
-                      <div className="bg-black text-white px-2 py-0.5 rounded text-[8px] md:text-[10px] font-mono shadow-sm">NODE: 19.02 SCORE</div>
-                      <div className="bg-[#dc2626] text-white px-2 py-0.5 rounded text-[8px] md:text-[10px] font-mono italic shadow-sm tracking-tighter">RT: 15,080</div>
+                      <div className="bg-black text-white px-2 py-0.5 rounded text-[11px] md:text-xs font-mono shadow-sm">NODE: 19.02 SCORE</div>
+                      <div className="bg-[#dc2626] text-white px-2 py-0.5 rounded text-[11px] md:text-xs font-mono italic shadow-sm tracking-tighter">RT: 15,080</div>
                     </div>
                 </div>
             </div>
 
             <div className="w-full bg-gray-900 py-1.5 px-4 rounded-lg flex items-center justify-center gap-2 shadow-inner">
                <span className="w-1.5 h-1.5 bg-red-600 rounded-full animate-ping"></span>
-               <p className="text-white text-[9px] md:text-[11px] font-black leading-none uppercase tracking-tight">
+               <p className="text-white text-[11px] md:text-xs font-black leading-none uppercase tracking-tight">
                  {L.portalStatus}
                </p>
             </div>
 
             <SectionHeader title={L.exchange} desc={L.exchangeDesc} />
-            <div className="bg-white p-4 rounded-2xl border-2 border-black space-y-4 shadow-sm font-black text-left">
+            <div className="bg-white p-4 md:p-5 rounded-2xl border-2 border-black space-y-4 shadow-sm font-black text-left">
                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-1 border-r border-gray-100 pr-2">
-                     {L.exList.map((txt, idx) => <p key={idx} className="text-[10px] md:text-xs font-black text-gray-800 leading-tight border-b border-gray-50 pb-1">▶ {txt}</p>)}
+                     {L.exList.map((txt, idx) => <p key={idx} className="text-[11px] md:text-xs font-black text-gray-800 leading-tight border-b border-gray-50 pb-1">▶ {txt}</p>)}
                   </div>
                   <div className="flex flex-col items-center justify-center p-3 bg-gray-50 rounded-xl text-center font-black">
-                     <p className="text-black text-xs md:text-lg font-black mb-2 italic">{L.convertTitle}</p>
+                     <p className="text-black text-sm md:text-base font-black mb-2 italic">{L.convertTitle}</p>
                      <button onClick={handleFinanceConversion} className="w-full bg-[#dc2626] text-white py-2 rounded-lg text-xs font-black hover:bg-black transition-all shadow-md">{L.convertBtn}</button>
                   </div>
                </div>
@@ -749,19 +775,19 @@ export default function KedheonDesignSystemFinal() {
                   {qrState.active ? (
                     <>
                       <img src={qrState.type === 'PERSONAL' ? "/qr-personal.png" : "/qr-business.png"} className="w-full h-full p-3 object-contain" alt="QR" />
-                      <p className="text-[8px] font-black bg-gray-100 px-2 py-0.5 rounded-full mb-1 uppercase text-center">{qrState.biz || (qrState.type === 'PERSONAL' ? L.personal : L.corporate)}</p>
+                      <p className="text-[11px] font-black bg-gray-100 px-2 py-0.5 rounded-full mb-1 uppercase text-center">{qrState.biz || (qrState.type === 'PERSONAL' ? L.personal : L.corporate)}</p>
                     </>
                   ) : <p className="text-black text-xs md:text-sm font-black italic uppercase animate-pulse">{L.encodedQR}</p>}
                </div>
                <div className="flex-1 w-full space-y-3 font-black">
                   <div className="bg-white p-4 rounded-xl border border-black/10">
-                     <p className="text-black text-[10px] md:text-xs font-black italic uppercase mb-3 border-l-2 border-black pl-2">{L.walletType}</p>
+                     <p className="text-black text-[11px] md:text-xs font-black italic uppercase mb-3 border-l-2 border-black pl-2">{L.walletType}</p>
                      <div className="flex gap-2 mb-3">
-                        <button onClick={() => setQrState({...qrState, type:'PERSONAL'})} className={`flex-1 py-1.5 rounded-md text-[10px] font-black border transition-all ${qrState.type === 'PERSONAL' ? 'bg-black text-white border-black shadow-md' : 'text-gray-300 border-gray-100'}`}>{L.personal}</button>
-                        <button onClick={() => setQrState({...qrState, type:'BUSINESS'})} className={`flex-1 py-1.5 rounded-md text-[10px] font-black border transition-all ${qrState.type === 'BUSINESS' ? 'bg-black text-white border-black shadow-md' : 'text-gray-300 border-gray-100'}`}>{L.corporate}</button>
+                        <button onClick={() => setQrState({...qrState, type:'PERSONAL'})} className={`flex-1 py-1.5 rounded-md text-[11px] font-black border transition-all ${qrState.type === 'PERSONAL' ? 'bg-black text-white border-black shadow-md' : 'text-gray-300 border-gray-100'}`}>{L.personal}</button>
+                        <button onClick={() => setQrState({...qrState, type:'BUSINESS'})} className={`flex-1 py-1.5 rounded-md text-[11px] font-black border transition-all ${qrState.type === 'BUSINESS' ? 'bg-black text-white border-black shadow-md' : 'text-gray-300 border-gray-100'}`}>{L.corporate}</button>
                      </div>
                      {qrState.type === 'BUSINESS' && (
-                        <input value={qrState.biz} onChange={e=>setQrState({...qrState, biz:e.target.value.toUpperCase()})} placeholder={L.bizPlaceholder} className="w-full bg-gray-50 border border-black/5 p-2 rounded-lg text-[10px] font-black outline-none focus:border-black mb-2" />
+                        <input value={qrState.biz} onChange={e=>setQrState({...qrState, biz:e.target.value.toUpperCase()})} placeholder={L.bizPlaceholder} className="w-full bg-gray-50 border border-black/5 p-2 rounded-lg text-[11px] font-black outline-none focus:border-black mb-2" />
                      )}
                   </div>
                   <button onClick={() => {if(beomToken<50) return alert(L.beomLackAlert); setBeomToken(p=>p-50); setQrState({...qrState, active:true});}} className="w-full bg-black text-white py-3 rounded-lg text-xs font-black hover:bg-[#dc2626] transition-all shadow-md">{L.activate}</button>
@@ -771,30 +797,30 @@ export default function KedheonDesignSystemFinal() {
             <SectionHeader title={L.creative} desc={L.creativeDesc} />
             <div className="bg-white p-4 md:p-6 rounded-2xl border border-black/10 space-y-4 shadow-sm font-black text-left">
               <div className="flex gap-6 border-b border-gray-100 pb-1.5 font-black">
-                <button onClick={() => setHubTab('HUB')} className={`text-xs md:text-lg font-black italic uppercase ${hubTab === 'HUB' ? 'text-black border-b-2 border-black' : 'text-gray-300'}`}>HUB</button>
-                <button onClick={() => setHubTab('SPIRIT')} className={`text-xs md:text-lg font-black italic uppercase ${hubTab === 'SPIRIT' ? 'text-black border-b-2 border-black' : 'text-gray-300'}`}>FAN SPIRIT</button>
+                <button onClick={() => setHubTab('HUB')} className={`text-sm md:text-base font-black italic uppercase ${hubTab === 'HUB' ? 'text-black border-b-2 border-black' : 'text-gray-300'}`}>HUB</button>
+                <button onClick={() => setHubTab('SPIRIT')} className={`text-sm md:text-base font-black italic uppercase ${hubTab === 'SPIRIT' ? 'text-black border-b-2 border-black' : 'text-gray-300'}`}>FAN SPIRIT</button>
               </div>
               <div className="flex gap-1.5 overflow-x-auto pb-1 no-scrollbar">
-                {L.cats.map(c => <button key={c} onClick={() => setCategory(c)} className={`px-3 py-1 rounded-full text-[9px] md:text-xs font-black italic border transition-all whitespace-nowrap ${category === c ? 'bg-black text-white border-black shadow-md' : 'bg-white text-gray-400'}`}>{c}</button>)}
+                {L.cats.map(c => <button key={c} onClick={() => setCategory(c)} className={`px-3 py-1 rounded-full text-xs md:text-sm font-black italic border transition-all whitespace-nowrap ${category === c ? 'bg-black text-white border-black shadow-md' : 'bg-white text-gray-400'}`}>{c}</button>)}
               </div>
-              <div className="flex gap-2 flex-wrap">{L.fans.map(f => <button key={f} className="px-3 py-1 bg-white border border-gray-100 rounded-full text-[9px] md:text-xs font-black text-red-600 shadow-sm">🚩 {f}</button>)}</div>
+              <div className="flex gap-2 flex-wrap">{L.fans.map(f => <button key={f} translate="no" className="notranslate px-3 py-1 bg-white border border-gray-100 rounded-full text-xs md:text-sm font-black text-red-600 shadow-sm">🚩 {f}</button>)}</div>
               <div className="space-y-2">
-                <input value={feed.title} onChange={e => setFeed({...feed, title: e.target.value})} placeholder={L.feedTitle} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-[10px] md:text-sm font-black outline-none" />
-                <input value={feed.link} onChange={e => setFeed({...feed, link: e.target.value})} placeholder={L.feedLink} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-[10px] md:text-sm font-black outline-none text-red-400 placeholder-red-200" />
-                <textarea value={feed.desc} onChange={e => setFeed({...feed, desc: e.target.value})} placeholder={L.feedDesc} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-[9px] md:text-xs font-bold h-24 outline-none focus:border-black leading-relaxed" />
+                <input value={feed.title} onChange={e => setFeed({...feed, title: e.target.value})} placeholder={L.feedTitle} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-xs md:text-sm font-black outline-none" />
+                <input value={feed.link} onChange={e => setFeed({...feed, link: e.target.value})} placeholder={L.feedLink} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-xs md:text-sm font-black outline-none text-red-400 placeholder-red-200" />
+                <textarea value={feed.desc} onChange={e => setFeed({...feed, desc: e.target.value})} placeholder={L.feedDesc} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-xs md:text-sm font-bold h-24 outline-none focus:border-black leading-relaxed" />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-2 font-black">
-                <button onClick={() => {if(!feed.title) return; setBeomToken(p=>p-10); alert(L.regDoneAlert); setFeed({title:'', link:'', desc:''});}} className="md:col-span-2 bg-black text-white py-3 rounded-xl text-sm md:text-lg font-black hover:bg-[#dc2626] transition-all shadow-lg active:scale-95">{L.postBtn}</button>
+                <button onClick={() => {if(!feed.title) return; setBeomToken(p=>p-10); alert(L.regDoneAlert); setFeed({title:'', link:'', desc:''});}} className="md:col-span-2 bg-black text-white py-3 rounded-xl text-sm md:text-base font-black hover:bg-[#dc2626] transition-all shadow-lg active:scale-95">{L.postBtn}</button>
                 <button className="bg-white border-2 border-black text-black py-3 rounded-xl text-xs md:text-sm font-black flex items-center justify-center gap-1.5 shadow active:scale-95">🚩 FAN ROOM</button>
               </div>
-              <div className="space-y-1 bg-gray-50 p-3 rounded-xl border-l-[4px] border-[#dc2626] text-left font-black"><p className="text-gray-400 text-[8px] md:text-[10px] font-bold italic leading-none">{L.fanRoomDesc}</p></div>
+              <div className="space-y-1 bg-gray-50 p-3 rounded-xl border-l-[4px] border-[#dc2626] text-left font-black"><p className="text-gray-400 text-[11px] md:text-xs font-bold italic leading-none">{L.fanRoomDesc}</p></div>
             </div>
 
             <SectionHeader title={L.market} desc={L.marketDesc} />
-            <div className="bg-white p-4 rounded-2xl border-2 border-black/10 space-y-4 font-black text-left">
+            <div className="bg-white p-4 md:p-5 rounded-2xl border-2 border-black/10 space-y-4 font-black text-left">
                 <div className="flex gap-4 border-b border-gray-100 pb-1.5">
-                    <button onClick={() => setMarketMode('BUY')} className={`text-xs md:text-lg font-black italic ${marketMode === 'BUY' ? 'text-black border-b-2 border-black' : 'text-gray-300'}`}>{L.marketBuyTab}</button>
-                    <button onClick={() => setMarketMode('SELL')} className={`text-xs md:text-lg font-black italic ${marketMode === 'SELL' ? 'text-black border-b-2 border-black' : 'text-gray-300'}`}>{L.marketSellTab}</button>
+                    <button onClick={() => setMarketMode('BUY')} className={`text-sm md:text-base font-black italic ${marketMode === 'BUY' ? 'text-black border-b-2 border-black' : 'text-gray-300'}`}>{L.marketBuyTab}</button>
+                    <button onClick={() => setMarketMode('SELL')} className={`text-sm md:text-base font-black italic ${marketMode === 'SELL' ? 'text-black border-b-2 border-black' : 'text-gray-300'}`}>{L.marketSellTab}</button>
                 </div>
                 {marketMode === 'BUY' ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 font-black">
@@ -802,22 +828,22 @@ export default function KedheonDesignSystemFinal() {
                             <div key={g.id} className="bg-gray-50 p-3 rounded-xl border flex gap-3 items-center group shadow-sm transition-all hover:border-[#dc2626]">
                                 <div className="w-20 h-20 md:w-28 md:h-28 bg-white rounded-lg flex items-center justify-center overflow-hidden shrink-0 shadow-inner"><img src={g.img} className="w-14 h-14 object-contain group-hover:scale-110 transition-transform" alt="G" /></div>
                                 <div className="flex-1 min-w-0 font-black">
-                                    <h4 className="text-[10px] md:text-xs font-black uppercase mb-0.5 truncate">{g.name}</h4>
-                                    <p className="text-gray-400 text-[8px] md:text-[10px] mb-1 font-bold line-clamp-1 leading-tight">{g.desc}</p>
-                                    <p className="text-[#dc2626] text-xs md:text-base font-black mb-2 leading-none">{g.price.toLocaleString()} <span className="text-[8px]">BEOM</span></p>
-                                    <button className="w-full py-1.5 bg-black text-white rounded-lg text-[8px] md:text-[10px] font-black uppercase active:scale-95">{L.buyReqBtn}</button>
+                                    <h4 className="text-[11px] md:text-xs font-black uppercase mb-0.5 truncate">{g.name}</h4>
+                                    <p className="text-gray-400 text-[11px] md:text-xs mb-1 font-bold line-clamp-1 leading-tight">{g.desc}</p>
+                                    <p className="text-[#dc2626] text-xs md:text-base font-black mb-2 leading-none">{g.price.toLocaleString()} <span className="notranslate text-[11px]" translate="no">BEOM</span></p>
+                                    <button className="w-full py-1.5 bg-black text-white rounded-lg text-[11px] md:text-xs font-black uppercase active:scale-95">{L.buyReqBtn}</button>
                                 </div>
                             </div>
                         ))}
                     </div>
                 ) : (
                     <div className="space-y-2 font-black">
-                        <input value={sellItem.name} onChange={e => setSellItem({...sellItem, name:e.target.value})} placeholder={L.itemName} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-[10px] md:text-sm font-black outline-none" />
+                        <input value={sellItem.name} onChange={e => setSellItem({...sellItem, name:e.target.value})} placeholder={L.itemName} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-xs md:text-sm font-black outline-none" />
                         <div className="grid grid-cols-2 gap-2">
-                            <input type="number" value={sellItem.price} onChange={e => setSellItem({...sellItem, price:e.target.value})} placeholder={L.itemPrice} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-[10px] md:text-sm font-black outline-none" />
-                            <input value={sellItem.img} onChange={e => setSellItem({...sellItem, img:e.target.value})} placeholder={L.itemImg} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-[10px] md:text-sm font-black outline-none" />
+                            <input type="number" value={sellItem.price} onChange={e => setSellItem({...sellItem, price:e.target.value})} placeholder={L.itemPrice} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-xs md:text-sm font-black outline-none" />
+                            <input value={sellItem.img} onChange={e => setSellItem({...sellItem, img:e.target.value})} placeholder={L.itemImg} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-xs md:text-sm font-black outline-none" />
                         </div>
-                        <textarea value={sellItem.desc} onChange={e => setSellItem({...sellItem, desc:e.target.value})} placeholder={L.itemDesc} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-[9px] md:text-xs font-bold h-20 outline-none" />
+                        <textarea value={sellItem.desc} onChange={e => setSellItem({...sellItem, desc:e.target.value})} placeholder={L.itemDesc} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-xs md:text-sm font-bold h-20 outline-none" />
                         <button onClick={() => {if(!sellItem.name) return; setUserGoods([{id:Date.now(), ...sellItem, price:Number(sellItem.price), seller:"User"}, ...userGoods]); alert(L.regDoneAlert); setMarketMode('BUY');}} className="w-full bg-[#dc2626] text-white py-3 rounded-xl text-xs md:text-sm font-black shadow-lg">{L.sellDoneBtn}</button>
                     </div>
                 )}
@@ -825,24 +851,25 @@ export default function KedheonDesignSystemFinal() {
 
             <SectionHeader title={L.partnership} desc={L.partnershipDesc} />
             <div className="bg-black p-6 rounded-2xl border-[8px] border-[#dc2626] space-y-4 relative overflow-hidden font-black shadow-2xl">
-                <h3 className="text-white text-lg md:text-2xl font-black italic border-l-4 border-white pl-3 uppercase leading-none z-10 relative">PARTNERSHIP B2B</h3>
+                <h3 className="text-white text-lg md:text-xl font-black italic border-l-4 border-white pl-3 uppercase leading-none z-10 relative">PARTNERSHIP B2B</h3>
                 <div className="grid grid-cols-2 gap-2 z-10 relative font-black">
-                    <input value={partner.corp} onChange={e=>setPartner({...partner, corp: e.target.value})} placeholder={L.corpName} className="bg-white/10 border-none p-3 rounded-xl text-[10px] md:text-xs text-white outline-none focus:ring-1 ring-[#dc2626]" />
-                    <input value={partner.manager} onChange={e=>setPartner({...partner, manager: e.target.value})} placeholder={L.manager} className="bg-white/10 border-none p-3 rounded-xl text-[10px] md:text-xs text-white outline-none focus:ring-1 ring-[#dc2626]" />
-                    <input value={partner.email} onChange={e=>setPartner({...partner, email: e.target.value})} placeholder={L.email} className="bg-white/10 border-none p-3 rounded-xl text-[10px] md:text-xs text-white outline-none focus:ring-1 ring-[#dc2626]" />
-                    <input value={partner.contact} onChange={e=>setPartner({...partner, contact: e.target.value})} placeholder={L.contact} className="bg-white/10 border-none p-3 rounded-xl text-[10px] md:text-xs text-white outline-none focus:ring-1 ring-[#dc2626]" />
+                    <input value={partner.corp} onChange={e=>setPartner({...partner, corp: e.target.value})} placeholder={L.corpName} className="bg-white/10 border-none p-3 rounded-xl text-[11px] md:text-xs text-white outline-none focus:ring-1 ring-[#dc2626]" />
+                    <input value={partner.manager} onChange={e=>setPartner({...partner, manager: e.target.value})} placeholder={L.manager} className="bg-white/10 border-none p-3 rounded-xl text-[11px] md:text-xs text-white outline-none focus:ring-1 ring-[#dc2626]" />
+                    <input value={partner.email} onChange={e=>setPartner({...partner, email: e.target.value})} placeholder={L.email} className="bg-white/10 border-none p-3 rounded-xl text-[11px] md:text-xs text-white outline-none focus:ring-1 ring-[#dc2626]" />
+                    <input value={partner.contact} onChange={e=>setPartner({...partner, contact: e.target.value})} placeholder={L.contact} className="bg-white/10 border-none p-3 rounded-xl text-[11px] md:text-xs text-white outline-none focus:ring-1 ring-[#dc2626]" />
                 </div>
-                <textarea value={partner.msg} onChange={e=>setPartner({...partner, msg: e.target.value})} placeholder={L.vision} className="w-full bg-white/10 border-none p-4 rounded-2xl text-[10px] md:text-xs text-white h-24 outline-none focus:ring-1 ring-[#dc2626] z-10 relative text-left" />
-                <button onClick={()=>alert(L.propDoneAlert)} className="w-full bg-[#dc2626] text-white py-3.5 rounded-full text-xs md:text-lg font-black hover:bg-white hover:text-black transition-all uppercase z-10 relative active:scale-95 shadow-xl">{L.submit}</button>
+                <textarea value={partner.msg} onChange={e=>setPartner({...partner, msg: e.target.value})} placeholder={L.vision} className="w-full bg-white/10 border-none p-4 rounded-2xl text-[11px] md:text-xs text-white h-24 outline-none focus:ring-1 ring-[#dc2626] z-10 relative text-left" />
+                <button onClick={()=>alert(L.propDoneAlert)} className="w-full bg-[#dc2626] text-white py-3.5 rounded-full text-sm md:text-base font-black hover:bg-white hover:text-black transition-all uppercase z-10 relative active:scale-95 shadow-xl">{L.submit}</button>
             </div>
           </div>
         )}
       </main>
 
-      <footer className="fixed bottom-4 left-4 right-4 max-w-4xl mx-auto bg-white border-2 border-black p-1.5 rounded-2xl flex justify-between gap-1.5 z-[1000] shadow-2xl font-black">
+      <footer className="fixed bottom-4 left-4 right-4 max-w-5xl mx-auto bg-white border-2 border-black p-1.5 rounded-2xl flex justify-between gap-1.5 z-[1000] shadow-2xl font-black">
         {['KEDHEON', 'CIVIL', 'FACTFILTER', 'NEXUS', 'VENDOR'].map(app => (
           <button
             key={app}
+            translate="no"
             onClick={() => {
               if (app === 'CIVIL') {
                 window.location.href = '/civil';
@@ -854,7 +881,7 @@ export default function KedheonDesignSystemFinal() {
                 alert(app + ' 서비스 연동 준비 중입니다.');
               }
             }}
-            className={`flex-1 py-3.5 md:py-4.5 rounded-xl text-[10px] md:text-sm transition-all font-black text-center leading-none cursor-pointer hover:scale-105 active:scale-95 ${app === 'KEDHEON' ? 'bg-black text-white shadow-md' : 'text-gray-400 hover:text-black'}`}
+            className={`notranslate flex-1 py-3.5 md:py-4.5 rounded-xl text-xs md:text-sm transition-all font-black text-center leading-none cursor-pointer hover:scale-105 active:scale-95 ${app === 'KEDHEON' ? 'bg-black text-white shadow-md' : 'text-gray-400 hover:text-black'}`}
           >
             {app}
           </button>
