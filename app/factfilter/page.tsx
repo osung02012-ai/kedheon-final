@@ -528,7 +528,7 @@ export default function FactFilterPage() {
           </div>
           <button
             onClick={() => window.location.href = '/'}
-            className="px-2 py-1 rounded-lg text-[11px] md:text-xs font-black border border-black/10 bg-white text-gray-500 hover:text-black whitespace-nowrap"
+            className="hidden min-[420px]:block px-2 py-1 rounded-lg text-[11px] md:text-xs font-black border border-black/10 bg-white text-gray-500 hover:text-black whitespace-nowrap"
           >
             {ko ? '케드헌 홈' : 'Kedheon'}
           </button>

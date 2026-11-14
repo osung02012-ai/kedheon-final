@@ -556,8 +556,11 @@ export default function CivilPage() {
           <button
             onClick={handleCheckin}
             className={`px-2 py-1 rounded-lg text-[11px] md:text-xs font-black border transition-all whitespace-nowrap ${checkedIn ? 'bg-gray-100 text-gray-400 border-gray-200' : 'bg-[#dc2626] text-white border-[#dc2626] active:scale-95'}`}
+            aria-label={checkedIn ? T.checkedIn : T.checkin}
           >
-            {checkedIn ? T.checkedIn : T.checkin}
+            {/* 390px 폰에서는 네비게이션이 넘치므로 아이콘만 보여 준다. */}
+            <span className="hidden min-[420px]:inline">{checkedIn ? T.checkedIn : T.checkin}</span>
+            <span aria-hidden className="min-[420px]:hidden">{checkedIn ? '✓' : '⚡'}</span>
           </button>
         </div>
       </nav>
