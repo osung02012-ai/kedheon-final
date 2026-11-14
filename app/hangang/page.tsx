@@ -335,17 +335,17 @@ export default function HangangPage() {
               </div>
             </div>
 
-            {/* 대표 이미지 · 황금 메달 민화 까치호랑이 */}
+            {/* 대표 이미지 · 조선 민화 까치호랑이 */}
             <figure className="order-1 md:order-2 mx-auto w-full max-w-[280px] md:max-w-[360px]">
               <img
                 src="/hangang-hero.jpg"
                 alt={ko
-                  ? '한강 수호신 까치호랑이 — 황금 원형 메달에 갓과 붉은 한복을 입은 범, 소나무 가지의 까치와 한강 물결을 그린 한국 민화'
-                  : 'Hangang tiger guardian in Korean minhwa style — a golden medal with a tiger in a gat and red hanbok, a magpie on a pine branch and Han River waves'}
+                  ? '한강 수호신 까치호랑이 — 갓과 붉은 한복을 입은 범, 소나무 가지의 까치와 달밤 한강 물결을 그린 정통 조선 민화'
+                  : 'Hangang tiger guardian — a classic Korean minhwa painting of a tiger in a gat and red hanbok with a magpie on a pine branch over the Han River at night'}
                 width={1024}
                 height={1024}
                 fetchPriority="high"
-                className="w-full aspect-square object-cover rounded-full shadow-xl ring-1 ring-black/5 bg-white"
+                className="w-full aspect-square object-cover rounded-2xl border-2 border-black shadow-xl"
               />
               <figcaption className="mt-2.5 text-center text-[9px] md:text-[10px] font-mono font-black tracking-[0.14em] uppercase text-gray-400">
                 <span translate="no" className="notranslate">까치호랑이</span> · Hangang Guardian
