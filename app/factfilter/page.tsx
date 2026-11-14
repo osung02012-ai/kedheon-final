@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { COUNTRIES, COUNTRY_MAP, GLOBAL_COUNTRY, type Country } from '../civil/countries';
 
 /**
@@ -368,6 +368,7 @@ export default function FactFilterPage() {
   const [viewCountry, setViewCountry] = useState('KR');
   const [reportCountry, setReportCountry] = useState('KR');
   const [picker, setPicker] = useState<'VIEW' | 'REPORT' | null>(null);
+  const chipBarRef = useRef<HTMLDivElement>(null);
 
   // 언어 선택에 맞춰 실제 문서 언어를 알려 브라우저 자동번역 오작동을 막는다.
   useEffect(() => {
@@ -382,6 +383,14 @@ export default function FactFilterPage() {
 
   // 필터 국가를 바꾸면 제보 폼의 국가도 따라간다.
   useEffect(() => { setReportCountry(viewCountry); }, [viewCountry]);
+
+  // 238개국에서 고른 국가가 칩 목록 밖에 있어도 보이도록 가로 스크롤을 맞춘다.
+  useEffect(() => {
+    const bar = chipBarRef.current;
+    if (!bar) return;
+    const el = bar.querySelector<HTMLElement>(`[data-cc="${viewCountry}"]`);
+    if (el) bar.scrollTo({ left: Math.max(0, el.offsetLeft - 12), behavior: 'smooth' });
+  }, [viewCountry]);
 
   // Check Tab State
   const [query, setQuery] = useState('');
@@ -580,13 +589,14 @@ export default function FactFilterPage() {
 
         {/* Country filter — 주요국 빠른 필터 + 전 세계 238개국 검색 (GLOBAL 포함) */}
         {activeTab !== 'VAULT' && (
-          <div className="flex gap-1.5 overflow-x-auto font-black pb-0.5">
+          <div ref={chipBarRef} className="flex gap-1.5 overflow-x-auto font-black pb-0.5">
             {tabs.map(code => {
               const info = countryOf(code);
               const active = viewCountry === code;
               return (
                 <button
                   key={code}
+                  data-cc={code}
                   onClick={() => setViewCountry(code)}
                   className={`px-3 py-1.5 rounded-xl text-xs md:text-sm font-black border transition-all whitespace-nowrap active:scale-95 ${
                     active ? 'bg-black text-white border-black shadow-md' : 'bg-white text-gray-400 border-black/10 hover:text-black'
@@ -838,8 +848,9 @@ export default function FactFilterPage() {
                     <span translate="no" className="notranslate text-gray-400 font-mono text-[11px] ml-1">{viewInfo.code}</span>
                   </p>
                   <p className="text-gray-400 text-[11px] font-bold">
-                    {ledgerItems.length}
-                    {ko ? '건 등재' : ' entries'}
+                    {ko
+                      ? `${ledgerItems.length}건 등재`
+                      : `${ledgerItems.length} ${ledgerItems.length === 1 ? 'entry' : 'entries'}`}
                   </p>
                 </div>
               </div>
