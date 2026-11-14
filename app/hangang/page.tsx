@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 import PiBadge from '../components/PiBadge';
+import PiPayButton from '../components/PiPayButton';
 import {
   LANGS, LANG_TAG, detectLang, tr, ui,
   type Lang, type L10, type UIKey
@@ -491,6 +492,15 @@ export default function HangangPage() {
             <button onClick={confirmBooking} className="w-full bg-[#dc2626] hover:bg-black text-white text-xs md:text-sm font-black py-3 rounded-xl transition-all active:scale-95">
               {T('modalConfirm')}
             </button>
+            <PiPayButton
+              amount={total}
+              memo={`Hangang pass · ${zone.code}`}
+              label={lang === 'KR' ? `${fmtPi(total)} Pi로 결제` : `Pay ${fmtPi(total)} Pi`}
+              doneLabel={lang === 'KR' ? '결제 완료' : 'Paid'}
+              webHint={lang === 'KR' ? '파이 결제는 Pi Browser 앱 안에서만 진행됩니다.' : 'Pi payments open inside the Pi Browser app.'}
+              cancelHint={lang === 'KR' ? '결제를 취소했습니다.' : 'Payment cancelled.'}
+              failHint={lang === 'KR' ? '결제가 완료되지 않았습니다. 잠시 후 다시 시도해 주세요.' : 'Payment did not complete. Please try again.'}
+            />
             <p className="text-gray-400 text-[10px] font-bold leading-snug">{T('modalDemo')}</p>
           </div>
         </div>

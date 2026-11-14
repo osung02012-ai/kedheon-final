@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { COUNTRIES, COUNTRY_MAP, GLOBAL_COUNTRY, type Country } from '../civil/countries';
 import PiBadge from '../components/PiBadge';
+import PiPayButton from '../components/PiPayButton';
 
 /**
  * FACTFILTER — AI 팩트체크 & 언론 책임 원장
@@ -820,6 +821,31 @@ export default function FactFilterPage() {
                 🔒 {ko
                   ? `제보자의 신원은 영구 비공개 암호화되며, 허위 악성 제보 방지를 위해 파이 KYC 실명 인증자만 제보할 수 있습니다. 접수 즉시 ${reportInfo.flag} ${reportInfo.ko} 원장 최상단에 등재되고 +10 BEOM가 적립됩니다.`
                   : `Whistleblower identity is cryptographically protected. Your report goes to the top of the ${reportInfo.en} ledger and earns +10 BEOM.`}
+              </div>
+
+              <div className="bg-white border-2 border-dashed border-black/15 rounded-xl p-3 space-y-2">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <p className="text-black text-[11px] md:text-xs font-black">
+                      {ko ? '제보 에스크로 · 허위·보복 제보 차단' : 'Report escrow · anti-false-report'}
+                    </p>
+                    <p className="text-gray-400 text-[10px] md:text-[11px] font-bold leading-snug mt-0.5">
+                      {ko
+                        ? '2 Pi를 예치하면 KYC 시민 검증이 시작되고, 검증을 통과하면 전액 환급됩니다.'
+                        : 'Stake 2 Pi to open KYC citizen review — refunded in full once your report is verified.'}
+                    </p>
+                  </div>
+                  <span className="shrink-0 text-gray-300 text-sm">🔐</span>
+                </div>
+                <PiPayButton
+                  amount={2}
+                  memo="FactFilter report escrow"
+                  label={ko ? '2 Pi 에스크로 예치' : 'Stake 2 Pi escrow'}
+                  doneLabel={ko ? '에스크로 예치 완료' : 'Escrow staked'}
+                  webHint={ko ? '파이 결제는 Pi Browser 앱 안에서만 진행됩니다.' : 'Pi payments open inside the Pi Browser app.'}
+                  cancelHint={ko ? '결제를 취소했습니다.' : 'Payment cancelled.'}
+                  failHint={ko ? '결제가 완료되지 않았습니다. 잠시 후 다시 시도해 주세요.' : 'Payment did not complete. Please try again.'}
+                />
               </div>
 
               <button

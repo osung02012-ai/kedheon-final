@@ -307,7 +307,7 @@ const DICT: Record<Lang, Dictionary> = {
       { t: "Frase", d: "Escribe 24 palabras en papel y guárdalas. (NO digital por hackeos)", warning: true },
       { t: "Minería", d: "Toca el rayo cada 24h." }
     ],
-    convertTitle: "Ecosystem Contribution Rewards",
+    convertTitle: "Ecosystem Contribution Rewards", convertBtn: "RECIBIR RECOMPENSA (+50 BEOM)",
     walletType: "Tipo de Billetera", personal: "Personal", corporate: "Corporativo", encodedQR: "QR Codificado",
     feedTitle: "Título o Espíritu", feedLink: "Enlace (URL)", feedDesc: "Describe tu actividad", postBtn: "PUBLICAR (10 BEOM)",
     marketBuyTab: "COMPRAR", marketSellTab: "VENDER", buyReqBtn: "SOLICITAR COMPRA", sellDoneBtn: "REGISTRO COMPLETO",
@@ -355,7 +355,7 @@ const DICT: Record<Lang, Dictionary> = {
       { t: "Cụm mật khẩu", d: "Ghi 24 từ ra giấy. (Không lưu kỹ thuật số để tránh bị hack)", warning: true },
       { t: "Khai thác", d: "Nhấn nút tia sét mỗi 24 giờ." }
     ],
-    convertTitle: "Ecosystem Contribution Rewards",
+    convertTitle: "Ecosystem Contribution Rewards", convertBtn: "NHẬN THƯỞNG (+50 BEOM)",
     walletType: "Loại bảo vệ ví", personal: "Cá nhân", corporate: "Doanh nghiệp", encodedQR: "QR Mã hóa",
     feedTitle: "Tiêu đề", feedLink: "Liên kết Ảnh/Video", feedDesc: "Mô tả hoạt động của bạn", postBtn: "ĐĂNG BÀI (10 BEOM)",
     marketBuyTab: "MUA HÀNG", marketSellTab: "BÁN HÀNG", buyReqBtn: "YÊU CẦU MUA", sellDoneBtn: "HOÀN TẤT ĐĂNG KÝ",
@@ -499,7 +499,7 @@ const DICT: Record<Lang, Dictionary> = {
       { t: "Фраза", d: "Запишите 24 слова на бумаге.", warning: true },
       { t: "Майнинг", d: "Нажимайте молнию каждые 24ч." }
     ],
-    convertTitle: "Ecosystem Contribution Rewards",
+    convertTitle: "Ecosystem Contribution Rewards", convertBtn: "ПОЛУЧИТЬ НАГРАДУ (+50 BEOM)",
     walletType: "Тип кошелька", personal: "Личный", corporate: "Корпоративный", encodedQR: "Закодированный QR",
     feedTitle: "Заголовок", feedLink: "Ссылка URL", feedDesc: "Описание активности", postBtn: "ОПУБЛИКОВАТЬ",
     marketBuyTab: "КУПИТЬ", marketSellTab: "ПРОДАТЬ", buyReqBtn: "ЗАПРОСИТЬ", sellDoneBtn: "ГОТОВО",

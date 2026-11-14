@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { COUNTRIES, COUNTRY_MAP, GLOBAL_COUNTRY } from './countries';
 import type { Country } from './countries';
 import PiBadge from '../components/PiBadge';
+import PiPayButton from '../components/PiPayButton';
 
 /**
  * CIVIL — KYC 실명 1인 1표 거버넌스 DApp (전 세계 238개국 지원)
@@ -773,6 +774,34 @@ export default function CivilPage() {
               🔒 {ko ? '내 KYC 국가' : 'My KYC country'}: {myCountryInfo.flag} {ko ? myCountryInfo.ko : myCountryInfo.en} — {ko ? '다른 나라 안건은 참관만 가능합니다.' : 'other countries are view only.'}
             </p>
           )}
+        </div>
+
+        {/* 시민 검증 풀 후원 — Pi 결제 */}
+        <div className="bg-white border-2 border-black rounded-2xl p-4 md:p-5 text-left space-y-2.5">
+          <div className="flex items-start justify-between gap-2">
+            <div className="min-w-0">
+              <h2 className="text-black text-sm md:text-base font-black">
+                <span translate="no" className="notranslate text-[#7d4698]">π</span> {ko ? '시민 검증 풀 후원' : 'Citizen verification pool'}
+              </h2>
+              <p className="text-gray-400 text-[11px] md:text-xs font-bold mt-0.5 leading-relaxed">
+                {ko
+                  ? '후원한 파이는 238개국 안건의 KYC 검증·감사 비용으로만 쓰이고, 지출 내역은 온체인에 공개됩니다.'
+                  : 'Support funds KYC verification and audits across 238 countries — every spend is published on-chain.'}
+              </p>
+            </div>
+            <span className="shrink-0 text-[10px] md:text-[11px] font-black bg-gray-50 border border-black/10 rounded-full px-2 py-0.5 text-gray-500">
+              {ko ? 'Pi 결제' : 'Pi payment'}
+            </span>
+          </div>
+          <PiPayButton
+            amount={1}
+            memo="Civil citizen verification pool"
+            label={ko ? '1 Pi 후원' : 'Support with 1 Pi'}
+            doneLabel={ko ? '후원 완료' : 'Supported'}
+            webHint={ko ? '파이 결제는 Pi Browser 앱 안에서만 진행됩니다.' : 'Pi payments open inside the Pi Browser app.'}
+            cancelHint={ko ? '결제를 취소했습니다.' : 'Payment cancelled.'}
+            failHint={ko ? '결제가 완료되지 않았습니다. 잠시 후 다시 시도해 주세요.' : 'Payment did not complete. Please try again.'}
+          />
         </div>
 
         {/* 10 malls petition */}
