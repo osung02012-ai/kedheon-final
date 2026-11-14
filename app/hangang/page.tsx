@@ -304,25 +304,58 @@ export default function HangangPage() {
       <main className="w-full max-w-5xl px-4 py-3">
 
         {/* ── 1. 히어로 & 핵심 가치 ────────────────────────────── */}
-        <section className="relative bg-gray-50 rounded-2xl border border-black/5 shadow-inner overflow-hidden px-4 py-7 md:py-10 text-center">
+        <section className="relative bg-gray-50 rounded-2xl border border-black/5 shadow-inner overflow-hidden px-4 py-7 md:px-8 md:py-9">
           <div className="absolute top-0 left-0 w-full h-1 bg-[#dc2626]" />
           <div className="absolute -right-10 -bottom-10 w-40 h-40 rounded-full bg-[#dc2626]/5" />
-          <p translate="no" className="notranslate inline-block text-[10px] md:text-[11px] font-mono tracking-[0.25em] text-[#dc2626] uppercase mb-2">
-            hangang.pi · K-Culture Pass
-          </p>
-          <h2 className="text-black text-xl md:text-4xl font-black tracking-tighter leading-tight">
-            {ko ? (
-              <>한국 번호도, 한국 카드도 없이 —<br className="hidden md:block" /> 서울 콘서트부터 한강 치맥까지</>
-            ) : (
-              <>No Korean number. No Korean card.<br className="hidden md:block" /> From Seoul concerts to Hangang chimaek.</>
-            )}
-          </h2>
-          <p className="text-gray-500 text-[11px] md:text-sm font-bold mt-3 max-w-2xl mx-auto leading-relaxed">
-            {ko
-              ? 'Pi KYC 실명 안전망으로 콘서트·숙박·뮷즈·치안까지 한 번에 연결합니다. 수수료 0% 직거래, 모든 예약은 실명 1인 1건.'
-              : 'Pi KYC identity links concerts, stays, museum goods and safety in one pass. 0% direct-deal fee, one verified human per booking.'}
-          </p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-1.5 md:gap-2 mt-5 max-w-3xl mx-auto">
+
+          <div className="relative grid grid-cols-1 md:grid-cols-[1.08fr_0.92fr] gap-5 md:gap-7 items-center">
+            <div className="text-center md:text-left order-2 md:order-1">
+              <p translate="no" className="notranslate inline-block text-[10px] md:text-[11px] font-mono tracking-[0.25em] text-[#dc2626] uppercase mb-2">
+                hangang.pi · K-Culture Pass
+              </p>
+              <h2 className="text-black text-xl md:text-4xl font-black tracking-tighter leading-tight">
+                {ko ? (
+                  <>한국 번호도, 한국 카드도 없이 —<br className="hidden md:block" /> 서울 콘서트부터 한강 치맥까지</>
+                ) : (
+                  <>No Korean number. No Korean card.<br className="hidden md:block" /> From Seoul concerts to Hangang chimaek.</>
+                )}
+              </h2>
+              <p className="text-gray-500 text-[11px] md:text-sm font-bold mt-3 max-w-2xl mx-auto md:mx-0 leading-relaxed">
+                {ko
+                  ? 'Pi KYC 실명 안전망으로 콘서트·숙박·뮷즈·치안까지 한 번에 연결합니다. 수수료 0% 직거래, 모든 예약은 실명 1인 1건.'
+                  : 'Pi KYC identity links concerts, stays, museum goods and safety in one pass. 0% direct-deal fee, one verified human per booking.'}
+              </p>
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-1.5 mt-3">
+                <span className="text-[9px] md:text-[10px] font-mono font-black tracking-[0.14em] uppercase bg-black text-white rounded-md px-2 py-1">
+                  {ko ? '서울 · 한강' : 'Seoul · Hangang'}
+                </span>
+                <span className="text-[9px] md:text-[10px] font-mono font-black tracking-[0.14em] uppercase bg-white border border-black/10 text-gray-500 rounded-md px-2 py-1">
+                  {ko ? 'Pi KYC 1인 1실명' : 'Pi KYC verified human'}
+                </span>
+              </div>
+            </div>
+
+            {/* 대표 이미지 · 한강 백호 수호신 */}
+            <figure className="order-1 md:order-2 mx-auto w-full max-w-[280px] md:max-w-[360px]">
+              <div className="relative">
+                <img
+                  src="/hangang-hero.jpg"
+                  alt={ko
+                    ? '한강 백호 수호신 — 검은 갓과 붉은 한복을 입고 응원봉을 든 백호, 야경의 한강과 N서울타워'
+                    : 'Hangang white tiger guardian in a black gat and red hanbok holding a lightstick, with the Han River and N Seoul Tower at night'}
+                  width={1024}
+                  height={1024}
+                  fetchPriority="high"
+                  className="w-full aspect-square object-cover rounded-2xl border-2 border-black shadow-xl"
+                />
+                <span className="absolute bottom-2 left-2 bg-black text-white text-[9px] md:text-[10px] font-mono font-black tracking-[0.14em] uppercase rounded-md px-2 py-1">
+                  <span translate="no" className="notranslate">白虎</span> · Hangang Guardian
+                </span>
+              </div>
+            </figure>
+          </div>
+
+          <div className="relative grid grid-cols-2 md:grid-cols-4 gap-1.5 md:gap-2 mt-5 max-w-3xl mx-auto">
             {[
               { v: '0%', kr: '직거래 수수료', en: 'direct-deal fee' },
               { v: '4', kr: '서울 권역 콘서트', en: 'Seoul venue zones' },
