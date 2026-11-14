@@ -64,16 +64,16 @@ export default function FactFilterPage() {
       titleEn: 'Defamatory fabricated article targeting an HACCP whistleblower',
       proof: '고용노동부 및 권익위 공식 조사 결과와 정반대 날조',
       proofEn: 'Fabricated in direct contradiction to MOEL and ACRC findings',
-      status: '검증 완료 (블랙리스트 박제)',
-      statusEn: 'Verified (blacklisted)',
+      status: '검증 완료 (원장 등재)',
+      statusEn: 'Verified (on-ledger)',
       votes: 1420
     },
     {
       id: 'rep-2',
       type: '유튜브 채널',
       typeEn: 'YouTube Channel',
-      name: '찌라시OO 이슈렉카',
-      nameEn: 'RumorOO Issue Wrecker',
+      name: '루머OO 채널',
+      nameEn: 'Rumor Channel OO',
       title: '조작된 합성 캡처로 기업 갑질 피해자 2차 가해',
       titleEn: 'Doctored screenshots used to re-victimize a workplace abuse victim',
       proof: '원본 녹취록 대조 결과 악의적 편집 판명',
@@ -155,7 +155,7 @@ export default function FactFilterPage() {
   };
 
   const handleSealEvidence = () => {
-    if (!vaultText.trim()) return alert(ko ? '박제할 증거 본문이나 사건 개요를 입력해주세요.' : 'Enter evidence details.');
+    if (!vaultText.trim()) return alert(ko ? '봉인할 증거 본문이나 사건 개요를 입력해주세요.' : 'Enter evidence details.');
     const mockHash = '0x' + Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
     setVaultHash(mockHash);
     setPoints(p => p + 5);
@@ -206,15 +206,15 @@ export default function FactFilterPage() {
           <div className="flex flex-col md:flex-row md:items-center gap-4 justify-between">
             <div className="min-w-0">
               <span className="inline-block px-2 py-0.5 rounded bg-black text-white text-[11px] md:text-xs font-black">
-                {ko ? '⚖️ 언론 권력 견제 & 가짜뉴스 박멸' : '⚖️ Truth Verification Protocol'}
+                {ko ? '⚖️ 언론 견제 & 허위 보도 검증' : '⚖️ Truth Verification Protocol'}
               </span>
               <h1 className="text-black text-2xl md:text-3xl tracking-tighter leading-tight mt-2">
-                {ko ? '기레기와 가짜뉴스가 숨을 곳은 없다' : 'Zero Tolerance for Malicious Fake News'}
+                {ko ? '허위·왜곡 보도가 숨을 곳은 없다' : 'Nowhere to Hide for Disinformation'}
               </h1>
               <p className="text-gray-500 text-xs md:text-sm font-bold leading-relaxed mt-2 max-w-xl">
                 {ko
-                  ? '악의적인 가짜뉴스 채널, 편파 왜곡 기자, 상습 조작 언론사를 블록체인 원장에 영구 박제합니다. 100% 실명 KYC 시민의 힘으로 언론의 신뢰를 바로 세웁니다.'
-                  : 'An immutable public ledger documenting malicious outlets, unethical reporters, and fake news channels. Powered by verified Pi KYC pioneers.'}
+                  ? '허위·왜곡 보도를 일삼는 채널, 특정 진영에 편향된 기자, 상습적으로 날조하는 언론사를 블록체인 원장에 영구 기록합니다. 100% 실명 KYC 시민의 검증으로 언론의 공신력을 바로 세웁니다.'
+                  : 'An immutable public ledger documenting disinformation outlets, biased reporting, and repeat fabrications. Verified by real-name Pi KYC citizens to restore public trust in the press.'}
               </p>
             </div>
             <div className="bg-white border-2 border-black rounded-2xl px-4 py-3 text-center shrink-0">
@@ -230,8 +230,8 @@ export default function FactFilterPage() {
           {[
             { key: 'CHECK', label: ko ? '🔍 AI 팩트체크' : '🔍 AI Fact Check' },
             { key: 'REPORT', label: ko ? '🚨 악성 채널·기자 제보' : '🚨 Report Fake News' },
-            { key: 'LEDGER', label: ko ? '🏛️ 기레기 & 왜곡 원장' : '🏛️ Accountability Ledger' },
-            { key: 'VAULT', label: ko ? '🛡️ 공익제보 증거 박제' : '🛡️ Evidence Vault' }
+            { key: 'LEDGER', label: ko ? '🏛️ 왜곡 언론·허위 보도 원장' : '🏛️ Disinformation Watchlist' },
+            { key: 'VAULT', label: ko ? '🛡️ 공익제보 증거 봉인' : '🛡️ Evidence Vault' }
           ].map(t => (
             <button
               key={t.key}
@@ -297,7 +297,7 @@ export default function FactFilterPage() {
               <div className="space-y-2">
                 {[
                   { title: ko ? '수도권 대형 물류센터 HACCP 위생 위반 묵인 사태' : 'HACCP hygiene violations at a Greater Seoul logistics hub', status: ko ? '✅ FACT (진실)' : '✅ FACT', note: ko ? '국민권익위원회 공익신고자 보호 및 행정처분 원장 일치' : 'Matches the ACRC whistleblower and enforcement records', badge: 'bg-black text-white', border: 'border-black/10' },
-                  { title: ko ? '글로벌 주요 거래소 파이 코인 기습 상장 찌라시' : 'Rumor of a surprise Pi listing on a major exchange', status: ko ? '❌ FAKE (가짜뉴스)' : '❌ FAKE', note: ko ? '공식 코어팀 발표 부재 및 피싱 유도 악성 링크 판명' : 'No core team announcement; a phishing link', badge: 'bg-[#dc2626] text-white', border: 'border-[#dc2626]' },
+                  { title: ko ? '글로벌 주요 거래소 파이 코인 기습 상장 루머' : 'Rumor of a surprise Pi listing on a major exchange', status: ko ? '❌ FAKE (가짜뉴스)' : '❌ FAKE', note: ko ? '공식 코어팀 발표 부재 및 피싱 유도 악성 링크 판명' : 'No core team announcement; a phishing link', badge: 'bg-[#dc2626] text-white', border: 'border-[#dc2626]' },
                   { title: ko ? '공장 지붕 태양광 설치 시 건물 소유권 침해 루머' : 'Rumor that rooftop solar voids building ownership', status: ko ? '❌ FALSE (허위)' : '❌ FALSE', note: ko ? '한전 PPA 임대차 계약 구조상 건물 소유권 보장 법적 확인' : 'Ownership is preserved under the PPA lease structure', badge: 'bg-[#dc2626] text-white', border: 'border-[#dc2626]' }
                 ].map((item, idx) => (
                   <div key={idx} className={`bg-white border ${item.border} rounded-xl p-3 md:p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-2 text-left`}>
@@ -324,7 +324,7 @@ export default function FactFilterPage() {
               </h2>
               <p className="text-gray-500 text-xs md:text-sm font-bold mt-1">
                 {ko
-                  ? '상습 오보, 자극적 합성 썸네일 렉카, 편파 왜곡 기자를 고발해 주십시오. KYC 시민 검증 후 박제됩니다.'
+                  ? '상습 오보, 자극적 합성 썸네일로 조회수를 버는 채널, 편파 왜곡 기자를 고발해 주십시오. KYC 시민 검증을 거쳐 원장에 등재됩니다.'
                   : 'Expose malicious clickbait channels, unethical reporters, and corrupt publishers.'}
               </p>
             </div>
@@ -407,7 +407,7 @@ export default function FactFilterPage() {
         {activeTab === 'LEDGER' && (
           <div className="text-left">
             <SectionTitle
-              title={ko ? '기레기 & 가짜뉴스 박제 원장' : 'Accountability Ledger'}
+              title={ko ? '왜곡 언론·허위 보도 원장' : 'Disinformation & Media Watchlist'}
               desc={ko ? '시민 검증단에 의해 왜곡·날조가 확정된 언론인 및 채널 목록입니다.' : 'Verified cases of media misconduct documented by the community.'}
             />
             <div className="space-y-2">
