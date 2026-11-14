@@ -519,12 +519,12 @@ export default function FactFilterPage() {
           <PiBadge en={!ko} />
           <button
             onClick={() => setLang(l => (l === 'KO' ? 'EN' : 'KO'))}
-            className="bg-gray-100 border border-gray-200 text-black text-[11px] md:text-xs font-black rounded-lg px-2 py-1 outline-none cursor-pointer shadow-sm hover:border-black transition-colors"
+            className="bg-gray-100 border border-gray-200 text-black text-[11px] md:text-xs font-black rounded-lg px-2 py-1 outline-none cursor-pointer shadow-sm hover:border-black transition-colors whitespace-nowrap shrink-0"
           >
             {ko ? '🇺🇸 EN' : '🇰🇷 KO'}
           </button>
-          <div className="bg-gray-100 border border-gray-200 rounded-lg px-2 py-1 text-[11px] md:text-xs font-black text-black flex items-center gap-1">
-            🐾 {points} <span translate="no" className="notranslate text-gray-400">BEOM</span>
+          <div className="bg-gray-100 border border-gray-200 rounded-lg px-2 py-1 text-[11px] md:text-xs font-black text-black flex items-center gap-1 whitespace-nowrap shrink-0">
+            🐾 {points} <span translate="no" className="notranslate text-gray-400 hidden min-[420px]:inline">BEOM</span>
           </div>
           <button
             onClick={() => window.location.href = '/'}
