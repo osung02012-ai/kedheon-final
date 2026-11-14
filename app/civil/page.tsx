@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { COUNTRIES, COUNTRY_MAP, GLOBAL_COUNTRY } from './countries';
 import type { Country } from './countries';
+import PiBadge from '../components/PiBadge';
 
 /**
  * CIVIL — KYC 실명 1인 1표 거버넌스 DApp (전 세계 238개국 지원)
@@ -541,6 +542,7 @@ export default function CivilPage() {
         </div>
 
         <div className="flex items-center gap-1.5 md:gap-2">
+          <PiBadge en={!ko} />
           <button
             onClick={() => setLang(l => (l === 'KO' ? 'EN' : 'KO'))}
             className="bg-gray-100 border border-gray-200 text-black text-[11px] md:text-xs font-black rounded-lg px-2 py-1 outline-none cursor-pointer shadow-sm hover:border-black transition-colors"

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { COUNTRIES, COUNTRY_MAP, GLOBAL_COUNTRY, type Country } from '../civil/countries';
+import PiBadge from '../components/PiBadge';
 
 /**
  * FACTFILTER — AI 팩트체크 & 언론 책임 원장
@@ -514,6 +515,7 @@ export default function FactFilterPage() {
         </div>
 
         <div className="flex items-center gap-1.5 md:gap-2">
+          <PiBadge en={!ko} />
           <button
             onClick={() => setLang(l => (l === 'KO' ? 'EN' : 'KO'))}
             className="bg-gray-100 border border-gray-200 text-black text-[11px] md:text-xs font-black rounded-lg px-2 py-1 outline-none cursor-pointer shadow-sm hover:border-black transition-colors"

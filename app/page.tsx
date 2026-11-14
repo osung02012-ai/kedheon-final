@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
+import PiBadge from './components/PiBadge';
 
 /** * [KEDHEON MASTER V271.0 - FINANCE CORE / TURBOPACK OPTIMIZATION PATCH]
  * -----------------------------------------------------------
@@ -649,6 +650,7 @@ export default function KedheonDesignSystemFinal() {
         </div>
         
         <div className="flex items-center gap-1.5 md:gap-2">
+          <PiBadge en={lang !== 'KR'} />
           <div className="relative">
             <select
               value={lang}
