@@ -857,6 +857,7 @@ export default function CivilPage() {
           { label: 'KEDHEON', path: '/' },
           { label: 'CIVIL', path: '/civil' },
           { label: 'FACTFILTER', path: '/factfilter' },
+          { label: 'HANGANG', path: '/hangang' },
           { label: 'NEXUS', path: '#' },
           { label: 'VENDOR', path: '#' }
         ].map(item => (
@@ -867,7 +868,8 @@ export default function CivilPage() {
               if (item.path === '#') alert(item.label + (ko ? ' 서비스 준비 중입니다.' : ' service is coming soon.'));
               else window.location.href = item.path;
             }}
-            className={`notranslate flex-1 py-3.5 md:py-4.5 rounded-xl text-xs md:text-sm transition-all font-black text-center leading-none cursor-pointer hover:scale-105 active:scale-95 ${item.label === 'CIVIL' ? 'bg-black text-white shadow-md' : 'text-gray-400 hover:text-black'}`}
+            className={`notranslate flex-1 min-w-0 px-0.5 py-3.5 md:py-4.5 rounded-xl transition-all font-black text-center leading-none whitespace-nowrap cursor-pointer hover:scale-105 active:scale-95 ${item.label === 'CIVIL' ? 'bg-black text-white shadow-md' : 'text-gray-400 hover:text-black'}`}
+            style={{ fontSize: 'clamp(7.5px, 2.05vw, 14px)' }}
           >
             {item.label}
           </button>

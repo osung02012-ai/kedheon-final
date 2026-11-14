@@ -1004,6 +1004,7 @@ export default function FactFilterPage() {
           { name: 'KEDHEON', path: '/' },
           { name: 'CIVIL', path: '/civil' },
           { name: 'FACTFILTER', path: '/factfilter' },
+          { name: 'HANGANG', path: '/hangang' },
           { name: 'NEXUS', path: '#' },
           { name: 'VENDOR', path: '#' }
         ].map(app => (
@@ -1017,11 +1018,12 @@ export default function FactFilterPage() {
                 window.location.href = app.path;
               }
             }}
-            className={`notranslate flex-1 py-3.5 md:py-4.5 rounded-xl text-xs md:text-sm transition-all font-black text-center leading-none cursor-pointer hover:scale-105 active:scale-95 ${
+            className={`notranslate flex-1 min-w-0 px-0.5 py-3.5 md:py-4.5 rounded-xl transition-all font-black text-center leading-none whitespace-nowrap cursor-pointer hover:scale-105 active:scale-95 ${
               app.name === 'FACTFILTER'
                 ? 'bg-black text-white shadow-md'
                 : 'text-gray-400 hover:text-black'
             }`}
+            style={{ fontSize: 'clamp(7.5px, 2.05vw, 14px)' }}
           >
             {app.name}
           </button>

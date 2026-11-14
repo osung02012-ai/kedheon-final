@@ -867,25 +867,29 @@ export default function KedheonDesignSystemFinal() {
         )}
       </main>
 
-      <footer className="fixed bottom-4 left-4 right-4 max-w-5xl mx-auto bg-white border-2 border-black p-1.5 rounded-2xl flex justify-between gap-1.5 z-[1000] shadow-2xl font-black">
-        {['KEDHEON', 'CIVIL', 'FACTFILTER', 'NEXUS', 'VENDOR'].map(app => (
+      <footer className="fixed bottom-4 left-4 right-4 max-w-5xl mx-auto bg-white border-2 border-black px-1 py-1.5 rounded-2xl flex justify-between gap-0.5 md:gap-1.5 z-[1000] shadow-2xl font-black">
+        {[
+          { name: 'KEDHEON', path: '/' },
+          { name: 'CIVIL', path: '/civil' },
+          { name: 'FACTFILTER', path: '/factfilter' },
+          { name: 'HANGANG', path: '/hangang' },
+          { name: 'NEXUS', path: '#' },
+          { name: 'VENDOR', path: '#' }
+        ].map(app => (
           <button
-            key={app}
+            key={app.name}
             translate="no"
             onClick={() => {
-              if (app === 'CIVIL') {
-                window.location.href = '/civil';
-              } else if (app === 'FACTFILTER') {
-                window.location.href = '/factfilter';
-              } else if (app === 'KEDHEON') {
-                window.location.href = '/';
+              if (app.path === '#') {
+                alert(app.name + ' 서비스 연동 준비 중입니다.');
               } else {
-                alert(app + ' 서비스 연동 준비 중입니다.');
+                window.location.href = app.path;
               }
             }}
-            className={`notranslate flex-1 py-3.5 md:py-4.5 rounded-xl text-xs md:text-sm transition-all font-black text-center leading-none cursor-pointer hover:scale-105 active:scale-95 ${app === 'KEDHEON' ? 'bg-black text-white shadow-md' : 'text-gray-400 hover:text-black'}`}
+            className={`notranslate flex-1 min-w-0 px-0.5 py-3.5 md:py-4.5 rounded-xl transition-all font-black text-center leading-none whitespace-nowrap cursor-pointer hover:scale-105 active:scale-95 ${app.name === 'KEDHEON' ? 'bg-black text-white shadow-md' : 'text-gray-400 hover:text-black'}`}
+            style={{ fontSize: 'clamp(7.5px, 2.05vw, 14px)' }}
           >
-            {app}
+            {app.name}
           </button>
         ))}
       </footer>
