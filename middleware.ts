@@ -19,9 +19,11 @@ export function middleware(req: NextRequest) {
 
   const { pathname } = req.nextUrl;
 
-  // 정적 자산, 이미 앱 경로인 요청, 도메인 검증 파일은 그대로 통과시킨다.
+  // 정적 자산, API 라우트, 이미 앱 경로인 요청, 도메인 검증 파일은 그대로 통과시킨다.
+  //  - /api/* 는 서브도메인에서도 그대로 살아 있어야 Pi 결제 서버 승인/완료가 동작한다.
   if (
     pathname.startsWith('/_next') ||
+    pathname.startsWith('/api') ||
     pathname.startsWith(prefix) ||
     pathname === '/validation-key.txt' ||
     pathname === '/favicon.ico' ||
