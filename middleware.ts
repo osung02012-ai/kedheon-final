@@ -12,6 +12,9 @@ const HOST_PREFIX: Record<string, string> = {
   'hangang.kedheon.com': '/hangang'
 };
 
+/** public/ 정적 자산(qr-personal.png 등)은 파일 확장자로 구분해 리라이트하지 않는다. */
+const STATIC_FILE = /\.[a-z0-9]{2,5}$/i;
+
 export function middleware(req: NextRequest) {
   const host = (req.headers.get('host') || '').toLowerCase().split(':')[0];
   const prefix = HOST_PREFIX[host];
@@ -25,6 +28,7 @@ export function middleware(req: NextRequest) {
     pathname.startsWith('/_next') ||
     pathname.startsWith('/api') ||
     pathname.startsWith(prefix) ||
+    STATIC_FILE.test(pathname) ||
     pathname === '/validation-key.txt' ||
     pathname === '/favicon.ico' ||
     pathname === '/robots.txt' ||
