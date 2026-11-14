@@ -389,7 +389,9 @@ export default function FactFilterPage() {
     const bar = chipBarRef.current;
     if (!bar) return;
     const el = bar.querySelector<HTMLElement>(`[data-cc="${viewCountry}"]`);
-    if (el) bar.scrollTo({ left: Math.max(0, el.offsetLeft - 12), behavior: 'smooth' });
+    if (!el) return;
+    const delta = el.getBoundingClientRect().left - bar.getBoundingClientRect().left;
+    bar.scrollBy({ left: delta - 12, behavior: 'smooth' });
   }, [viewCountry]);
 
   // Check Tab State
