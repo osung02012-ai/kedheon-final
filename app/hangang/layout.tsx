@@ -18,7 +18,7 @@ export const metadata: Metadata = {
         url: "/hangang-hero.jpg",
         width: 1024,
         height: 1024,
-        alt: "Hangang white tiger guardian — Seoul K-Culture Pass for Pi",
+        alt: "Hangang tiger guardian in Korean minhwa style — Seoul K-Culture Pass for Pi",
       },
     ],
   },

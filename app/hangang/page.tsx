@@ -335,21 +335,21 @@ export default function HangangPage() {
               </div>
             </div>
 
-            {/* 대표 이미지 · 한강 백호 수호신 */}
+            {/* 대표 이미지 · 한강 까치호랑이 민화 */}
             <figure className="order-1 md:order-2 mx-auto w-full max-w-[280px] md:max-w-[360px]">
               <div className="relative">
                 <img
                   src="/hangang-hero.jpg"
                   alt={ko
-                    ? '한강 백호 수호신 — 검은 갓과 붉은 한복을 입고 응원봉을 든 백호, 야경의 한강과 N서울타워'
-                    : 'Hangang white tiger guardian in a black gat and red hanbok holding a lightstick, with the Han River and N Seoul Tower at night'}
+                    ? '한강 수호신 까치호랑이 — 갓과 붉은 한복을 입은 범, 소나무 가지의 까치와 한강 물결을 그린 한국 민화'
+                    : 'Hangang tiger guardian in a gat and red hanbok, in Korean minhwa folk-painting style with a magpie on a pine branch and Han River waves'}
                   width={1024}
                   height={1024}
                   fetchPriority="high"
                   className="w-full aspect-square object-cover rounded-2xl border-2 border-black shadow-xl"
                 />
                 <span className="absolute bottom-2 left-2 bg-black text-white text-[9px] md:text-[10px] font-mono font-black tracking-[0.14em] uppercase rounded-md px-2 py-1">
-                  <span translate="no" className="notranslate">白虎</span> · Hangang Guardian
+                  <span translate="no" className="notranslate">까치호랑이</span> · Hangang Guardian
                 </span>
               </div>
             </figure>
