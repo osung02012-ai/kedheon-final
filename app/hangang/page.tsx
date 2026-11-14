@@ -96,7 +96,7 @@ export default function HangangPage() {
   const goodsOf = (id: string) => GOODS.find(g => g.id === id) || GOODS[0];
 
   return (
-    <div className="flex flex-col items-center bg-white min-h-screen text-black font-sans w-full pb-24 font-black selection:bg-red-50 overflow-x-hidden">
+    <div className={`flex flex-col items-center bg-white min-h-screen text-black font-sans w-full pb-24 font-black selection:bg-red-50 overflow-x-hidden ${lang === 'KR' ? 'break-keep' : ''}`}>
 
       {/* ── 상단 네비게이션 (케데헌 규격 · 10개국어) ─────────────── */}
       <nav className="w-full max-w-5xl flex justify-between items-center px-4 py-2 sticky top-0 bg-white/95 backdrop-blur-md z-[500] border-b border-black/10 shadow-sm">
