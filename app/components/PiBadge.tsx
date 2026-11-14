@@ -15,8 +15,12 @@ export default function PiBadge({ en = false, className = '' }: { en?: boolean; 
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [path, setPath] = useState('/');
 
-  useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    setMounted(true);
+    setPath(window.location.pathname || '/');
+  }, []);
 
   const connected = status === 'connected' && !!username;
 
@@ -36,7 +40,7 @@ export default function PiBadge({ en = false, className = '' }: { en?: boolean; 
 
   const copyLink = async () => {
     try {
-      await navigator.clipboard.writeText(`https://kedheon.com${window.location.pathname}`);
+      await navigator.clipboard.writeText(`https://kedheon.com${path}`);
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
     } catch {
@@ -103,7 +107,7 @@ export default function PiBadge({ en = false, className = '' }: { en?: boolean; 
               <li>{en ? 'Sign in with Pi and allow the KYC connection.' : 'Pi 로그인 후 KYC 연결을 승인합니다.'}</li>
             </ol>
             <div className="bg-gray-50 border border-black/10 rounded-xl p-2.5 flex items-center justify-between gap-2">
-              <code translate="no" className="notranslate text-[11px] md:text-xs font-mono text-black break-all">kedheon.com{window.location.pathname}</code>
+              <code translate="no" className="notranslate text-[11px] md:text-xs font-mono text-black break-all">kedheon.com{path}</code>
               <button
                 onClick={copyLink}
                 className="shrink-0 px-2 py-1 rounded-lg border border-black text-[11px] font-black bg-white text-black hover:bg-black hover:text-white transition-all"
