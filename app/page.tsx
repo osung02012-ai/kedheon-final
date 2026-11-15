@@ -840,8 +840,8 @@ export default function KedheonDesignSystemFinal() {
                             <div key={g.id} className="bg-neutral-50 p-3 rounded-xl border border-neutral-200 flex gap-3 items-center group transition-all hover:border-neutral-400">
                                 <div className="w-20 h-20 md:w-28 md:h-28 bg-white rounded-lg flex items-center justify-center overflow-hidden shrink-0 shadow-inner"><img src={g.img} className="w-14 h-14 object-contain group-hover:scale-110 transition-transform" alt="G" /></div>
                                 <div className="flex-1 min-w-0">
-                                    <h4 className="t-card uppercase mb-0.5 truncate">{g.name}</h4>
-                                    <p className="text-neutral-500 t-sub mb-1 line-clamp-1">{g.desc}</p>
+                                    <h4 className="t-card uppercase mb-0.5 leading-snug">{g.name}</h4>
+                                    <p className="text-neutral-500 t-sub mb-1 line-clamp-2">{g.desc}</p>
                                     <p className="text-[#dc2626] t-card mb-2">{g.price.toLocaleString()} <span className="notranslate t-tag" translate="no">BEOM</span></p>
                                     <button onClick={() => {if (!requireAuth(L.buyReqBtn)) return; alert(L.buyDoneAlert);}} className="w-full py-1.5 bg-black text-white rounded-lg t-tag uppercase active:scale-95">{L.buyReqBtn}{!authenticated && ' 🔒'}</button>
                                 </div>
