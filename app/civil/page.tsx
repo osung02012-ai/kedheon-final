@@ -829,11 +829,11 @@ export default function CivilPage() {
           <SectionTitle title={T.malls} desc={T.mallsDesc} />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
             {MALLS.map(m => (
-              <div key={m.name} className="bg-white border border-neutral-200 rounded-xl p-3 md:p-4 flex justify-between items-center gap-2 text-left">
+              <div key={m.name} className="bg-white border border-neutral-200 rounded-xl p-3 md:p-4 flex items-start justify-between gap-2 text-left">
                 <div className="min-w-0">
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex flex-wrap items-center gap-1.5">
                     <span className="t-tag bg-neutral-100 text-neutral-600 px-1.5 py-0.5 rounded whitespace-nowrap shrink-0">{ko ? m.tag : m.tagEn}</span>
-                    <h3 className="text-black t-card truncate">{ko ? m.name : m.nameEn}</h3>
+                    <h3 className="text-black t-card leading-snug">{ko ? m.name : m.nameEn}</h3>
                   </div>
                   <p className="text-neutral-500 t-sub mt-0.5">
                     {T.signers}: {(m.signers + (demanded[m.name] ? 1 : 0)).toLocaleString()}
