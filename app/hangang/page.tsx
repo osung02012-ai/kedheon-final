@@ -139,33 +139,32 @@ export default function HangangPage() {
 
         <PiReadOnlyBanner className="mb-3" />
         {/* ── 1. 히어로 ─────────────────────────────────────────── */}
-        {/* 첫 화면(360×800)에서 히어로 + '01 전국 7대 권역' 머리까지 같이 보이도록 압축했다.
-            모바일: 그림 84px 썸네일 + 제목/설명을 나란히, 캡션·뱃지·통계 카드박스는 데스크톱 전용. */}
-        {/* ── 1. 히어로 ─────────────────────────────────────────── */}
+        {/* 첫 화면(360×800)에서 히어로 + '01 전국 7대 권역' 머리까지 같이 보이는 압축은 유지하되,
+            대표이미지는 모바일에서도 상단 중앙 240px 카드로 크게 되돌렸다(hangang.pi 명패 포함).
+            캡션·태그 뱃지·통계 카드박스는 데스크톱 전용. */}
         <section className="relative bg-white rounded-2xl border-2 border-black overflow-hidden px-3 py-3 md:px-8 md:py-8">
           <div className="absolute top-0 left-0 w-full h-1 bg-[#dc2626]" />
           <div className="absolute -right-10 -bottom-10 w-40 h-40 rounded-full bg-[#dc2626]/5" />
 
           <div className="relative md:grid md:grid-cols-[1.08fr_0.92fr] md:gap-7 md:items-center">
-            {/* 모바일: 그림은 오른쪽 위 46px 썸네일로 띄워 본문이 폭을 다 쓰게 하고,
-                데스크톱: 오른쪽 칸에 큰 그림 + 캡션 */}
-            <figure className="absolute top-0 right-0 w-[46px] md:static md:order-2 md:w-full md:max-w-[360px] md:mx-auto md:shrink-0">
+            {/* 모바일: 상단 중앙 대표이미지 카드(그림에 hangang.pi 명패 포함) / 데스크톱: 오른쪽 칸 큰 그림 + 캡션 */}
+            <figure className="relative mx-auto w-full max-w-[240px] sm:max-w-[260px] md:order-2 md:max-w-[360px] md:shrink-0">
               <img
                 src="/hangang-hero-emerald.jpg"
                 alt={T('imgAlt')}
                 width={1024}
                 height={1024}
                 fetchPriority="high"
-                className="w-full aspect-square object-cover rounded-lg md:rounded-2xl border border-neutral-200 shadow-sm md:shadow-lg"
+                className="w-full aspect-square object-cover rounded-2xl border border-neutral-200 shadow-lg"
               />
               <figcaption className="hidden md:block mt-2.5 text-center t-tag font-mono uppercase text-gray-400">
                 {T('imgCaption')}
               </figcaption>
             </figure>
 
-            <div className="min-w-0 text-left md:order-1">
-              <p translate="no" className="notranslate inline-block t-tag font-mono text-[#dc2626] uppercase whitespace-nowrap pr-12 md:pr-0">
-                hangang.pi<span className="hidden md:inline"> · K-Culture Pass</span>
+            <div className="min-w-0 text-left md:order-1 mt-2.5 md:mt-0">
+              <p translate="no" className="notranslate hidden md:inline-block t-tag font-mono text-[#dc2626] uppercase whitespace-nowrap">
+                hangang.pi · K-Culture Pass
               </p>
               <h2 className="t-hero text-black mt-0.5">
                 {T('heroTitle')}
