@@ -72,7 +72,7 @@ export default function PiAuthSheet({
       aria-modal="true"
     >
       <div
-        className="bg-white w-full max-w-md rounded-t-3xl md:rounded-2xl border-2 border-black p-4 md:p-5 space-y-3 text-left shadow-2xl font-black"
+        className="bg-white w-full max-w-md rounded-t-3xl md:rounded-2xl border border-neutral-200 p-4 md:p-5 space-y-3 text-left shadow-2xl font-black"
         onClick={e => e.stopPropagation()}
       >
         <div className="flex items-start justify-between gap-2">
@@ -97,7 +97,7 @@ export default function PiAuthSheet({
           <button
             onClick={onClose}
             aria-label={gate(GATE.close, lang)}
-            className="shrink-0 w-8 h-8 rounded-full border border-black/10 text-black text-sm font-black hover:bg-gray-100 cursor-pointer"
+            className="shrink-0 w-8 h-8 rounded-full bg-neutral-100 text-neutral-600 text-sm font-black hover:bg-neutral-200 cursor-pointer"
           >
             ✕
           </button>
@@ -127,13 +127,13 @@ export default function PiAuthSheet({
               <li>{gate(GATE.step2, lang)}</li>
               <li>{gate(GATE.step3, lang)}</li>
             </ol>
-            <div className="bg-gray-50 border border-black/10 rounded-xl p-2.5 flex items-center justify-between gap-2">
+            <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-2.5 flex items-center justify-between gap-2">
               <code translate="no" className="notranslate text-[11px] md:text-xs font-mono text-black break-all">
                 {address}
               </code>
               <button
                 onClick={copyLink}
-                className="shrink-0 px-2 py-1 rounded-lg border border-black text-[11px] font-black bg-white text-black hover:bg-black hover:text-white transition-all"
+                className="shrink-0 px-2 py-1 rounded-lg text-[11px] font-black bg-neutral-100 text-neutral-800 hover:bg-neutral-200 transition-all"
               >
                 {copied ? gate(GATE.copied, lang) : gate(GATE.copy, lang)}
               </button>
@@ -152,7 +152,7 @@ export default function PiAuthSheet({
 
         <button
           onClick={onClose}
-          className="w-full bg-white border-2 border-black text-black font-black py-2 rounded-xl text-[11px] md:text-xs hover:bg-gray-50 transition-all"
+          className="w-full bg-neutral-100 text-neutral-800 font-black py-2 rounded-lg text-[11px] md:text-xs hover:bg-neutral-200 transition-all"
         >
           {gate(GATE.close, lang)}
         </button>

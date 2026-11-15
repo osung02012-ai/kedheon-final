@@ -88,10 +88,10 @@ export default function PiPayButton({
         type="button"
         onClick={handleClick}
         disabled={paying || done}
-        className={`w-full flex items-center justify-center gap-1.5 border-2 rounded-xl py-2.5 text-[11px] md:text-xs font-black transition-all active:scale-95 ${
+        className={`w-full flex items-center justify-center gap-1.5 rounded-lg py-2.5 text-[11px] md:text-xs font-black transition-all active:scale-95 ${
           done
-            ? 'bg-white text-black border-black'
-            : 'bg-white text-black border-black hover:bg-black hover:text-white'
+            ? 'bg-neutral-100 text-neutral-500'
+            : 'bg-black text-white shadow-sm hover:bg-[#dc2626]'
         } ${paying ? 'opacity-60' : ''}`}
       >
         <span translate="no" className="notranslate text-[#7d4698] leading-none">π</span>

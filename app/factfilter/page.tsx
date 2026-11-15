@@ -223,7 +223,7 @@ const VERIFIED_CASES: VerifiedCase[] = [
     note: '국민권익위원회 공익신고자 보호 및 행정처분 원장 일치',
     noteEn: 'Matches the ACRC whistleblower and enforcement records',
     badge: 'bg-black text-white',
-    border: 'border-black/10'
+    border: 'border-neutral-200'
   },
   {
     country: 'KR',
@@ -301,8 +301,8 @@ const CountryPicker = ({
 
   return (
     <div className="fixed inset-0 z-[2000] bg-black/50 backdrop-blur-sm flex items-end md:items-center justify-center p-0 md:p-4">
-      <div className="bg-white w-full max-w-lg max-h-[85vh] rounded-t-3xl md:rounded-2xl border-2 border-black flex flex-col overflow-hidden shadow-2xl">
-        <div className="px-4 pt-3 pb-2 border-b-2 border-black text-left">
+      <div className="bg-white w-full max-w-lg max-h-[85vh] rounded-t-3xl md:rounded-2xl border border-neutral-200 flex flex-col overflow-hidden shadow-2xl">
+        <div className="px-4 pt-3 pb-2 border-b border-neutral-200 text-left">
           <div className="flex items-start justify-between gap-2">
             <div className="min-w-0">
               <h3 className="text-black t-card truncate">{title}</h3>
@@ -311,7 +311,7 @@ const CountryPicker = ({
             <button
               onClick={onClose}
               aria-label="close"
-              className="shrink-0 w-8 h-8 rounded-full border border-black/10 text-black t-btn hover:bg-gray-100 cursor-pointer"
+              className="shrink-0 w-8 h-8 rounded-full bg-neutral-100 text-neutral-600 t-btn hover:bg-neutral-200 cursor-pointer"
             >
               ✕
             </button>
@@ -321,7 +321,7 @@ const CountryPicker = ({
             value={q}
             onChange={e => setQ(e.target.value)}
             placeholder={ko ? '국가명 또는 ISO 코드 검색 (예: 브라질, Brazil, BR)' : 'Search country or ISO code (e.g. Brazil, BR)'}
-            className="mt-2 w-full bg-gray-50 border border-black/10 rounded-xl px-3 py-2.5 t-body text-black placeholder-gray-400 outline-none focus:border-black"
+            className="mt-2 w-full bg-neutral-50 border border-neutral-300 rounded-lg t-body text-black placeholder-neutral-400 outline-none transition-colors focus:bg-white focus:border-black focus:ring-2 focus:ring-black/10 px-3 py-2.5"
           />
         </div>
 
@@ -329,7 +329,7 @@ const CountryPicker = ({
           <button
             onClick={() => { onSelect('GLOBAL'); onClose(); }}
             className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-left t-btn mb-1 border ${
-              current === 'GLOBAL' ? 'bg-black text-white border-black' : 'bg-white text-black border-black/10 hover:border-black'
+              current === 'GLOBAL' ? 'bg-black text-white' : 'bg-neutral-100 text-neutral-800 hover:bg-neutral-200'
             }`}
           >
             <span className="text-base">🌍</span>
@@ -344,8 +344,8 @@ const CountryPicker = ({
             <button
               key={c.code}
               onClick={() => { onSelect(c.code); onClose(); }}
-              className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-left t-btn border mb-1 ${
-                current === c.code ? 'bg-black text-white border-black' : 'bg-white text-black border-transparent hover:border-black/20 hover:bg-gray-50'
+              className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-left t-btn mb-1 ${
+                current === c.code ? 'bg-black text-white' : 'bg-neutral-100 text-neutral-800 hover:bg-neutral-200'
               }`}
             >
               <span className="text-base">{c.flag}</span>
@@ -355,7 +355,7 @@ const CountryPicker = ({
             </button>
           ))}
         </div>
-        <div className="px-4 py-2 border-t border-black/10 text-neutral-500 t-sub text-center">
+        <div className="px-4 py-2 border-t border-neutral-200 text-neutral-500 t-sub text-center">
           {ko ? `ISO 3166-1 기준 ${COUNTRIES.length}개국` : `${COUNTRIES.length} countries · ISO 3166-1`}
         </div>
       </div>
@@ -520,7 +520,7 @@ export default function FactFilterPage() {
       <AppHeader
         brand={
           <div className="flex items-center gap-2 md:gap-3 cursor-pointer min-w-0" onClick={() => window.location.href = '/'}>
-            <div className="w-8 h-8 md:w-11 md:h-11 rounded-lg border-2 border-black bg-black flex items-center justify-center text-white t-card shrink-0">
+            <div className="w-8 h-8 md:w-11 md:h-11 rounded-lg border border-black bg-black flex items-center justify-center text-white t-card shrink-0">
               F
             </div>
             <div className="text-left leading-tight font-bold min-w-0">
@@ -533,16 +533,16 @@ export default function FactFilterPage() {
           <PiBadge en={!ko} />
           <button
             onClick={() => setLang(l => (l === 'KO' ? 'EN' : 'KO'))}
-            className="bg-gray-100 border border-gray-200 text-black t-tag rounded-lg px-2 py-1 outline-none cursor-pointer shadow-sm hover:border-black transition-colors whitespace-nowrap shrink-0"
+            className="bg-neutral-100 text-black t-tag rounded-lg px-2 py-1 outline-none cursor-pointer hover:bg-neutral-200 transition-colors whitespace-nowrap shrink-0"
           >
             {ko ? '🇺🇸 EN' : '🇰🇷 KO'}
           </button>
-          <div className="bg-gray-100 border border-gray-200 rounded-lg px-2 py-1 t-tag text-black flex items-center gap-1 whitespace-nowrap shrink-0">
+          <div className="bg-neutral-100 rounded-lg px-2 py-1 t-tag text-black flex items-center gap-1 whitespace-nowrap shrink-0">
             🐾 {points} <span translate="no" className="notranslate text-gray-400 hidden min-[420px]:inline">BEOM</span>
           </div>
           <button
             onClick={() => window.location.href = '/'}
-            className="hidden min-[420px]:block px-2 py-1 rounded-lg t-tag border border-black/10 bg-white text-gray-500 hover:text-black whitespace-nowrap shrink-0"
+            className="hidden min-[420px]:block px-2 py-1 rounded-lg t-tag bg-neutral-100 text-neutral-600 hover:bg-neutral-200 hover:text-black whitespace-nowrap shrink-0"
           >
             {ko ? '케드헌 홈' : 'Kedheon'}
           </button>
@@ -552,7 +552,7 @@ export default function FactFilterPage() {
 
         <PiReadOnlyBanner />
         {/* Hero */}
-        <div className="bg-gray-50 rounded-2xl border border-black/5 p-4 md:p-5 relative shadow-inner overflow-hidden text-left">
+        <div className="bg-white rounded-2xl border-2 border-black p-4 md:p-5 relative overflow-hidden text-left">
           <div className="absolute top-0 left-0 w-full h-1 bg-[#dc2626]"></div>
           <div className="flex flex-col md:flex-row md:items-center gap-4 justify-between">
             <div className="min-w-0">
@@ -562,7 +562,7 @@ export default function FactFilterPage() {
                 </span>
                 <span
                   translate="no"
-                  className="notranslate inline-block px-2 py-0.5 rounded bg-white border border-black text-black t-tag"
+                  className="notranslate inline-block px-2 py-0.5 rounded bg-neutral-100 text-neutral-700 t-tag"
                 >
                   🌍 {ko ? `${COUNTRIES.length}개국 원장` : `${COUNTRIES.length} countries`}
                 </span>
@@ -576,7 +576,7 @@ export default function FactFilterPage() {
                   : `An immutable public ledger documenting disinformation outlets, biased reporting, and repeat fabrications. Open the ledger of any of the ${COUNTRIES.length} countries to review and report, verified by real-name Pi KYC citizens.`}
               </p>
             </div>
-            <div className="bg-white border-2 border-black rounded-2xl px-4 py-3 text-center shrink-0">
+            <div className="bg-neutral-50 border border-neutral-200 rounded-xl px-4 py-3 text-center shrink-0">
               <div className="t-stat text-black">100%</div>
               <div className="text-neutral-500 t-sub mt-1">{ko ? 'KYC 실명 검증' : 'KYC Verified'}</div>
               <div className="text-[#dc2626] t-tag mt-1">{ko ? '외압 삭제 불가' : 'Immutable'}</div>
@@ -595,10 +595,9 @@ export default function FactFilterPage() {
             <button
               key={t.key}
               onClick={() => setActiveTab(t.key as any)}
-              className={`shrink-0 md:flex-1 px-3 py-2 rounded-xl t-btn whitespace-nowrap transition-all text-center cursor-pointer border active:scale-95 ${
+              className={`shrink-0 md:flex-1 px-3 py-2 rounded-xl t-btn whitespace-nowrap transition-all text-center cursor-pointer active:scale-95 ${
                 activeTab === t.key
-                  ? 'bg-black text-white border-black shadow-md'
-                  : 'bg-white text-gray-400 border-black/10 hover:text-black'
+                  ? 'bg-black text-white shadow-sm' : 'bg-neutral-100 text-neutral-600 hover:text-black'
               }`}
             >
               {t.label}
@@ -617,8 +616,8 @@ export default function FactFilterPage() {
                   key={code}
                   data-cc={code}
                   onClick={() => setViewCountry(code)}
-                  className={`shrink-0 px-3 py-1.5 rounded-xl t-btn border transition-all whitespace-nowrap active:scale-95 ${
-                    active ? 'bg-black text-white border-black shadow-md' : 'bg-white text-gray-400 border-black/10 hover:text-black'
+                  className={`shrink-0 px-3 py-1.5 rounded-xl t-btn transition-all whitespace-nowrap active:scale-95 ${
+                    active ? 'bg-black text-white shadow-sm' : 'bg-neutral-100 text-neutral-600 hover:text-black'
                   }`}
                 >
                   {info.flag} {ko ? info.ko : info.en}
@@ -627,7 +626,7 @@ export default function FactFilterPage() {
             })}
             <button
               onClick={() => setPicker('VIEW')}
-              className="shrink-0 px-3 py-1.5 rounded-xl t-btn border border-[#dc2626] text-[#dc2626] bg-white hover:bg-[#dc2626] hover:text-white transition-all whitespace-nowrap active:scale-95"
+              className="shrink-0 px-3 py-1.5 rounded-xl t-btn bg-red-50 text-[#dc2626] hover:bg-[#dc2626] hover:text-white transition-all whitespace-nowrap active:scale-95"
             >
               🌐 {ko ? `전체 ${COUNTRIES.length}개국` : `All ${COUNTRIES.length} countries`} ▾
             </button>
@@ -637,12 +636,12 @@ export default function FactFilterPage() {
         {/* TAB 1: AI FACT CHECK */}
         {activeTab === 'CHECK' && (
           <div className="space-y-3">
-            <div className="bg-white border-2 border-black/10 rounded-2xl p-4 md:p-5 space-y-3 text-left">
+            <div className="bg-white border border-neutral-200 rounded-2xl p-4 md:p-5 space-y-3 text-left">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <h2 className="text-black t-card flex items-center gap-2">
                   <span>🔎</span> {ko ? '의심 뉴스 URL 또는 루머 문장 입력' : 'Enter Article URL or Claim'}
                 </h2>
-                <span className="t-tag text-gray-500 bg-gray-100 border border-black/10 rounded-lg px-2 py-0.5">
+                <span className="t-tag text-neutral-600 bg-neutral-100 rounded-lg px-2 py-0.5">
                   {viewInfo.flag} {ko ? viewInfo.ko : viewInfo.en} <span translate="no" className="notranslate font-mono text-gray-400">{viewInfo.code}</span>
                 </span>
               </div>
@@ -652,7 +651,7 @@ export default function FactFilterPage() {
                   value={query}
                   onChange={e => setQuery(e.target.value)}
                   placeholder={ko ? '예: [단독] 특정 사건 왜곡 보도 기사 링크 또는 제목' : 'e.g. Article link or sensational headline...'}
-                  className="flex-1 bg-gray-50 border border-black/10 rounded-xl px-3 py-2.5 t-body text-black placeholder-gray-400 outline-none focus:border-black transition-all"
+                  className="flex-1 bg-neutral-50 border border-neutral-300 rounded-lg t-body text-black placeholder-neutral-400 outline-none transition-colors focus:bg-white focus:border-black focus:ring-2 focus:ring-black/10 px-3 py-2.5"
                 />
                 <button
                   onClick={runFactCheck}
@@ -664,7 +663,7 @@ export default function FactFilterPage() {
               </div>
 
               {checkResult && (
-                <div className="p-4 rounded-xl bg-red-50 border-2 border-[#dc2626] space-y-2">
+                <div className="p-4 rounded-xl bg-red-50 border border-[#dc2626]/40 space-y-2">
                   <div className="flex items-center justify-between gap-2">
                     <span className="t-tag px-2.5 py-1 rounded bg-[#dc2626] text-white">
                       {ko ? '⚠️ 악의적 왜곡 의심 판정' : '⚠️ Misleading / Biased'}
@@ -705,7 +704,7 @@ export default function FactFilterPage() {
                 ))}
 
                 {cases.length === 0 && (
-                  <div className="bg-gray-50 border-2 border-dashed border-black/20 rounded-xl p-5 text-center space-y-2">
+                  <div className="bg-neutral-50 border border-dashed border-neutral-300 rounded-xl p-5 text-center space-y-2">
                     <div className="text-3xl">{viewInfo.flag}</div>
                     <p className="text-black t-card">
                       {ko ? `${viewInfo.ko} 검증 사례가 아직 없습니다` : `No verified cases for ${viewInfo.en} yet`}
@@ -717,7 +716,7 @@ export default function FactFilterPage() {
                     </p>
                     <button
                       onClick={() => setViewCountry('GLOBAL')}
-                      className="mt-1 px-3 py-1.5 rounded-xl t-tag border border-black bg-white text-black hover:bg-black hover:text-white transition-all"
+                      className="mt-1 px-3 py-1.5 rounded-xl t-tag bg-neutral-100 text-neutral-800 hover:bg-neutral-200 transition-all"
                     >
                       🌍 {ko ? '글로벌 검증 사례 보기' : 'View global verdicts'}
                     </button>
@@ -730,7 +729,7 @@ export default function FactFilterPage() {
 
         {/* TAB 2: REPORT */}
         {activeTab === 'REPORT' && (
-          <div className="bg-white border-2 border-black/10 rounded-2xl p-4 md:p-5 space-y-4 text-left">
+          <div className="bg-white border border-neutral-200 rounded-2xl p-4 md:p-5 space-y-4 text-left">
             <div>
               <h2 className="text-black t-card flex items-center gap-2">
                 <span>🚨</span> {ko ? '악의적 가짜뉴스 채널·기자·언론사 제보' : 'Report Malicious Fake News'}
@@ -772,10 +771,9 @@ export default function FactFilterPage() {
                       type="button"
                       key={c.key}
                       onClick={() => setReportType(c.key as any)}
-                      className={`py-2 rounded-xl t-tag border transition-all cursor-pointer active:scale-95 ${
+                      className={`py-2 rounded-xl t-tag transition-all cursor-pointer active:scale-95 ${
                         reportType === c.key
-                          ? 'bg-black text-white border-black'
-                          : 'bg-gray-50 text-gray-500 border-black/10 hover:text-black'
+                          ? 'bg-black text-white shadow-sm' : 'bg-neutral-100 text-neutral-600 hover:text-black'
                       }`}
                     >
                       {c.label}
@@ -789,12 +787,14 @@ export default function FactFilterPage() {
                 <button
                   type="button"
                   onClick={() => setPicker('REPORT')}
-                  className="w-full flex items-center justify-between gap-1 bg-gray-50 border border-black/10 text-black t-btn rounded-xl px-3 py-2.5 hover:border-black transition-colors"
+                  className="w-full flex items-center justify-between gap-1 bg-white border border-neutral-300 text-black t-btn rounded-lg shadow-xs px-3 py-2.5 hover:border-neutral-400 focus:border-black transition-colors"
                 >
                   <span className="truncate">
                     {reportInfo.flag} {ko ? reportInfo.ko : reportInfo.en} (<span translate="no" className="notranslate font-mono t-tag">{reportInfo.code}</span>)
                   </span>
-                  <span className="t-sub text-neutral-500 shrink-0">▾ {ko ? '변경' : 'Change'}</span>
+                  <span className="t-sub text-neutral-500 shrink-0 border-l border-neutral-200 pl-1.5 leading-none">
+                    ▾<span className="hidden min-[400px]:inline"> {ko ? '변경' : 'Change'}</span>
+                  </span>
                 </button>
               </div>
 
@@ -805,7 +805,7 @@ export default function FactFilterPage() {
                   value={targetName}
                   onChange={e => setTargetName(e.target.value)}
                   placeholder={ko ? '예: OO일보 홍OO 기자 또는 유튜브 채널명' : 'Name of reporter, channel, or outlet'}
-                  className="w-full bg-gray-50 border border-black/10 rounded-xl px-3 py-2.5 t-body text-black placeholder-gray-400 outline-none focus:border-black"
+                  className="w-full bg-neutral-50 border border-neutral-300 rounded-lg t-body text-black placeholder-neutral-400 outline-none transition-colors focus:bg-white focus:border-black focus:ring-2 focus:ring-black/10 px-3 py-2.5"
                 />
               </div>
 
@@ -816,7 +816,7 @@ export default function FactFilterPage() {
                   value={targetUrl}
                   onChange={e => setTargetUrl(e.target.value)}
                   placeholder="https://..."
-                  className="w-full bg-gray-50 border border-black/10 rounded-xl px-3 py-2.5 t-body text-black placeholder-gray-400 outline-none focus:border-black"
+                  className="w-full bg-neutral-50 border border-neutral-300 rounded-lg t-body text-black placeholder-neutral-400 outline-none transition-colors focus:bg-white focus:border-black focus:ring-2 focus:ring-black/10 px-3 py-2.5"
                 />
               </div>
 
@@ -827,17 +827,17 @@ export default function FactFilterPage() {
                   onChange={e => setTargetDetail(e.target.value)}
                   rows={3}
                   placeholder={ko ? '실제 팩트와 어떻게 다르게 왜곡했는지 구체적인 반박 근거를 적어주세요.' : 'Explain how the report was fabricated with concrete counter-evidence.'}
-                  className="w-full bg-gray-50 border border-black/10 rounded-xl p-3 t-body text-black placeholder-gray-400 outline-none focus:border-black"
+                  className="w-full bg-neutral-50 border border-neutral-300 rounded-lg t-body text-black placeholder-neutral-400 outline-none transition-colors focus:bg-white focus:border-black focus:ring-2 focus:ring-black/10 p-3"
                 />
               </div>
 
-              <div className="bg-gray-50 border border-black/10 p-3 rounded-xl t-sub text-gray-500">
+              <div className="bg-neutral-50 border border-neutral-200 p-3 rounded-xl t-sub text-neutral-600">
                 🔒 {ko
                   ? `제보자의 신원은 영구 비공개 암호화되며, 허위 악성 제보 방지를 위해 파이 KYC 실명 인증자만 제보할 수 있습니다. 접수 즉시 ${reportInfo.flag} ${reportInfo.ko} 원장 최상단에 등재되고 +10 BEOM가 적립됩니다.`
                   : `Whistleblower identity is cryptographically protected. Your report goes to the top of the ${reportInfo.en} ledger and earns +10 BEOM.`}
               </div>
 
-              <div className="bg-white border-2 border-dashed border-black/15 rounded-xl p-3 space-y-2">
+              <div className="bg-neutral-50 border border-dashed border-neutral-300 rounded-xl p-3 space-y-2">
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
                     <p className="text-black t-card">
@@ -883,7 +883,7 @@ export default function FactFilterPage() {
             />
 
             {/* 선택 국가 원장 헤더 */}
-            <div className="flex flex-wrap items-center justify-between gap-2 bg-gray-50 border border-black/10 rounded-2xl px-3 py-2 mb-2">
+            <div className="flex flex-wrap items-center justify-between gap-2 bg-neutral-50 border border-neutral-200 rounded-2xl px-3 py-2 mb-2">
               <div className="flex items-center gap-2 min-w-0">
                 <span className="text-lg">{viewInfo.flag}</span>
                 <div className="min-w-0">
@@ -900,7 +900,7 @@ export default function FactFilterPage() {
               </div>
               <button
                 onClick={() => setPicker('VIEW')}
-                className="shrink-0 px-2.5 py-1.5 rounded-lg t-tag border border-black bg-white text-black hover:bg-black hover:text-white transition-all"
+                className="shrink-0 px-2.5 py-1.5 rounded-lg t-tag bg-neutral-100 text-neutral-800 hover:bg-neutral-200 transition-all"
               >
                 🌐 {ko ? '국가 변경' : 'Change country'}
               </button>
@@ -910,13 +910,13 @@ export default function FactFilterPage() {
               {ledgerItems.map(item => {
                 const info = countryOf(item.country);
                 return (
-                  <div key={item.id} className="bg-white border-2 border-black/10 rounded-2xl p-4 md:p-5 space-y-2 hover:border-[#dc2626] transition-all">
+                  <div key={item.id} className="bg-white border border-neutral-200 rounded-2xl p-4 md:p-5 space-y-2 hover:border-neutral-400 transition-all">
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <div className="flex items-center gap-2 min-w-0">
                         <span className="t-tag px-2 py-0.5 rounded bg-[#dc2626] text-white whitespace-nowrap">
                           {ko ? item.type : (item.typeEn || item.type)}
                         </span>
-                        <span className="t-tag px-1.5 py-0.5 rounded bg-gray-100 text-gray-500 whitespace-nowrap">
+                        <span className="t-tag px-1.5 py-0.5 rounded bg-neutral-100 text-neutral-600 whitespace-nowrap">
                           {info.flag} {ko ? info.ko : info.en}
                         </span>
                         <span className="t-card text-black truncate">{ko ? item.name : (item.nameEn || item.name)}</span>
@@ -925,7 +925,7 @@ export default function FactFilterPage() {
                     </div>
 
                     <div className="t-card text-black">{ko ? item.title : (item.titleEn || item.title)}</div>
-                    <div className="t-sub text-gray-500 bg-gray-50 p-2.5 rounded-lg border border-black/10 break-all">
+                    <div className="t-sub text-neutral-600 bg-neutral-50 p-2.5 rounded-lg border border-neutral-200 break-all">
                       <span className="text-black font-bold">{ko ? '반박 증빙:' : 'Proof:'}</span> {ko ? item.proof : (item.proofEn || item.proof)}
                     </div>
 
@@ -944,7 +944,7 @@ export default function FactFilterPage() {
 
               {ledgerItems.length === 0 && (
                 <div className="space-y-2">
-                  <div className="bg-gray-50 border-2 border-dashed border-black/20 rounded-2xl p-5 text-center space-y-2">
+                  <div className="bg-neutral-50 border border-dashed border-neutral-300 rounded-2xl p-5 text-center space-y-2">
                     <div className="text-4xl">{viewInfo.flag}</div>
                     <p className="text-black t-card">
                       {ko ? `${viewInfo.ko} 언론 원장이 아직 비어 있습니다` : `No ${viewInfo.en} media reports yet`}
@@ -963,7 +963,7 @@ export default function FactFilterPage() {
                       </button>
                       <button
                         onClick={() => setViewCountry('GLOBAL')}
-                        className="px-3 py-2 rounded-xl t-tag border border-black bg-white text-black hover:bg-black hover:text-white transition-all"
+                        className="px-3 py-2 rounded-xl t-tag bg-neutral-100 text-neutral-800 hover:bg-neutral-200 transition-all"
                       >
                         🌍 {ko ? '글로벌 원장 보기' : 'View global ledger'}
                       </button>
@@ -971,13 +971,13 @@ export default function FactFilterPage() {
                   </div>
 
                   {viewCountry !== 'GLOBAL' && (
-                    <div className="bg-white border border-black/10 rounded-2xl p-3">
+                    <div className="bg-white border border-neutral-200 rounded-2xl p-3">
                       <p className="text-gray-400 t-tag uppercase mb-2">
                         🌍 {ko ? '글로벌 공통 검증 사례' : 'Global verified cases'}
                       </p>
                       <div className="space-y-1.5">
                         {SEED_REPORTS.filter(r => r.country === 'GLOBAL').map(r => (
-                          <div key={r.id} className="flex flex-col md:flex-row md:items-center justify-between gap-1 border-b border-black/5 pb-1.5 last:border-0 last:pb-0">
+                          <div key={r.id} className="flex flex-col md:flex-row md:items-center justify-between gap-1 border-b border-neutral-200 pb-1.5 last:border-0 last:pb-0">
                             <span className="t-card text-black truncate">
                               {ko ? r.name : (r.nameEn || r.name)} · {ko ? r.title : (r.titleEn || r.title)}
                             </span>
@@ -995,7 +995,7 @@ export default function FactFilterPage() {
 
         {/* TAB 4: VAULT */}
         {activeTab === 'VAULT' && (
-          <div className="bg-white border-2 border-black/10 rounded-2xl p-4 md:p-5 space-y-3 text-left">
+          <div className="bg-white border border-neutral-200 rounded-2xl p-4 md:p-5 space-y-3 text-left">
             <div>
               <h2 className="text-black t-card flex items-center gap-2">
                 <span>🛡️</span> {ko ? '외압 삭제 불가: 공익제보 증거 지문' : 'Immutable Evidence Vault'}
@@ -1012,7 +1012,7 @@ export default function FactFilterPage() {
               onChange={e => setVaultText(e.target.value)}
               rows={4}
               placeholder={ko ? '봉인할 공익제보 증거 요약, 부당 지시 녹취록, 계약 위반 사실 등을 입력하세요.' : 'Paste evidence details, transcript, or unfair contract terms to seal...'}
-              className="w-full bg-gray-50 border border-black/10 rounded-xl p-3 t-body text-black placeholder-gray-400 outline-none focus:border-black"
+              className="w-full bg-neutral-50 border border-neutral-300 rounded-lg t-body text-black placeholder-neutral-400 outline-none transition-colors focus:bg-white focus:border-black focus:ring-2 focus:ring-black/10 p-3"
             />
 
             <button
@@ -1023,11 +1023,11 @@ export default function FactFilterPage() {
             </button>
 
             {vaultHash && (
-              <div className="p-4 rounded-xl bg-gray-50 border-2 border-black space-y-1">
+              <div className="p-4 rounded-xl bg-neutral-50 border border-neutral-200 space-y-1">
                 <div className="t-tag text-[#dc2626] uppercase">
                   {ko ? '온체인 증거 고유 해시 (SHA-256)' : 'On-Chain Proof Fingerprint'}
                 </div>
-                <div translate="no" className="notranslate font-mono t-tag text-black break-all bg-white p-2 rounded border border-black/10">{vaultHash}</div>
+                <div translate="no" className="notranslate font-mono t-tag text-black break-all bg-neutral-50 p-2 rounded border border-neutral-200">{vaultHash}</div>
                 <div className="t-sub text-gray-500 pt-1">
                   ✓ {ko ? '타임스탬프 원장 각인 완료. 법정 제출용 무결성 증명서 생성 가능.' : 'Timestamped on-chain. Integrity certificate ready.'}
                 </div>

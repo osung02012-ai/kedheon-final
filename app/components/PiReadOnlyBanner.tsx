@@ -20,7 +20,7 @@ export default function PiReadOnlyBanner({ className = '' }: { className?: strin
 
   return (
     <div
-      className={`w-full max-w-full flex flex-wrap items-center gap-x-2 gap-y-1.5 bg-white border border-[#dc2626] rounded-xl px-3 py-2 shadow-sm ${className}`}
+      className={`w-full max-w-full flex flex-wrap items-center gap-x-2 gap-y-1.5 bg-red-50 border border-[#dc2626]/30 rounded-xl px-3 py-2 ${className}`}
     >
       <p className="min-w-0 flex-1 t-sub-snug text-[#dc2626] break-keep">
         🔒 {gate(GATE.banner, gateLang)}

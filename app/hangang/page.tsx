@@ -115,7 +115,7 @@ export default function HangangPage() {
       <AppHeader
         brand={
           <div className="flex items-center gap-2 md:gap-3 min-w-0">
-            <div className="w-8 h-8 md:w-11 md:h-11 rounded-lg border-2 border-black bg-black flex items-center justify-center shrink-0">
+            <div className="w-8 h-8 md:w-11 md:h-11 rounded-lg border border-black bg-black flex items-center justify-center shrink-0">
               <span className="text-white t-card" translate="no">H</span>
             </div>
             <div className="text-left leading-tight font-bold min-w-0">
@@ -131,13 +131,13 @@ export default function HangangPage() {
               value={lang}
               onChange={e => setLang(e.target.value as Lang)}
               aria-label="Language"
-              className="appearance-none bg-gray-100 border border-gray-200 text-black t-tag rounded-lg pl-2 pr-5 py-1 outline-none cursor-pointer shadow-sm focus:border-black transition-colors"
+              className="appearance-none bg-white border border-neutral-300 text-black t-tag rounded-lg pl-2 pr-8 py-1 outline-none cursor-pointer shadow-xs focus:border-black focus:ring-2 focus:ring-black/10 transition-colors"
             >
               {LANGS.map(l => (
                 <option key={l.code} value={l.code}>{l.flag} {l.label}</option>
               ))}
             </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-1.5 text-gray-400">
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex w-5 items-center justify-center rounded-r-lg border-l border-neutral-200 bg-neutral-50 text-neutral-500">
               <svg className="fill-current h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
             </div>
           </div>
@@ -147,7 +147,7 @@ export default function HangangPage() {
 
         <PiReadOnlyBanner className="mb-3" />
         {/* ── 1. 히어로 ─────────────────────────────────────────── */}
-        <section className="relative bg-gray-50 rounded-2xl border border-black/5 shadow-inner overflow-hidden px-4 py-7 md:px-8 md:py-9">
+        <section className="relative bg-white rounded-2xl border-2 border-black overflow-hidden px-4 py-7 md:px-8 md:py-9">
           <div className="absolute top-0 left-0 w-full h-1 bg-[#dc2626]" />
           <div className="absolute -right-10 -bottom-10 w-40 h-40 rounded-full bg-[#dc2626]/5" />
 
@@ -166,7 +166,7 @@ export default function HangangPage() {
                 <span className="t-tag font-mono uppercase bg-black text-white rounded-md px-2 py-1">
                   {T('heroTag1')}
                 </span>
-                <span className="t-tag font-mono uppercase bg-white border border-black/10 text-gray-500 rounded-md px-2 py-1">
+                <span className="t-tag font-mono uppercase bg-neutral-100 text-neutral-600 rounded-md px-2 py-1">
                   {T('heroTag2')}
                 </span>
               </div>
@@ -180,7 +180,7 @@ export default function HangangPage() {
                 width={1024}
                 height={1024}
                 fetchPriority="high"
-                className="w-full aspect-square object-cover rounded-2xl border-2 border-black shadow-xl"
+                className="w-full aspect-square object-cover rounded-2xl border border-neutral-200 shadow-lg"
               />
               <figcaption className="mt-2.5 text-center t-tag font-mono uppercase text-gray-400">
                 {T('imgCaption')}
@@ -195,7 +195,7 @@ export default function HangangPage() {
               { v: '24h', label: T('statHotline') },
               { v: `🐾 ${beom}`, label: T('statBeom') }
             ].map((s, i) => (
-              <div key={i} className="bg-white border border-black/10 rounded-xl px-2 py-2.5">
+              <div key={i} className="bg-white border border-neutral-200 rounded-xl px-2 py-2.5">
                 <p translate="no" className="notranslate text-black t-stat">{s.v}</p>
                 <p className="text-gray-400 t-tag mt-1">{s.label}</p>
               </div>
@@ -212,7 +212,7 @@ export default function HangangPage() {
               key={z.key}
               translate="no"
               onClick={() => selectZone(z.key)}
-              className={`notranslate shrink-0 px-3 py-2 rounded-xl border text-left transition-all ${zone.key === z.key ? 'bg-black text-white border-black shadow-md' : 'bg-white text-gray-400 border-black/10 hover:text-black'}`}
+              className={`notranslate shrink-0 px-3 py-2 rounded-xl text-left transition-all ${zone.key === z.key ? 'bg-black text-white shadow-sm' : 'bg-neutral-100 text-neutral-600 hover:text-black'}`}
             >
               <span className="block t-card">{z.code}</span>
               <span className={`block t-tag mt-1 ${zone.key === z.key ? 'text-white/60' : 'text-gray-300'}`}>{L(z.sub)}</span>
@@ -221,7 +221,7 @@ export default function HangangPage() {
         </div>
 
         {/* 권역 실속 팁 */}
-        <div className="mt-2 bg-gray-50 border border-black/10 rounded-2xl px-3 py-2.5 md:px-4">
+        <div className="mt-2 bg-neutral-50 border border-neutral-200 rounded-2xl px-3 py-2.5 md:px-4">
           <p className="t-tag uppercase text-[#dc2626] mb-1.5">
             {T('tipsLabel')}
           </p>
@@ -235,20 +235,20 @@ export default function HangangPage() {
           </ul>
         </div>
 
-        <div className="mt-2 bg-white border-2 border-black/10 rounded-2xl p-3 md:p-5">
-          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-gray-100 pb-2.5">
+        <div className="mt-2 bg-white border border-neutral-200 rounded-2xl p-3 md:p-5">
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-neutral-200 pb-2.5">
             <div className="text-left">
               <p className="text-black t-card">{L(zone.venues)}</p>
               <p className="text-neutral-500 t-sub mt-1">{T('zoneOptionsDesc')}</p>
             </div>
-            <span className="t-tag bg-gray-100 px-2 py-1 rounded-full text-gray-500">
+            <span className="t-tag bg-neutral-100 px-2 py-1 rounded-full text-neutral-600">
               {T('kycBadge')}
             </span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 mt-3">
             {PICK_ORDER.map(k => (
-              <div key={k} className="bg-gray-50 rounded-xl border border-black/5 p-2.5">
+              <div key={k} className="bg-neutral-50 rounded-xl border border-neutral-200 p-2.5">
                 <p className={`t-tag mb-1.5 ${k === 'stay' ? 'uppercase text-gray-400' : 'uppercase text-gray-400'}`}>
                   <span className="mr-1">{PICK_ICON[k]}</span>
                   {T(PICK_LABEL_KEY[k])}
@@ -260,7 +260,7 @@ export default function HangangPage() {
                       <button
                         key={i}
                         onClick={() => setPick(p => ({ ...p, [k]: i }))}
-                        className={`w-full text-left flex items-start justify-between gap-2 rounded-lg px-2 py-1.5 border transition-all ${on ? 'bg-white border-[#dc2626] shadow-sm' : 'bg-white/60 border-black/5 hover:border-black/20'}`}
+                        className={`w-full text-left flex items-start justify-between gap-2 rounded-lg px-2 py-1.5 border transition-all ${on ? 'bg-white border-[#dc2626] shadow-sm' : 'bg-white border-neutral-200 hover:border-neutral-400'}`}
                       >
                         <span className={`min-w-0 block t-body ${on ? 'text-black' : 'text-gray-500'}`}>
                           {L(o.t)}
@@ -298,7 +298,7 @@ export default function HangangPage() {
         {booked.length > 0 && (
           <div className="mt-2 space-y-1">
             {booked.map(b => (
-              <div key={b.id} className="flex items-center justify-between gap-2 bg-gray-50 border-l-[4px] border-[#dc2626] rounded-lg px-2.5 py-2">
+              <div key={b.id} className="flex items-center justify-between gap-2 bg-neutral-50 border-l-[3px] border-[#dc2626] rounded-lg px-2.5 py-2">
                 <p className="t-tag text-black truncate">
                   <span className="notranslate" translate="no">{b.zone}</span> · {T('reservedLabel')} · <span className="notranslate" translate="no">#{b.id}</span>
                 </p>
@@ -315,11 +315,11 @@ export default function HangangPage() {
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-1.5 md:gap-2">
           {GOODS.map(g => (
-            <div key={g.id} className="bg-white border border-black/10 rounded-xl p-2.5 flex flex-col justify-between hover:border-[#dc2626] transition-colors">
+            <div key={g.id} className="bg-white border border-neutral-200 rounded-xl p-2.5 flex flex-col justify-between hover:border-neutral-400 transition-colors">
               <div>
                 <div className="flex items-start justify-between gap-1">
                   <span className="text-lg md:text-xl leading-none">{g.icon}</span>
-                  <span className="notranslate t-tag bg-gray-100 text-gray-500 rounded-full px-1.5 py-0.5">{g.grade}</span>
+                  <span className="notranslate t-tag bg-neutral-100 text-neutral-600 rounded-full px-1.5 py-0.5">{g.grade}</span>
                 </div>
                 <p className="t-tag text-black mt-1.5">{L(g.t)}</p>
               </div>
@@ -331,7 +331,7 @@ export default function HangangPage() {
           ))}
         </div>
 
-        <div className="mt-2 bg-white border-2 border-black/10 rounded-2xl p-3 md:p-4">
+        <div className="mt-2 bg-white border border-neutral-200 rounded-2xl p-3 md:p-4">
           <p className="t-tag uppercase text-gray-400 mb-2">
             {T('requestLabel')}
           </p>
@@ -340,7 +340,7 @@ export default function HangangPage() {
               value={reqType}
               onChange={e => setReqType(e.target.value)}
               aria-label={T('requestLabel')}
-              className="bg-gray-50 border border-black/5 rounded-lg px-2.5 py-2 t-tag outline-none focus:border-black"
+              className="bg-white border border-neutral-300 rounded-lg px-2.5 py-2 t-tag shadow-xs outline-none cursor-pointer focus:border-black focus:ring-2 focus:ring-black/10"
             >
               {GOODS.map(g => (
                 <option key={g.id} value={g.id}>{L(g.t)}</option>
@@ -350,7 +350,7 @@ export default function HangangPage() {
               value={reqZone}
               onChange={e => setReqZone(e.target.value)}
               aria-label="Region"
-              className="bg-gray-50 border border-black/5 rounded-lg px-2.5 py-2 t-tag outline-none focus:border-black"
+              className="bg-white border border-neutral-300 rounded-lg px-2.5 py-2 t-tag shadow-xs outline-none cursor-pointer focus:border-black focus:ring-2 focus:ring-black/10"
             >
               {ZONES.map(z => (
                 <option key={z.key} value={z.key} translate="no" className="notranslate">{z.code} · {L(z.sub)}</option>
@@ -361,7 +361,7 @@ export default function HangangPage() {
             value={reqNote}
             onChange={e => setReqNote(e.target.value)}
             placeholder={T('reqPlaceholder')}
-            className="w-full mt-1.5 bg-gray-50 border border-black/5 rounded-lg p-2.5 t-body h-16 outline-none focus:border-black"
+            className="w-full mt-1.5 bg-neutral-50 border border-neutral-300 rounded-lg t-body text-black placeholder-neutral-400 outline-none transition-colors focus:bg-white focus:border-black focus:ring-2 focus:ring-black/10 p-2.5 h-16"
           />
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 mt-2">
             <p className="text-gray-400 t-tag">{T('reqNote')}</p>
@@ -376,7 +376,7 @@ export default function HangangPage() {
           {requests.length > 0 && (
             <div className="mt-2 space-y-1">
               {requests.map(r => (
-                <div key={r.id} className="flex items-start justify-between gap-2 bg-gray-50 rounded-lg px-2.5 py-2 border-l-[4px] border-black">
+                <div key={r.id} className="flex items-start justify-between gap-2 bg-neutral-50 rounded-lg px-2.5 py-2 border-l-[3px] border-neutral-400">
                   <div className="min-w-0 text-left">
                     <p className="t-tag text-black truncate">{L(goodsOf(r.type).t)}</p>
                     <p className="t-tag text-gray-400 truncate">{r.note}</p>
@@ -401,7 +401,7 @@ export default function HangangPage() {
             { icon: '🧾', title: T('util3Title'), body: T('util3Body') },
             { icon: '🚪', title: T('util4Title'), body: T('util4Body') }
           ].map((u, i) => (
-            <div key={i} className="bg-white border border-black/10 rounded-xl p-3">
+            <div key={i} className="bg-white border border-neutral-200 rounded-xl p-3">
               <p className="text-black t-card flex items-center gap-1.5">
                 <span className="text-base leading-none">{u.icon}</span>
                 {u.title}
@@ -424,7 +424,7 @@ export default function HangangPage() {
             <a
               key={h.num}
               href={`tel:${h.tel}`}
-              className="bg-black rounded-xl p-3 text-left border-2 border-black hover:border-[#dc2626] transition-colors group"
+              className="bg-black rounded-xl p-3 text-left transition-colors group hover:opacity-90"
             >
               <p translate="no" className="notranslate t-stat text-white group-hover:text-[#dc2626]">{h.num}</p>
               <p className="text-white/70 t-tag mt-1">{h.label}</p>
@@ -440,21 +440,21 @@ export default function HangangPage() {
               href={l.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-start justify-between gap-2 bg-white border border-black/10 rounded-xl px-3 py-2.5 hover:border-black transition-colors"
+              className="flex items-start justify-between gap-2 bg-white border border-neutral-200 rounded-xl px-3 py-2.5 hover:border-neutral-400 transition-colors"
             >
               <div className="min-w-0 text-left">
                 <p className="t-card text-black">{L(l.t)}</p>
                 <p className="t-tag text-gray-400 mt-0.5">{L(l.d)}</p>
               </div>
               <div className="shrink-0 flex items-center gap-1.5">
-                <span translate="no" className="notranslate t-tag bg-gray-100 text-gray-500 rounded-full px-1.5 py-0.5">{l.tag}</span>
+                <span translate="no" className="notranslate t-tag bg-neutral-100 text-neutral-600 rounded-full px-1.5 py-0.5">{l.tag}</span>
                 <span className="text-gray-300 t-sub">↗</span>
               </div>
             </a>
           ))}
         </div>
 
-        <div className="mt-2 bg-gray-50 border-l-[4px] border-[#dc2626] rounded-lg px-3 py-2.5">
+        <div className="mt-2 bg-neutral-50 border-l-[3px] border-[#dc2626] rounded-lg px-3 py-2.5">
           <p className="t-tag text-gray-500 text-left">
             {T('safetyNote')}
           </p>
@@ -468,17 +468,17 @@ export default function HangangPage() {
       {/* ── 예약·문의 모달 ───────────────────────────────────────── */}
       {inquiry && (
         <div className="fixed inset-0 z-[2000] bg-black/50 backdrop-blur-sm flex items-end md:items-center justify-center p-0 md:p-4" onClick={() => setInquiry(false)}>
-          <div className="bg-white w-full max-w-md rounded-t-3xl md:rounded-2xl border-2 border-black p-4 md:p-5 space-y-3 text-left shadow-2xl" onClick={e => e.stopPropagation()}>
+          <div className="bg-white w-full max-w-md rounded-t-3xl md:rounded-2xl border border-neutral-200 p-4 md:p-5 space-y-3 text-left shadow-2xl" onClick={e => e.stopPropagation()}>
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
                 <h3 className="text-black t-card">{T('modalTitle')}</h3>
                 <p translate="no" className="notranslate text-neutral-500 t-sub mt-0.5">{zone.code} · {L(zone.venues)}</p>
               </div>
-              <button onClick={() => setInquiry(false)} aria-label="close" className="shrink-0 w-8 h-8 rounded-full border border-black/10 text-black t-btn hover:bg-gray-100">✕</button>
+              <button onClick={() => setInquiry(false)} aria-label="close" className="shrink-0 w-8 h-8 rounded-full bg-neutral-100 text-neutral-600 t-btn hover:bg-neutral-200">✕</button>
             </div>
 
-            <div className="flex items-center gap-3 bg-gray-50 border border-black/10 rounded-xl p-3">
-              <img src="/qr-personal.png" alt="Kedheon secure QR" className="w-20 h-20 object-contain bg-white rounded-lg border border-black/10" />
+            <div className="flex items-center gap-3 bg-neutral-50 border border-neutral-200 rounded-xl p-3">
+              <img src="/qr-personal.png" alt="Kedheon secure QR" className="w-20 h-20 object-contain bg-white rounded-lg border border-neutral-200" />
               <div className="min-w-0">
                 <p className="t-card text-black">{T('modalQR')}</p>
                 <p className="t-tag text-gray-500 mt-1">{T('modalQRDesc')}</p>
@@ -487,7 +487,7 @@ export default function HangangPage() {
 
             <div className="space-y-1">
               {PICK_ORDER.map(k => (
-                <div key={k} className="flex items-start justify-between gap-2 border-b border-gray-100 pb-1">
+                <div key={k} className="flex items-start justify-between gap-2 border-b border-neutral-200 pb-1">
                   <p className="t-tag text-gray-500 min-w-0">
                     <span className="text-gray-300 mr-1">{PICK_ICON[k]}</span>
                     {L(zone.picks[k][pick[k]].t)}

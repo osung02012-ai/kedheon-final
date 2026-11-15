@@ -53,14 +53,15 @@ body {
  * 이탤릭은 로고·장식 숫자에만 남기고 본문 위계에서는 쓰지 않는다.
  */
 :root {
-  --t-hero: 22px;
-  --t-section: 16px;
-  --t-card: 14px;
-  --t-body: 12.5px;
-  --t-sub: 12px;
-  --t-tag: 10.5px;
-  --t-btn: 12px;
-  --t-stat: 18px;
+  /* 모바일 기본값 — Pi Browser 1.5배 확대에서도 일반 웹 비율이 되도록 반 단계 낮췄다 */
+  --t-hero: 20px;      /* ×1.5 = 30px */
+  --t-section: 15px;   /* ×1.5 = 22.5px */
+  --t-card: 13.5px;    /* ×1.5 ≈ 20.3px */
+  --t-body: 11.5px;    /* ×1.5 ≈ 17.3px */
+  --t-sub: 11px;       /* ×1.5 = 16.5px */
+  --t-tag: 10px;       /* ×1.5 = 15px */
+  --t-btn: 11.5px;     /* ×1.5 ≈ 17.3px */
+  --t-stat: 17px;      /* ×1.5 = 25.5px */
 }
 
 @media (min-width: 640px) {
@@ -71,7 +72,7 @@ body {
     --t-body: 13px;
     --t-sub: 13px;
     --t-tag: 11px;
-    --t-btn: 13px;
+    --t-btn: 12.5px;
     --t-stat: 22px;
   }
 }

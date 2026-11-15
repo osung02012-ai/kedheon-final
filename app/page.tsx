@@ -652,7 +652,7 @@ export default function KedheonDesignSystemFinal() {
       <AppHeader
         brand={
           <>
-            <img src="/kedheon-character.png" className="w-8 h-8 md:w-11 md:h-11 rounded-lg border-2 border-black shrink-0" alt="K" />
+            <img src="/kedheon-character.png" className="w-8 h-8 md:w-11 md:h-11 rounded-lg border border-black shrink-0" alt="K" />
             <div className="text-left leading-tight font-bold min-w-0">
               <h1 className="notranslate t-brand text-black italic uppercase" translate="no">Kedheon</h1>
               <span className="block text-gray-400 t-tag font-mono uppercase whitespace-nowrap">MASTER V271.0</span>
@@ -665,7 +665,7 @@ export default function KedheonDesignSystemFinal() {
             <select
               value={lang}
               onChange={(e) => setLang(e.target.value as Lang)}
-              className="appearance-none bg-gray-100 border border-gray-200 text-black t-tag rounded-lg pl-2 pr-5 py-1 outline-none cursor-pointer shadow-sm focus:border-black transition-colors"
+              className="appearance-none bg-white border border-neutral-300 text-black t-tag rounded-lg pl-2 pr-8 py-1 outline-none cursor-pointer shadow-xs focus:border-black focus:ring-2 focus:ring-black/10 transition-colors"
             >
               <option value="KR">🇰🇷 KR</option>
               <option value="EN">🇺🇸 EN</option>
@@ -678,20 +678,20 @@ export default function KedheonDesignSystemFinal() {
               <option value="RU">🇷🇺 RU</option>
               <option value="ID">🇮🇩 ID</option>
             </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-1.5 text-gray-400">
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex w-5 items-center justify-center rounded-r-lg border-l border-neutral-200 bg-neutral-50 text-neutral-500">
               <svg className="fill-current h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
             </div>
           </div>
 
-          <button onClick={() => setTab('ROOKIE')} className={`shrink-0 px-2 py-1 rounded-lg t-btn border transition-all whitespace-nowrap ${tab === 'ROOKIE' ? 'bg-[#dc2626] text-white border-[#dc2626]' : 'text-gray-500 border-black/10 hover:text-black'}`}>{L.rookie}</button>
-          <button onClick={() => setTab('PIONEER')} className={`shrink-0 px-2 py-1 rounded-lg t-btn border transition-all whitespace-nowrap ${tab === 'PIONEER' ? 'bg-black text-white border-black' : 'text-gray-500 border-black/10 hover:text-black'}`}>{L.pioneer}</button>
+          <button onClick={() => setTab('ROOKIE')} className={`shrink-0 px-2 py-1 rounded-lg t-btn transition-all whitespace-nowrap ${tab === 'ROOKIE' ? 'bg-[#dc2626] text-white shadow-sm' : 'bg-neutral-100 text-neutral-600 hover:text-black'}`}>{L.rookie}</button>
+          <button onClick={() => setTab('PIONEER')} className={`shrink-0 px-2 py-1 rounded-lg t-btn transition-all whitespace-nowrap ${tab === 'PIONEER' ? 'bg-black text-white shadow-sm' : 'bg-neutral-100 text-neutral-600 hover:text-black'}`}>{L.pioneer}</button>
       </AppHeader>
 
       <main className="w-full max-w-5xl px-4 py-3">
         <PiReadOnlyBanner className="mb-3" />
         {tab === 'ROOKIE' ? (
           <div className="flex flex-col gap-3 animate-in fade-in duration-500">
-            <div className="flex flex-col items-center text-center gap-3 py-6 bg-gray-50 rounded-2xl border border-black/5 relative shadow-inner overflow-hidden">
+            <div className="flex flex-col items-center text-center gap-3 py-6 bg-white rounded-2xl border-2 border-black relative overflow-hidden">
               <div className="absolute top-0 left-0 w-full h-1 bg-[#dc2626]"></div>
               <img src="/kedheon-character.png" className="w-32 h-32 md:w-56 md:h-56 object-contain drop-shadow-xl" alt="K" />
               <div className="px-4 leading-none">
@@ -701,7 +701,7 @@ export default function KedheonDesignSystemFinal() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               {L.steps.map((s, i) => (
-                <div key={i} className={`p-3 bg-white rounded-xl border flex flex-col gap-2 transition-all ${s.warning ? 'border-[#dc2626] bg-red-50/5 shadow-sm' : 'border-black/5 opacity-90'}`}>
+                <div key={i} className={`p-3 bg-white rounded-xl border flex flex-col gap-2 transition-all ${s.warning ? 'border-[#dc2626]/60 bg-red-50/40' : 'border-neutral-200'}`}>
                   <div className="flex items-start gap-3 text-left">
                     <span className={`t-hero italic leading-none shrink-0 ${s.warning ? 'text-[#dc2626]' : 'text-black opacity-10'}`}>0{i+1}</span>
                     <div className="flex-1 min-w-0">
@@ -719,7 +719,7 @@ export default function KedheonDesignSystemFinal() {
               ))}
             </div>
             
-            <div className="w-full bg-black border-[3px] border-[#dc2626] rounded-2xl p-4 md:p-6 text-left shadow-2xl flex flex-col md:flex-row items-center gap-4 relative overflow-hidden mt-2">
+            <div className="w-full bg-black rounded-2xl p-4 md:p-6 text-left flex flex-col md:flex-row items-center gap-4 relative overflow-hidden mt-2">
                 <div className="absolute -right-4 -top-4 w-16 h-16 bg-[#dc2626] rotate-45 opacity-20"></div>
                 <div className="flex-1 z-10">
                     <h3 className="text-white t-card uppercase border-l-4 border-[#dc2626] pl-2">
@@ -734,7 +734,7 @@ export default function KedheonDesignSystemFinal() {
                 </button>
             </div>
 
-            <div className="p-6 bg-black text-white rounded-2xl text-center shadow-xl border-2 border-[#dc2626] cursor-pointer active:scale-95 mt-2" onClick={() => { setShowInviteCode(true); handleCopy(); }}>
+            <div className="p-6 bg-black text-white rounded-2xl text-center cursor-pointer active:scale-95 mt-2" onClick={() => { setShowInviteCode(true); handleCopy(); }}>
                <p className="t-sub text-gray-500 mb-1">{showInviteCode ? L.copyPrompt : L.inviteReveal}</p>
                <div translate="no" className="notranslate t-code text-white">{showInviteCode ? PI_INVITE_CODE : '••••••••'}</div>
             </div>
@@ -742,7 +742,7 @@ export default function KedheonDesignSystemFinal() {
         ) : (
           <div className="flex flex-col gap-4 py-1 animate-in slide-in-from-bottom-5 duration-700 text-left">
             
-            <div className="w-full bg-white p-5 rounded-2xl border-2 border-black shadow-lg flex flex-col justify-center relative overflow-hidden group">
+            <div className="w-full bg-white p-5 rounded-2xl border-2 border-black shadow-sm flex flex-col justify-center relative overflow-hidden group">
                 <h3 className="text-gray-400 t-tag uppercase mb-2">{L.assets}</h3>
                 <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none transition-transform group-hover:scale-105">
                    <img src="/beom-token.png" className="w-24 h-24 md:w-44 md:h-48 object-contain drop-shadow-2xl" alt="Beom" />
@@ -761,7 +761,7 @@ export default function KedheonDesignSystemFinal() {
                 </div>
             </div>
 
-            <div className="w-full bg-gray-900 py-1.5 px-4 rounded-lg flex items-center justify-center gap-2 shadow-inner">
+            <div className="w-full bg-neutral-900 py-1.5 px-4 rounded-lg flex items-center justify-center gap-2">
                <span className="w-1.5 h-1.5 bg-red-600 rounded-full animate-ping"></span>
                <p className="text-white t-tag uppercase">
                  {L.portalStatus}
@@ -769,12 +769,12 @@ export default function KedheonDesignSystemFinal() {
             </div>
 
             <SectionHeader title={L.exchange} desc={L.exchangeDesc} />
-            <div className="bg-white p-4 md:p-5 rounded-2xl border-2 border-black space-y-4 shadow-sm text-left">
+            <div className="bg-white p-4 md:p-5 rounded-2xl border border-neutral-200 space-y-4 text-left">
                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-1 border-r border-gray-100 pr-2">
-                     {L.exList.map((txt, idx) => <p key={idx} className="t-body text-gray-800 border-b border-gray-50 pb-1">▶ {txt}</p>)}
+                  <div className="space-y-1 border-r border-neutral-200 pr-2">
+                     {L.exList.map((txt, idx) => <p key={idx} className="t-body text-neutral-800 border-b border-neutral-100 pb-1">▶ {txt}</p>)}
                   </div>
-                  <div className="flex flex-col items-center justify-center p-3 bg-gray-50 rounded-xl text-center">
+                  <div className="flex flex-col items-center justify-center p-3 bg-neutral-50 border border-neutral-200 rounded-lg text-center">
                      <p className="text-black t-card mb-2">{L.convertTitle}</p>
                      <button onClick={handleFinanceConversion} className="w-full bg-[#dc2626] text-white py-2 rounded-lg t-btn hover:bg-black transition-all shadow-md">{L.convertBtn}{!authenticated && ' 🔒'}</button>
                   </div>
@@ -782,24 +782,24 @@ export default function KedheonDesignSystemFinal() {
             </div>
 
             <SectionHeader title={L.auth} desc={L.authDesc} />
-            <div className="bg-gray-50 p-4 md:p-6 rounded-2xl border border-black/5 flex flex-col md:flex-row items-center gap-5 shadow-inner text-left">
-               <div className={`bg-white border-2 rounded-xl flex flex-col items-center justify-center shadow-lg w-40 h-40 md:w-56 md:h-56 transition-all ${qrState.active ? 'border-[#dc2626]' : 'opacity-10 grayscale blur-sm'}`}>
+            <div className="bg-neutral-50 p-4 md:p-6 rounded-2xl border border-neutral-200 flex flex-col md:flex-row items-center gap-5 text-left">
+               <div className={`bg-white border rounded-xl flex flex-col items-center justify-center shadow-sm w-40 h-40 md:w-56 md:h-56 transition-all ${qrState.active ? 'border-[#dc2626]' : 'border-neutral-200 opacity-10 grayscale blur-sm'}`}>
                   {qrState.active ? (
                     <>
                       <img src={qrState.type === 'PERSONAL' ? "/qr-personal.png" : "/qr-business.png"} className="w-full h-full p-3 object-contain" alt="QR" />
-                      <p className="t-tag bg-gray-100 px-2 py-0.5 rounded-full mb-1 uppercase text-center">{qrState.biz || (qrState.type === 'PERSONAL' ? L.personal : L.corporate)}</p>
+                      <p className="t-tag bg-neutral-100 px-2 py-0.5 rounded-full mb-1 uppercase text-center">{qrState.biz || (qrState.type === 'PERSONAL' ? L.personal : L.corporate)}</p>
                     </>
                   ) : <p className="text-black t-card uppercase animate-pulse">{L.encodedQR}</p>}
                </div>
                <div className="flex-1 w-full space-y-3">
-                  <div className="bg-white p-4 rounded-xl border border-black/10">
+                  <div className="bg-white p-4 rounded-xl border border-neutral-200">
                      <p className="text-black t-tag uppercase mb-3 border-l-2 border-black pl-2">{L.walletType}</p>
                      <div className="flex gap-2 mb-3">
-                        <button onClick={() => setQrState({...qrState, type:'PERSONAL'})} className={`flex-1 py-1.5 rounded-md t-tag border transition-all ${qrState.type === 'PERSONAL' ? 'bg-black text-white border-black shadow-md' : 'text-gray-300 border-gray-100'}`}>{L.personal}</button>
-                        <button onClick={() => setQrState({...qrState, type:'BUSINESS'})} className={`flex-1 py-1.5 rounded-md t-tag border transition-all ${qrState.type === 'BUSINESS' ? 'bg-black text-white border-black shadow-md' : 'text-gray-300 border-gray-100'}`}>{L.corporate}</button>
+                        <button onClick={() => setQrState({...qrState, type:'PERSONAL'})} className={`flex-1 py-1.5 rounded-md t-tag transition-all ${qrState.type === 'PERSONAL' ? 'bg-black text-white shadow-sm' : 'bg-neutral-100 text-neutral-500'}`}>{L.personal}</button>
+                        <button onClick={() => setQrState({...qrState, type:'BUSINESS'})} className={`flex-1 py-1.5 rounded-md t-tag transition-all ${qrState.type === 'BUSINESS' ? 'bg-black text-white shadow-sm' : 'bg-neutral-100 text-neutral-500'}`}>{L.corporate}</button>
                      </div>
                      {qrState.type === 'BUSINESS' && (
-                        <input value={qrState.biz} onChange={e=>setQrState({...qrState, biz:e.target.value.toUpperCase()})} placeholder={L.bizPlaceholder} className="w-full bg-gray-50 border border-black/5 p-2 rounded-lg t-body outline-none focus:border-black mb-2" />
+                        <input value={qrState.biz} onChange={e=>setQrState({...qrState, biz:e.target.value.toUpperCase()})} placeholder={L.bizPlaceholder} className="w-full bg-neutral-50 border border-neutral-300 rounded-lg t-body text-black placeholder-neutral-400 outline-none transition-colors focus:bg-white focus:border-black focus:ring-2 focus:ring-black/10 p-2 mb-2" />
                      )}
                   </div>
                   <button onClick={() => {if (!requireAuth(L.activate)) return; if(beomToken<50) return alert(L.beomLackAlert); setBeomToken(p=>p-50); setQrState({...qrState, active:true});}} className="w-full bg-black text-white py-3 rounded-lg t-btn hover:bg-[#dc2626] transition-all shadow-md">{L.activate}{!authenticated && ' 🔒'}</button>
@@ -807,37 +807,37 @@ export default function KedheonDesignSystemFinal() {
             </div>
 
             <SectionHeader title={L.creative} desc={L.creativeDesc} />
-            <div className="bg-white p-4 md:p-6 rounded-2xl border border-black/10 space-y-4 shadow-sm text-left">
-              <div className="flex gap-6 border-b border-gray-100 pb-1.5 overflow-x-auto no-scrollbar">
+            <div className="bg-white p-4 md:p-6 rounded-2xl border border-neutral-200 space-y-4 text-left">
+              <div className="flex gap-6 border-b border-neutral-200 pb-1.5 overflow-x-auto no-scrollbar">
                 <button onClick={() => setHubTab('HUB')} className={`shrink-0 whitespace-nowrap t-btn uppercase ${hubTab === 'HUB' ? 'text-black border-b-2 border-black' : 'text-gray-300'}`}>HUB</button>
                 <button onClick={() => setHubTab('SPIRIT')} className={`shrink-0 whitespace-nowrap t-btn uppercase ${hubTab === 'SPIRIT' ? 'text-black border-b-2 border-black' : 'text-gray-300'}`}>FAN SPIRIT</button>
               </div>
               <div className="flex gap-1.5 overflow-x-auto pb-1 no-scrollbar">
-                {L.cats.map(c => <button key={c} onClick={() => setCategory(c)} className={`shrink-0 px-3 py-1 rounded-full t-btn border transition-all whitespace-nowrap ${category === c ? 'bg-black text-white border-black shadow-md' : 'bg-white text-gray-400'}`}>{c}</button>)}
+                {L.cats.map(c => <button key={c} onClick={() => setCategory(c)} className={`shrink-0 px-3 py-1 rounded-full t-btn transition-all whitespace-nowrap ${category === c ? 'bg-black text-white shadow-sm' : 'bg-neutral-100 text-neutral-500 hover:text-black'}`}>{c}</button>)}
               </div>
-              <div className="flex gap-2 flex-wrap">{L.fans.map(f => <button key={f} translate="no" className="notranslate px-3 py-1 bg-white border border-gray-100 rounded-full t-btn text-red-600 shadow-sm">🚩 {f}</button>)}</div>
+              <div className="flex gap-2 flex-wrap">{L.fans.map(f => <button key={f} translate="no" className="notranslate px-3 py-1 bg-neutral-100 rounded-full t-btn text-[#dc2626] hover:bg-neutral-200 transition-colors">🚩 {f}</button>)}</div>
               <div className="space-y-2">
-                <input value={feed.title} onChange={e => setFeed({...feed, title: e.target.value})} placeholder={L.feedTitle} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl t-body outline-none" />
-                <input value={feed.link} onChange={e => setFeed({...feed, link: e.target.value})} placeholder={L.feedLink} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl t-body outline-none text-red-400 placeholder-red-200" />
-                <textarea value={feed.desc} onChange={e => setFeed({...feed, desc: e.target.value})} placeholder={L.feedDesc} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl t-body h-24 outline-none focus:border-black" />
+                <input value={feed.title} onChange={e => setFeed({...feed, title: e.target.value})} placeholder={L.feedTitle} className="w-full bg-neutral-50 border border-neutral-300 rounded-lg t-body text-black placeholder-neutral-400 outline-none transition-colors focus:bg-white focus:border-black focus:ring-2 focus:ring-black/10 p-3" />
+                <input value={feed.link} onChange={e => setFeed({...feed, link: e.target.value})} placeholder={L.feedLink} className="w-full bg-neutral-50 border border-neutral-300 rounded-lg t-body text-black placeholder-neutral-400 outline-none transition-colors focus:bg-white focus:border-black focus:ring-2 focus:ring-black/10 p-3" />
+                <textarea value={feed.desc} onChange={e => setFeed({...feed, desc: e.target.value})} placeholder={L.feedDesc} className="w-full bg-neutral-50 border border-neutral-300 rounded-lg t-body text-black placeholder-neutral-400 outline-none transition-colors focus:bg-white focus:border-black focus:ring-2 focus:ring-black/10 p-3 h-24" />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                 <button onClick={() => {if (!requireAuth(L.postBtn)) return; if(!feed.title) return; setBeomToken(p=>p-10); alert(L.regDoneAlert); setFeed({title:'', link:'', desc:''});}} className="md:col-span-2 bg-black text-white py-3 rounded-xl t-btn hover:bg-[#dc2626] transition-all shadow-lg active:scale-95">{L.postBtn}{!authenticated && ' 🔒'}</button>
-                <button className="bg-white border-2 border-black text-black py-3 rounded-xl t-btn flex items-center justify-center gap-1.5 shadow active:scale-95">🚩 FAN ROOM</button>
+                <button className="bg-neutral-100 text-neutral-800 py-3 rounded-lg t-btn flex items-center justify-center gap-1.5 hover:bg-neutral-200 active:scale-95">🚩 FAN ROOM</button>
               </div>
-              <div className="space-y-1 bg-gray-50 p-3 rounded-xl border-l-[4px] border-[#dc2626] text-left"><p className="text-neutral-500 t-sub">{L.fanRoomDesc}</p></div>
+              <div className="space-y-1 bg-neutral-50 p-3 rounded-lg border-l-[3px] border-[#dc2626] text-left"><p className="text-neutral-500 t-sub">{L.fanRoomDesc}</p></div>
             </div>
 
             <SectionHeader title={L.market} desc={L.marketDesc} />
-            <div className="bg-white p-4 md:p-5 rounded-2xl border-2 border-black/10 space-y-4 text-left">
-                <div className="flex gap-4 border-b border-gray-100 pb-1.5">
+            <div className="bg-white p-4 md:p-5 rounded-2xl border border-neutral-200 space-y-4 text-left">
+                <div className="flex gap-4 border-b border-neutral-200 pb-1.5">
                     <button onClick={() => setMarketMode('BUY')} className={`t-btn ${marketMode === 'BUY' ? 'text-black border-b-2 border-black' : 'text-gray-300'}`}>{L.marketBuyTab}</button>
                     <button onClick={() => setMarketMode('SELL')} className={`t-btn ${marketMode === 'SELL' ? 'text-black border-b-2 border-black' : 'text-gray-300'}`}>{L.marketSellTab}</button>
                 </div>
                 {marketMode === 'BUY' ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         {displayGoods.map(g => (
-                            <div key={g.id} className="bg-gray-50 p-3 rounded-xl border flex gap-3 items-center group shadow-sm transition-all hover:border-[#dc2626]">
+                            <div key={g.id} className="bg-neutral-50 p-3 rounded-xl border border-neutral-200 flex gap-3 items-center group transition-all hover:border-neutral-400">
                                 <div className="w-20 h-20 md:w-28 md:h-28 bg-white rounded-lg flex items-center justify-center overflow-hidden shrink-0 shadow-inner"><img src={g.img} className="w-14 h-14 object-contain group-hover:scale-110 transition-transform" alt="G" /></div>
                                 <div className="flex-1 min-w-0">
                                     <h4 className="t-card uppercase mb-0.5 truncate">{g.name}</h4>
@@ -850,27 +850,27 @@ export default function KedheonDesignSystemFinal() {
                     </div>
                 ) : (
                     <div className="space-y-2">
-                        <input value={sellItem.name} onChange={e => setSellItem({...sellItem, name:e.target.value})} placeholder={L.itemName} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl t-body outline-none" />
+                        <input value={sellItem.name} onChange={e => setSellItem({...sellItem, name:e.target.value})} placeholder={L.itemName} className="w-full bg-neutral-50 border border-neutral-300 rounded-lg t-body text-black placeholder-neutral-400 outline-none transition-colors focus:bg-white focus:border-black focus:ring-2 focus:ring-black/10 p-3" />
                         <div className="grid grid-cols-2 gap-2">
-                            <input type="number" value={sellItem.price} onChange={e => setSellItem({...sellItem, price:e.target.value})} placeholder={L.itemPrice} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl t-body outline-none" />
-                            <input value={sellItem.img} onChange={e => setSellItem({...sellItem, img:e.target.value})} placeholder={L.itemImg} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl t-body outline-none" />
+                            <input type="number" value={sellItem.price} onChange={e => setSellItem({...sellItem, price:e.target.value})} placeholder={L.itemPrice} className="w-full bg-neutral-50 border border-neutral-300 rounded-lg t-body text-black placeholder-neutral-400 outline-none transition-colors focus:bg-white focus:border-black focus:ring-2 focus:ring-black/10 p-3" />
+                            <input value={sellItem.img} onChange={e => setSellItem({...sellItem, img:e.target.value})} placeholder={L.itemImg} className="w-full bg-neutral-50 border border-neutral-300 rounded-lg t-body text-black placeholder-neutral-400 outline-none transition-colors focus:bg-white focus:border-black focus:ring-2 focus:ring-black/10 p-3" />
                         </div>
-                        <textarea value={sellItem.desc} onChange={e => setSellItem({...sellItem, desc:e.target.value})} placeholder={L.itemDesc} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl t-body h-20 outline-none" />
+                        <textarea value={sellItem.desc} onChange={e => setSellItem({...sellItem, desc:e.target.value})} placeholder={L.itemDesc} className="w-full bg-neutral-50 border border-neutral-300 rounded-lg t-body text-black placeholder-neutral-400 outline-none transition-colors focus:bg-white focus:border-black focus:ring-2 focus:ring-black/10 p-3 h-20" />
                         <button onClick={() => {if (!requireAuth(L.sellDoneBtn)) return; if(!sellItem.name) return; setUserGoods([{id:Date.now(), ...sellItem, price:Number(sellItem.price), seller:"User"}, ...userGoods]); alert(L.regDoneAlert); setMarketMode('BUY');}} className="w-full bg-[#dc2626] text-white py-3 rounded-xl t-btn shadow-lg">{L.sellDoneBtn}{!authenticated && ' 🔒'}</button>
                     </div>
                 )}
             </div>
 
             <SectionHeader title={L.partnership} desc={L.partnershipDesc} />
-            <div className="bg-black p-6 rounded-2xl border-[8px] border-[#dc2626] space-y-4 relative overflow-hidden shadow-2xl">
+            <div className="bg-black p-5 md:p-6 rounded-2xl space-y-4 relative overflow-hidden">
                 <h3 className="text-white t-section border-l-4 border-white pl-3 uppercase z-10 relative">PARTNERSHIP B2B</h3>
                 <div className="grid grid-cols-2 gap-2 z-10 relative">
-                    <input value={partner.corp} onChange={e=>setPartner({...partner, corp: e.target.value})} placeholder={L.corpName} className="bg-white/10 border-none p-3 rounded-xl t-body text-white outline-none focus:ring-1 ring-[#dc2626]" />
-                    <input value={partner.manager} onChange={e=>setPartner({...partner, manager: e.target.value})} placeholder={L.manager} className="bg-white/10 border-none p-3 rounded-xl t-body text-white outline-none focus:ring-1 ring-[#dc2626]" />
-                    <input value={partner.email} onChange={e=>setPartner({...partner, email: e.target.value})} placeholder={L.email} className="bg-white/10 border-none p-3 rounded-xl t-body text-white outline-none focus:ring-1 ring-[#dc2626]" />
-                    <input value={partner.contact} onChange={e=>setPartner({...partner, contact: e.target.value})} placeholder={L.contact} className="bg-white/10 border-none p-3 rounded-xl t-body text-white outline-none focus:ring-1 ring-[#dc2626]" />
+                    <input value={partner.corp} onChange={e=>setPartner({...partner, corp: e.target.value})} placeholder={L.corpName} className="bg-white/10 border border-white/25 rounded-lg p-3 t-body text-white placeholder-white/40 outline-none focus:bg-white/15 focus:border-white/60" />
+                    <input value={partner.manager} onChange={e=>setPartner({...partner, manager: e.target.value})} placeholder={L.manager} className="bg-white/10 border border-white/25 rounded-lg p-3 t-body text-white placeholder-white/40 outline-none focus:bg-white/15 focus:border-white/60" />
+                    <input value={partner.email} onChange={e=>setPartner({...partner, email: e.target.value})} placeholder={L.email} className="bg-white/10 border border-white/25 rounded-lg p-3 t-body text-white placeholder-white/40 outline-none focus:bg-white/15 focus:border-white/60" />
+                    <input value={partner.contact} onChange={e=>setPartner({...partner, contact: e.target.value})} placeholder={L.contact} className="bg-white/10 border border-white/25 rounded-lg p-3 t-body text-white placeholder-white/40 outline-none focus:bg-white/15 focus:border-white/60" />
                 </div>
-                <textarea value={partner.msg} onChange={e=>setPartner({...partner, msg: e.target.value})} placeholder={L.vision} className="w-full bg-white/10 border-none p-4 rounded-2xl t-body text-white h-24 outline-none focus:ring-1 ring-[#dc2626] z-10 relative text-left" />
+                <textarea value={partner.msg} onChange={e=>setPartner({...partner, msg: e.target.value})} placeholder={L.vision} className="w-full bg-white/10 border border-white/25 rounded-lg p-4 t-body text-white placeholder-white/40 h-24 outline-none focus:bg-white/15 focus:border-white/60 z-10 relative text-left" />
                 <button onClick={()=>{if (!requireAuth(L.submit)) return; alert(L.propDoneAlert);}} className="w-full bg-[#dc2626] text-white py-3.5 rounded-full t-btn hover:bg-white hover:text-black transition-all uppercase z-10 relative active:scale-95 shadow-xl">{L.submit}{!authenticated && ' 🔒'}</button>
             </div>
           </div>

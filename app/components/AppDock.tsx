@@ -80,7 +80,7 @@ export default function AppDock({
   }, [measure, revealActive]);
 
   return (
-    <footer className="fixed bottom-3 sm:bottom-4 left-2 right-2 sm:left-4 sm:right-4 max-w-5xl mx-auto bg-white border-2 border-black px-1.5 py-1.5 rounded-2xl z-[1000] shadow-2xl font-black">
+    <footer className="fixed bottom-3 sm:bottom-4 left-2 right-2 sm:left-4 sm:right-4 max-w-5xl mx-auto bg-white border border-neutral-200 px-1.5 py-1.5 rounded-2xl z-[1000] shadow-lg font-black">
       <div className="relative">
         <div ref={rowRef} className="no-scrollbar flex items-center gap-0.5 md:gap-1.5 overflow-x-auto">
           {DOCK_ITEMS.map(app => {
@@ -100,7 +100,7 @@ export default function AppDock({
                   }
                 }}
                 className={`notranslate shrink-0 whitespace-nowrap leading-none px-1 py-3 md:flex-1 md:px-2.5 md:py-3.5 rounded-xl text-center tracking-tight transition-all cursor-pointer hover:scale-105 active:scale-95 ${
-                  isActive ? 'bg-black text-white shadow-md' : 'text-gray-400 hover:text-black'
+                  isActive ? 'bg-black text-white shadow-sm' : 'text-neutral-500 hover:text-black'
                 }`}
               >
                 {app.name}

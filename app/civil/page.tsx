@@ -282,8 +282,8 @@ const CountryPicker = ({
 
   return (
     <div className="fixed inset-0 z-[2000] bg-black/50 backdrop-blur-sm flex items-end md:items-center justify-center p-0 md:p-4">
-      <div className="bg-white w-full max-w-lg max-h-[85vh] rounded-t-3xl md:rounded-2xl border-2 border-black flex flex-col overflow-hidden shadow-2xl">
-        <div className="px-4 pt-3 pb-2 border-b-2 border-black text-left">
+      <div className="bg-white w-full max-w-lg max-h-[85vh] rounded-t-3xl md:rounded-2xl border border-neutral-200 flex flex-col overflow-hidden shadow-2xl">
+        <div className="px-4 pt-3 pb-2 border-b border-neutral-200 text-left">
           <div className="flex items-start justify-between gap-2">
             <div className="min-w-0">
               <h3 className="text-black t-card truncate">{title}</h3>
@@ -292,7 +292,7 @@ const CountryPicker = ({
             <button
               onClick={onClose}
               aria-label="close"
-              className="shrink-0 w-8 h-8 rounded-full border border-black/10 text-black t-btn hover:bg-gray-100 cursor-pointer"
+              className="shrink-0 w-8 h-8 rounded-full bg-neutral-100 text-neutral-600 t-btn hover:bg-neutral-200 cursor-pointer"
             >
               ✕
             </button>
@@ -302,7 +302,7 @@ const CountryPicker = ({
             value={q}
             onChange={e => setQ(e.target.value)}
             placeholder={ko ? '국가명 또는 ISO 코드 검색 (예: 독일, Germany, DE)' : 'Search country or ISO code (e.g. Germany, DE)'}
-            className="mt-2 w-full bg-gray-50 border border-black/10 rounded-xl px-3 py-2.5 t-body text-black placeholder-gray-400 outline-none focus:border-black"
+            className="mt-2 w-full bg-neutral-50 border border-neutral-300 rounded-lg t-body text-black placeholder-neutral-400 outline-none transition-colors focus:bg-white focus:border-black focus:ring-2 focus:ring-black/10 px-3 py-2.5"
           />
         </div>
 
@@ -311,7 +311,7 @@ const CountryPicker = ({
             <button
               onClick={() => { onSelect('GLOBAL'); onClose(); }}
               className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-left t-btn mb-1 border ${
-                current === 'GLOBAL' ? 'bg-black text-white border-black' : 'bg-white text-black border-black/10 hover:border-black'
+                current === 'GLOBAL' ? 'bg-black text-white' : 'bg-neutral-100 text-neutral-800 hover:bg-neutral-200'
               }`}
             >
               <span className="text-base">🌍</span>
@@ -327,8 +327,8 @@ const CountryPicker = ({
             <button
               key={c.code}
               onClick={() => { onSelect(c.code); onClose(); }}
-              className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-left t-btn border mb-1 ${
-                current === c.code ? 'bg-black text-white border-black' : 'bg-white text-black border-transparent hover:border-black/20 hover:bg-gray-50'
+              className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-left t-btn mb-1 ${
+                current === c.code ? 'bg-black text-white' : 'bg-neutral-100 text-neutral-800 hover:bg-neutral-200'
               }`}
             >
               <span className="text-base">{c.flag}</span>
@@ -338,7 +338,7 @@ const CountryPicker = ({
             </button>
           ))}
         </div>
-        <div className="px-4 py-2 border-t border-black/10 text-neutral-500 t-sub text-center">
+        <div className="px-4 py-2 border-t border-neutral-200 text-neutral-500 t-sub text-center">
           {ko ? `ISO 3166-1 기준 ${COUNTRIES.length}개국` : `${COUNTRIES.length} countries · ISO 3166-1`}
         </div>
       </div>
@@ -548,7 +548,7 @@ export default function CivilPage() {
       <AppHeader
         brand={
           <div className="flex items-center gap-2 md:gap-3 cursor-pointer min-w-0" onClick={() => window.location.href = '/'}>
-            <div className="w-8 h-8 md:w-11 md:h-11 rounded-lg border-2 border-black bg-black flex items-center justify-center text-white t-card shrink-0">
+            <div className="w-8 h-8 md:w-11 md:h-11 rounded-lg border border-black bg-black flex items-center justify-center text-white t-card shrink-0">
               C
             </div>
             <div className="text-left leading-tight font-bold min-w-0">
@@ -561,16 +561,16 @@ export default function CivilPage() {
           <PiBadge en={!ko} />
           <button
             onClick={() => setLang(l => (l === 'KO' ? 'EN' : 'KO'))}
-            className="bg-gray-100 border border-gray-200 text-black t-tag rounded-lg px-2 py-1 outline-none cursor-pointer shadow-sm hover:border-black transition-colors whitespace-nowrap shrink-0"
+            className="bg-neutral-100 text-black t-tag rounded-lg px-2 py-1 outline-none cursor-pointer hover:bg-neutral-200 transition-colors whitespace-nowrap shrink-0"
           >
             {ko ? '🇺🇸 EN' : '🇰🇷 KO'}
           </button>
-          <div className="bg-gray-100 border border-gray-200 rounded-lg px-2 py-1 t-tag text-black flex items-center gap-1 whitespace-nowrap shrink-0">
+          <div className="bg-neutral-100 rounded-lg px-2 py-1 t-tag text-black flex items-center gap-1 whitespace-nowrap shrink-0">
             🐾 {points} <span translate="no" className="notranslate text-gray-400 hidden min-[420px]:inline">BEOM</span>
           </div>
           <button
             onClick={handleCheckin}
-            className={`px-2 py-1 rounded-lg t-tag border transition-all whitespace-nowrap shrink-0 ${checkedIn ? 'bg-gray-100 text-gray-400 border-gray-200' : 'bg-[#dc2626] text-white border-[#dc2626] active:scale-95'}`}
+            className={`px-2 py-1 rounded-lg t-tag transition-all whitespace-nowrap shrink-0 ${checkedIn ? 'bg-neutral-100 text-neutral-400' : 'bg-[#dc2626] text-white shadow-sm active:scale-95'}`}
             aria-label={checkedIn ? T.checkedIn : T.checkin}
           >
             {/* 390px 폰에서는 네비게이션이 넘치므로 아이콘만 보여 준다. */}
@@ -584,7 +584,7 @@ export default function CivilPage() {
         <PiReadOnlyBanner />
         {/* Hero */}
         <div className="flex flex-col md:flex-row items-stretch gap-3">
-          <div className="flex-1 bg-gray-50 rounded-2xl border border-black/5 p-4 md:p-5 relative shadow-inner overflow-hidden text-left flex flex-col justify-center">
+          <div className="flex-1 bg-white rounded-2xl border-2 border-black p-4 md:p-5 relative overflow-hidden text-left flex flex-col justify-center">
             <div className="absolute top-0 left-0 w-full h-1 bg-[#dc2626]"></div>
             <div className="flex flex-wrap items-center gap-1.5">
               <span className="text-[#dc2626] t-tag uppercase">{T.subtitle}</span>
@@ -594,7 +594,7 @@ export default function CivilPage() {
             <p className="text-gray-500 t-sub mt-2">{T.heroDesc}</p>
           </div>
 
-          <div className="md:w-64 bg-white rounded-2xl border-2 border-black p-4 md:p-5 text-left flex flex-col justify-between">
+          <div className="md:w-64 bg-white rounded-2xl border border-neutral-200 p-4 md:p-5 text-left flex flex-col justify-between">
             <div>
               <p className="text-gray-400 t-tag uppercase">{T.pointLabel}</p>
               <p className="t-stat text-black mt-1">
@@ -605,12 +605,14 @@ export default function CivilPage() {
               <label className="text-black t-body block">{T.myCountry}</label>
               <button
                 onClick={() => setPicker('MY')}
-                className="w-full flex items-center justify-between gap-1 bg-gray-50 border border-black/10 text-black t-btn rounded-xl px-2 py-2 hover:border-black transition-colors"
+                className="w-full flex items-center justify-between gap-1 bg-white border border-neutral-300 text-black t-btn rounded-lg shadow-xs px-2 py-2 hover:border-neutral-400 focus:border-black transition-colors"
               >
                 <span className="truncate">
                   {myCountryInfo.flag} {ko ? myCountryInfo.ko : myCountryInfo.en} ({myCountryInfo.code})
                 </span>
-                <span className="t-sub text-neutral-500 shrink-0">▾ {T.change}</span>
+                <span className="t-sub text-neutral-500 shrink-0 border-l border-neutral-200 pl-1.5 leading-none">
+                  ▾<span className="hidden min-[400px]:inline"> {T.change}</span>
+                </span>
               </button>
               <p className="text-gray-500 t-sub flex items-center gap-1">
                 <span className="w-2 h-2 bg-green-500 rounded-full inline-block"></span>
@@ -630,8 +632,8 @@ export default function CivilPage() {
                 <button
                   key={code}
                   onClick={() => setViewCountry(code)}
-                  className={`px-3 py-1.5 rounded-xl t-btn border transition-all whitespace-nowrap shrink-0 active:scale-95 ${
-                    active ? 'bg-black text-white border-black shadow-md' : 'bg-white text-gray-400 border-black/10 hover:text-black'
+                  className={`px-3 py-1.5 rounded-xl t-btn transition-all whitespace-nowrap shrink-0 active:scale-95 ${
+                    active ? 'bg-black text-white shadow-sm' : 'bg-neutral-100 text-neutral-600 hover:text-black'
                   }`}
                 >
                   {info.flag} {ko ? info.ko : info.en}
@@ -640,7 +642,7 @@ export default function CivilPage() {
             })}
             <button
               onClick={() => setPicker('VIEW')}
-              className="px-3 py-1.5 rounded-xl t-btn border border-[#dc2626] text-[#dc2626] bg-white hover:bg-[#dc2626] hover:text-white transition-all whitespace-nowrap shrink-0 active:scale-95"
+              className="px-3 py-1.5 rounded-xl t-btn bg-red-50 text-[#dc2626] hover:bg-[#dc2626] hover:text-white transition-all whitespace-nowrap shrink-0 active:scale-95"
             >
               🌐 {T.allCountries} ▾
             </button>
@@ -652,7 +654,7 @@ export default function CivilPage() {
           <SectionTitle title={T.agenda} desc={T.agendaDesc} />
 
           {/* 선택 국가 투표방 헤더 */}
-          <div className="flex flex-wrap items-center justify-between gap-2 bg-gray-50 border border-black/10 rounded-2xl px-3 py-2 mb-2">
+          <div className="flex flex-wrap items-center justify-between gap-2 bg-neutral-50 border border-neutral-200 rounded-2xl px-3 py-2 mb-2">
             <div className="flex items-center gap-2 min-w-0">
               <span className="text-lg">{viewInfo.flag}</span>
               <div className="min-w-0 text-left">
@@ -666,13 +668,13 @@ export default function CivilPage() {
             <div className="flex flex-wrap items-center justify-end gap-1.5 min-w-0">
               <button
                 onClick={() => setPicker('VIEW')}
-                className="shrink-0 whitespace-nowrap px-2.5 py-1.5 rounded-lg t-tag border border-black/10 bg-white text-gray-500 hover:text-black hover:border-black"
+                className="shrink-0 whitespace-nowrap px-2.5 py-1.5 rounded-lg t-tag bg-neutral-100 text-neutral-700 hover:bg-neutral-200 hover:text-black transition-colors"
               >
                 🔎 {ko ? '국가 변경' : 'Change'}
               </button>
               <button
                 onClick={() => { if (!requireAuth(T.propose)) return; setShowPropose(v => !v); }}
-                className="shrink-0 whitespace-nowrap px-2.5 py-1.5 rounded-lg t-tag border border-[#dc2626] bg-[#dc2626] text-white hover:bg-black hover:border-black"
+                className="shrink-0 whitespace-nowrap px-2.5 py-1.5 rounded-lg t-tag bg-[#dc2626] text-white rounded-lg shadow-sm hover:bg-black transition-colors"
               >
                 {T.propose}{!authenticated && ' 🔒'}
               </button>
@@ -690,13 +692,13 @@ export default function CivilPage() {
                 value={propKo}
                 onChange={e => setPropKo(e.target.value)}
                 placeholder={ko ? '예: 지방선거 개표 결과 온체인 검증 의무화' : 'e.g. 온체인 개표 검증'}
-                className="w-full bg-gray-50 border border-black/10 rounded-xl px-3 py-2.5 t-body text-black placeholder-gray-400 outline-none focus:border-black"
+                className="w-full bg-neutral-50 border border-neutral-300 rounded-lg t-body text-black placeholder-neutral-400 outline-none transition-colors focus:bg-white focus:border-black focus:ring-2 focus:ring-black/10 px-3 py-2.5"
               />
               <input
                 value={propEn}
                 onChange={e => setPropEn(e.target.value)}
                 placeholder="e.g. Mandatory on-chain verification of vote counts"
-                className="w-full bg-gray-50 border border-black/10 rounded-xl px-3 py-2.5 t-body text-black placeholder-gray-400 outline-none focus:border-black"
+                className="w-full bg-neutral-50 border border-neutral-300 rounded-lg t-body text-black placeholder-neutral-400 outline-none transition-colors focus:bg-white focus:border-black focus:ring-2 focus:ring-black/10 px-3 py-2.5"
               />
               <div className="grid grid-cols-2 gap-2">
                 <button
@@ -707,7 +709,7 @@ export default function CivilPage() {
                 </button>
                 <button
                   onClick={() => setShowPropose(false)}
-                  className="py-2.5 rounded-xl t-btn bg-white text-black border-2 border-black hover:text-[#dc2626] hover:border-[#dc2626] transition-all active:scale-95"
+                  className="py-2.5 rounded-lg t-btn bg-neutral-100 text-neutral-800 hover:bg-neutral-200 transition-all active:scale-95"
                 >
                   {T.propCancel}
                 </button>
@@ -729,14 +731,14 @@ export default function CivilPage() {
               const locked = !canVote(a);
               const countryInfo = countryOf(a.country);
               return (
-                <div key={a.id} className="bg-white border-2 border-black/10 rounded-2xl p-4 md:p-5 space-y-3 text-left">
+                <div key={a.id} className="bg-white border border-neutral-200 rounded-2xl p-4 md:p-5 space-y-3 text-left">
                   <div className="flex justify-between items-start gap-2">
                     <div className="min-w-0">
                       <div className="flex flex-wrap items-center gap-1.5">
                         <span className="bg-black text-white t-tag px-2 py-0.5 rounded notranslate" translate="no">
                           {countryInfo.flag} {a.country}
                         </span>
-                        <span className={`t-tag px-2 py-0.5 rounded border ${(a.tag === 'Tax Hunter' || a.proposed) ? 'bg-[#dc2626] text-white border-[#dc2626]' : 'bg-gray-50 text-gray-600 border-black/10'}`}>
+                        <span className={`t-tag px-2 py-0.5 rounded ${(a.tag === 'Tax Hunter' || a.proposed) ? 'bg-[#dc2626] text-white' : 'bg-neutral-100 text-neutral-600'}`}>
                           {ko ? a.tag : a.tagEn}
                         </span>
                       </div>
@@ -754,7 +756,7 @@ export default function CivilPage() {
                         <span className="text-[#dc2626]">{T.no} {noPct}%</span>
                       </div>
                     )}
-                    <div className="w-full bg-gray-100 h-2 rounded-full overflow-hidden flex">
+                    <div className="w-full bg-neutral-200 h-2 rounded-full overflow-hidden flex">
                       <div className="bg-black h-full" style={{ width: `${yesPct}%` }}></div>
                       <div className="bg-[#dc2626] h-full" style={{ width: `${noPct}%` }}></div>
                     </div>
@@ -764,20 +766,20 @@ export default function CivilPage() {
                   </div>
 
                   {locked ? (
-                    <div className="bg-gray-50 border border-dashed border-black/20 rounded-xl px-3 py-2.5 text-center">
+                    <div className="bg-neutral-50 border border-dashed border-neutral-300 rounded-xl px-3 py-2.5 text-center">
                       <p className="text-gray-500 t-sub">{T.locked}</p>
                     </div>
                   ) : (
                     <div className="grid grid-cols-2 gap-2">
                       <button
                         onClick={() => handleVote(a, 'YES')}
-                        className={`py-2.5 rounded-xl t-btn transition-all active:scale-95 ${myVote === 'YES' ? 'bg-[#dc2626] text-white' : 'bg-black text-white hover:bg-[#dc2626]'}`}
+                        className={`py-2.5 rounded-lg t-btn transition-all active:scale-95 ${myVote === 'YES' ? 'bg-[#dc2626] text-white' : 'bg-black text-white hover:bg-[#dc2626]'}`}
                       >
                         {T.voteYes}{!authenticated && ' 🔒'}
                       </button>
                       <button
                         onClick={() => handleVote(a, 'NO')}
-                        className={`py-2.5 rounded-xl t-btn transition-all active:scale-95 border-2 ${myVote === 'NO' ? 'bg-white text-[#dc2626] border-[#dc2626]' : 'bg-white text-black border-black hover:text-[#dc2626] hover:border-[#dc2626]'}`}
+                        className={`py-2.5 rounded-lg t-btn transition-all active:scale-95 ${myVote === 'NO' ? 'bg-[#dc2626] text-white' : 'bg-neutral-100 text-neutral-800 hover:bg-neutral-200'}`}
                       >
                         {T.voteNo}{!authenticated && ' 🔒'}
                       </button>
@@ -795,7 +797,7 @@ export default function CivilPage() {
         </div>
 
         {/* 시민 검증 풀 후원 — Pi 결제 */}
-        <div className="bg-white border-2 border-black rounded-2xl p-4 md:p-5 text-left space-y-2.5">
+        <div className="bg-white border border-neutral-200 rounded-2xl p-4 md:p-5 text-left space-y-2.5">
           <div className="flex items-start justify-between gap-2">
             <div className="min-w-0">
               <h2 className="text-black t-card">
@@ -807,7 +809,7 @@ export default function CivilPage() {
                   : 'Support funds KYC verification and audits across 238 countries — every spend is published on-chain.'}
               </p>
             </div>
-            <span className="shrink-0 t-tag bg-gray-50 border border-black/10 rounded-full px-2 py-0.5 text-gray-500">
+            <span className="shrink-0 t-tag bg-neutral-100 rounded-full px-2 py-0.5 text-neutral-600">
               {ko ? 'Pi 결제' : 'Pi payment'}
             </span>
           </div>
@@ -827,10 +829,10 @@ export default function CivilPage() {
           <SectionTitle title={T.malls} desc={T.mallsDesc} />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
             {MALLS.map(m => (
-              <div key={m.name} className="bg-white border border-black/10 rounded-xl p-3 md:p-4 flex justify-between items-center gap-2 text-left">
+              <div key={m.name} className="bg-white border border-neutral-200 rounded-xl p-3 md:p-4 flex justify-between items-center gap-2 text-left">
                 <div className="min-w-0">
                   <div className="flex items-center gap-1.5">
-                    <span className="t-tag bg-gray-50 text-gray-500 px-1.5 py-0.5 rounded border border-black/5">{ko ? m.tag : m.tagEn}</span>
+                    <span className="t-tag bg-neutral-100 text-neutral-600 px-1.5 py-0.5 rounded whitespace-nowrap shrink-0">{ko ? m.tag : m.tagEn}</span>
                     <h3 className="text-black t-card truncate">{ko ? m.name : m.nameEn}</h3>
                   </div>
                   <p className="text-neutral-500 t-sub mt-0.5">
@@ -839,7 +841,7 @@ export default function CivilPage() {
                 </div>
                 <button
                   onClick={() => handleDemand(m)}
-                  className={`px-3 py-1.5 rounded-lg t-tag whitespace-nowrap active:scale-95 transition-all ${demanded[m.name] ? 'bg-gray-100 text-gray-400 border border-black/10' : 'bg-[#dc2626] text-white hover:bg-black'}`}
+                  className={`px-3 py-1.5 rounded-lg t-tag whitespace-nowrap active:scale-95 transition-all ${demanded[m.name] ? 'bg-neutral-100 text-neutral-400' : 'bg-[#dc2626] text-white shadow-sm hover:bg-black'}`}
                 >
                   {demanded[m.name] ? T.demanded : T.demand}{!authenticated && ' 🔒'}
                 </button>
@@ -851,11 +853,11 @@ export default function CivilPage() {
         {/* Official ballot link generator */}
         <div>
           <SectionTitle title={T.linkTitle} desc={T.linkDesc} />
-          <div className="bg-black rounded-2xl p-4 md:p-5 border-[4px] border-[#dc2626] space-y-3 text-left">
+          <div className="bg-black rounded-2xl p-4 md:p-5 space-y-3 text-left">
             <select
               value={linkAgenda}
               onChange={e => setLinkAgenda(e.target.value)}
-              className="w-full bg-white text-black t-btn rounded-xl px-3 py-2.5 outline-none cursor-pointer"
+              className="w-full bg-white text-black t-btn rounded-lg border border-neutral-300 shadow-xs px-3 py-2.5 outline-none cursor-pointer focus:border-black focus:ring-2 focus:ring-black/10"
             >
               {allLinkableAgendas.map(a => (
                 <option key={a.id} value={a.id}>

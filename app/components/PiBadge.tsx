@@ -54,7 +54,7 @@ export default function PiBadge({ en = false, className = '' }: { en?: boolean; 
       onClick={() => setOpen(false)}
     >
       <div
-        className="bg-white w-full max-w-md rounded-t-3xl md:rounded-2xl border-2 border-black p-4 md:p-5 space-y-3 text-left shadow-2xl font-black"
+        className="bg-white w-full max-w-md rounded-t-3xl md:rounded-2xl border border-neutral-200 p-4 md:p-5 space-y-3 text-left shadow-2xl font-black"
         onClick={e => e.stopPropagation()}
       >
         <div className="flex items-start justify-between gap-2">
@@ -75,14 +75,14 @@ export default function PiBadge({ en = false, className = '' }: { en?: boolean; 
           <button
             onClick={() => setOpen(false)}
             aria-label="close"
-            className="shrink-0 w-8 h-8 rounded-full border border-black/10 text-black text-sm font-black hover:bg-gray-100 cursor-pointer"
+            className="shrink-0 w-8 h-8 rounded-full bg-neutral-100 text-neutral-600 text-sm font-black hover:bg-neutral-200 cursor-pointer"
           >
             ✕
           </button>
         </div>
 
         {connected ? (
-          <div className="bg-gray-50 border border-black/10 rounded-xl p-3 space-y-1">
+          <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-3 space-y-1">
             <p className="text-[11px] md:text-xs font-black text-black">
               🟢 {en ? 'KYC verified' : 'KYC 인증됨'} <span translate="no" className="notranslate text-[#7d4698]">@{username}</span>
             </p>
@@ -106,11 +106,11 @@ export default function PiBadge({ en = false, className = '' }: { en?: boolean; 
               <li>{en ? 'Enter the address below.' : '아래 주소를 입력합니다.'}</li>
               <li>{en ? 'Sign in with Pi and allow the KYC connection.' : 'Pi 로그인 후 KYC 연결을 승인합니다.'}</li>
             </ol>
-            <div className="bg-gray-50 border border-black/10 rounded-xl p-2.5 flex items-center justify-between gap-2">
+            <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-2.5 flex items-center justify-between gap-2">
               <code translate="no" className="notranslate text-[11px] md:text-xs font-mono text-black break-all">kedheon.com{path}</code>
               <button
                 onClick={copyLink}
-                className="shrink-0 px-2 py-1 rounded-lg border border-black text-[11px] font-black bg-white text-black hover:bg-black hover:text-white transition-all"
+                className="shrink-0 px-2 py-1 rounded-lg text-[11px] font-black bg-neutral-100 text-neutral-800 hover:bg-neutral-200 transition-all"
               >
                 {copied ? (en ? 'copied' : '복사됨') : (en ? 'copy' : '복사')}
               </button>
@@ -135,7 +135,7 @@ export default function PiBadge({ en = false, className = '' }: { en?: boolean; 
           setOpen(true);
         }}
         aria-label={connected ? `Pi KYC ${username}` : 'Pi connect'}
-        className={`shrink-0 flex items-center gap-1 bg-gray-100 border border-gray-200 rounded-lg px-1.5 py-1 t-tag text-black hover:border-black transition-colors cursor-pointer ${className}`}
+        className={`shrink-0 flex items-center gap-1 bg-neutral-100 rounded-lg px-1.5 py-1 t-tag text-black hover:bg-neutral-200 transition-colors cursor-pointer ${className}`}
       >
         <span className={`w-1.5 h-1.5 rounded-full ${dot}`} />
         <span className="text-[#7d4698] leading-none">π</span>
