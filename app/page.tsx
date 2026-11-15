@@ -589,11 +589,9 @@ const SafeText = ({ text }: { text: string }) => (
 );
 
 const SectionHeader = ({ title, desc }: { title: string; desc: string; }) => (
-  <div className="w-full border-t-2 border-[#dc2626] pt-2 mb-2 text-left font-black">
-    <h2 className="text-black text-lg md:text-xl uppercase italic border-l-[8px] border-black pl-3 tracking-tighter leading-none">
-       {title}
-    </h2>
-    <p className="text-gray-400 text-xs md:text-sm font-bold pl-7 italic leading-none mt-1">{desc}</p>
+  <div className="w-full border-t-2 border-[#dc2626] pt-3 mt-1 mb-2 text-left">
+    <h2 className="t-section text-neutral-900 uppercase border-l-[5px] border-black pl-2.5">{title}</h2>
+    <p className="t-sub text-neutral-500 pl-3.5 mt-1.5">{desc}</p>
   </div>
 );
 
@@ -649,15 +647,15 @@ export default function KedheonDesignSystemFinal() {
   if (!hasMounted) return <div className="bg-white min-h-screen" />;
 
   return (
-    <div className="flex flex-col items-center bg-white min-h-screen text-black font-sans w-full pb-24 font-black selection:bg-red-50 overflow-x-hidden">
+    <div className="flex flex-col items-center bg-white min-h-screen text-black font-sans w-full pb-24 selection:bg-red-50 overflow-x-hidden">
       
       <AppHeader
         brand={
           <>
             <img src="/kedheon-character.png" className="w-8 h-8 md:w-11 md:h-11 rounded-lg border-2 border-black shrink-0" alt="K" />
-            <div className="text-left leading-tight font-black min-w-0">
-              <h1 className="notranslate text-black text-sm md:text-base italic uppercase leading-none" translate="no">Kedheon</h1>
-              <span className="block text-gray-400 text-[11px] font-mono tracking-widest uppercase whitespace-nowrap">MASTER V271.0</span>
+            <div className="text-left leading-tight font-bold min-w-0">
+              <h1 className="notranslate t-brand text-black italic uppercase" translate="no">Kedheon</h1>
+              <span className="block text-gray-400 t-tag font-mono uppercase whitespace-nowrap">MASTER V271.0</span>
             </div>
           </>
         }
@@ -667,7 +665,7 @@ export default function KedheonDesignSystemFinal() {
             <select
               value={lang}
               onChange={(e) => setLang(e.target.value as Lang)}
-              className="appearance-none bg-gray-100 border border-gray-200 text-black text-[11px] md:text-xs font-black rounded-lg pl-2 pr-5 py-1 outline-none cursor-pointer shadow-sm focus:border-black transition-colors"
+              className="appearance-none bg-gray-100 border border-gray-200 text-black t-tag rounded-lg pl-2 pr-5 py-1 outline-none cursor-pointer shadow-sm focus:border-black transition-colors"
             >
               <option value="KR">🇰🇷 KR</option>
               <option value="EN">🇺🇸 EN</option>
@@ -685,36 +683,36 @@ export default function KedheonDesignSystemFinal() {
             </div>
           </div>
 
-          <button onClick={() => setTab('ROOKIE')} className={`shrink-0 px-2 py-1 rounded-lg text-xs md:text-sm font-black border transition-all whitespace-nowrap ${tab === 'ROOKIE' ? 'bg-[#dc2626] text-white border-[#dc2626]' : 'text-gray-500 border-black/10 hover:text-black'}`}>{L.rookie}</button>
-          <button onClick={() => setTab('PIONEER')} className={`shrink-0 px-2 py-1 rounded-lg text-xs md:text-sm font-black border transition-all whitespace-nowrap ${tab === 'PIONEER' ? 'bg-black text-white border-black' : 'text-gray-500 border-black/10 hover:text-black'}`}>{L.pioneer}</button>
+          <button onClick={() => setTab('ROOKIE')} className={`shrink-0 px-2 py-1 rounded-lg t-btn border transition-all whitespace-nowrap ${tab === 'ROOKIE' ? 'bg-[#dc2626] text-white border-[#dc2626]' : 'text-gray-500 border-black/10 hover:text-black'}`}>{L.rookie}</button>
+          <button onClick={() => setTab('PIONEER')} className={`shrink-0 px-2 py-1 rounded-lg t-btn border transition-all whitespace-nowrap ${tab === 'PIONEER' ? 'bg-black text-white border-black' : 'text-gray-500 border-black/10 hover:text-black'}`}>{L.pioneer}</button>
       </AppHeader>
 
       <main className="w-full max-w-5xl px-4 py-3">
         <PiReadOnlyBanner className="mb-3" />
         {tab === 'ROOKIE' ? (
-          <div className="flex flex-col gap-3 animate-in fade-in duration-500 font-black">
-            <div className="flex flex-col items-center text-center gap-3 py-6 bg-gray-50 rounded-2xl border border-black/5 relative shadow-inner overflow-hidden font-black">
+          <div className="flex flex-col gap-3 animate-in fade-in duration-500">
+            <div className="flex flex-col items-center text-center gap-3 py-6 bg-gray-50 rounded-2xl border border-black/5 relative shadow-inner overflow-hidden">
               <div className="absolute top-0 left-0 w-full h-1 bg-[#dc2626]"></div>
               <img src="/kedheon-character.png" className="w-32 h-32 md:w-56 md:h-56 object-contain drop-shadow-xl" alt="K" />
               <div className="px-4 leading-none">
-                <h1 className="text-black text-2xl md:text-3xl uppercase tracking-tighter mb-1">{L.procedure}</h1>
-                <p className="text-[#dc2626] text-xs md:text-sm font-bold tracking-tight">{L.piJoinDesc}</p>
+                <h1 className="t-hero text-black uppercase mb-1">{L.procedure}</h1>
+                <p className="t-sub text-[#dc2626]">{L.piJoinDesc}</p>
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               {L.steps.map((s, i) => (
                 <div key={i} className={`p-3 bg-white rounded-xl border flex flex-col gap-2 transition-all ${s.warning ? 'border-[#dc2626] bg-red-50/5 shadow-sm' : 'border-black/5 opacity-90'}`}>
-                  <div className="flex items-center gap-3 text-left">
-                    <span className={`text-3xl md:text-4xl font-black italic ${s.warning ? 'text-[#dc2626]' : 'text-black opacity-5'}`}>0{i+1}</span>
+                  <div className="flex items-start gap-3 text-left">
+                    <span className={`t-hero italic leading-none shrink-0 ${s.warning ? 'text-[#dc2626]' : 'text-black opacity-10'}`}>0{i+1}</span>
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-black text-sm md:text-base font-black uppercase italic leading-none"><SafeText text={s.t} /></h3>
-                      <p className={`text-xs md:text-sm font-bold leading-tight mt-1 ${s.warning ? 'text-[#dc2626]' : 'text-gray-600'}`}><SafeText text={s.d} /></p>
+                      <h3 className="text-black t-card uppercase"><SafeText text={s.t} /></h3>
+                      <p className={`t-body mt-1 ${s.warning ? 'text-[#dc2626]' : 'text-gray-600'}`}><SafeText text={s.d} /></p>
                     </div>
                   </div>
                   {s.links && (
                     <div className="grid grid-cols-2 gap-2">
-                      <button onClick={() => handleDownload(s.links?.AOS)} className="bg-black text-white py-1.5 rounded-lg text-[11px] font-black uppercase hover:bg-[#dc2626] transition-all">Android</button>
-                      <button onClick={() => handleDownload(s.links?.iOS)} className="bg-black text-white py-1.5 rounded-lg text-[11px] font-black uppercase hover:bg-[#dc2626] transition-all">iPhone</button>
+                      <button onClick={() => handleDownload(s.links?.AOS)} className="bg-black text-white py-1.5 rounded-lg t-tag uppercase whitespace-nowrap hover:bg-[#dc2626] transition-all">Android</button>
+                      <button onClick={() => handleDownload(s.links?.iOS)} className="bg-black text-white py-1.5 rounded-lg t-tag uppercase whitespace-nowrap hover:bg-[#dc2626] transition-all">iPhone</button>
                     </div>
                   )}
                 </div>
@@ -724,156 +722,156 @@ export default function KedheonDesignSystemFinal() {
             <div className="w-full bg-black border-[3px] border-[#dc2626] rounded-2xl p-4 md:p-6 text-left shadow-2xl flex flex-col md:flex-row items-center gap-4 relative overflow-hidden mt-2">
                 <div className="absolute -right-4 -top-4 w-16 h-16 bg-[#dc2626] rotate-45 opacity-20"></div>
                 <div className="flex-1 z-10">
-                    <h3 className="text-white text-sm md:text-base font-black italic uppercase border-l-4 border-[#dc2626] pl-2 leading-none">
+                    <h3 className="text-white t-card uppercase border-l-4 border-[#dc2626] pl-2">
                       {L.devRecruitTitle}
                     </h3>
-                    <p className="text-gray-400 text-[11px] md:text-xs mt-2 font-bold leading-tight">
+                    <p className="text-neutral-500 t-sub mt-2">
                       {L.devRecruitDesc}
                     </p>
                 </div>
-                <button onClick={() => handleDownload("https://minepi.com/developers/")} className="w-full md:w-auto bg-[#dc2626] text-white px-5 py-3 rounded-xl text-[11px] md:text-xs font-black uppercase whitespace-nowrap active:scale-95 shadow-md hover:bg-white hover:text-black transition-all z-10 border border-transparent hover:border-black">
+                <button onClick={() => handleDownload("https://minepi.com/developers/")} className="w-full md:w-auto bg-[#dc2626] text-white px-5 py-3 rounded-xl t-tag uppercase whitespace-nowrap active:scale-95 shadow-md hover:bg-white hover:text-black transition-all z-10 border border-transparent hover:border-black">
                     {L.devRecruitBtn}
                 </button>
             </div>
 
             <div className="p-6 bg-black text-white rounded-2xl text-center shadow-xl border-2 border-[#dc2626] cursor-pointer active:scale-95 mt-2" onClick={() => { setShowInviteCode(true); handleCopy(); }}>
-               <p className="text-[11px] italic text-gray-500 mb-1">{showInviteCode ? L.copyPrompt : L.inviteReveal}</p>
-               <div translate="no" className="notranslate text-white text-3xl md:text-5xl tracking-widest font-black leading-none italic">{showInviteCode ? PI_INVITE_CODE : '••••••••'}</div>
+               <p className="t-sub text-gray-500 mb-1">{showInviteCode ? L.copyPrompt : L.inviteReveal}</p>
+               <div translate="no" className="notranslate t-hero text-white tracking-[0.2em]">{showInviteCode ? PI_INVITE_CODE : '••••••••'}</div>
             </div>
           </div>
         ) : (
-          <div className="flex flex-col gap-4 py-1 animate-in slide-in-from-bottom-5 duration-700 font-black text-left">
+          <div className="flex flex-col gap-4 py-1 animate-in slide-in-from-bottom-5 duration-700 text-left">
             
             <div className="w-full bg-white p-5 rounded-2xl border-2 border-black shadow-lg flex flex-col justify-center relative overflow-hidden group">
-                <h3 className="text-gray-400 text-[11px] uppercase tracking-widest font-black mb-2">{L.assets}</h3>
+                <h3 className="text-gray-400 t-tag uppercase mb-2">{L.assets}</h3>
                 <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none transition-transform group-hover:scale-105">
                    <img src="/beom-token.png" className="w-24 h-24 md:w-44 md:h-48 object-contain drop-shadow-2xl" alt="Beom" />
                 </div>
                 <div className="relative z-10 leading-none">
-                    <p className="text-black text-2xl md:text-5xl tracking-tighter font-black">
+                    <p className="t-hero text-black">
                       {Math.floor(beomToken).toLocaleString()}
-                      <span className="text-lg opacity-20">.{beomToken.toFixed(2).split('.')[1]}</span> 
-                      <span translate="no" className="notranslate ml-2 text-2xl md:text-3xl italic uppercase text-[#dc2626]">BEOM</span>
+                      <span className="t-card opacity-20">.{beomToken.toFixed(2).split('.')[1]}</span> 
+                      <span translate="no" className="notranslate t-card ml-2 uppercase text-[#dc2626]">BEOM</span>
                     </p>
-                    <p className="text-gray-400 text-xs md:text-sm font-black italic mt-1">≈ {piBalance.toLocaleString()} <span translate="no" className="notranslate">PI</span></p>
-                    <div className="flex items-center gap-2 mt-3 font-black">
-                      <div className="bg-black text-white px-2 py-0.5 rounded text-[11px] md:text-xs font-mono shadow-sm">NODE: 19.02 SCORE</div>
-                      <div className="bg-[#dc2626] text-white px-2 py-0.5 rounded text-[11px] md:text-xs font-mono italic shadow-sm tracking-tighter">RT: 15,080</div>
+                    <p className="text-neutral-500 t-sub mt-1">≈ {piBalance.toLocaleString()} <span translate="no" className="notranslate">PI</span></p>
+                    <div className="flex items-center gap-2 mt-3">
+                      <div className="bg-black text-white px-2 py-0.5 rounded t-tag font-mono whitespace-nowrap shadow-sm">NODE: 19.02 SCORE</div>
+                      <div className="bg-[#dc2626] text-white px-2 py-0.5 rounded t-tag font-mono whitespace-nowrap shadow-sm">RT: 15,080</div>
                     </div>
                 </div>
             </div>
 
             <div className="w-full bg-gray-900 py-1.5 px-4 rounded-lg flex items-center justify-center gap-2 shadow-inner">
                <span className="w-1.5 h-1.5 bg-red-600 rounded-full animate-ping"></span>
-               <p className="text-white text-[11px] md:text-xs font-black leading-none uppercase tracking-tight">
+               <p className="text-white t-tag uppercase">
                  {L.portalStatus}
                </p>
             </div>
 
             <SectionHeader title={L.exchange} desc={L.exchangeDesc} />
-            <div className="bg-white p-4 md:p-5 rounded-2xl border-2 border-black space-y-4 shadow-sm font-black text-left">
+            <div className="bg-white p-4 md:p-5 rounded-2xl border-2 border-black space-y-4 shadow-sm text-left">
                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-1 border-r border-gray-100 pr-2">
-                     {L.exList.map((txt, idx) => <p key={idx} className="text-[11px] md:text-xs font-black text-gray-800 leading-tight border-b border-gray-50 pb-1">▶ {txt}</p>)}
+                     {L.exList.map((txt, idx) => <p key={idx} className="t-body text-gray-800 border-b border-gray-50 pb-1">▶ {txt}</p>)}
                   </div>
-                  <div className="flex flex-col items-center justify-center p-3 bg-gray-50 rounded-xl text-center font-black">
-                     <p className="text-black text-sm md:text-base font-black mb-2 italic">{L.convertTitle}</p>
-                     <button onClick={handleFinanceConversion} className="w-full bg-[#dc2626] text-white py-2 rounded-lg text-xs font-black hover:bg-black transition-all shadow-md">{L.convertBtn}{!authenticated && ' 🔒'}</button>
+                  <div className="flex flex-col items-center justify-center p-3 bg-gray-50 rounded-xl text-center">
+                     <p className="text-black t-card mb-2">{L.convertTitle}</p>
+                     <button onClick={handleFinanceConversion} className="w-full bg-[#dc2626] text-white py-2 rounded-lg t-btn hover:bg-black transition-all shadow-md">{L.convertBtn}{!authenticated && ' 🔒'}</button>
                   </div>
                </div>
             </div>
 
             <SectionHeader title={L.auth} desc={L.authDesc} />
-            <div className="bg-gray-50 p-4 md:p-6 rounded-2xl border border-black/5 flex flex-col md:flex-row items-center gap-5 shadow-inner font-black text-left">
+            <div className="bg-gray-50 p-4 md:p-6 rounded-2xl border border-black/5 flex flex-col md:flex-row items-center gap-5 shadow-inner text-left">
                <div className={`bg-white border-2 rounded-xl flex flex-col items-center justify-center shadow-lg w-40 h-40 md:w-56 md:h-56 transition-all ${qrState.active ? 'border-[#dc2626]' : 'opacity-10 grayscale blur-sm'}`}>
                   {qrState.active ? (
                     <>
                       <img src={qrState.type === 'PERSONAL' ? "/qr-personal.png" : "/qr-business.png"} className="w-full h-full p-3 object-contain" alt="QR" />
-                      <p className="text-[11px] font-black bg-gray-100 px-2 py-0.5 rounded-full mb-1 uppercase text-center">{qrState.biz || (qrState.type === 'PERSONAL' ? L.personal : L.corporate)}</p>
+                      <p className="t-tag bg-gray-100 px-2 py-0.5 rounded-full mb-1 uppercase text-center">{qrState.biz || (qrState.type === 'PERSONAL' ? L.personal : L.corporate)}</p>
                     </>
-                  ) : <p className="text-black text-xs md:text-sm font-black italic uppercase animate-pulse">{L.encodedQR}</p>}
+                  ) : <p className="text-black t-card uppercase animate-pulse">{L.encodedQR}</p>}
                </div>
-               <div className="flex-1 w-full space-y-3 font-black">
+               <div className="flex-1 w-full space-y-3">
                   <div className="bg-white p-4 rounded-xl border border-black/10">
-                     <p className="text-black text-[11px] md:text-xs font-black italic uppercase mb-3 border-l-2 border-black pl-2">{L.walletType}</p>
+                     <p className="text-black t-tag uppercase mb-3 border-l-2 border-black pl-2">{L.walletType}</p>
                      <div className="flex gap-2 mb-3">
-                        <button onClick={() => setQrState({...qrState, type:'PERSONAL'})} className={`flex-1 py-1.5 rounded-md text-[11px] font-black border transition-all ${qrState.type === 'PERSONAL' ? 'bg-black text-white border-black shadow-md' : 'text-gray-300 border-gray-100'}`}>{L.personal}</button>
-                        <button onClick={() => setQrState({...qrState, type:'BUSINESS'})} className={`flex-1 py-1.5 rounded-md text-[11px] font-black border transition-all ${qrState.type === 'BUSINESS' ? 'bg-black text-white border-black shadow-md' : 'text-gray-300 border-gray-100'}`}>{L.corporate}</button>
+                        <button onClick={() => setQrState({...qrState, type:'PERSONAL'})} className={`flex-1 py-1.5 rounded-md t-tag border transition-all ${qrState.type === 'PERSONAL' ? 'bg-black text-white border-black shadow-md' : 'text-gray-300 border-gray-100'}`}>{L.personal}</button>
+                        <button onClick={() => setQrState({...qrState, type:'BUSINESS'})} className={`flex-1 py-1.5 rounded-md t-tag border transition-all ${qrState.type === 'BUSINESS' ? 'bg-black text-white border-black shadow-md' : 'text-gray-300 border-gray-100'}`}>{L.corporate}</button>
                      </div>
                      {qrState.type === 'BUSINESS' && (
-                        <input value={qrState.biz} onChange={e=>setQrState({...qrState, biz:e.target.value.toUpperCase()})} placeholder={L.bizPlaceholder} className="w-full bg-gray-50 border border-black/5 p-2 rounded-lg text-[11px] font-black outline-none focus:border-black mb-2" />
+                        <input value={qrState.biz} onChange={e=>setQrState({...qrState, biz:e.target.value.toUpperCase()})} placeholder={L.bizPlaceholder} className="w-full bg-gray-50 border border-black/5 p-2 rounded-lg t-body outline-none focus:border-black mb-2" />
                      )}
                   </div>
-                  <button onClick={() => {if (!requireAuth(L.activate)) return; if(beomToken<50) return alert(L.beomLackAlert); setBeomToken(p=>p-50); setQrState({...qrState, active:true});}} className="w-full bg-black text-white py-3 rounded-lg text-xs font-black hover:bg-[#dc2626] transition-all shadow-md">{L.activate}{!authenticated && ' 🔒'}</button>
+                  <button onClick={() => {if (!requireAuth(L.activate)) return; if(beomToken<50) return alert(L.beomLackAlert); setBeomToken(p=>p-50); setQrState({...qrState, active:true});}} className="w-full bg-black text-white py-3 rounded-lg t-btn hover:bg-[#dc2626] transition-all shadow-md">{L.activate}{!authenticated && ' 🔒'}</button>
                </div>
             </div>
 
             <SectionHeader title={L.creative} desc={L.creativeDesc} />
-            <div className="bg-white p-4 md:p-6 rounded-2xl border border-black/10 space-y-4 shadow-sm font-black text-left">
-              <div className="flex gap-6 border-b border-gray-100 pb-1.5 font-black overflow-x-auto no-scrollbar">
-                <button onClick={() => setHubTab('HUB')} className={`shrink-0 whitespace-nowrap text-sm md:text-base font-black italic uppercase ${hubTab === 'HUB' ? 'text-black border-b-2 border-black' : 'text-gray-300'}`}>HUB</button>
-                <button onClick={() => setHubTab('SPIRIT')} className={`shrink-0 whitespace-nowrap text-sm md:text-base font-black italic uppercase ${hubTab === 'SPIRIT' ? 'text-black border-b-2 border-black' : 'text-gray-300'}`}>FAN SPIRIT</button>
+            <div className="bg-white p-4 md:p-6 rounded-2xl border border-black/10 space-y-4 shadow-sm text-left">
+              <div className="flex gap-6 border-b border-gray-100 pb-1.5 overflow-x-auto no-scrollbar">
+                <button onClick={() => setHubTab('HUB')} className={`shrink-0 whitespace-nowrap t-btn uppercase ${hubTab === 'HUB' ? 'text-black border-b-2 border-black' : 'text-gray-300'}`}>HUB</button>
+                <button onClick={() => setHubTab('SPIRIT')} className={`shrink-0 whitespace-nowrap t-btn uppercase ${hubTab === 'SPIRIT' ? 'text-black border-b-2 border-black' : 'text-gray-300'}`}>FAN SPIRIT</button>
               </div>
               <div className="flex gap-1.5 overflow-x-auto pb-1 no-scrollbar">
-                {L.cats.map(c => <button key={c} onClick={() => setCategory(c)} className={`shrink-0 px-3 py-1 rounded-full text-xs md:text-sm font-black italic border transition-all whitespace-nowrap ${category === c ? 'bg-black text-white border-black shadow-md' : 'bg-white text-gray-400'}`}>{c}</button>)}
+                {L.cats.map(c => <button key={c} onClick={() => setCategory(c)} className={`shrink-0 px-3 py-1 rounded-full t-btn border transition-all whitespace-nowrap ${category === c ? 'bg-black text-white border-black shadow-md' : 'bg-white text-gray-400'}`}>{c}</button>)}
               </div>
-              <div className="flex gap-2 flex-wrap">{L.fans.map(f => <button key={f} translate="no" className="notranslate px-3 py-1 bg-white border border-gray-100 rounded-full text-xs md:text-sm font-black text-red-600 shadow-sm">🚩 {f}</button>)}</div>
+              <div className="flex gap-2 flex-wrap">{L.fans.map(f => <button key={f} translate="no" className="notranslate px-3 py-1 bg-white border border-gray-100 rounded-full t-btn text-red-600 shadow-sm">🚩 {f}</button>)}</div>
               <div className="space-y-2">
-                <input value={feed.title} onChange={e => setFeed({...feed, title: e.target.value})} placeholder={L.feedTitle} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-xs md:text-sm font-black outline-none" />
-                <input value={feed.link} onChange={e => setFeed({...feed, link: e.target.value})} placeholder={L.feedLink} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-xs md:text-sm font-black outline-none text-red-400 placeholder-red-200" />
-                <textarea value={feed.desc} onChange={e => setFeed({...feed, desc: e.target.value})} placeholder={L.feedDesc} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-xs md:text-sm font-bold h-24 outline-none focus:border-black leading-relaxed" />
+                <input value={feed.title} onChange={e => setFeed({...feed, title: e.target.value})} placeholder={L.feedTitle} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl t-body outline-none" />
+                <input value={feed.link} onChange={e => setFeed({...feed, link: e.target.value})} placeholder={L.feedLink} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl t-body outline-none text-red-400 placeholder-red-200" />
+                <textarea value={feed.desc} onChange={e => setFeed({...feed, desc: e.target.value})} placeholder={L.feedDesc} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl t-body h-24 outline-none focus:border-black" />
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-2 font-black">
-                <button onClick={() => {if (!requireAuth(L.postBtn)) return; if(!feed.title) return; setBeomToken(p=>p-10); alert(L.regDoneAlert); setFeed({title:'', link:'', desc:''});}} className="md:col-span-2 bg-black text-white py-3 rounded-xl text-sm md:text-base font-black hover:bg-[#dc2626] transition-all shadow-lg active:scale-95">{L.postBtn}{!authenticated && ' 🔒'}</button>
-                <button className="bg-white border-2 border-black text-black py-3 rounded-xl text-xs md:text-sm font-black flex items-center justify-center gap-1.5 shadow active:scale-95">🚩 FAN ROOM</button>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                <button onClick={() => {if (!requireAuth(L.postBtn)) return; if(!feed.title) return; setBeomToken(p=>p-10); alert(L.regDoneAlert); setFeed({title:'', link:'', desc:''});}} className="md:col-span-2 bg-black text-white py-3 rounded-xl t-btn hover:bg-[#dc2626] transition-all shadow-lg active:scale-95">{L.postBtn}{!authenticated && ' 🔒'}</button>
+                <button className="bg-white border-2 border-black text-black py-3 rounded-xl t-btn flex items-center justify-center gap-1.5 shadow active:scale-95">🚩 FAN ROOM</button>
               </div>
-              <div className="space-y-1 bg-gray-50 p-3 rounded-xl border-l-[4px] border-[#dc2626] text-left font-black"><p className="text-gray-400 text-[11px] md:text-xs font-bold italic leading-none">{L.fanRoomDesc}</p></div>
+              <div className="space-y-1 bg-gray-50 p-3 rounded-xl border-l-[4px] border-[#dc2626] text-left"><p className="text-neutral-500 t-sub">{L.fanRoomDesc}</p></div>
             </div>
 
             <SectionHeader title={L.market} desc={L.marketDesc} />
-            <div className="bg-white p-4 md:p-5 rounded-2xl border-2 border-black/10 space-y-4 font-black text-left">
+            <div className="bg-white p-4 md:p-5 rounded-2xl border-2 border-black/10 space-y-4 text-left">
                 <div className="flex gap-4 border-b border-gray-100 pb-1.5">
-                    <button onClick={() => setMarketMode('BUY')} className={`text-sm md:text-base font-black italic ${marketMode === 'BUY' ? 'text-black border-b-2 border-black' : 'text-gray-300'}`}>{L.marketBuyTab}</button>
-                    <button onClick={() => setMarketMode('SELL')} className={`text-sm md:text-base font-black italic ${marketMode === 'SELL' ? 'text-black border-b-2 border-black' : 'text-gray-300'}`}>{L.marketSellTab}</button>
+                    <button onClick={() => setMarketMode('BUY')} className={`t-btn ${marketMode === 'BUY' ? 'text-black border-b-2 border-black' : 'text-gray-300'}`}>{L.marketBuyTab}</button>
+                    <button onClick={() => setMarketMode('SELL')} className={`t-btn ${marketMode === 'SELL' ? 'text-black border-b-2 border-black' : 'text-gray-300'}`}>{L.marketSellTab}</button>
                 </div>
                 {marketMode === 'BUY' ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 font-black">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         {displayGoods.map(g => (
                             <div key={g.id} className="bg-gray-50 p-3 rounded-xl border flex gap-3 items-center group shadow-sm transition-all hover:border-[#dc2626]">
                                 <div className="w-20 h-20 md:w-28 md:h-28 bg-white rounded-lg flex items-center justify-center overflow-hidden shrink-0 shadow-inner"><img src={g.img} className="w-14 h-14 object-contain group-hover:scale-110 transition-transform" alt="G" /></div>
-                                <div className="flex-1 min-w-0 font-black">
-                                    <h4 className="text-[11px] md:text-xs font-black uppercase mb-0.5 truncate">{g.name}</h4>
-                                    <p className="text-gray-400 text-[11px] md:text-xs mb-1 font-bold line-clamp-1 leading-tight">{g.desc}</p>
-                                    <p className="text-[#dc2626] text-xs md:text-base font-black mb-2 leading-none">{g.price.toLocaleString()} <span className="notranslate text-[11px]" translate="no">BEOM</span></p>
-                                    <button onClick={() => {if (!requireAuth(L.buyReqBtn)) return; alert(L.buyDoneAlert);}} className="w-full py-1.5 bg-black text-white rounded-lg text-[11px] md:text-xs font-black uppercase active:scale-95">{L.buyReqBtn}{!authenticated && ' 🔒'}</button>
+                                <div className="flex-1 min-w-0">
+                                    <h4 className="t-card uppercase mb-0.5 truncate">{g.name}</h4>
+                                    <p className="text-neutral-500 t-sub mb-1 line-clamp-1">{g.desc}</p>
+                                    <p className="text-[#dc2626] t-card mb-2">{g.price.toLocaleString()} <span className="notranslate t-tag" translate="no">BEOM</span></p>
+                                    <button onClick={() => {if (!requireAuth(L.buyReqBtn)) return; alert(L.buyDoneAlert);}} className="w-full py-1.5 bg-black text-white rounded-lg t-tag uppercase active:scale-95">{L.buyReqBtn}{!authenticated && ' 🔒'}</button>
                                 </div>
                             </div>
                         ))}
                     </div>
                 ) : (
-                    <div className="space-y-2 font-black">
-                        <input value={sellItem.name} onChange={e => setSellItem({...sellItem, name:e.target.value})} placeholder={L.itemName} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-xs md:text-sm font-black outline-none" />
+                    <div className="space-y-2">
+                        <input value={sellItem.name} onChange={e => setSellItem({...sellItem, name:e.target.value})} placeholder={L.itemName} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl t-body outline-none" />
                         <div className="grid grid-cols-2 gap-2">
-                            <input type="number" value={sellItem.price} onChange={e => setSellItem({...sellItem, price:e.target.value})} placeholder={L.itemPrice} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-xs md:text-sm font-black outline-none" />
-                            <input value={sellItem.img} onChange={e => setSellItem({...sellItem, img:e.target.value})} placeholder={L.itemImg} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-xs md:text-sm font-black outline-none" />
+                            <input type="number" value={sellItem.price} onChange={e => setSellItem({...sellItem, price:e.target.value})} placeholder={L.itemPrice} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl t-body outline-none" />
+                            <input value={sellItem.img} onChange={e => setSellItem({...sellItem, img:e.target.value})} placeholder={L.itemImg} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl t-body outline-none" />
                         </div>
-                        <textarea value={sellItem.desc} onChange={e => setSellItem({...sellItem, desc:e.target.value})} placeholder={L.itemDesc} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-xs md:text-sm font-bold h-20 outline-none" />
-                        <button onClick={() => {if (!requireAuth(L.sellDoneBtn)) return; if(!sellItem.name) return; setUserGoods([{id:Date.now(), ...sellItem, price:Number(sellItem.price), seller:"User"}, ...userGoods]); alert(L.regDoneAlert); setMarketMode('BUY');}} className="w-full bg-[#dc2626] text-white py-3 rounded-xl text-xs md:text-sm font-black shadow-lg">{L.sellDoneBtn}{!authenticated && ' 🔒'}</button>
+                        <textarea value={sellItem.desc} onChange={e => setSellItem({...sellItem, desc:e.target.value})} placeholder={L.itemDesc} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl t-body h-20 outline-none" />
+                        <button onClick={() => {if (!requireAuth(L.sellDoneBtn)) return; if(!sellItem.name) return; setUserGoods([{id:Date.now(), ...sellItem, price:Number(sellItem.price), seller:"User"}, ...userGoods]); alert(L.regDoneAlert); setMarketMode('BUY');}} className="w-full bg-[#dc2626] text-white py-3 rounded-xl t-btn shadow-lg">{L.sellDoneBtn}{!authenticated && ' 🔒'}</button>
                     </div>
                 )}
             </div>
 
             <SectionHeader title={L.partnership} desc={L.partnershipDesc} />
-            <div className="bg-black p-6 rounded-2xl border-[8px] border-[#dc2626] space-y-4 relative overflow-hidden font-black shadow-2xl">
-                <h3 className="text-white text-lg md:text-xl font-black italic border-l-4 border-white pl-3 uppercase leading-none z-10 relative">PARTNERSHIP B2B</h3>
-                <div className="grid grid-cols-2 gap-2 z-10 relative font-black">
-                    <input value={partner.corp} onChange={e=>setPartner({...partner, corp: e.target.value})} placeholder={L.corpName} className="bg-white/10 border-none p-3 rounded-xl text-[11px] md:text-xs text-white outline-none focus:ring-1 ring-[#dc2626]" />
-                    <input value={partner.manager} onChange={e=>setPartner({...partner, manager: e.target.value})} placeholder={L.manager} className="bg-white/10 border-none p-3 rounded-xl text-[11px] md:text-xs text-white outline-none focus:ring-1 ring-[#dc2626]" />
-                    <input value={partner.email} onChange={e=>setPartner({...partner, email: e.target.value})} placeholder={L.email} className="bg-white/10 border-none p-3 rounded-xl text-[11px] md:text-xs text-white outline-none focus:ring-1 ring-[#dc2626]" />
-                    <input value={partner.contact} onChange={e=>setPartner({...partner, contact: e.target.value})} placeholder={L.contact} className="bg-white/10 border-none p-3 rounded-xl text-[11px] md:text-xs text-white outline-none focus:ring-1 ring-[#dc2626]" />
+            <div className="bg-black p-6 rounded-2xl border-[8px] border-[#dc2626] space-y-4 relative overflow-hidden shadow-2xl">
+                <h3 className="text-white t-section border-l-4 border-white pl-3 uppercase z-10 relative">PARTNERSHIP B2B</h3>
+                <div className="grid grid-cols-2 gap-2 z-10 relative">
+                    <input value={partner.corp} onChange={e=>setPartner({...partner, corp: e.target.value})} placeholder={L.corpName} className="bg-white/10 border-none p-3 rounded-xl t-body text-white outline-none focus:ring-1 ring-[#dc2626]" />
+                    <input value={partner.manager} onChange={e=>setPartner({...partner, manager: e.target.value})} placeholder={L.manager} className="bg-white/10 border-none p-3 rounded-xl t-body text-white outline-none focus:ring-1 ring-[#dc2626]" />
+                    <input value={partner.email} onChange={e=>setPartner({...partner, email: e.target.value})} placeholder={L.email} className="bg-white/10 border-none p-3 rounded-xl t-body text-white outline-none focus:ring-1 ring-[#dc2626]" />
+                    <input value={partner.contact} onChange={e=>setPartner({...partner, contact: e.target.value})} placeholder={L.contact} className="bg-white/10 border-none p-3 rounded-xl t-body text-white outline-none focus:ring-1 ring-[#dc2626]" />
                 </div>
-                <textarea value={partner.msg} onChange={e=>setPartner({...partner, msg: e.target.value})} placeholder={L.vision} className="w-full bg-white/10 border-none p-4 rounded-2xl text-[11px] md:text-xs text-white h-24 outline-none focus:ring-1 ring-[#dc2626] z-10 relative text-left" />
-                <button onClick={()=>{if (!requireAuth(L.submit)) return; alert(L.propDoneAlert);}} className="w-full bg-[#dc2626] text-white py-3.5 rounded-full text-sm md:text-base font-black hover:bg-white hover:text-black transition-all uppercase z-10 relative active:scale-95 shadow-xl">{L.submit}{!authenticated && ' 🔒'}</button>
+                <textarea value={partner.msg} onChange={e=>setPartner({...partner, msg: e.target.value})} placeholder={L.vision} className="w-full bg-white/10 border-none p-4 rounded-2xl t-body text-white h-24 outline-none focus:ring-1 ring-[#dc2626] z-10 relative text-left" />
+                <button onClick={()=>{if (!requireAuth(L.submit)) return; alert(L.propDoneAlert);}} className="w-full bg-[#dc2626] text-white py-3.5 rounded-full t-btn hover:bg-white hover:text-black transition-all uppercase z-10 relative active:scale-95 shadow-xl">{L.submit}{!authenticated && ' 🔒'}</button>
             </div>
           </div>
         )}

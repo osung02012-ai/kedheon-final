@@ -252,11 +252,9 @@ const defaultAgendas = (cc: string): Agenda[] => {
 };
 
 const SectionTitle = ({ title, desc }: { title: string; desc: string }) => (
-  <div className="w-full border-t-2 border-[#dc2626] pt-2 mb-2 text-left font-black">
-    <h2 className="text-black text-lg md:text-xl uppercase italic border-l-[8px] border-black pl-3 tracking-tighter leading-none">
-      {title}
-    </h2>
-    <p className="text-gray-400 text-xs md:text-sm font-bold pl-7 italic leading-none mt-1">{desc}</p>
+  <div className="w-full border-t-2 border-[#dc2626] pt-3 mt-1 mb-2 text-left">
+    <h2 className="t-section text-neutral-900 uppercase border-l-[5px] border-black pl-2.5">{title}</h2>
+    <p className="t-sub text-neutral-500 pl-3.5 mt-1.5">{desc}</p>
   </div>
 );
 
@@ -288,13 +286,13 @@ const CountryPicker = ({
         <div className="px-4 pt-3 pb-2 border-b-2 border-black text-left">
           <div className="flex items-start justify-between gap-2">
             <div className="min-w-0">
-              <h3 className="text-black text-sm md:text-base font-black truncate">{title}</h3>
-              <p className="text-gray-400 text-[11px] md:text-xs font-bold mt-0.5">{desc}</p>
+              <h3 className="text-black t-card truncate">{title}</h3>
+              <p className="text-neutral-500 t-sub mt-0.5">{desc}</p>
             </div>
             <button
               onClick={onClose}
               aria-label="close"
-              className="shrink-0 w-8 h-8 rounded-full border border-black/10 text-black text-sm font-black hover:bg-gray-100 cursor-pointer"
+              className="shrink-0 w-8 h-8 rounded-full border border-black/10 text-black t-btn hover:bg-gray-100 cursor-pointer"
             >
               ✕
             </button>
@@ -304,7 +302,7 @@ const CountryPicker = ({
             value={q}
             onChange={e => setQ(e.target.value)}
             placeholder={ko ? '국가명 또는 ISO 코드 검색 (예: 독일, Germany, DE)' : 'Search country or ISO code (e.g. Germany, DE)'}
-            className="mt-2 w-full bg-gray-50 border border-black/10 rounded-xl px-3 py-2.5 text-xs md:text-sm text-black placeholder-gray-400 outline-none focus:border-black font-bold"
+            className="mt-2 w-full bg-gray-50 border border-black/10 rounded-xl px-3 py-2.5 t-body text-black placeholder-gray-400 outline-none focus:border-black"
           />
         </div>
 
@@ -312,7 +310,7 @@ const CountryPicker = ({
           {allowGlobal && (
             <button
               onClick={() => { onSelect('GLOBAL'); onClose(); }}
-              className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-left font-black text-xs md:text-sm mb-1 border ${
+              className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-left t-btn mb-1 border ${
                 current === 'GLOBAL' ? 'bg-black text-white border-black' : 'bg-white text-black border-black/10 hover:border-black'
               }`}
             >
@@ -321,7 +319,7 @@ const CountryPicker = ({
             </button>
           )}
           {list.length === 0 && (
-            <p className="text-gray-400 text-xs md:text-sm font-bold text-center py-6">
+            <p className="text-neutral-500 t-sub text-center py-6">
               {ko ? '검색 결과가 없습니다.' : 'No country found.'}
             </p>
           )}
@@ -329,18 +327,18 @@ const CountryPicker = ({
             <button
               key={c.code}
               onClick={() => { onSelect(c.code); onClose(); }}
-              className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-left font-black text-xs md:text-sm border mb-1 ${
+              className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-left t-btn border mb-1 ${
                 current === c.code ? 'bg-black text-white border-black' : 'bg-white text-black border-transparent hover:border-black/20 hover:bg-gray-50'
               }`}
             >
               <span className="text-base">{c.flag}</span>
               <span className="truncate flex-1">{ko ? c.ko : c.en}</span>
-              <span className={`text-[11px] font-mono ${current === c.code ? 'text-white/60' : 'text-gray-400'}`}>{c.code}</span>
-              {current === c.code && <span className="text-[11px]">✓</span>}
+              <span className={`t-tag font-mono ${current === c.code ? 'text-white/60' : 'text-gray-400'}`}>{c.code}</span>
+              {current === c.code && <span className="t-body">✓</span>}
             </button>
           ))}
         </div>
-        <div className="px-4 py-2 border-t border-black/10 text-gray-400 text-[11px] font-bold text-center">
+        <div className="px-4 py-2 border-t border-black/10 text-neutral-500 t-sub text-center">
           {ko ? `ISO 3166-1 기준 ${COUNTRIES.length}개국` : `${COUNTRIES.length} countries · ISO 3166-1`}
         </div>
       </div>
@@ -544,18 +542,18 @@ export default function CivilPage() {
   if (viewCountry !== 'GLOBAL' && !QUICK_CODES.includes(viewCountry)) tabs.splice(1, 0, viewCountry);
 
   return (
-    <div className="flex flex-col items-center bg-white min-h-screen text-black font-sans w-full pb-24 font-black selection:bg-red-50 overflow-x-hidden">
+    <div className="flex flex-col items-center bg-white min-h-screen text-black font-sans w-full pb-24 selection:bg-red-50 overflow-x-hidden">
 
       {/* Navigation — Kedheon 규격 */}
       <AppHeader
         brand={
           <div className="flex items-center gap-2 md:gap-3 cursor-pointer min-w-0" onClick={() => window.location.href = '/'}>
-            <div className="w-8 h-8 md:w-11 md:h-11 rounded-lg border-2 border-black bg-black flex items-center justify-center text-white text-sm md:text-lg font-black italic shrink-0">
+            <div className="w-8 h-8 md:w-11 md:h-11 rounded-lg border-2 border-black bg-black flex items-center justify-center text-white t-card shrink-0">
               C
             </div>
-            <div className="text-left leading-tight font-black min-w-0">
-              <h1 translate="no" className="notranslate text-black text-sm md:text-base italic uppercase leading-none">Civil</h1>
-              <span className="block text-gray-400 text-[11px] font-mono tracking-widest uppercase whitespace-nowrap">KYC VOTING</span>
+            <div className="text-left leading-tight font-bold min-w-0">
+              <h1 translate="no" className="notranslate t-brand text-black italic uppercase">Civil</h1>
+              <span className="block text-gray-400 t-tag font-mono uppercase whitespace-nowrap">KYC VOTING</span>
             </div>
           </div>
         }
@@ -563,16 +561,16 @@ export default function CivilPage() {
           <PiBadge en={!ko} />
           <button
             onClick={() => setLang(l => (l === 'KO' ? 'EN' : 'KO'))}
-            className="bg-gray-100 border border-gray-200 text-black text-[11px] md:text-xs font-black rounded-lg px-2 py-1 outline-none cursor-pointer shadow-sm hover:border-black transition-colors whitespace-nowrap shrink-0"
+            className="bg-gray-100 border border-gray-200 text-black t-tag rounded-lg px-2 py-1 outline-none cursor-pointer shadow-sm hover:border-black transition-colors whitespace-nowrap shrink-0"
           >
             {ko ? '🇺🇸 EN' : '🇰🇷 KO'}
           </button>
-          <div className="bg-gray-100 border border-gray-200 rounded-lg px-2 py-1 text-[11px] md:text-xs font-black text-black flex items-center gap-1 whitespace-nowrap shrink-0">
+          <div className="bg-gray-100 border border-gray-200 rounded-lg px-2 py-1 t-tag text-black flex items-center gap-1 whitespace-nowrap shrink-0">
             🐾 {points} <span translate="no" className="notranslate text-gray-400 hidden min-[420px]:inline">BEOM</span>
           </div>
           <button
             onClick={handleCheckin}
-            className={`px-2 py-1 rounded-lg text-[11px] md:text-xs font-black border transition-all whitespace-nowrap shrink-0 ${checkedIn ? 'bg-gray-100 text-gray-400 border-gray-200' : 'bg-[#dc2626] text-white border-[#dc2626] active:scale-95'}`}
+            className={`px-2 py-1 rounded-lg t-tag border transition-all whitespace-nowrap shrink-0 ${checkedIn ? 'bg-gray-100 text-gray-400 border-gray-200' : 'bg-[#dc2626] text-white border-[#dc2626] active:scale-95'}`}
             aria-label={checkedIn ? T.checkedIn : T.checkin}
           >
             {/* 390px 폰에서는 네비게이션이 넘치므로 아이콘만 보여 준다. */}
@@ -589,32 +587,32 @@ export default function CivilPage() {
           <div className="flex-1 bg-gray-50 rounded-2xl border border-black/5 p-4 md:p-5 relative shadow-inner overflow-hidden text-left flex flex-col justify-center">
             <div className="absolute top-0 left-0 w-full h-1 bg-[#dc2626]"></div>
             <div className="flex flex-wrap items-center gap-1.5">
-              <span className="text-[#dc2626] text-[11px] md:text-xs font-bold uppercase tracking-widest">{T.subtitle}</span>
-              <span translate="no" className="notranslate bg-black text-white text-[11px] font-black px-1.5 py-0.5 rounded">🌍 {T.globalCoverage}</span>
+              <span className="text-[#dc2626] t-tag uppercase">{T.subtitle}</span>
+              <span translate="no" className="notranslate bg-black text-white t-tag px-1.5 py-0.5 rounded">🌍 {T.globalCoverage}</span>
             </div>
-            <h1 className="text-black text-2xl md:text-3xl uppercase tracking-tighter leading-none mt-1">{T.heroTitle}</h1>
-            <p className="text-gray-500 text-xs md:text-sm font-bold leading-relaxed mt-2">{T.heroDesc}</p>
+            <h1 className="t-hero text-black uppercase mt-1">{T.heroTitle}</h1>
+            <p className="text-gray-500 t-sub mt-2">{T.heroDesc}</p>
           </div>
 
           <div className="md:w-64 bg-white rounded-2xl border-2 border-black p-4 md:p-5 text-left flex flex-col justify-between">
             <div>
-              <p className="text-gray-400 text-[11px] md:text-xs font-bold uppercase">{T.pointLabel}</p>
-              <p className="text-black text-2xl md:text-3xl leading-none mt-1">
-                {points.toLocaleString()} <span translate="no" className="notranslate text-sm md:text-base text-[#dc2626] italic">BEOM</span>
+              <p className="text-gray-400 t-tag uppercase">{T.pointLabel}</p>
+              <p className="t-stat text-black mt-1">
+                {points.toLocaleString()} <span translate="no" className="notranslate t-tag text-[#dc2626]">BEOM</span>
               </p>
             </div>
             <div className="mt-3 space-y-1">
-              <label className="text-black text-[11px] md:text-xs font-bold block">{T.myCountry}</label>
+              <label className="text-black t-body block">{T.myCountry}</label>
               <button
                 onClick={() => setPicker('MY')}
-                className="w-full flex items-center justify-between gap-1 bg-gray-50 border border-black/10 text-black text-xs md:text-sm font-black rounded-xl px-2 py-2 hover:border-black transition-colors"
+                className="w-full flex items-center justify-between gap-1 bg-gray-50 border border-black/10 text-black t-btn rounded-xl px-2 py-2 hover:border-black transition-colors"
               >
                 <span className="truncate">
                   {myCountryInfo.flag} {ko ? myCountryInfo.ko : myCountryInfo.en} ({myCountryInfo.code})
                 </span>
-                <span className="text-[11px] text-gray-400 shrink-0">▾ {T.change}</span>
+                <span className="t-sub text-neutral-500 shrink-0">▾ {T.change}</span>
               </button>
-              <p className="text-gray-500 text-[11px] md:text-xs font-bold flex items-center gap-1">
+              <p className="text-gray-500 t-sub flex items-center gap-1">
                 <span className="w-2 h-2 bg-green-500 rounded-full inline-block"></span>
                 {T.verified}: {myCountryInfo.flag} {ko ? myCountryInfo.ko : myCountryInfo.en}
               </p>
@@ -624,7 +622,7 @@ export default function CivilPage() {
 
         {/* Country room filter — 주요국 빠른 필터 + 전 세계 238개국 검색 */}
         <div className="space-y-1.5">
-          <div className="flex gap-1.5 overflow-x-auto font-black pb-0.5">
+          <div className="flex gap-1.5 overflow-x-auto pb-0.5">
             {tabs.map(code => {
               const info = countryOf(code);
               const active = viewCountry === code;
@@ -632,7 +630,7 @@ export default function CivilPage() {
                 <button
                   key={code}
                   onClick={() => setViewCountry(code)}
-                  className={`px-3 py-1.5 rounded-xl text-xs md:text-sm font-black border transition-all whitespace-nowrap shrink-0 active:scale-95 ${
+                  className={`px-3 py-1.5 rounded-xl t-btn border transition-all whitespace-nowrap shrink-0 active:scale-95 ${
                     active ? 'bg-black text-white border-black shadow-md' : 'bg-white text-gray-400 border-black/10 hover:text-black'
                   }`}
                 >
@@ -642,7 +640,7 @@ export default function CivilPage() {
             })}
             <button
               onClick={() => setPicker('VIEW')}
-              className="px-3 py-1.5 rounded-xl text-xs md:text-sm font-black border border-[#dc2626] text-[#dc2626] bg-white hover:bg-[#dc2626] hover:text-white transition-all whitespace-nowrap shrink-0 active:scale-95"
+              className="px-3 py-1.5 rounded-xl t-btn border border-[#dc2626] text-[#dc2626] bg-white hover:bg-[#dc2626] hover:text-white transition-all whitespace-nowrap shrink-0 active:scale-95"
             >
               🌐 {T.allCountries} ▾
             </button>
@@ -658,23 +656,23 @@ export default function CivilPage() {
             <div className="flex items-center gap-2 min-w-0">
               <span className="text-lg">{viewInfo.flag}</span>
               <div className="min-w-0 text-left">
-                <p className="text-black text-xs md:text-sm font-black truncate">
+                <p className="text-black t-card truncate">
                   {ko ? viewInfo.ko : viewInfo.en}
-                  <span className="text-gray-400 font-mono text-[11px] ml-1">{viewInfo.code}</span>
+                  <span className="text-gray-400 font-mono t-tag ml-1">{viewInfo.code}</span>
                 </p>
-                <p className="text-gray-400 text-[11px] font-bold">{roomAgendas.length}{T.roomCount}</p>
+                <p className="text-neutral-500 t-sub">{roomAgendas.length}{T.roomCount}</p>
               </div>
             </div>
             <div className="flex flex-wrap items-center justify-end gap-1.5 min-w-0">
               <button
                 onClick={() => setPicker('VIEW')}
-                className="shrink-0 whitespace-nowrap px-2.5 py-1.5 rounded-lg text-[11px] md:text-xs font-black border border-black/10 bg-white text-gray-500 hover:text-black hover:border-black"
+                className="shrink-0 whitespace-nowrap px-2.5 py-1.5 rounded-lg t-tag border border-black/10 bg-white text-gray-500 hover:text-black hover:border-black"
               >
                 🔎 {ko ? '국가 변경' : 'Change'}
               </button>
               <button
                 onClick={() => { if (!requireAuth(T.propose)) return; setShowPropose(v => !v); }}
-                className="shrink-0 whitespace-nowrap px-2.5 py-1.5 rounded-lg text-[11px] md:text-xs font-black border border-[#dc2626] bg-[#dc2626] text-white hover:bg-black hover:border-black"
+                className="shrink-0 whitespace-nowrap px-2.5 py-1.5 rounded-lg t-tag border border-[#dc2626] bg-[#dc2626] text-white hover:bg-black hover:border-black"
               >
                 {T.propose}{!authenticated && ' 🔒'}
               </button>
@@ -684,32 +682,32 @@ export default function CivilPage() {
           {/* 안건 제안 폼 */}
           {showPropose && (
             <div className="bg-white border-2 border-[#dc2626] rounded-2xl p-3 md:p-4 mb-2 space-y-2 text-left">
-              <p className="text-black text-xs md:text-sm font-black">
+              <p className="text-black t-card">
                 {viewInfo.flag} {ko ? viewInfo.ko : viewInfo.en} — {ko ? '안건 제안' : 'Propose an agenda'}
               </p>
-              <p className="text-gray-400 text-[11px] md:text-xs font-bold">{T.proposeDesc}</p>
+              <p className="text-neutral-500 t-sub">{T.proposeDesc}</p>
               <input
                 value={propKo}
                 onChange={e => setPropKo(e.target.value)}
                 placeholder={ko ? '예: 지방선거 개표 결과 온체인 검증 의무화' : 'e.g. 온체인 개표 검증'}
-                className="w-full bg-gray-50 border border-black/10 rounded-xl px-3 py-2.5 text-xs md:text-sm text-black placeholder-gray-400 outline-none focus:border-black font-bold"
+                className="w-full bg-gray-50 border border-black/10 rounded-xl px-3 py-2.5 t-body text-black placeholder-gray-400 outline-none focus:border-black"
               />
               <input
                 value={propEn}
                 onChange={e => setPropEn(e.target.value)}
                 placeholder="e.g. Mandatory on-chain verification of vote counts"
-                className="w-full bg-gray-50 border border-black/10 rounded-xl px-3 py-2.5 text-xs md:text-sm text-black placeholder-gray-400 outline-none focus:border-black font-bold"
+                className="w-full bg-gray-50 border border-black/10 rounded-xl px-3 py-2.5 t-body text-black placeholder-gray-400 outline-none focus:border-black"
               />
               <div className="grid grid-cols-2 gap-2">
                 <button
                   onClick={handlePropose}
-                  className="py-2.5 rounded-xl text-xs md:text-sm font-black bg-[#dc2626] text-white hover:bg-black transition-all active:scale-95"
+                  className="py-2.5 rounded-xl t-btn bg-[#dc2626] text-white hover:bg-black transition-all active:scale-95"
                 >
                   {T.propSubmit}{!authenticated && ' 🔒'}
                 </button>
                 <button
                   onClick={() => setShowPropose(false)}
-                  className="py-2.5 rounded-xl text-xs md:text-sm font-black bg-white text-black border-2 border-black hover:text-[#dc2626] hover:border-[#dc2626] transition-all active:scale-95"
+                  className="py-2.5 rounded-xl t-btn bg-white text-black border-2 border-black hover:text-[#dc2626] hover:border-[#dc2626] transition-all active:scale-95"
                 >
                   {T.propCancel}
                 </button>
@@ -719,7 +717,7 @@ export default function CivilPage() {
 
           <div className="space-y-2">
             {roomAgendas.length === 0 && (
-              <p className="text-gray-400 text-xs md:text-sm font-bold text-center py-6">{T.noAgenda}</p>
+              <p className="text-neutral-500 t-sub text-center py-6">{T.noAgenda}</p>
             )}
             {roomAgendas.map(a => {
               const myVote = voted[a.id];
@@ -735,23 +733,23 @@ export default function CivilPage() {
                   <div className="flex justify-between items-start gap-2">
                     <div className="min-w-0">
                       <div className="flex flex-wrap items-center gap-1.5">
-                        <span className="bg-black text-white text-[11px] md:text-xs font-black px-2 py-0.5 rounded notranslate" translate="no">
+                        <span className="bg-black text-white t-tag px-2 py-0.5 rounded notranslate" translate="no">
                           {countryInfo.flag} {a.country}
                         </span>
-                        <span className={`text-[11px] md:text-xs font-black px-2 py-0.5 rounded border ${(a.tag === 'Tax Hunter' || a.proposed) ? 'bg-[#dc2626] text-white border-[#dc2626]' : 'bg-gray-50 text-gray-600 border-black/10'}`}>
+                        <span className={`t-tag px-2 py-0.5 rounded border ${(a.tag === 'Tax Hunter' || a.proposed) ? 'bg-[#dc2626] text-white border-[#dc2626]' : 'bg-gray-50 text-gray-600 border-black/10'}`}>
                           {ko ? a.tag : a.tagEn}
                         </span>
                       </div>
-                      <h3 className="text-black text-sm md:text-base font-black leading-snug mt-2">{ko ? a.title : a.titleEn}</h3>
+                      <h3 className="text-black t-card mt-2">{ko ? a.title : a.titleEn}</h3>
                     </div>
-                    <span className="text-gray-400 text-[11px] md:text-xs font-mono shrink-0">{T.ends} {a.deadline}</span>
+                    <span className="text-gray-400 t-tag font-mono shrink-0">{T.ends} {a.deadline}</span>
                   </div>
 
                   <div className="space-y-1">
                     {total === 0 ? (
-                      <p className="text-gray-400 text-[11px] md:text-xs font-bold">{T.noVotesYet}</p>
+                      <p className="text-neutral-500 t-sub">{T.noVotesYet}</p>
                     ) : (
-                      <div className="flex justify-between text-[11px] md:text-xs font-bold">
+                      <div className="flex justify-between t-body">
                         <span className="text-black">{T.yes} {yesPct}%</span>
                         <span className="text-[#dc2626]">{T.no} {noPct}%</span>
                       </div>
@@ -760,26 +758,26 @@ export default function CivilPage() {
                       <div className="bg-black h-full" style={{ width: `${yesPct}%` }}></div>
                       <div className="bg-[#dc2626] h-full" style={{ width: `${noPct}%` }}></div>
                     </div>
-                    <p className="text-gray-400 text-[11px] md:text-xs font-bold">
+                    <p className="text-neutral-500 t-sub">
                       {(total + (a.baseVoters ?? 0)).toLocaleString()} {T.voters}
                     </p>
                   </div>
 
                   {locked ? (
                     <div className="bg-gray-50 border border-dashed border-black/20 rounded-xl px-3 py-2.5 text-center">
-                      <p className="text-gray-500 text-xs md:text-sm font-bold">{T.locked}</p>
+                      <p className="text-gray-500 t-sub">{T.locked}</p>
                     </div>
                   ) : (
                     <div className="grid grid-cols-2 gap-2">
                       <button
                         onClick={() => handleVote(a, 'YES')}
-                        className={`py-2.5 rounded-xl text-xs md:text-sm font-black transition-all active:scale-95 ${myVote === 'YES' ? 'bg-[#dc2626] text-white' : 'bg-black text-white hover:bg-[#dc2626]'}`}
+                        className={`py-2.5 rounded-xl t-btn transition-all active:scale-95 ${myVote === 'YES' ? 'bg-[#dc2626] text-white' : 'bg-black text-white hover:bg-[#dc2626]'}`}
                       >
                         {T.voteYes}{!authenticated && ' 🔒'}
                       </button>
                       <button
                         onClick={() => handleVote(a, 'NO')}
-                        className={`py-2.5 rounded-xl text-xs md:text-sm font-black transition-all active:scale-95 border-2 ${myVote === 'NO' ? 'bg-white text-[#dc2626] border-[#dc2626]' : 'bg-white text-black border-black hover:text-[#dc2626] hover:border-[#dc2626]'}`}
+                        className={`py-2.5 rounded-xl t-btn transition-all active:scale-95 border-2 ${myVote === 'NO' ? 'bg-white text-[#dc2626] border-[#dc2626]' : 'bg-white text-black border-black hover:text-[#dc2626] hover:border-[#dc2626]'}`}
                       >
                         {T.voteNo}{!authenticated && ' 🔒'}
                       </button>
@@ -790,7 +788,7 @@ export default function CivilPage() {
             })}
           </div>
           {lockActive && (
-            <p className="text-[#dc2626] text-[11px] md:text-xs font-bold mt-2">
+            <p className="text-[#dc2626] t-body mt-2">
               🔒 {ko ? '내 KYC 국가' : 'My KYC country'}: {myCountryInfo.flag} {ko ? myCountryInfo.ko : myCountryInfo.en} — {ko ? '다른 나라 안건은 참관만 가능합니다.' : 'other countries are view only.'}
             </p>
           )}
@@ -800,16 +798,16 @@ export default function CivilPage() {
         <div className="bg-white border-2 border-black rounded-2xl p-4 md:p-5 text-left space-y-2.5">
           <div className="flex items-start justify-between gap-2">
             <div className="min-w-0">
-              <h2 className="text-black text-sm md:text-base font-black">
+              <h2 className="text-black t-card">
                 <span translate="no" className="notranslate text-[#7d4698]">π</span> {ko ? '시민 검증 풀 후원' : 'Citizen verification pool'}
               </h2>
-              <p className="text-gray-400 text-[11px] md:text-xs font-bold mt-0.5 leading-relaxed">
+              <p className="text-neutral-500 t-sub mt-0.5">
                 {ko
                   ? '후원한 파이는 238개국 안건의 KYC 검증·감사 비용으로만 쓰이고, 지출 내역은 온체인에 공개됩니다.'
                   : 'Support funds KYC verification and audits across 238 countries — every spend is published on-chain.'}
               </p>
             </div>
-            <span className="shrink-0 text-[10px] md:text-[11px] font-black bg-gray-50 border border-black/10 rounded-full px-2 py-0.5 text-gray-500">
+            <span className="shrink-0 t-tag bg-gray-50 border border-black/10 rounded-full px-2 py-0.5 text-gray-500">
               {ko ? 'Pi 결제' : 'Pi payment'}
             </span>
           </div>
@@ -832,16 +830,16 @@ export default function CivilPage() {
               <div key={m.name} className="bg-white border border-black/10 rounded-xl p-3 md:p-4 flex justify-between items-center gap-2 text-left">
                 <div className="min-w-0">
                   <div className="flex items-center gap-1.5">
-                    <span className="text-[11px] md:text-xs bg-gray-50 text-gray-500 px-1.5 py-0.5 rounded font-bold border border-black/5">{ko ? m.tag : m.tagEn}</span>
-                    <h3 className="text-black text-sm md:text-base font-black truncate">{ko ? m.name : m.nameEn}</h3>
+                    <span className="t-tag bg-gray-50 text-gray-500 px-1.5 py-0.5 rounded border border-black/5">{ko ? m.tag : m.tagEn}</span>
+                    <h3 className="text-black t-card truncate">{ko ? m.name : m.nameEn}</h3>
                   </div>
-                  <p className="text-gray-400 text-[11px] md:text-xs font-bold mt-0.5">
+                  <p className="text-neutral-500 t-sub mt-0.5">
                     {T.signers}: {(m.signers + (demanded[m.name] ? 1 : 0)).toLocaleString()}
                   </p>
                 </div>
                 <button
                   onClick={() => handleDemand(m)}
-                  className={`px-3 py-1.5 rounded-lg text-[11px] md:text-xs font-black whitespace-nowrap active:scale-95 transition-all ${demanded[m.name] ? 'bg-gray-100 text-gray-400 border border-black/10' : 'bg-[#dc2626] text-white hover:bg-black'}`}
+                  className={`px-3 py-1.5 rounded-lg t-tag whitespace-nowrap active:scale-95 transition-all ${demanded[m.name] ? 'bg-gray-100 text-gray-400 border border-black/10' : 'bg-[#dc2626] text-white hover:bg-black'}`}
                 >
                   {demanded[m.name] ? T.demanded : T.demand}{!authenticated && ' 🔒'}
                 </button>
@@ -857,7 +855,7 @@ export default function CivilPage() {
             <select
               value={linkAgenda}
               onChange={e => setLinkAgenda(e.target.value)}
-              className="w-full bg-white text-black text-xs md:text-sm font-black rounded-xl px-3 py-2.5 outline-none cursor-pointer"
+              className="w-full bg-white text-black t-btn rounded-xl px-3 py-2.5 outline-none cursor-pointer"
             >
               {allLinkableAgendas.map(a => (
                 <option key={a.id} value={a.id}>
@@ -865,12 +863,12 @@ export default function CivilPage() {
                 </option>
               ))}
             </select>
-            <p translate="no" className="notranslate text-gray-400 text-[11px] md:text-xs font-mono break-all bg-white/10 rounded-lg px-3 py-2">
+            <p translate="no" className="notranslate text-gray-400 t-tag font-mono break-all bg-white/10 rounded-lg px-3 py-2">
               https://kedheon.com/civil?vote={linkAgenda}
             </p>
             <button
               onClick={handleGenerateLink}
-              className="w-full bg-[#dc2626] text-white py-3 rounded-xl text-xs md:text-sm font-black hover:bg-white hover:text-black transition-all active:scale-95"
+              className="w-full bg-[#dc2626] text-white py-3 rounded-xl t-btn hover:bg-white hover:text-black transition-all active:scale-95"
             >
               {T.generate}{!authenticated && ' 🔒'}
             </button>

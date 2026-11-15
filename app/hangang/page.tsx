@@ -34,12 +34,12 @@ function fmtPi(n: number) {
 
 function SectionHead({ no, title, desc }: { no: string; title: string; desc: string }) {
   return (
-    <div className="mt-6 mb-2 text-left">
-      <div className="flex items-center gap-2">
-        <span className="text-[#dc2626] text-[11px] md:text-xs font-black italic leading-none">{no}</span>
-        <h2 className="text-black text-base md:text-xl font-black italic uppercase tracking-tighter leading-none">{title}</h2>
+    <div className="mt-7 mb-2 text-left border-t-2 border-[#dc2626] pt-3">
+      <div className="flex items-baseline gap-2">
+        <span className="t-tag text-[#dc2626] shrink-0">{no}</span>
+        <h2 className="t-section text-neutral-900 uppercase border-l-[5px] border-black pl-2.5">{title}</h2>
       </div>
-      <p className="text-gray-400 text-[11px] md:text-xs font-bold mt-1.5 leading-snug">{desc}</p>
+      <p className="t-sub text-neutral-500 mt-1.5 pl-[calc(5px+0.625rem)]">{desc}</p>
     </div>
   );
 }
@@ -109,18 +109,18 @@ export default function HangangPage() {
   const goodsOf = (id: string) => GOODS.find(g => g.id === id) || GOODS[0];
 
   return (
-    <div className={`flex flex-col items-center bg-white min-h-screen text-black font-sans w-full pb-24 font-black selection:bg-red-50 overflow-x-hidden ${lang === 'KR' ? 'break-keep' : ''}`}>
+    <div className={`flex flex-col items-center bg-white min-h-screen text-black font-sans w-full pb-24 selection:bg-red-50 overflow-x-hidden ${lang === 'KR' ? 'break-keep' : ''}`}>
 
       {/* ── 상단 네비게이션 (케데헌 규격 · 10개국어) ─────────────── */}
       <AppHeader
         brand={
           <div className="flex items-center gap-2 md:gap-3 min-w-0">
             <div className="w-8 h-8 md:w-11 md:h-11 rounded-lg border-2 border-black bg-black flex items-center justify-center shrink-0">
-              <span className="text-white text-sm md:text-lg font-black italic leading-none" translate="no">H</span>
+              <span className="text-white t-card" translate="no">H</span>
             </div>
-            <div className="text-left leading-tight font-black min-w-0">
-              <h1 className="notranslate text-black text-sm md:text-base italic uppercase leading-none truncate" translate="no">Hangang</h1>
-              <span className="block text-gray-400 text-[10px] md:text-[11px] font-mono tracking-widest uppercase whitespace-nowrap">K-CULTURE PASS</span>
+            <div className="text-left leading-tight font-bold min-w-0">
+              <h1 className="notranslate t-brand text-black italic uppercase truncate" translate="no">Hangang</h1>
+              <span className="block text-gray-400 t-tag font-mono uppercase whitespace-nowrap">K-CULTURE PASS</span>
             </div>
           </div>
         }
@@ -131,7 +131,7 @@ export default function HangangPage() {
               value={lang}
               onChange={e => setLang(e.target.value as Lang)}
               aria-label="Language"
-              className="appearance-none bg-gray-100 border border-gray-200 text-black text-[11px] md:text-xs font-black rounded-lg pl-2 pr-5 py-1 outline-none cursor-pointer shadow-sm focus:border-black transition-colors"
+              className="appearance-none bg-gray-100 border border-gray-200 text-black t-tag rounded-lg pl-2 pr-5 py-1 outline-none cursor-pointer shadow-sm focus:border-black transition-colors"
             >
               {LANGS.map(l => (
                 <option key={l.code} value={l.code}>{l.flag} {l.label}</option>
@@ -153,20 +153,20 @@ export default function HangangPage() {
 
           <div className="relative grid grid-cols-1 md:grid-cols-[1.08fr_0.92fr] gap-5 md:gap-7 items-center">
             <div className="text-center md:text-left order-2 md:order-1">
-              <p translate="no" className="notranslate inline-block text-[10px] md:text-[11px] font-mono tracking-[0.25em] text-[#dc2626] uppercase mb-2">
+              <p translate="no" className="notranslate inline-block t-tag font-mono text-[#dc2626] uppercase mb-2">
                 hangang.pi · K-Culture Pass
               </p>
-              <h2 className="text-black text-xl md:text-4xl font-black tracking-tighter leading-tight">
+              <h2 className="t-hero text-black">
                 {T('heroTitle')}
               </h2>
-              <p className="text-gray-500 text-[11px] md:text-sm font-bold mt-3 max-w-2xl mx-auto md:mx-0 leading-relaxed">
+              <p className="text-gray-500 t-sub mt-3 max-w-2xl mx-auto md:mx-0">
                 {T('heroDesc')}
               </p>
               <div className="flex flex-wrap items-center justify-center md:justify-start gap-1.5 mt-3">
-                <span className="text-[9px] md:text-[10px] font-mono font-black tracking-[0.14em] uppercase bg-black text-white rounded-md px-2 py-1">
+                <span className="t-tag font-mono uppercase bg-black text-white rounded-md px-2 py-1">
                   {T('heroTag1')}
                 </span>
-                <span className="text-[9px] md:text-[10px] font-mono font-black tracking-[0.14em] uppercase bg-white border border-black/10 text-gray-500 rounded-md px-2 py-1">
+                <span className="t-tag font-mono uppercase bg-white border border-black/10 text-gray-500 rounded-md px-2 py-1">
                   {T('heroTag2')}
                 </span>
               </div>
@@ -182,7 +182,7 @@ export default function HangangPage() {
                 fetchPriority="high"
                 className="w-full aspect-square object-cover rounded-2xl border-2 border-black shadow-xl"
               />
-              <figcaption className="mt-2.5 text-center text-[9px] md:text-[10px] font-mono font-black tracking-[0.14em] uppercase text-gray-400">
+              <figcaption className="mt-2.5 text-center t-tag font-mono uppercase text-gray-400">
                 {T('imgCaption')}
               </figcaption>
             </figure>
@@ -196,8 +196,8 @@ export default function HangangPage() {
               { v: `🐾 ${beom}`, label: T('statBeom') }
             ].map((s, i) => (
               <div key={i} className="bg-white border border-black/10 rounded-xl px-2 py-2.5">
-                <p translate="no" className="notranslate text-black text-sm md:text-lg font-black leading-none">{s.v}</p>
-                <p className="text-gray-400 text-[10px] md:text-[11px] font-bold mt-1 leading-tight">{s.label}</p>
+                <p translate="no" className="notranslate text-black t-stat">{s.v}</p>
+                <p className="text-gray-400 t-tag mt-1">{s.label}</p>
               </div>
             ))}
           </div>
@@ -214,22 +214,22 @@ export default function HangangPage() {
               onClick={() => selectZone(z.key)}
               className={`notranslate shrink-0 px-3 py-2 rounded-xl border text-left transition-all ${zone.key === z.key ? 'bg-black text-white border-black shadow-md' : 'bg-white text-gray-400 border-black/10 hover:text-black'}`}
             >
-              <span className="block text-[11px] md:text-sm font-black italic leading-none">{z.code}</span>
-              <span className={`block text-[9px] md:text-[10px] font-bold mt-1 leading-tight ${zone.key === z.key ? 'text-white/60' : 'text-gray-300'}`}>{L(z.sub)}</span>
+              <span className="block t-card">{z.code}</span>
+              <span className={`block t-tag mt-1 ${zone.key === z.key ? 'text-white/60' : 'text-gray-300'}`}>{L(z.sub)}</span>
             </button>
           ))}
         </div>
 
         {/* 권역 실속 팁 */}
         <div className="mt-2 bg-gray-50 border border-black/10 rounded-2xl px-3 py-2.5 md:px-4">
-          <p className="text-[10px] md:text-[11px] font-black uppercase tracking-widest text-[#dc2626] mb-1.5">
+          <p className="t-tag uppercase text-[#dc2626] mb-1.5">
             {T('tipsLabel')}
           </p>
           <ul className="space-y-1">
             {zone.tips.map((tip, i) => (
               <li key={i} className="flex gap-1.5 text-left">
-                <span className="shrink-0 text-[10px] md:text-[11px] font-black text-[#dc2626] leading-snug">{i + 1}</span>
-                <span className="text-[10px] md:text-[11px] font-bold text-gray-600 leading-snug">{L(tip)}</span>
+                <span className="shrink-0 t-tag text-[#dc2626]">{i + 1}</span>
+                <span className="t-body text-gray-600">{L(tip)}</span>
               </li>
             ))}
           </ul>
@@ -238,10 +238,10 @@ export default function HangangPage() {
         <div className="mt-2 bg-white border-2 border-black/10 rounded-2xl p-3 md:p-5">
           <div className="flex flex-wrap items-center justify-between gap-2 border-b border-gray-100 pb-2.5">
             <div className="text-left">
-              <p className="text-black text-xs md:text-sm font-black">{L(zone.venues)}</p>
-              <p className="text-gray-400 text-[10px] md:text-[11px] font-bold mt-0.5">{T('zoneOptionsDesc')}</p>
+              <p className="text-black t-card">{L(zone.venues)}</p>
+              <p className="text-neutral-500 t-sub mt-1">{T('zoneOptionsDesc')}</p>
             </div>
-            <span className="text-[10px] md:text-[11px] font-black bg-gray-100 px-2 py-1 rounded-full text-gray-500">
+            <span className="t-tag bg-gray-100 px-2 py-1 rounded-full text-gray-500">
               {T('kycBadge')}
             </span>
           </div>
@@ -249,7 +249,7 @@ export default function HangangPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 mt-3">
             {PICK_ORDER.map(k => (
               <div key={k} className="bg-gray-50 rounded-xl border border-black/5 p-2.5">
-                <p className={`text-[10px] md:text-[11px] font-black tracking-widest mb-1.5 ${k === 'stay' ? 'uppercase text-gray-400' : 'uppercase text-gray-400'}`}>
+                <p className={`t-tag mb-1.5 ${k === 'stay' ? 'uppercase text-gray-400' : 'uppercase text-gray-400'}`}>
                   <span className="mr-1">{PICK_ICON[k]}</span>
                   {T(PICK_LABEL_KEY[k])}
                 </p>
@@ -262,11 +262,11 @@ export default function HangangPage() {
                         onClick={() => setPick(p => ({ ...p, [k]: i }))}
                         className={`w-full text-left flex items-start justify-between gap-2 rounded-lg px-2 py-1.5 border transition-all ${on ? 'bg-white border-[#dc2626] shadow-sm' : 'bg-white/60 border-black/5 hover:border-black/20'}`}
                       >
-                        <span className={`min-w-0 block text-[11px] md:text-xs font-black leading-snug ${on ? 'text-black' : 'text-gray-500'}`}>
+                        <span className={`min-w-0 block t-body ${on ? 'text-black' : 'text-gray-500'}`}>
                           {L(o.t)}
                         </span>
-                        <span translate="no" className={`notranslate shrink-0 text-[11px] md:text-xs font-black ${on ? 'text-[#dc2626]' : 'text-gray-400'}`}>
-                          {fmtPi(o.pi)} <span className="text-[9px]">Pi</span>
+                        <span translate="no" className={`notranslate shrink-0 t-body ${on ? 'text-[#dc2626]' : 'text-gray-400'}`}>
+                          {fmtPi(o.pi)} <span className="t-tag">Pi</span>
                         </span>
                       </button>
                     );
@@ -278,31 +278,31 @@ export default function HangangPage() {
 
           <div className="mt-3 flex flex-col md:flex-row md:items-center justify-between gap-2 bg-black rounded-xl px-3 py-3">
             <div className="text-left">
-              <p className="text-white/50 text-[10px] md:text-[11px] font-bold leading-none">{T('totalLabel')}</p>
-              <p className="text-white text-lg md:text-2xl font-black leading-none mt-1">
+              <p className="text-white/50 t-tag">{T('totalLabel')}</p>
+              <p className="text-white t-stat mt-1">
                 <span translate="no" className="notranslate">{fmtPi(total)}</span>
-                <span translate="no" className="notranslate text-[#dc2626] text-xs md:text-sm ml-1">Pi</span>
-                <span className="notranslate text-white/60 text-[10px] md:text-xs ml-2">+ 🐾 5</span>
+                <span translate="no" className="notranslate text-[#dc2626] t-body ml-1">Pi</span>
+                <span className="notranslate text-white/60 t-tag ml-2">+ 🐾 5</span>
               </p>
             </div>
             <button
               onClick={() => { if (!requireAuth(T('bookBtn'))) return; setInquiry(true); }}
-              className="bg-[#dc2626] hover:bg-white hover:text-black text-white text-xs md:text-sm font-black px-4 py-2.5 rounded-lg transition-all active:scale-95"
+              className="bg-[#dc2626] hover:bg-white hover:text-black text-white t-btn px-4 py-2.5 rounded-lg transition-all active:scale-95"
             >
               {T('bookBtn')}{!authenticated && ' 🔒'}
             </button>
           </div>
-          <p className="text-gray-400 text-[10px] md:text-[11px] font-bold mt-2 leading-snug">{T('bookNote')}</p>
+          <p className="text-neutral-500 t-sub mt-2">{T('bookNote')}</p>
         </div>
 
         {booked.length > 0 && (
           <div className="mt-2 space-y-1">
             {booked.map(b => (
               <div key={b.id} className="flex items-center justify-between gap-2 bg-gray-50 border-l-[4px] border-[#dc2626] rounded-lg px-2.5 py-2">
-                <p className="text-[10px] md:text-[11px] font-black text-black truncate">
+                <p className="t-tag text-black truncate">
                   <span className="notranslate" translate="no">{b.zone}</span> · {T('reservedLabel')} · <span className="notranslate" translate="no">#{b.id}</span>
                 </p>
-                <p className="text-[10px] md:text-[11px] font-black text-[#dc2626] shrink-0">
+                <p className="t-tag text-[#dc2626] shrink-0">
                   <span translate="no" className="notranslate">{fmtPi(b.total)} Pi</span>
                 </p>
               </div>
@@ -319,20 +319,20 @@ export default function HangangPage() {
               <div>
                 <div className="flex items-start justify-between gap-1">
                   <span className="text-lg md:text-xl leading-none">{g.icon}</span>
-                  <span className="notranslate text-[9px] font-black bg-gray-100 text-gray-500 rounded-full px-1.5 py-0.5">{g.grade}</span>
+                  <span className="notranslate t-tag bg-gray-100 text-gray-500 rounded-full px-1.5 py-0.5">{g.grade}</span>
                 </div>
-                <p className="text-[10px] md:text-[11px] font-black text-black leading-snug mt-1.5">{L(g.t)}</p>
+                <p className="t-tag text-black mt-1.5">{L(g.t)}</p>
               </div>
               <div className="flex items-center justify-between mt-2">
-                <span translate="no" className="notranslate text-[11px] md:text-xs font-black text-[#dc2626]">{fmtPi(g.pi)} Pi</span>
-                <span className="text-[9px] font-bold text-gray-300">FactFilter {g.grade}</span>
+                <span translate="no" className="notranslate t-tag text-[#dc2626]">{fmtPi(g.pi)} Pi</span>
+                <span className="t-tag text-gray-300">FactFilter {g.grade}</span>
               </div>
             </div>
           ))}
         </div>
 
         <div className="mt-2 bg-white border-2 border-black/10 rounded-2xl p-3 md:p-4">
-          <p className="text-[11px] md:text-xs font-black uppercase tracking-widest text-gray-400 mb-2">
+          <p className="t-tag uppercase text-gray-400 mb-2">
             {T('requestLabel')}
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5">
@@ -340,7 +340,7 @@ export default function HangangPage() {
               value={reqType}
               onChange={e => setReqType(e.target.value)}
               aria-label={T('requestLabel')}
-              className="bg-gray-50 border border-black/5 rounded-lg px-2.5 py-2 text-[11px] md:text-xs font-black outline-none focus:border-black"
+              className="bg-gray-50 border border-black/5 rounded-lg px-2.5 py-2 t-tag outline-none focus:border-black"
             >
               {GOODS.map(g => (
                 <option key={g.id} value={g.id}>{L(g.t)}</option>
@@ -350,7 +350,7 @@ export default function HangangPage() {
               value={reqZone}
               onChange={e => setReqZone(e.target.value)}
               aria-label="Region"
-              className="bg-gray-50 border border-black/5 rounded-lg px-2.5 py-2 text-[11px] md:text-xs font-black outline-none focus:border-black"
+              className="bg-gray-50 border border-black/5 rounded-lg px-2.5 py-2 t-tag outline-none focus:border-black"
             >
               {ZONES.map(z => (
                 <option key={z.key} value={z.key} translate="no" className="notranslate">{z.code} · {L(z.sub)}</option>
@@ -361,13 +361,13 @@ export default function HangangPage() {
             value={reqNote}
             onChange={e => setReqNote(e.target.value)}
             placeholder={T('reqPlaceholder')}
-            className="w-full mt-1.5 bg-gray-50 border border-black/5 rounded-lg p-2.5 text-[11px] md:text-xs font-bold h-16 outline-none focus:border-black leading-relaxed"
+            className="w-full mt-1.5 bg-gray-50 border border-black/5 rounded-lg p-2.5 t-body h-16 outline-none focus:border-black"
           />
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 mt-2">
-            <p className="text-gray-400 text-[10px] md:text-[11px] font-bold leading-snug">{T('reqNote')}</p>
+            <p className="text-gray-400 t-tag">{T('reqNote')}</p>
             <button
               onClick={submitRequest}
-              className="shrink-0 bg-black hover:bg-[#dc2626] text-white text-xs md:text-sm font-black px-4 py-2.5 rounded-lg transition-all active:scale-95"
+              className="shrink-0 bg-black hover:bg-[#dc2626] text-white t-btn px-4 py-2.5 rounded-lg transition-all active:scale-95"
             >
               {T('submitBtn')}{!authenticated && ' 🔒'}
             </button>
@@ -378,12 +378,12 @@ export default function HangangPage() {
               {requests.map(r => (
                 <div key={r.id} className="flex items-start justify-between gap-2 bg-gray-50 rounded-lg px-2.5 py-2 border-l-[4px] border-black">
                   <div className="min-w-0 text-left">
-                    <p className="text-[10px] md:text-[11px] font-black text-black truncate">{L(goodsOf(r.type).t)}</p>
-                    <p className="text-[10px] font-bold text-gray-400 truncate">{r.note}</p>
+                    <p className="t-tag text-black truncate">{L(goodsOf(r.type).t)}</p>
+                    <p className="t-tag text-gray-400 truncate">{r.note}</p>
                   </div>
                   <div className="shrink-0 text-right">
-                    <p className="notranslate text-[9px] font-black text-gray-400" translate="no">{r.zone} #{r.id}</p>
-                    <p className="text-[9px] font-black text-[#dc2626]">{T('matchingHost')}</p>
+                    <p className="notranslate t-tag text-gray-400" translate="no">{r.zone} #{r.id}</p>
+                    <p className="t-tag text-[#dc2626]">{T('matchingHost')}</p>
                   </div>
                 </div>
               ))}
@@ -402,11 +402,11 @@ export default function HangangPage() {
             { icon: '🚪', title: T('util4Title'), body: T('util4Body') }
           ].map((u, i) => (
             <div key={i} className="bg-white border border-black/10 rounded-xl p-3">
-              <p className="text-black text-[11px] md:text-xs font-black flex items-center gap-1.5">
+              <p className="text-black t-card flex items-center gap-1.5">
                 <span className="text-base leading-none">{u.icon}</span>
                 {u.title}
               </p>
-              <p className="text-gray-500 text-[10px] md:text-[11px] font-bold leading-relaxed mt-1.5">{u.body}</p>
+              <p className="text-neutral-600 t-body mt-1.5">{u.body}</p>
             </div>
           ))}
         </div>
@@ -426,9 +426,9 @@ export default function HangangPage() {
               href={`tel:${h.tel}`}
               className="bg-black rounded-xl p-3 text-left border-2 border-black hover:border-[#dc2626] transition-colors group"
             >
-              <p translate="no" className="notranslate text-white text-xl md:text-2xl font-black leading-none group-hover:text-[#dc2626]">{h.num}</p>
-              <p className="text-white/70 text-[10px] md:text-[11px] font-black mt-1 leading-tight">{h.label}</p>
-              <p className="text-white/40 text-[9px] font-bold mt-1 leading-tight">{h.sub}</p>
+              <p translate="no" className="notranslate t-stat text-white group-hover:text-[#dc2626]">{h.num}</p>
+              <p className="text-white/70 t-tag mt-1">{h.label}</p>
+              <p className="text-white/40 t-tag mt-1">{h.sub}</p>
             </a>
           ))}
         </div>
@@ -443,24 +443,24 @@ export default function HangangPage() {
               className="flex items-start justify-between gap-2 bg-white border border-black/10 rounded-xl px-3 py-2.5 hover:border-black transition-colors"
             >
               <div className="min-w-0 text-left">
-                <p className="text-[11px] md:text-xs font-black text-black leading-snug">{L(l.t)}</p>
-                <p className="text-[10px] md:text-[11px] font-bold text-gray-400 leading-snug mt-0.5">{L(l.d)}</p>
+                <p className="t-card text-black">{L(l.t)}</p>
+                <p className="t-tag text-gray-400 mt-0.5">{L(l.d)}</p>
               </div>
               <div className="shrink-0 flex items-center gap-1.5">
-                <span translate="no" className="notranslate text-[9px] font-black bg-gray-100 text-gray-500 rounded-full px-1.5 py-0.5">{l.tag}</span>
-                <span className="text-gray-300 text-sm">↗</span>
+                <span translate="no" className="notranslate t-tag bg-gray-100 text-gray-500 rounded-full px-1.5 py-0.5">{l.tag}</span>
+                <span className="text-gray-300 t-sub">↗</span>
               </div>
             </a>
           ))}
         </div>
 
         <div className="mt-2 bg-gray-50 border-l-[4px] border-[#dc2626] rounded-lg px-3 py-2.5">
-          <p className="text-[10px] md:text-[11px] font-bold text-gray-500 leading-relaxed text-left">
+          <p className="t-tag text-gray-500 text-left">
             {T('safetyNote')}
           </p>
         </div>
 
-        <p className="text-center text-gray-300 text-[10px] font-bold mt-6 mb-2">
+        <p className="text-center text-gray-300 t-tag mt-6 mb-2">
           <span translate="no" className="notranslate">Hangang</span> · <span translate="no" className="notranslate">hangang.pi</span> · {T('footerTag')}
         </p>
       </main>
@@ -471,38 +471,38 @@ export default function HangangPage() {
           <div className="bg-white w-full max-w-md rounded-t-3xl md:rounded-2xl border-2 border-black p-4 md:p-5 space-y-3 text-left shadow-2xl" onClick={e => e.stopPropagation()}>
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
-                <h3 className="text-black text-sm md:text-base font-black">{T('modalTitle')}</h3>
-                <p translate="no" className="notranslate text-gray-400 text-[11px] font-bold mt-0.5">{zone.code} · {L(zone.venues)}</p>
+                <h3 className="text-black t-card">{T('modalTitle')}</h3>
+                <p translate="no" className="notranslate text-neutral-500 t-sub mt-0.5">{zone.code} · {L(zone.venues)}</p>
               </div>
-              <button onClick={() => setInquiry(false)} aria-label="close" className="shrink-0 w-8 h-8 rounded-full border border-black/10 text-black text-sm font-black hover:bg-gray-100">✕</button>
+              <button onClick={() => setInquiry(false)} aria-label="close" className="shrink-0 w-8 h-8 rounded-full border border-black/10 text-black t-btn hover:bg-gray-100">✕</button>
             </div>
 
             <div className="flex items-center gap-3 bg-gray-50 border border-black/10 rounded-xl p-3">
               <img src="/qr-personal.png" alt="Kedheon secure QR" className="w-20 h-20 object-contain bg-white rounded-lg border border-black/10" />
               <div className="min-w-0">
-                <p className="text-[11px] md:text-xs font-black text-black">{T('modalQR')}</p>
-                <p className="text-[10px] md:text-[11px] font-bold text-gray-500 leading-snug mt-1">{T('modalQRDesc')}</p>
+                <p className="t-card text-black">{T('modalQR')}</p>
+                <p className="t-tag text-gray-500 mt-1">{T('modalQRDesc')}</p>
               </div>
             </div>
 
             <div className="space-y-1">
               {PICK_ORDER.map(k => (
                 <div key={k} className="flex items-start justify-between gap-2 border-b border-gray-100 pb-1">
-                  <p className="text-[10px] md:text-[11px] font-bold text-gray-500 min-w-0">
+                  <p className="t-tag text-gray-500 min-w-0">
                     <span className="text-gray-300 mr-1">{PICK_ICON[k]}</span>
                     {L(zone.picks[k][pick[k]].t)}
                   </p>
-                  <p translate="no" className="notranslate shrink-0 text-[10px] md:text-[11px] font-black text-black">{fmtPi(zone.picks[k][pick[k]].pi)} Pi</p>
+                  <p translate="no" className="notranslate shrink-0 t-tag text-black">{fmtPi(zone.picks[k][pick[k]].pi)} Pi</p>
                 </div>
               ))}
             </div>
 
             <div className="flex items-center justify-between bg-black rounded-xl px-3 py-2.5">
-              <p className="text-white/50 text-[10px] font-bold">{T('totalLabel')}</p>
-              <p translate="no" className="notranslate text-white text-base font-black">{fmtPi(total)} Pi <span className="text-[#dc2626] text-[10px] ml-1">+ 🐾 5</span></p>
+              <p className="text-white/50 t-tag">{T('totalLabel')}</p>
+              <p translate="no" className="notranslate text-white t-card">{fmtPi(total)} Pi <span className="text-[#dc2626] t-tag ml-1">+ 🐾 5</span></p>
             </div>
 
-            <button onClick={confirmBooking} className="w-full bg-[#dc2626] hover:bg-black text-white text-xs md:text-sm font-black py-3 rounded-xl transition-all active:scale-95">
+            <button onClick={confirmBooking} className="w-full bg-[#dc2626] hover:bg-black text-white t-btn py-3 rounded-xl transition-all active:scale-95">
               {T('modalConfirm')}{!authenticated && ' 🔒'}
             </button>
             <PiPayButton
@@ -514,7 +514,7 @@ export default function HangangPage() {
               cancelHint={lang === 'KR' ? '결제를 취소했습니다.' : 'Payment cancelled.'}
               failHint={lang === 'KR' ? '결제가 완료되지 않았습니다. 잠시 후 다시 시도해 주세요.' : 'Payment did not complete. Please try again.'}
             />
-            <p className="text-gray-400 text-[10px] font-bold leading-snug">{T('modalDemo')}</p>
+            <p className="text-gray-400 t-tag">{T('modalDemo')}</p>
           </div>
         </div>
       )}

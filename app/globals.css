@@ -41,6 +41,111 @@ body {
   overflow-x: clip;
 }
 
+/*
+ * ───────── 4대 앱 공통 타이포 위계 (KEDHEON · CIVIL · FACTFILTER · HANGANG) ─────────
+ *
+ * 주제(t-hero) → 섹션 제목(t-section) → 카드 제목(t-card) → 소주제(t-sub)
+ *            → 내용(t-body) → 태그·캡션(t-tag)   (+ 버튼 t-btn · 수치 t-stat)
+ *
+ * Pi Browser 는 시스템 글꼴 배율(실측 1.5배)을 px 에 그대로 곱하므로, 위계는 배율이
+ * 적용된 뒤에도 남아야 한다. 그래서 단계 간격을 1~2px 로 촘촘히 두고, 크기 차이만큼
+ * 굵기(900/800/700/500/400)와 색(neutral-900/600/500)으로도 간격을 겹쳐 둔다.
+ * 이탤릭은 로고·장식 숫자에만 남기고 본문 위계에서는 쓰지 않는다.
+ */
+:root {
+  --t-hero: 22px;
+  --t-section: 16px;
+  --t-card: 14px;
+  --t-body: 12.5px;
+  --t-sub: 12px;
+  --t-tag: 10.5px;
+  --t-btn: 12px;
+  --t-stat: 18px;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --t-hero: 26px;
+    --t-section: 18px;
+    --t-card: 15px;
+    --t-body: 13px;
+    --t-sub: 13px;
+    --t-tag: 11px;
+    --t-btn: 13px;
+    --t-stat: 22px;
+  }
+}
+
+.t-hero {
+  font-size: var(--t-hero);
+  line-height: 1.25;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+.t-section {
+  font-size: var(--t-section);
+  line-height: 1.3;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+}
+
+.t-card {
+  font-size: var(--t-card);
+  line-height: 1.35;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.t-sub {
+  font-size: var(--t-sub);
+  line-height: 1.45;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.t-body {
+  font-size: var(--t-body);
+  line-height: 1.55;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.t-tag {
+  font-size: var(--t-tag);
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.t-btn {
+  font-size: var(--t-btn);
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.t-stat {
+  font-size: var(--t-stat);
+  line-height: 1.15;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+/* 상단 브랜드 로고타입 — 4대 앱 공통 */
+.t-brand {
+  font-size: 13px;
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+}
+
+@media (min-width: 640px) {
+  .t-brand {
+    font-size: 14px;
+  }
+}
+
 /* 가로 스와이프 스트립의 스크롤바 숨김 */
 .no-scrollbar {
   -ms-overflow-style: none;

@@ -135,7 +135,7 @@ export default function PiBadge({ en = false, className = '' }: { en?: boolean; 
           setOpen(true);
         }}
         aria-label={connected ? `Pi KYC ${username}` : 'Pi connect'}
-        className={`shrink-0 flex items-center gap-1 bg-gray-100 border border-gray-200 rounded-lg px-1.5 py-1 text-[10px] md:text-[11px] font-black text-black hover:border-black transition-colors cursor-pointer ${className}`}
+        className={`shrink-0 flex items-center gap-1 bg-gray-100 border border-gray-200 rounded-lg px-1.5 py-1 t-tag text-black hover:border-black transition-colors cursor-pointer ${className}`}
       >
         <span className={`w-1.5 h-1.5 rounded-full ${dot}`} />
         <span className="text-[#7d4698] leading-none">π</span>
