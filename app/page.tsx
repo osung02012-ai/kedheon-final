@@ -737,22 +737,23 @@ export default function KedheonDesignSystemFinal() {
         ) : (
           <div className="flex flex-col gap-4 py-1 animate-in slide-in-from-bottom-5 duration-700 text-left">
             
-            <div className="w-full bg-white p-3.5 md:p-5 rounded-2xl border-2 border-black shadow-sm flex flex-col justify-center relative overflow-hidden group">
-                <h3 className="text-gray-400 t-tag uppercase mb-2">{L.assets}</h3>
-                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none transition-transform group-hover:scale-105">
-                   <img src="/beom-token.png" className="w-20 h-20 md:w-44 md:h-48 object-contain drop-shadow-2xl" alt="Beom" />
-                </div>
-                <div className="relative z-10 leading-none">
+            <div className="w-full bg-white p-3.5 md:p-5 rounded-2xl border-2 border-black shadow-sm relative overflow-hidden group">
+                <div className="min-w-0 relative z-10 leading-none text-left">
+                    <h3 className="text-gray-400 t-tag uppercase mb-1.5">{L.assets}</h3>
                     <p className="t-hero text-black">
                       {Math.floor(beomToken).toLocaleString()}
-                      <span className="t-card opacity-20">.{beomToken.toFixed(2).split('.')[1]}</span> 
+                      <span className="t-card opacity-20">.{beomToken.toFixed(2).split('.')[1]}</span>
                       <span translate="no" className="notranslate t-card ml-2 uppercase text-[#dc2626]">BEOM</span>
                     </p>
                     <p className="text-neutral-500 t-sub mt-1">≈ {piBalance.toLocaleString()} <span translate="no" className="notranslate">PI</span></p>
-                    <div className="flex items-center gap-2 mt-3">
-                      <div className="bg-black text-white px-2 py-0.5 rounded t-tag font-mono whitespace-nowrap shadow-sm">NODE: 19.02 SCORE</div>
-                      <div className="bg-[#dc2626] text-white px-2 py-0.5 rounded t-tag font-mono whitespace-nowrap shadow-sm">RT: 15,080</div>
+                    <div className="flex flex-wrap items-center gap-1 mt-2 pr-16 md:pr-0">
+                      <div className="bg-black text-white px-1.5 py-0.5 rounded t-tag font-mono whitespace-nowrap shadow-sm">NODE: 19.02 SCORE</div>
+                      <div className="bg-[#dc2626] text-white px-1.5 py-0.5 rounded t-tag font-mono whitespace-nowrap shadow-sm">RT: 15,080</div>
                     </div>
+                </div>
+                {/* 모바일: 동전은 글 옆에 작게 두어 배지를 가리지 않는다 / 데스크톱: 오른쪽 큰 장식 */}
+                <div className="pointer-events-none absolute top-3 right-3 md:right-4 md:top-1/2 md:-translate-y-1/2 transition-transform group-hover:scale-105">
+                   <img src="/beom-token.png" className="w-[56px] h-[56px] md:w-44 md:h-48 object-contain drop-shadow-2xl" alt="Beom" />
                 </div>
             </div>
 
