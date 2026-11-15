@@ -736,7 +736,7 @@ export default function KedheonDesignSystemFinal() {
 
             <div className="p-6 bg-black text-white rounded-2xl text-center shadow-xl border-2 border-[#dc2626] cursor-pointer active:scale-95 mt-2" onClick={() => { setShowInviteCode(true); handleCopy(); }}>
                <p className="t-sub text-gray-500 mb-1">{showInviteCode ? L.copyPrompt : L.inviteReveal}</p>
-               <div translate="no" className="notranslate t-hero text-white tracking-[0.2em]">{showInviteCode ? PI_INVITE_CODE : '••••••••'}</div>
+               <div translate="no" className="notranslate t-code text-white">{showInviteCode ? PI_INVITE_CODE : '••••••••'}</div>
             </div>
           </div>
         ) : (
