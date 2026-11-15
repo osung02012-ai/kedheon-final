@@ -4,6 +4,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import PiBadge from './components/PiBadge';
 import { usePi } from './components/PiProvider';
 import PiReadOnlyBanner from './components/PiReadOnlyBanner';
+import AppDock from './components/AppDock';
+import AppHeader from './components/AppHeader';
 
 /** * [KEDHEON MASTER V271.0 - FINANCE CORE / TURBOPACK OPTIMIZATION PATCH]
  * -----------------------------------------------------------
@@ -649,18 +651,19 @@ export default function KedheonDesignSystemFinal() {
   return (
     <div className="flex flex-col items-center bg-white min-h-screen text-black font-sans w-full pb-24 font-black selection:bg-red-50 overflow-x-hidden">
       
-      <nav className="w-full max-w-5xl flex justify-between items-center px-4 py-2 sticky top-0 bg-white/95 backdrop-blur-md z-[500] border-b border-black/10 shadow-sm">
-        <div className="flex items-center gap-2 md:gap-3">
-          <img src="/kedheon-character.png" className="w-8 h-8 md:w-11 md:h-11 rounded-lg border-2 border-black" alt="K" />
-          <div className="text-left leading-tight font-black">
-            <h1 className="notranslate text-black text-sm md:text-base italic uppercase leading-none" translate="no">Kedheon</h1>
-            <span className="text-gray-400 text-[11px] font-mono tracking-widest uppercase">MASTER V271.0</span>
-          </div>
-        </div>
-        
-        <div className="flex items-center gap-1.5 md:gap-2">
+      <AppHeader
+        brand={
+          <>
+            <img src="/kedheon-character.png" className="w-8 h-8 md:w-11 md:h-11 rounded-lg border-2 border-black shrink-0" alt="K" />
+            <div className="text-left leading-tight font-black min-w-0">
+              <h1 className="notranslate text-black text-sm md:text-base italic uppercase leading-none" translate="no">Kedheon</h1>
+              <span className="block text-gray-400 text-[11px] font-mono tracking-widest uppercase whitespace-nowrap">MASTER V271.0</span>
+            </div>
+          </>
+        }
+      >
           <PiBadge en={lang !== 'KR'} />
-          <div className="relative">
+          <div className="relative shrink-0">
             <select
               value={lang}
               onChange={(e) => setLang(e.target.value as Lang)}
@@ -682,10 +685,9 @@ export default function KedheonDesignSystemFinal() {
             </div>
           </div>
 
-          <button onClick={() => setTab('ROOKIE')} className={`px-2 py-1 rounded-lg text-xs md:text-sm font-black border transition-all whitespace-nowrap ${tab === 'ROOKIE' ? 'bg-[#dc2626] text-white border-[#dc2626]' : 'text-gray-500 border-black/10 hover:text-black'}`}>{L.rookie}</button>
-          <button onClick={() => setTab('PIONEER')} className={`px-2 py-1 rounded-lg text-xs md:text-sm font-black border transition-all whitespace-nowrap ${tab === 'PIONEER' ? 'bg-black text-white border-black' : 'text-gray-500 border-black/10 hover:text-black'}`}>{L.pioneer}</button>
-        </div>
-      </nav>
+          <button onClick={() => setTab('ROOKIE')} className={`shrink-0 px-2 py-1 rounded-lg text-xs md:text-sm font-black border transition-all whitespace-nowrap ${tab === 'ROOKIE' ? 'bg-[#dc2626] text-white border-[#dc2626]' : 'text-gray-500 border-black/10 hover:text-black'}`}>{L.rookie}</button>
+          <button onClick={() => setTab('PIONEER')} className={`shrink-0 px-2 py-1 rounded-lg text-xs md:text-sm font-black border transition-all whitespace-nowrap ${tab === 'PIONEER' ? 'bg-black text-white border-black' : 'text-gray-500 border-black/10 hover:text-black'}`}>{L.pioneer}</button>
+      </AppHeader>
 
       <main className="w-full max-w-5xl px-4 py-3">
         <PiReadOnlyBanner className="mb-3" />
@@ -808,12 +810,12 @@ export default function KedheonDesignSystemFinal() {
 
             <SectionHeader title={L.creative} desc={L.creativeDesc} />
             <div className="bg-white p-4 md:p-6 rounded-2xl border border-black/10 space-y-4 shadow-sm font-black text-left">
-              <div className="flex gap-6 border-b border-gray-100 pb-1.5 font-black">
-                <button onClick={() => setHubTab('HUB')} className={`text-sm md:text-base font-black italic uppercase ${hubTab === 'HUB' ? 'text-black border-b-2 border-black' : 'text-gray-300'}`}>HUB</button>
-                <button onClick={() => setHubTab('SPIRIT')} className={`text-sm md:text-base font-black italic uppercase ${hubTab === 'SPIRIT' ? 'text-black border-b-2 border-black' : 'text-gray-300'}`}>FAN SPIRIT</button>
+              <div className="flex gap-6 border-b border-gray-100 pb-1.5 font-black overflow-x-auto no-scrollbar">
+                <button onClick={() => setHubTab('HUB')} className={`shrink-0 whitespace-nowrap text-sm md:text-base font-black italic uppercase ${hubTab === 'HUB' ? 'text-black border-b-2 border-black' : 'text-gray-300'}`}>HUB</button>
+                <button onClick={() => setHubTab('SPIRIT')} className={`shrink-0 whitespace-nowrap text-sm md:text-base font-black italic uppercase ${hubTab === 'SPIRIT' ? 'text-black border-b-2 border-black' : 'text-gray-300'}`}>FAN SPIRIT</button>
               </div>
               <div className="flex gap-1.5 overflow-x-auto pb-1 no-scrollbar">
-                {L.cats.map(c => <button key={c} onClick={() => setCategory(c)} className={`px-3 py-1 rounded-full text-xs md:text-sm font-black italic border transition-all whitespace-nowrap ${category === c ? 'bg-black text-white border-black shadow-md' : 'bg-white text-gray-400'}`}>{c}</button>)}
+                {L.cats.map(c => <button key={c} onClick={() => setCategory(c)} className={`shrink-0 px-3 py-1 rounded-full text-xs md:text-sm font-black italic border transition-all whitespace-nowrap ${category === c ? 'bg-black text-white border-black shadow-md' : 'bg-white text-gray-400'}`}>{c}</button>)}
               </div>
               <div className="flex gap-2 flex-wrap">{L.fans.map(f => <button key={f} translate="no" className="notranslate px-3 py-1 bg-white border border-gray-100 rounded-full text-xs md:text-sm font-black text-red-600 shadow-sm">🚩 {f}</button>)}</div>
               <div className="space-y-2">
@@ -877,32 +879,7 @@ export default function KedheonDesignSystemFinal() {
         )}
       </main>
 
-      <footer className="fixed bottom-4 left-4 right-4 max-w-5xl mx-auto bg-white border-2 border-black px-1 py-1.5 rounded-2xl flex justify-between gap-0.5 md:gap-1.5 z-[1000] shadow-2xl font-black">
-        {[
-          { name: 'KEDHEON', path: '/' },
-          { name: 'CIVIL', path: '/civil' },
-          { name: 'FACTFILTER', path: '/factfilter' },
-          { name: 'HANGANG', path: '/hangang' },
-          { name: 'NEXUS', path: '#' },
-          { name: 'VENDOR', path: '#' }
-        ].map(app => (
-          <button
-            key={app.name}
-            translate="no"
-            onClick={() => {
-              if (app.path === '#') {
-                alert(app.name + ' 서비스 연동 준비 중입니다.');
-              } else {
-                window.location.href = app.path;
-              }
-            }}
-            className={`notranslate flex-1 min-w-0 px-0.5 py-3.5 md:py-4.5 rounded-xl transition-all font-black text-center leading-none whitespace-nowrap cursor-pointer hover:scale-105 active:scale-95 ${app.name === 'KEDHEON' ? 'bg-black text-white shadow-md' : 'text-gray-400 hover:text-black'}`}
-            style={{ fontSize: 'clamp(7px, 2.05vw, 14px)' }}
-          >
-            {app.name}
-          </button>
-        ))}
-      </footer>
+      <AppDock active="KEDHEON" soonMessage=" 서비스 연동 준비 중입니다." />
     </div>
   );
 }

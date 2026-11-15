@@ -7,6 +7,8 @@ import PiBadge from '../components/PiBadge';
 import PiPayButton from '../components/PiPayButton';
 import { usePi } from '../components/PiProvider';
 import PiReadOnlyBanner from '../components/PiReadOnlyBanner';
+import AppDock from '../components/AppDock';
+import AppHeader from '../components/AppHeader';
 
 /**
  * CIVIL — KYC 실명 1인 1표 거버넌스 DApp (전 세계 238개국 지원)
@@ -545,18 +547,19 @@ export default function CivilPage() {
     <div className="flex flex-col items-center bg-white min-h-screen text-black font-sans w-full pb-24 font-black selection:bg-red-50 overflow-x-hidden">
 
       {/* Navigation — Kedheon 규격 */}
-      <nav className="w-full max-w-5xl flex justify-between items-center px-4 py-2 sticky top-0 bg-white/95 backdrop-blur-md z-[500] border-b border-black/10 shadow-sm">
-        <div className="flex items-center gap-2 md:gap-3 cursor-pointer" onClick={() => window.location.href = '/'}>
-          <div className="w-8 h-8 md:w-11 md:h-11 rounded-lg border-2 border-black bg-black flex items-center justify-center text-white text-sm md:text-lg font-black italic">
-            C
+      <AppHeader
+        brand={
+          <div className="flex items-center gap-2 md:gap-3 cursor-pointer min-w-0" onClick={() => window.location.href = '/'}>
+            <div className="w-8 h-8 md:w-11 md:h-11 rounded-lg border-2 border-black bg-black flex items-center justify-center text-white text-sm md:text-lg font-black italic shrink-0">
+              C
+            </div>
+            <div className="text-left leading-tight font-black min-w-0">
+              <h1 translate="no" className="notranslate text-black text-sm md:text-base italic uppercase leading-none">Civil</h1>
+              <span className="block text-gray-400 text-[11px] font-mono tracking-widest uppercase whitespace-nowrap">KYC VOTING</span>
+            </div>
           </div>
-          <div className="text-left leading-tight font-black">
-            <h1 translate="no" className="notranslate text-black text-sm md:text-base italic uppercase leading-none">Civil</h1>
-            <span className="text-gray-400 text-[11px] font-mono tracking-widest uppercase">KYC VOTING</span>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-1.5 md:gap-2">
+        }
+      >
           <PiBadge en={!ko} />
           <button
             onClick={() => setLang(l => (l === 'KO' ? 'EN' : 'KO'))}
@@ -569,15 +572,14 @@ export default function CivilPage() {
           </div>
           <button
             onClick={handleCheckin}
-            className={`px-2 py-1 rounded-lg text-[11px] md:text-xs font-black border transition-all whitespace-nowrap ${checkedIn ? 'bg-gray-100 text-gray-400 border-gray-200' : 'bg-[#dc2626] text-white border-[#dc2626] active:scale-95'}`}
+            className={`px-2 py-1 rounded-lg text-[11px] md:text-xs font-black border transition-all whitespace-nowrap shrink-0 ${checkedIn ? 'bg-gray-100 text-gray-400 border-gray-200' : 'bg-[#dc2626] text-white border-[#dc2626] active:scale-95'}`}
             aria-label={checkedIn ? T.checkedIn : T.checkin}
           >
             {/* 390px 폰에서는 네비게이션이 넘치므로 아이콘만 보여 준다. */}
             <span className="hidden min-[420px]:inline">{checkedIn ? T.checkedIn : T.checkin}{!authenticated && ' 🔒'}</span>
             <span aria-hidden className="min-[420px]:hidden">{checkedIn ? '✓' : '⚡'}</span>
           </button>
-        </div>
-      </nav>
+      </AppHeader>
 
       <main className="w-full max-w-5xl px-4 py-3 space-y-4">
 
@@ -630,7 +632,7 @@ export default function CivilPage() {
                 <button
                   key={code}
                   onClick={() => setViewCountry(code)}
-                  className={`px-3 py-1.5 rounded-xl text-xs md:text-sm font-black border transition-all whitespace-nowrap active:scale-95 ${
+                  className={`px-3 py-1.5 rounded-xl text-xs md:text-sm font-black border transition-all whitespace-nowrap shrink-0 active:scale-95 ${
                     active ? 'bg-black text-white border-black shadow-md' : 'bg-white text-gray-400 border-black/10 hover:text-black'
                   }`}
                 >
@@ -640,7 +642,7 @@ export default function CivilPage() {
             })}
             <button
               onClick={() => setPicker('VIEW')}
-              className="px-3 py-1.5 rounded-xl text-xs md:text-sm font-black border border-[#dc2626] text-[#dc2626] bg-white hover:bg-[#dc2626] hover:text-white transition-all whitespace-nowrap active:scale-95"
+              className="px-3 py-1.5 rounded-xl text-xs md:text-sm font-black border border-[#dc2626] text-[#dc2626] bg-white hover:bg-[#dc2626] hover:text-white transition-all whitespace-nowrap shrink-0 active:scale-95"
             >
               🌐 {T.allCountries} ▾
             </button>
@@ -663,16 +665,16 @@ export default function CivilPage() {
                 <p className="text-gray-400 text-[11px] font-bold">{roomAgendas.length}{T.roomCount}</p>
               </div>
             </div>
-            <div className="flex items-center gap-1.5">
+            <div className="flex flex-wrap items-center justify-end gap-1.5 min-w-0">
               <button
                 onClick={() => setPicker('VIEW')}
-                className="px-2.5 py-1.5 rounded-lg text-[11px] md:text-xs font-black border border-black/10 bg-white text-gray-500 hover:text-black hover:border-black"
+                className="shrink-0 whitespace-nowrap px-2.5 py-1.5 rounded-lg text-[11px] md:text-xs font-black border border-black/10 bg-white text-gray-500 hover:text-black hover:border-black"
               >
                 🔎 {ko ? '국가 변경' : 'Change'}
               </button>
               <button
                 onClick={() => { if (!requireAuth(T.propose)) return; setShowPropose(v => !v); }}
-                className="px-2.5 py-1.5 rounded-lg text-[11px] md:text-xs font-black border border-[#dc2626] bg-[#dc2626] text-white hover:bg-black hover:border-black"
+                className="shrink-0 whitespace-nowrap px-2.5 py-1.5 rounded-lg text-[11px] md:text-xs font-black border border-[#dc2626] bg-[#dc2626] text-white hover:bg-black hover:border-black"
               >
                 {T.propose}{!authenticated && ' 🔒'}
               </button>
@@ -899,29 +901,7 @@ export default function CivilPage() {
       />
 
       {/* Footer — Kedheon 규격 */}
-      <footer className="fixed bottom-4 left-4 right-4 max-w-5xl mx-auto bg-white border-2 border-black p-1.5 rounded-2xl flex justify-between gap-1.5 z-[1000] shadow-2xl font-black">
-        {[
-          { label: 'KEDHEON', path: '/' },
-          { label: 'CIVIL', path: '/civil' },
-          { label: 'FACTFILTER', path: '/factfilter' },
-          { label: 'HANGANG', path: '/hangang' },
-          { label: 'NEXUS', path: '#' },
-          { label: 'VENDOR', path: '#' }
-        ].map(item => (
-          <button
-            key={item.label}
-            translate="no"
-            onClick={() => {
-              if (item.path === '#') alert(item.label + (ko ? ' 서비스 준비 중입니다.' : ' service is coming soon.'));
-              else window.location.href = item.path;
-            }}
-            className={`notranslate flex-1 min-w-0 px-0.5 py-3.5 md:py-4.5 rounded-xl transition-all font-black text-center leading-none whitespace-nowrap cursor-pointer hover:scale-105 active:scale-95 ${item.label === 'CIVIL' ? 'bg-black text-white shadow-md' : 'text-gray-400 hover:text-black'}`}
-            style={{ fontSize: 'clamp(7px, 2.05vw, 14px)' }}
-          >
-            {item.label}
-          </button>
-        ))}
-      </footer>
+      <AppDock active="CIVIL" soonMessage={ko ? ' 서비스 준비 중입니다.' : ' service is coming soon.'} />
     </div>
   );
 }

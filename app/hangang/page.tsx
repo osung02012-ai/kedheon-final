@@ -5,6 +5,8 @@ import PiBadge from '../components/PiBadge';
 import PiPayButton from '../components/PiPayButton';
 import { usePi } from '../components/PiProvider';
 import PiReadOnlyBanner from '../components/PiReadOnlyBanner';
+import AppDock from '../components/AppDock';
+import AppHeader from '../components/AppHeader';
 import {
   LANGS, LANG_TAG, detectLang, tr, ui,
   type Lang, type L10, type UIKey
@@ -110,20 +112,21 @@ export default function HangangPage() {
     <div className={`flex flex-col items-center bg-white min-h-screen text-black font-sans w-full pb-24 font-black selection:bg-red-50 overflow-x-hidden ${lang === 'KR' ? 'break-keep' : ''}`}>
 
       {/* ── 상단 네비게이션 (케데헌 규격 · 10개국어) ─────────────── */}
-      <nav className="w-full max-w-5xl flex justify-between items-center px-4 py-2 sticky top-0 bg-white/95 backdrop-blur-md z-[500] border-b border-black/10 shadow-sm">
-        <div className="flex items-center gap-2 md:gap-3 min-w-0">
-          <div className="w-8 h-8 md:w-11 md:h-11 rounded-lg border-2 border-black bg-black flex items-center justify-center shrink-0">
-            <span className="text-white text-sm md:text-lg font-black italic leading-none" translate="no">H</span>
+      <AppHeader
+        brand={
+          <div className="flex items-center gap-2 md:gap-3 min-w-0">
+            <div className="w-8 h-8 md:w-11 md:h-11 rounded-lg border-2 border-black bg-black flex items-center justify-center shrink-0">
+              <span className="text-white text-sm md:text-lg font-black italic leading-none" translate="no">H</span>
+            </div>
+            <div className="text-left leading-tight font-black min-w-0">
+              <h1 className="notranslate text-black text-sm md:text-base italic uppercase leading-none truncate" translate="no">Hangang</h1>
+              <span className="block text-gray-400 text-[10px] md:text-[11px] font-mono tracking-widest uppercase whitespace-nowrap">K-CULTURE PASS</span>
+            </div>
           </div>
-          <div className="text-left leading-tight font-black min-w-0">
-            <h1 className="notranslate text-black text-sm md:text-base italic uppercase leading-none truncate" translate="no">Hangang</h1>
-            <span className="text-gray-400 text-[10px] md:text-[11px] font-mono tracking-widest uppercase">K-CULTURE PASS</span>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-1.5 md:gap-2 shrink-0">
+        }
+      >
           <PiBadge en={lang !== 'KR'} />
-          <div className="relative">
+          <div className="relative shrink-0">
             <select
               value={lang}
               onChange={e => setLang(e.target.value as Lang)}
@@ -138,8 +141,7 @@ export default function HangangPage() {
               <svg className="fill-current h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
             </div>
           </div>
-        </div>
-      </nav>
+      </AppHeader>
 
       <main className="w-full max-w-5xl px-4 py-3">
 
@@ -518,34 +520,7 @@ export default function HangangPage() {
       )}
 
       {/* ── 하단 고정 푸터 (6개 앱) ──────────────────────────── */}
-      <footer className="fixed bottom-4 left-4 right-4 max-w-5xl mx-auto bg-white border-2 border-black px-1 py-1.5 rounded-2xl flex justify-between gap-0.5 md:gap-1.5 z-[1000] shadow-2xl font-black">
-        {[
-          { name: 'KEDHEON', path: '/' },
-          { name: 'CIVIL', path: '/civil' },
-          { name: 'FACTFILTER', path: '/factfilter' },
-          { name: 'HANGANG', path: '/hangang' },
-          { name: 'NEXUS', path: '#' },
-          { name: 'VENDOR', path: '#' }
-        ].map(app => (
-          <button
-            key={app.name}
-            translate="no"
-            onClick={() => {
-              if (app.path === '#') {
-                alert(app.name + T('alertSoon'));
-              } else {
-                window.location.href = app.path;
-              }
-            }}
-            className={`notranslate flex-1 min-w-0 px-0.5 py-3.5 md:py-4.5 rounded-xl transition-all font-black text-center leading-none whitespace-nowrap cursor-pointer hover:scale-105 active:scale-95 ${
-              app.name === 'HANGANG' ? 'bg-black text-white shadow-md' : 'text-gray-400 hover:text-black'
-            }`}
-            style={{ fontSize: 'clamp(7px, 2.05vw, 14px)' }}
-          >
-            {app.name}
-          </button>
-        ))}
-      </footer>
+      <AppDock active="HANGANG" soonMessage={T('alertSoon')} />
     </div>
   );
 }

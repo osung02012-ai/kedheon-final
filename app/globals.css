@@ -19,8 +19,33 @@
   }
 }
 
+/*
+ * Pi Browser(Android WebView) 는 시스템 글꼴 크기 배율을 텍스트에 그대로 곱한다.
+ * (실측: Pi Browser 412px 화면에서 약 1.5배 — 11px 라벨이 16.5px 로 렌더)
+ * 레이아웃 박스는 그대로인데 글자만 커지므로, 겹침·잘림을 막는 규칙을 전역에 둔다.
+ */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  /* 한국어는 어절 단위로만 줄바꿈 — '국가 변 / 경' 같은 중간 꺾임 방지 */
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+/* 가로 스와이프 스트립의 스크롤바 숨김 */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
 }
