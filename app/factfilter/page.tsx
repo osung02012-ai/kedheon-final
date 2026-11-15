@@ -548,13 +548,13 @@ export default function FactFilterPage() {
           </button>
       </AppHeader>
 
-      <main className="w-full max-w-5xl px-4 py-3 space-y-4">
+      <main className="w-full max-w-5xl px-4 py-3 space-y-3">
 
         <PiReadOnlyBanner />
         {/* Hero */}
-        <div className="bg-white rounded-2xl border-2 border-black p-4 md:p-5 relative overflow-hidden text-left">
+        <div className="bg-white rounded-2xl border-2 border-black px-3 py-2.5 md:p-5 relative overflow-hidden text-left">
           <div className="absolute top-0 left-0 w-full h-1 bg-[#dc2626]"></div>
-          <div className="flex flex-col md:flex-row md:items-center gap-4 justify-between">
+          <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4 justify-between">
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-1.5">
                 <span className="inline-block px-2 py-0.5 rounded bg-black text-white t-tag">
@@ -566,17 +566,26 @@ export default function FactFilterPage() {
                 >
                   🌍 {ko ? `${COUNTRIES.length}개국 원장` : `${COUNTRIES.length} countries`}
                 </span>
+                {/* 모바일에서는 100% 카드 대신 얇은 배지 한 칸으로 */}
+                <span translate="no" className="notranslate md:hidden inline-block px-2 py-0.5 rounded bg-red-50 text-[#dc2626] t-tag">
+                  100% KYC
+                </span>
               </div>
-              <h1 className="t-hero text-black mt-2">
+              <h1 className="t-hero text-black mt-1.5">
                 {ko ? '허위·왜곡 보도가 숨을 곳은 없다' : 'Nowhere to Hide for Disinformation'}
               </h1>
-              <p className="text-gray-500 t-sub mt-2 max-w-xl">
+              <p className="text-gray-500 t-sub mt-1.5 max-w-xl">
                 {ko
-                  ? `허위·왜곡 보도를 일삼는 채널, 특정 진영에 편향된 기자, 상습적으로 날조하는 언론사를 블록체인 원장에 영구 기록합니다. 전 세계 ${COUNTRIES.length}개국 어느 나라든 국가별 원장을 열어 조회하고 제보할 수 있으며, 100% 실명 KYC 시민의 검증으로 언론의 공신력을 바로 세웁니다.`
-                  : `An immutable public ledger documenting disinformation outlets, biased reporting, and repeat fabrications. Open the ledger of any of the ${COUNTRIES.length} countries to review and report, verified by real-name Pi KYC citizens.`}
+                  ? '허위·왜곡 보도를 일삼는 채널과 언론사를 블록체인 원장에 영구 기록합니다.'
+                  : 'Channels and outlets that spread disinformation are recorded permanently on an immutable ledger.'}
+              </p>
+              <p className="hidden md:block text-gray-500 t-sub mt-1.5 max-w-xl">
+                {ko
+                  ? `전 세계 ${COUNTRIES.length}개국 어느 나라든 국가별 원장을 열어 조회하고 제보할 수 있으며, 100% 실명 KYC 시민의 검증으로 언론의 공신력을 바로 세웁니다.`
+                  : `Open the ledger of any of the ${COUNTRIES.length} countries to review and report, verified by real-name Pi KYC citizens.`}
               </p>
             </div>
-            <div className="bg-neutral-50 border border-neutral-200 rounded-xl px-4 py-3 text-center shrink-0">
+            <div className="hidden md:block bg-neutral-50 border border-neutral-200 rounded-xl px-4 py-3 text-center shrink-0">
               <div className="t-stat text-black">100%</div>
               <div className="text-neutral-500 t-sub mt-1">{ko ? 'KYC 실명 검증' : 'KYC Verified'}</div>
               <div className="text-[#dc2626] t-tag mt-1">{ko ? '외압 삭제 불가' : 'Immutable'}</div>

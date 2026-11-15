@@ -6,6 +6,7 @@ import { usePi } from './components/PiProvider';
 import PiReadOnlyBanner from './components/PiReadOnlyBanner';
 import AppDock from './components/AppDock';
 import AppHeader from './components/AppHeader';
+import LangSelect from './components/LangSelect';
 
 /** * [KEDHEON MASTER V271.0 - FINANCE CORE / TURBOPACK OPTIMIZATION PATCH]
  * -----------------------------------------------------------
@@ -661,40 +662,34 @@ export default function KedheonDesignSystemFinal() {
         }
       >
           <PiBadge en={lang !== 'KR'} />
-          <div className="relative shrink-0">
-            <select
-              value={lang}
-              onChange={(e) => setLang(e.target.value as Lang)}
-              className="appearance-none bg-white border border-neutral-300 text-black t-tag rounded-lg pl-2 pr-8 py-1 outline-none cursor-pointer shadow-xs focus:border-black focus:ring-2 focus:ring-black/10 transition-colors"
-            >
-              <option value="KR">🇰🇷 KR</option>
-              <option value="EN">🇺🇸 EN</option>
-              <option value="CN">🇨🇳 CN</option>
-              <option value="JP">🇯🇵 JP</option>
-              <option value="ES">🇪🇸 ES</option>
-              <option value="VN">🇻🇳 VN</option>
-              <option value="FR">🇫🇷 FR</option>
-              <option value="PT">🇵🇹 PT</option>
-              <option value="RU">🇷🇺 RU</option>
-              <option value="ID">🇮🇩 ID</option>
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex w-5 items-center justify-center rounded-r-lg border-l border-neutral-200 bg-neutral-50 text-neutral-500">
-              <svg className="fill-current h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-            </div>
-          </div>
+          <LangSelect
+            value={lang}
+            onChange={v => setLang(v as Lang)}
+            options={[
+              { value: 'KR', label: '🇰🇷 KR' }, { value: 'EN', label: '🇺🇸 EN' },
+              { value: 'CN', label: '🇨🇳 CN' }, { value: 'JP', label: '🇯🇵 JP' },
+              { value: 'ES', label: '🇪🇸 ES' }, { value: 'VN', label: '🇻🇳 VN' },
+              { value: 'FR', label: '🇫🇷 FR' }, { value: 'PT', label: '🇵🇹 PT' },
+              { value: 'RU', label: '🇷🇺 RU' }, { value: 'ID', label: '🇮🇩 ID' }
+            ]}
+          />
 
-          <button onClick={() => setTab('ROOKIE')} className={`shrink-0 px-2 py-1 rounded-lg t-btn transition-all whitespace-nowrap ${tab === 'ROOKIE' ? 'bg-[#dc2626] text-white shadow-sm' : 'bg-neutral-100 text-neutral-600 hover:text-black'}`}>{L.rookie}</button>
-          <button onClick={() => setTab('PIONEER')} className={`shrink-0 px-2 py-1 rounded-lg t-btn transition-all whitespace-nowrap ${tab === 'PIONEER' ? 'bg-black text-white shadow-sm' : 'bg-neutral-100 text-neutral-600 hover:text-black'}`}>{L.pioneer}</button>
+          {/* 두 탭은 한 덩어리로 묶어 좁은 화면에서 함께 다음 줄로 내려가게 한다
+              (낱개로 두면 ROOKIE는 1줄, PIONEER는 3줄째로 흩어져 헤더가 세 줄이 된다). */}
+          <div className="flex items-center gap-1 shrink-0">
+            <button onClick={() => setTab('ROOKIE')} className={`shrink-0 px-2 py-1 rounded-lg t-btn transition-all whitespace-nowrap ${tab === 'ROOKIE' ? 'bg-[#dc2626] text-white shadow-sm' : 'bg-neutral-100 text-neutral-600 hover:text-black'}`}>{L.rookie}</button>
+            <button onClick={() => setTab('PIONEER')} className={`shrink-0 px-2 py-1 rounded-lg t-btn transition-all whitespace-nowrap ${tab === 'PIONEER' ? 'bg-black text-white shadow-sm' : 'bg-neutral-100 text-neutral-600 hover:text-black'}`}>{L.pioneer}</button>
+          </div>
       </AppHeader>
 
       <main className="w-full max-w-5xl px-4 py-3">
         <PiReadOnlyBanner className="mb-3" />
         {tab === 'ROOKIE' ? (
           <div className="flex flex-col gap-3 animate-in fade-in duration-500">
-            <div className="flex flex-col items-center text-center gap-3 py-6 bg-white rounded-2xl border-2 border-black relative overflow-hidden">
+            <div className="flex items-center gap-3 px-3 py-3 md:flex-col md:items-center md:text-center md:gap-3 md:py-6 bg-white rounded-2xl border-2 border-black relative overflow-hidden">
               <div className="absolute top-0 left-0 w-full h-1 bg-[#dc2626]"></div>
-              <img src="/kedheon-character.png" className="w-32 h-32 md:w-56 md:h-56 object-contain drop-shadow-xl" alt="K" />
-              <div className="px-4 leading-none">
+              <img src="/kedheon-character.png" className="w-[84px] h-[84px] md:w-56 md:h-56 object-contain drop-shadow-xl shrink-0" alt="K" />
+              <div className="min-w-0 text-left md:px-4 md:text-center md:leading-none">
                 <h1 className="t-hero text-black uppercase mb-1">{L.procedure}</h1>
                 <p className="t-sub text-[#dc2626]">{L.piJoinDesc}</p>
               </div>
@@ -742,10 +737,10 @@ export default function KedheonDesignSystemFinal() {
         ) : (
           <div className="flex flex-col gap-4 py-1 animate-in slide-in-from-bottom-5 duration-700 text-left">
             
-            <div className="w-full bg-white p-5 rounded-2xl border-2 border-black shadow-sm flex flex-col justify-center relative overflow-hidden group">
+            <div className="w-full bg-white p-3.5 md:p-5 rounded-2xl border-2 border-black shadow-sm flex flex-col justify-center relative overflow-hidden group">
                 <h3 className="text-gray-400 t-tag uppercase mb-2">{L.assets}</h3>
-                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none transition-transform group-hover:scale-105">
-                   <img src="/beom-token.png" className="w-24 h-24 md:w-44 md:h-48 object-contain drop-shadow-2xl" alt="Beom" />
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none transition-transform group-hover:scale-105">
+                   <img src="/beom-token.png" className="w-20 h-20 md:w-44 md:h-48 object-contain drop-shadow-2xl" alt="Beom" />
                 </div>
                 <div className="relative z-10 leading-none">
                     <p className="t-hero text-black">

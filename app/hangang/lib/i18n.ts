@@ -68,28 +68,28 @@ export function detectLang(): Lang {
  * ------------------------------------------------------------------ */
 export const UI = {
   heroTitle: [
-    '한국 번호도, 한국 카드도 없이 — 서울에서 제주까지 대한민국 올인원 파이 패스',
-    'No Korean number. No Korean card. — One Pi pass from Seoul to Jeju',
-    '不需要韩国手机号、也不需要韩国银行卡 — 首尔到济州，一张 Pi 通行证走遍韩国',
-    '韓国の番号もカードもいらない — ソウルから済州まで、Pi ひとつで韓国一周',
-    'Sin número ni tarjeta coreana — un solo pase Pi de Seúl a Jeju',
-    'Không cần số điện thoại hay thẻ Hàn Quốc — một tấm vé Pi từ Seoul đến Jeju',
-    'Sans numéro ni carte coréenne — un seul pass Pi de Séoul à Jeju',
-    'Sem número nem cartão coreano — um único passe Pi de Seul a Jeju',
-    'Без корейского номера и карты — один пропуск Pi от Сеула до Чеджу',
-    'Tanpa nomor atau kartu Korea — satu pass Pi dari Seoul sampai Jeju'
+    '번호도 카드도 없이, 서울에서 제주까지',
+    'No number, no card — Seoul to Jeju',
+    '无需号码与银行卡，首尔到济州',
+    '番号もカードもいらず、ソウルから済州へ',
+    'Sin número ni tarjeta — de Seúl a Jeju',
+    'Không số, không thẻ — Seoul đến Jeju',
+    'Sans numéro ni carte — de Séoul à Jeju',
+    'Sem número nem cartão — de Seul a Jeju',
+    'Без номера и карты — от Сеула до Чеджу',
+    'Tanpa nomor & kartu — Seoul ke Jeju'
   ],
   heroDesc: [
-    'Pi KYC 실명 안전망으로 콘서트·숙박·한복·미식·교통까지 전국 7개 권역에서 한 번에. 수수료 0% 직거래, 예약은 실명 1인 1건.',
-    'Pi KYC links concerts, stays, hanbok, food and transit across 7 regions of Korea. 0% direct-deal fee, one verified human per booking.',
-    'Pi KYC 实名保障，把演唱会、住宿、韩服、美食与交通串成全国 7 大圈的一站式行程。0% 直连手续费，实名一人一单。',
-    'Pi KYC の実名認証で、コンサート・宿泊・韓服・グルメ・交通を韓国 7 エリアでひとつに。手数料 0%、実名でお一人様 1 予約。',
-    'Pi KYC conecta conciertos, alojamiento, hanbok, comida y transporte en 7 regiones de Corea. Comisión 0%, una reserva por persona verificada.',
-    'Pi KYC kết nối concert, lưu trú, hanbok, ẩm thực và di chuyển tại 7 vùng của Hàn Quốc. Phí 0%, mỗi người thật một đơn.',
-    'Pi KYC relie concerts, hébergement, hanbok, gastronomie et transports dans 7 régions de Corée. 0 % de commission, une réservation par personne vérifiée.',
-    'O Pi KYC liga shows, hospedagem, hanbok, gastronomia e transporte em 7 regiões da Coreia. Taxa 0%, uma reserva por pessoa verificada.',
-    'Pi KYC связывает концерты, жильё, ханбок, еду и транспорт в 7 регионах Кореи. Комиссия 0%, одна бронь на одного подтверждённого человека.',
-    'Pi KYC menghubungkan konser, penginapan, hanbok, kuliner, dan transportasi di 7 wilayah Korea. Biaya 0%, satu pemesanan per orang terverifikasi.'
+    'Pi KYC로 콘서트·숙박·한복·교통까지 전국 7개 권역 한 번에.',
+    'Pi KYC covers concerts, stays, hanbok and transit across 7 regions.',
+    'Pi KYC 实名认证，演唱会、住宿、韩服、交通一站搞定全国 7 大圈。',
+    'Pi KYC の実名認証で、コンサート・宿泊・韓服・交通を韓国 7 エリアで。',
+    'Pi KYC cubre conciertos, alojamiento, hanbok y transporte en 7 regiones.',
+    'Pi KYC gồm concert, lưu trú, hanbok và di chuyển tại 7 vùng Hàn Quốc.',
+    'Pi KYC couvre concerts, hébergement, hanbok et transports dans 7 régions.',
+    'O Pi KYC cobre shows, hospedagem, hanbok e transporte em 7 regiões.',
+    'Pi KYC: концерты, жильё, ханбок и транспорт в 7 регионах Кореи.',
+    'Pi KYC mencakup konser, penginapan, hanbok, dan transportasi di 7 wilayah.'
   ],
   heroTag1: [
     '7개 권역 · 서울~제주',
@@ -130,6 +130,23 @@ export const UI = {
   statBeom: [
     'BEOM 리워드', 'BEOM rewards', 'BEOM 奖励', 'BEOM リワード',
     'recompensas BEOM', 'thưởng BEOM', 'récompenses BEOM', 'recompensas BEOM', 'награды BEOM', 'reward BEOM'
+  ],
+  // 모바일 1줄 통계 스트립용 짧은 라벨 (좁은 폰에서 4칸이 한 줄에 들어가도록)
+  statFeeS: [
+    '수수료', 'fee', '手续费', '手数料',
+    'comisión', 'phí', 'commission', 'taxa', 'комиссия', 'biaya'
+  ],
+  statZonesS: [
+    '권역', 'regions', '大圈', 'エリア',
+    'regiones', 'vùng', 'régions', 'regiões', 'регионы', 'wilayah'
+  ],
+  statHotlineS: [
+    '1330', '1330', '1330', '1330',
+    '1330', '1330', '1330', '1330', '1330', '1330'
+  ],
+  statBeomS: [
+    'BEOM', 'BEOM', 'BEOM', 'BEOM',
+    'BEOM', 'BEOM', 'BEOM', 'BEOM', 'BEOM', 'BEOM'
   ],
   sec1Title: [
     '전국 7대 권역 올인원 빌더', '7-region all-in-one builder', '全国 7 大圈一站式行程', '全国7エリア オールインワン',

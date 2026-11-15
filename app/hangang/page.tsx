@@ -7,6 +7,8 @@ import { usePi } from '../components/PiProvider';
 import PiReadOnlyBanner from '../components/PiReadOnlyBanner';
 import AppDock from '../components/AppDock';
 import AppHeader from '../components/AppHeader';
+import HanbokIcon from '../components/HanbokIcon';
+import LangSelect from '../components/LangSelect';
 import {
   LANGS, LANG_TAG, detectLang, tr, ui,
   type Lang, type L10, type UIKey
@@ -34,12 +36,12 @@ function fmtPi(n: number) {
 
 function SectionHead({ no, title, desc }: { no: string; title: string; desc: string }) {
   return (
-    <div className="mt-7 mb-2 text-left border-t-2 border-[#dc2626] pt-3">
+    <div className="mt-4 mb-1.5 text-left border-t-2 border-[#dc2626] pt-2.5">
       <div className="flex items-baseline gap-2">
         <span className="t-tag text-[#dc2626] shrink-0">{no}</span>
         <h2 className="t-section text-neutral-900 uppercase border-l-[5px] border-black pl-2.5">{title}</h2>
       </div>
-      <p className="t-sub text-neutral-500 mt-1.5 pl-[calc(5px+0.625rem)]">{desc}</p>
+      <p className="t-sub text-neutral-500 mt-1 pl-[calc(5px+0.625rem)]">{desc}</p>
     </div>
   );
 }
@@ -126,43 +128,52 @@ export default function HangangPage() {
         }
       >
           <PiBadge en={lang !== 'KR'} />
-          <div className="relative shrink-0">
-            <select
-              value={lang}
-              onChange={e => setLang(e.target.value as Lang)}
-              aria-label="Language"
-              className="appearance-none bg-white border border-neutral-300 text-black t-tag rounded-lg pl-2 pr-8 py-1 outline-none cursor-pointer shadow-xs focus:border-black focus:ring-2 focus:ring-black/10 transition-colors"
-            >
-              {LANGS.map(l => (
-                <option key={l.code} value={l.code}>{l.flag} {l.label}</option>
-              ))}
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex w-5 items-center justify-center rounded-r-lg border-l border-neutral-200 bg-neutral-50 text-neutral-500">
-              <svg className="fill-current h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
-            </div>
-          </div>
+          <LangSelect
+            value={lang}
+            onChange={v => setLang(v as Lang)}
+            options={LANGS.map(l => ({ value: l.code, label: `${l.flag} ${l.label}` }))}
+          />
       </AppHeader>
 
       <main className="w-full max-w-5xl px-4 py-3">
 
         <PiReadOnlyBanner className="mb-3" />
         {/* ── 1. 히어로 ─────────────────────────────────────────── */}
-        <section className="relative bg-white rounded-2xl border-2 border-black overflow-hidden px-4 py-7 md:px-8 md:py-9">
+        {/* 첫 화면(360×800)에서 히어로 + '01 전국 7대 권역' 머리까지 같이 보이도록 압축했다.
+            모바일: 그림 84px 썸네일 + 제목/설명을 나란히, 캡션·뱃지·통계 카드박스는 데스크톱 전용. */}
+        {/* ── 1. 히어로 ─────────────────────────────────────────── */}
+        <section className="relative bg-white rounded-2xl border-2 border-black overflow-hidden px-3 py-3 md:px-8 md:py-8">
           <div className="absolute top-0 left-0 w-full h-1 bg-[#dc2626]" />
           <div className="absolute -right-10 -bottom-10 w-40 h-40 rounded-full bg-[#dc2626]/5" />
 
-          <div className="relative grid grid-cols-1 md:grid-cols-[1.08fr_0.92fr] gap-5 md:gap-7 items-center">
-            <div className="text-center md:text-left order-2 md:order-1">
-              <p translate="no" className="notranslate inline-block t-tag font-mono text-[#dc2626] uppercase mb-2">
-                hangang.pi · K-Culture Pass
+          <div className="relative md:grid md:grid-cols-[1.08fr_0.92fr] md:gap-7 md:items-center">
+            {/* 모바일: 그림은 오른쪽 위 46px 썸네일로 띄워 본문이 폭을 다 쓰게 하고,
+                데스크톱: 오른쪽 칸에 큰 그림 + 캡션 */}
+            <figure className="absolute top-0 right-0 w-[46px] md:static md:order-2 md:w-full md:max-w-[360px] md:mx-auto md:shrink-0">
+              <img
+                src="/hangang-hero-emerald.jpg"
+                alt={T('imgAlt')}
+                width={1024}
+                height={1024}
+                fetchPriority="high"
+                className="w-full aspect-square object-cover rounded-lg md:rounded-2xl border border-neutral-200 shadow-sm md:shadow-lg"
+              />
+              <figcaption className="hidden md:block mt-2.5 text-center t-tag font-mono uppercase text-gray-400">
+                {T('imgCaption')}
+              </figcaption>
+            </figure>
+
+            <div className="min-w-0 text-left md:order-1">
+              <p translate="no" className="notranslate inline-block t-tag font-mono text-[#dc2626] uppercase whitespace-nowrap pr-12 md:pr-0">
+                hangang.pi<span className="hidden md:inline"> · K-Culture Pass</span>
               </p>
-              <h2 className="t-hero text-black">
+              <h2 className="t-hero text-black mt-0.5">
                 {T('heroTitle')}
               </h2>
-              <p className="text-gray-500 t-sub mt-3 max-w-2xl mx-auto md:mx-0">
+              <p className="text-gray-500 t-sub mt-1.5 max-w-2xl">
                 {T('heroDesc')}
               </p>
-              <div className="flex flex-wrap items-center justify-center md:justify-start gap-1.5 mt-3">
+              <div className="hidden md:flex flex-wrap items-center justify-start gap-1.5 mt-3">
                 <span className="t-tag font-mono uppercase bg-black text-white rounded-md px-2 py-1">
                   {T('heroTag1')}
                 </span>
@@ -171,33 +182,22 @@ export default function HangangPage() {
                 </span>
               </div>
             </div>
-
-            {/* 대표 이미지 · 조선 민화 까치호랑이(에메랄드 최종본) + hangang.pi 명패 */}
-            <figure className="order-1 md:order-2 mx-auto w-full max-w-[280px] md:max-w-[360px]">
-              <img
-                src="/hangang-hero-emerald.jpg"
-                alt={T('imgAlt')}
-                width={1024}
-                height={1024}
-                fetchPriority="high"
-                className="w-full aspect-square object-cover rounded-2xl border border-neutral-200 shadow-lg"
-              />
-              <figcaption className="mt-2.5 text-center t-tag font-mono uppercase text-gray-400">
-                {T('imgCaption')}
-              </figcaption>
-            </figure>
           </div>
 
-          <div className="relative grid grid-cols-2 md:grid-cols-4 gap-1.5 md:gap-2 mt-5 max-w-3xl mx-auto">
+          {/* 통계: 모바일은 얇은 1줄 4칸 스트립, 데스크톱은 1×4 카드 */}
+          <div className="relative mt-2.5 grid grid-cols-4 items-center gap-x-1 border-t border-neutral-200 pt-2 md:mt-5 md:gap-2 md:border-0 md:pt-0 md:max-w-3xl md:mx-auto">
             {[
-              { v: '0%', label: T('statFee') },
-              { v: '7', label: T('statZones') },
-              { v: '24h', label: T('statHotline') },
-              { v: `🐾 ${beom}`, label: T('statBeom') }
+              { v: '0%', label: T('statFee'), short: T('statFeeS') },
+              { v: '7', label: T('statZones'), short: T('statZonesS') },
+              { v: '24h', label: T('statHotline'), short: T('statHotlineS') },
+              { v: `🐾 ${beom}`, label: T('statBeom'), short: T('statBeomS') }
             ].map((s, i) => (
-              <div key={i} className="bg-white border border-neutral-200 rounded-xl px-2 py-2.5">
-                <p translate="no" className="notranslate text-black t-stat">{s.v}</p>
-                <p className="text-gray-400 t-tag mt-1">{s.label}</p>
+              <div key={i} className="flex flex-col items-center gap-0 md:items-start md:gap-0 md:bg-white md:border md:border-neutral-200 md:rounded-xl md:px-2 md:py-2">
+                <p translate="no" className="notranslate text-black t-tag font-black md:text-[length:var(--t-stat)] whitespace-nowrap">{s.v}</p>
+                <p className="text-gray-400 t-tag md:mt-0.5 whitespace-nowrap">
+                  <span className="md:hidden">{s.short}</span>
+                  <span className="hidden md:inline">{s.label}</span>
+                </p>
               </div>
             ))}
           </div>
@@ -318,7 +318,9 @@ export default function HangangPage() {
             <div key={g.id} className="bg-white border border-neutral-200 rounded-xl p-2.5 flex flex-col justify-between hover:border-neutral-400 transition-colors">
               <div>
                 <div className="flex items-start justify-between gap-1">
-                  <span className="text-lg md:text-xl leading-none">{g.icon}</span>
+                  <span className="text-lg md:text-xl leading-none text-black">
+                    {g.id === 'hanbok' ? <HanbokIcon /> : g.icon}
+                  </span>
                   <span className="notranslate t-tag bg-neutral-100 text-neutral-600 rounded-full px-1.5 py-0.5">{g.grade}</span>
                 </div>
                 <p className="t-tag text-black mt-1.5">{L(g.t)}</p>

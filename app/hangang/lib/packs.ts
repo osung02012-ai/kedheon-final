@@ -18,7 +18,7 @@ export const GOODS: GoodsItem[] = [
     id: 'pensive',
     t: ['국립중앙박물관 뮷즈 · 반가사유상 미니어처', 'National Museum goods · Pensive Bodhisattva miniature', '国立中央博物馆周边 · 半跏思惟像迷你', '国立中央博物館グッズ · 半跏思惟像ミニチュア', 'Museo Nacional · miniatura del Bodhisattva', 'Bảo tàng Quốc gia · tượng Bán Già Tư Duy mini', 'Musée national · miniature du Bodhisattva', 'Museu Nacional · miniatura do Bodhisattva', 'Нацмузей · миниатюра Бодхисаттвы', 'Museum Nasional · miniatur Bodhisattva'],
     pi: 4,
-    icon: '🗿',
+    icon: '🏛️',
     grade: 'A'
   },
   {
@@ -32,7 +32,8 @@ export const GOODS: GoodsItem[] = [
     id: 'hanbok',
     t: ['경주·전주 한복 대여 예약 대행', 'Gyeongju / Jeonju hanbok rental booking', '庆州·全州韩服租借代订', '慶州・全州の韓服レンタル予約代行', 'Reserva de hanbok en Gyeongju / Jeonju', 'Đặt thuê hanbok Gyeongju / Jeonju', 'Réservation de hanbok à Gyeongju / Jeonju', 'Reserva de hanbok em Gyeongju / Jeonju', 'Бронь ханбока в Кёнджу / Чонджу', 'Pesan sewa hanbok Gyeongju / Jeonju'],
     pi: 6,
-    icon: '👘',
+    // 한복은 이모지 집합에 없다(👘는 기모노). 카드에서 HanbokIcon(SVG)으로 그린다.
+    icon: '',
     grade: 'A'
   },
   {
@@ -53,14 +54,14 @@ export const GOODS: GoodsItem[] = [
     id: 'busan',
     t: ['부산 어묵·김 세트 택배 대행', 'Busan fish cake & seaweed set shipped', '釜山鱼饼·海苔套装代寄', '釜山の練り物・海苔セット発送', 'Set de pastel de pescado y alga de Busan', 'Set chả cá & rong biển Busan gửi đi', 'Kit chikuwa et algues de Busan expédié', 'Kit de bolinho de peixe e alga de Busan', 'Набор рыбных лепёшек и нори из Пусана', 'Paket odeng & rumput laut Busan dikirim'],
     pi: 4,
-    icon: '🍢',
+    icon: '🐟',
     grade: 'B'
   },
   {
     id: 'gyeongju',
     t: ['경주빵·황남빵 세트', 'Gyeongju bread & Hwangnam bread set', '庆州面包·皇南饼套装', '慶州パン・皇南パンセット', 'Set de pan de Gyeongju y Hwangnam', 'Set bánh Gyeongju & Hwangnam', 'Assortiment pains de Gyeongju et Hwangnam', 'Kit pães de Gyeongju e Hwangnam', 'Набор хлеба Кёнджу и Хваннам', 'Paket roti Gyeongju & Hwangnam'],
     pi: 3,
-    icon: '🥮',
+    icon: '🥐',
     grade: 'B'
   },
   {

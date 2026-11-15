@@ -390,6 +390,12 @@ export default function CivilPage() {
     heroDesc: ko
       ? `파이 KYC 실명 인증을 통과한 시민만 1표를 행사합니다. 전 세계 ${COUNTRIES.length}개국 어디에서나 자기 나라 투표방을 열고 안건을 올릴 수 있습니다 — 봇·알바가 판치는 Web2 투표의 한계를 블록체인 원장으로 넘어섭니다.`
       : `Only Pi KYC-verified humans cast a vote. Citizens of all ${COUNTRIES.length} countries can open their own national room and raise agendas — an immutable ledger replaces the bot-ridden ballots of Web2.`,
+    heroLead: ko
+      ? `파이 KYC 실명 인증을 통과한 시민만 1표를 행사합니다.`
+      : `Only Pi KYC-verified humans cast a vote.`,
+    heroMore: ko
+      ? `전 세계 ${COUNTRIES.length}개국 어디에서나 자기 나라 투표방을 열고 안건을 올릴 수 있습니다 — 봇·알바가 판치는 Web2 투표의 한계를 블록체인 원장으로 넘어섭니다.`
+      : `Citizens of all ${COUNTRIES.length} countries can open their own national room and raise agendas — an immutable ledger replaces the bot-ridden ballots of Web2.`,
     myCountry: ko ? '내 KYC 인증 국가' : 'My KYC Country',
     change: ko ? '변경' : 'Change',
     verified: ko ? 'KYC 인증 확인' : 'KYC Verified',
@@ -579,44 +585,47 @@ export default function CivilPage() {
           </button>
       </AppHeader>
 
-      <main className="w-full max-w-5xl px-4 py-3 space-y-4">
+      <main className="w-full max-w-5xl px-4 py-3 space-y-3">
 
         <PiReadOnlyBanner />
         {/* Hero */}
-        <div className="flex flex-col md:flex-row items-stretch gap-3">
-          <div className="flex-1 bg-white rounded-2xl border-2 border-black p-4 md:p-5 relative overflow-hidden text-left flex flex-col justify-center">
+        <div className="flex flex-col md:flex-row items-stretch gap-2 md:gap-3">
+          <div className="flex-1 bg-white rounded-2xl border-2 border-black px-3 py-2.5 md:p-5 relative overflow-hidden text-left flex flex-col justify-center">
             <div className="absolute top-0 left-0 w-full h-1 bg-[#dc2626]"></div>
             <div className="flex flex-wrap items-center gap-1.5">
               <span className="text-[#dc2626] t-tag uppercase">{T.subtitle}</span>
               <span translate="no" className="notranslate bg-black text-white t-tag px-1.5 py-0.5 rounded">🌍 {T.globalCoverage}</span>
             </div>
             <h1 className="t-hero text-black uppercase mt-1">{T.heroTitle}</h1>
-            <p className="text-gray-500 t-sub mt-2">{T.heroDesc}</p>
+            <p className="text-gray-500 t-sub mt-1.5">{T.heroLead}</p>
+            <p className="hidden md:block text-gray-500 t-sub mt-1.5">{T.heroMore}</p>
           </div>
 
-          <div className="md:w-64 bg-white rounded-2xl border border-neutral-200 p-4 md:p-5 text-left flex flex-col justify-between">
-            <div>
+          <div className="md:w-64 bg-white rounded-2xl border border-neutral-200 px-3 py-2.5 md:p-5 text-left flex flex-col justify-between">
+            <div className="flex items-baseline justify-between gap-2 md:block">
               <p className="text-gray-400 t-tag uppercase">{T.pointLabel}</p>
-              <p className="t-stat text-black mt-1">
+              <p className="t-stat text-black md:mt-1">
                 {points.toLocaleString()} <span translate="no" className="notranslate t-tag text-[#dc2626]">BEOM</span>
               </p>
             </div>
-            <div className="mt-3 space-y-1">
-              <label className="text-black t-body block">{T.myCountry}</label>
-              <button
-                onClick={() => setPicker('MY')}
-                className="w-full flex items-center justify-between gap-1 bg-white border border-neutral-300 text-black t-btn rounded-lg shadow-xs px-2 py-2 hover:border-neutral-400 focus:border-black transition-colors"
-              >
-                <span className="truncate">
-                  {myCountryInfo.flag} {ko ? myCountryInfo.ko : myCountryInfo.en} ({myCountryInfo.code})
-                </span>
-                <span className="t-sub text-neutral-500 shrink-0 border-l border-neutral-200 pl-1.5 leading-none">
-                  ▾<span className="hidden min-[400px]:inline"> {T.change}</span>
-                </span>
-              </button>
-              <p className="text-gray-500 t-sub flex items-center gap-1">
-                <span className="w-2 h-2 bg-green-500 rounded-full inline-block"></span>
-                {T.verified}: {myCountryInfo.flag} {ko ? myCountryInfo.ko : myCountryInfo.en}
+            <div className="mt-2 md:mt-3 space-y-1">
+              <label className="text-black t-tag block">{T.myCountry}</label>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setPicker('MY')}
+                  className="w-full min-w-0 flex items-center justify-between gap-1 bg-white border border-neutral-300 text-black t-btn rounded-lg shadow-xs px-2 py-1.5 md:py-2 hover:border-neutral-400 focus:border-black transition-colors"
+                >
+                  <span className="truncate">
+                    {myCountryInfo.flag} {ko ? myCountryInfo.ko : myCountryInfo.en} ({myCountryInfo.code})
+                  </span>
+                  <span className="t-sub text-neutral-500 shrink-0 border-l border-neutral-200 pl-1.5 leading-none">
+                    ▾<span className="hidden min-[400px]:inline"> {T.change}</span>
+                  </span>
+                </button>
+              </div>
+              <p className="text-gray-500 t-tag flex items-center gap-1">
+                <span className="w-2 h-2 bg-green-500 rounded-full inline-block shrink-0"></span>
+                <span className="truncate">{T.verified}: {myCountryInfo.flag} {ko ? myCountryInfo.ko : myCountryInfo.en}</span>
               </p>
             </div>
           </div>
