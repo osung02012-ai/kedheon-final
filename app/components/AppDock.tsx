@@ -82,7 +82,7 @@ export default function AppDock({
   return (
     <footer className="fixed bottom-3 sm:bottom-4 left-2 right-2 sm:left-4 sm:right-4 max-w-5xl mx-auto bg-white border-2 border-black px-1.5 py-1.5 rounded-2xl z-[1000] shadow-2xl font-black">
       <div className="relative">
-        <div ref={rowRef} className="no-scrollbar flex items-center gap-1 overflow-x-auto">
+        <div ref={rowRef} className="no-scrollbar flex items-center gap-0.5 md:gap-1.5 overflow-x-auto">
           {DOCK_ITEMS.map(app => {
             const isActive = app.name === active;
             return (
@@ -91,7 +91,7 @@ export default function AppDock({
                 type="button"
                 translate="no"
                 data-active={isActive ? 'true' : undefined}
-                style={{ fontSize: 'clamp(9.5px, 2.6vw, 12px)' }}
+                style={{ fontSize: 'clamp(9px, 2.4vw, 11.5px)' }}
                 onClick={() => {
                   if (app.path === '#') {
                     alert(app.name + soonMessage);
@@ -99,7 +99,7 @@ export default function AppDock({
                     window.location.href = app.path;
                   }
                 }}
-                className={`notranslate shrink-0 whitespace-nowrap leading-none px-1.5 py-3 md:flex-1 md:px-2.5 md:py-3.5 rounded-xl text-center transition-all cursor-pointer hover:scale-105 active:scale-95 ${
+                className={`notranslate shrink-0 whitespace-nowrap leading-none px-1 py-3 md:flex-1 md:px-2.5 md:py-3.5 rounded-xl text-center tracking-tight transition-all cursor-pointer hover:scale-105 active:scale-95 ${
                   isActive ? 'bg-black text-white shadow-md' : 'text-gray-400 hover:text-black'
                 }`}
               >
