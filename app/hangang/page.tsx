@@ -172,10 +172,10 @@ export default function HangangPage() {
               </div>
             </div>
 
-            {/* 대표 이미지 · 조선 민화 까치호랑이 + hangang.pi 명패 */}
+            {/* 대표 이미지 · 조선 민화 까치호랑이(에메랄드 최종본) + hangang.pi 명패 */}
             <figure className="order-1 md:order-2 mx-auto w-full max-w-[280px] md:max-w-[360px]">
               <img
-                src="/hangang-hero.jpg"
+                src="/hangang-hero-emerald.jpg"
                 alt={T('imgAlt')}
                 width={1024}
                 height={1024}

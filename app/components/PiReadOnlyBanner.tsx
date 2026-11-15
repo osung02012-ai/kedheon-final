@@ -9,6 +9,10 @@ import { GATE, gate } from './pi-gate-i18n';
  *  - 열람/탐색은 그대로 두고, 실행(투표·제안·청원·제보·결제)만 잠긴다는 사실을 먼저 알린다.
  *  - '인증 방법'을 누르면 PiAuthSheet(전역)가 뜬다.
  *  - Pi KYC 인증이 끝나면 스스로 사라진다.
+ *
+ * Pi Browser(Android WebView)의 글꼴 배율(실측 약 1.5배)·좁은 화면에서도 배너가 좌우로
+ * 잘리지 않도록: 배너는 `w-full max-w-full`, 문구는 `flex-1 min-w-0 break-keep`,
+ * 버튼은 `shrink-0 ml-auto` 로 두고 좁아지면 버튼이 다음 줄로 접히게(flex-wrap) 한다.
  */
 export default function PiReadOnlyBanner({ className = '' }: { className?: string }) {
   const { authenticated, gateLang, openAuthSheet } = usePi();
@@ -16,15 +20,15 @@ export default function PiReadOnlyBanner({ className = '' }: { className?: strin
 
   return (
     <div
-      className={`w-full flex items-center justify-between gap-2 bg-white border border-[#dc2626] rounded-xl px-3 py-2 shadow-sm ${className}`}
+      className={`w-full max-w-full flex flex-wrap items-center gap-x-2 gap-y-1.5 bg-white border border-[#dc2626] rounded-xl px-3 py-2 shadow-sm ${className}`}
     >
-      <p className="text-[10px] md:text-[11px] font-black text-[#dc2626] leading-snug min-w-0">
+      <p className="min-w-0 flex-1 text-[10px] md:text-[11px] font-black text-[#dc2626] leading-snug break-keep">
         🔒 {gate(GATE.banner, gateLang)}
       </p>
       <button
         type="button"
         onClick={openAuthSheet}
-        className="shrink-0 whitespace-nowrap bg-black hover:bg-[#dc2626] text-white text-[10px] md:text-[11px] font-black px-2 py-1.5 rounded-lg transition-all active:scale-95 cursor-pointer"
+        className="shrink-0 ml-auto whitespace-nowrap bg-black hover:bg-[#dc2626] text-white text-[10px] md:text-[11px] font-black px-2 py-1.5 rounded-lg transition-all active:scale-95 cursor-pointer"
       >
         {gate(GATE.bannerBtn, gateLang)}
       </button>

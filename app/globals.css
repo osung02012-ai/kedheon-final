@@ -27,6 +27,8 @@
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  /* 가로 스크롤 컨테이너를 만들지 않고(clip) 페이지가 좌우로 밀려 잘리는 일을 막는다. */
+  overflow-x: clip;
 }
 
 body {
@@ -36,6 +38,7 @@ body {
   /* 한국어는 어절 단위로만 줄바꿈 — '국가 변 / 경' 같은 중간 꺾임 방지 */
   word-break: keep-all;
   overflow-wrap: break-word;
+  overflow-x: clip;
 }
 
 /* 가로 스와이프 스트립의 스크롤바 숨김 */

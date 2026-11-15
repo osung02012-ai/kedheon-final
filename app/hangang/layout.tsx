@@ -15,10 +15,10 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/hangang-hero.jpg",
+        url: "/hangang-hero-emerald.jpg",
         width: 1024,
         height: 1024,
-        alt: "Hangang tiger guardian — classic Korean minhwa painting with hangang.pi nameplate, Korea-wide K-Culture Pass for Pi",
+        alt: "Hangang tiger guardian — classic Korean minhwa painting with emerald night river, full moon and hangang.pi nameplate, Korea-wide K-Culture Pass for Pi",
       },
     ],
   },
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     title: "Hangang | Korea-Wide K-Culture Pass for Pi",
     description:
       "Seoul, Yongin, Busan, Gyeongju, Jeju, Jeonju·Gangneung, DMZ — stays, culture, food and transit in one Pi pass.",
-    images: ["/hangang-hero.jpg"],
+    images: ["/hangang-hero-emerald.jpg"],
   },
   robots: { index: true, follow: true },
 };
