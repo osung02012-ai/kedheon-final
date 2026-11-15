@@ -3,6 +3,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import PiBadge from '../components/PiBadge';
 import PiPayButton from '../components/PiPayButton';
+import { usePi } from '../components/PiProvider';
+import PiReadOnlyBanner from '../components/PiReadOnlyBanner';
 import {
   LANGS, LANG_TAG, detectLang, tr, ui,
   type Lang, type L10, type UIKey
@@ -41,6 +43,7 @@ function SectionHead({ no, title, desc }: { no: string; title: string; desc: str
 }
 
 export default function HangangPage() {
+  const { requireAuth, authenticated, setGateLang } = usePi();
   const [lang, setLang] = useState<Lang>('KR');
   const [mounted, setMounted] = useState(false);
   const [zoneKey, setZoneKey] = useState('SEOUL');
@@ -65,6 +68,11 @@ export default function HangangPage() {
     document.documentElement.lang = LANG_TAG[lang] || 'en';
   }, [lang]);
 
+  // 실행 권한 안내 패널도 같은 언어로 (10개국어)
+  useEffect(() => {
+    setGateLang(lang);
+  }, [lang, setGateLang]);
+
   const zone = ZONES.find(z => z.key === zoneKey) ?? ZONES[0];
   const total = useMemo(
     () => PICK_ORDER.reduce((sum, k) => sum + zone.picks[k][pick[k]].pi, 0),
@@ -77,12 +85,14 @@ export default function HangangPage() {
   };
 
   const confirmBooking = () => {
+    if (!requireAuth(T('modalConfirm'))) return;
     setBooked(prev => [{ zone: zone.code, total, id: `${zone.key}-${Date.now().toString().slice(-6)}` }, ...prev]);
     setBeom(v => v + 5);
     setInquiry(false);
   };
 
   const submitRequest = () => {
+    if (!requireAuth(T('submitBtn'))) return;
     if (!reqNote.trim()) {
       alert(T('alertNote'));
       return;
@@ -133,6 +143,7 @@ export default function HangangPage() {
 
       <main className="w-full max-w-5xl px-4 py-3">
 
+        <PiReadOnlyBanner className="mb-3" />
         {/* ── 1. 히어로 ─────────────────────────────────────────── */}
         <section className="relative bg-gray-50 rounded-2xl border border-black/5 shadow-inner overflow-hidden px-4 py-7 md:px-8 md:py-9">
           <div className="absolute top-0 left-0 w-full h-1 bg-[#dc2626]" />
@@ -276,7 +287,7 @@ export default function HangangPage() {
               onClick={() => setInquiry(true)}
               className="bg-[#dc2626] hover:bg-white hover:text-black text-white text-xs md:text-sm font-black px-4 py-2.5 rounded-lg transition-all active:scale-95"
             >
-              {T('bookBtn')}
+              {T('bookBtn')}{!authenticated && ' 🔒'}
             </button>
           </div>
           <p className="text-gray-400 text-[10px] md:text-[11px] font-bold mt-2 leading-snug">{T('bookNote')}</p>
@@ -356,7 +367,7 @@ export default function HangangPage() {
               onClick={submitRequest}
               className="shrink-0 bg-black hover:bg-[#dc2626] text-white text-xs md:text-sm font-black px-4 py-2.5 rounded-lg transition-all active:scale-95"
             >
-              {T('submitBtn')}
+              {T('submitBtn')}{!authenticated && ' 🔒'}
             </button>
           </div>
 
@@ -490,7 +501,7 @@ export default function HangangPage() {
             </div>
 
             <button onClick={confirmBooking} className="w-full bg-[#dc2626] hover:bg-black text-white text-xs md:text-sm font-black py-3 rounded-xl transition-all active:scale-95">
-              {T('modalConfirm')}
+              {T('modalConfirm')}{!authenticated && ' 🔒'}
             </button>
             <PiPayButton
               amount={total}

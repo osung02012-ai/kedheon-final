@@ -4,6 +4,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { COUNTRIES, COUNTRY_MAP, GLOBAL_COUNTRY, type Country } from '../civil/countries';
 import PiBadge from '../components/PiBadge';
 import PiPayButton from '../components/PiPayButton';
+import { usePi } from '../components/PiProvider';
+import PiReadOnlyBanner from '../components/PiReadOnlyBanner';
 
 /**
  * FACTFILTER — AI 팩트체크 & 언론 책임 원장
@@ -362,6 +364,7 @@ const CountryPicker = ({
 };
 
 export default function FactFilterPage() {
+  const { requireAuth, authenticated, setGateLang } = usePi();
   const [lang, setLang] = useState<'KO' | 'EN'>('KO');
   const [activeTab, setActiveTab] = useState<'CHECK' | 'REPORT' | 'LEDGER' | 'VAULT'>('CHECK');
   const [points, setPoints] = useState(847);
@@ -414,6 +417,12 @@ export default function FactFilterPage() {
   const [vaultHash, setVaultHash] = useState('');
 
   const ko = lang === 'KO';
+
+  // 실행 권한 안내 패널을 현재 언어로
+  useEffect(() => {
+    setGateLang(ko ? 'KR' : 'EN');
+  }, [ko, setGateLang]);
+
   const viewInfo = countryOf(viewCountry);
   const reportInfo = countryOf(reportCountry);
 
@@ -424,6 +433,7 @@ export default function FactFilterPage() {
   const cases = VERIFIED_CASES.filter(c => c.country === viewCountry);
 
   const runFactCheck = () => {
+    if (!requireAuth(ko ? '팩트체크 가동' : 'Verify Claim')) return;
     if (!query.trim()) return alert(ko ? '검증할 뉴스 URL이나 의심 문장을 입력해주세요.' : 'Please enter a news URL or statement.');
     setChecking(true);
     setCheckResult(null);
@@ -450,6 +460,7 @@ export default function FactFilterPage() {
 
   const handleReportSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!requireAuth(ko ? '제보 등록' : 'Submit Report')) return;
     if (!targetName.trim() || !targetUrl.trim() || !targetDetail.trim()) {
       return alert(ko ? '모든 필수 항목을 입력해주세요.' : 'Please fill all required fields.');
     }
@@ -485,6 +496,7 @@ export default function FactFilterPage() {
   };
 
   const handleSealEvidence = () => {
+    if (!requireAuth(ko ? '증거 봉인' : 'Seal Evidence')) return;
     if (!vaultText.trim()) return alert(ko ? '봉인할 증거 본문이나 사건 개요를 입력해주세요.' : 'Enter evidence details.');
     const mockHash = '0x' + Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
     setVaultHash(mockHash);
@@ -495,6 +507,7 @@ export default function FactFilterPage() {
   };
 
   const endorse = (id: string) => {
+    if (!requireAuth(ko ? '검증 지지 투표' : 'Endorse Proof')) return;
     setReportedList(prev => prev.map(r => (r.id === id ? { ...r, votes: r.votes + 1 } : r)));
     setPoints(p => p + 1);
     alert(ko ? '검증 지지 투표가 완료되었습니다 (+1 BEOM)' : 'Verification vote cast (+1 BEOM)');
@@ -537,6 +550,7 @@ export default function FactFilterPage() {
 
       <main className="w-full max-w-5xl px-4 py-3 space-y-4">
 
+        <PiReadOnlyBanner />
         {/* Hero */}
         <div className="bg-gray-50 rounded-2xl border border-black/5 p-4 md:p-5 relative shadow-inner overflow-hidden text-left">
           <div className="absolute top-0 left-0 w-full h-1 bg-[#dc2626]"></div>
@@ -645,7 +659,7 @@ export default function FactFilterPage() {
                   disabled={checking}
                   className="bg-[#dc2626] hover:bg-black text-white font-black px-5 py-2.5 rounded-xl text-xs md:text-sm transition-all disabled:opacity-50 cursor-pointer active:scale-95 whitespace-nowrap"
                 >
-                  {checking ? (ko ? 'AI 교차 검증 중...' : 'Verifying...') : (ko ? '팩트체크 가동' : 'Verify Claim')}
+                  {checking ? (ko ? 'AI 교차 검증 중...' : 'Verifying...') : (ko ? '팩트체크 가동' : 'Verify Claim')}{!authenticated && ' 🔒'}
                 </button>
               </div>
 
@@ -852,7 +866,7 @@ export default function FactFilterPage() {
                 type="submit"
                 className="w-full bg-[#dc2626] hover:bg-black text-white font-black py-3 rounded-xl text-xs md:text-sm transition-all active:scale-95 cursor-pointer"
               >
-                {ko ? `블록체인 검증 원장에 제보 등록 (+10 BEOM)` : 'Submit Report to Ledger (+10 BEOM)'}
+                {ko ? `블록체인 검증 원장에 제보 등록 (+10 BEOM)` : 'Submit Report to Ledger (+10 BEOM)'}{!authenticated && ' 🔒'}
               </button>
             </form>
           </div>
@@ -921,7 +935,7 @@ export default function FactFilterPage() {
                         onClick={() => endorse(item.id)}
                         className="text-[#dc2626] hover:text-black font-black cursor-pointer"
                       >
-                        {ko ? '👍 검증 지지 투표' : '👍 Endorse Proof'}
+                        {ko ? '👍 검증 지지 투표' : '👍 Endorse Proof'}{!authenticated && ' 🔒'}
                       </button>
                     </div>
                   </div>
@@ -1005,7 +1019,7 @@ export default function FactFilterPage() {
               onClick={handleSealEvidence}
               className="w-full bg-[#dc2626] hover:bg-black text-white font-black py-3 rounded-xl text-xs md:text-sm transition-all active:scale-95 cursor-pointer"
             >
-              {ko ? '위변조 불가 타임스탬프로 영구 봉인 (+5 BEOM)' : 'Seal Evidence to Blockchain (+5 BEOM)'}
+              {ko ? '위변조 불가 타임스탬프로 영구 봉인 (+5 BEOM)' : 'Seal Evidence to Blockchain (+5 BEOM)'}{!authenticated && ' 🔒'}
             </button>
 
             {vaultHash && (

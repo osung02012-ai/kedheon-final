@@ -2,6 +2,8 @@
 
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import Script from 'next/script';
+import PiAuthSheet from './PiAuthSheet';
+import type { GateLang } from './pi-gate-i18n';
 
 /**
  * Pi SDK 2.0 커넥터 + Pi 결제(pay) 파이프라인
@@ -11,6 +13,12 @@ import Script from 'next/script';
  *  - 결제는 반드시 서버 경유로 승인·완료한다: /api/pi/approve → /api/pi/complete
  *    (서버 키 PI_API_KEY가 없으면 두 라우트가 sandbox-ready로 응답해 흐름이 끊기지 않는다.)
  *  - SDK 스크립트: https://sdk.minepi.com/pi-sdk.js (공식)
+ *
+ * 실행 권한 게이트(2026-11-15):
+ *  - 읽기(페이지 열람·통계·안건·원장·관광 정보)는 누구나. 실행(투표·제안·청원·제보·결제)은
+ *    Pi.authenticate로 KYC user가 붙은 상태에서만 통과한다.
+ *  - 각 앱은 write 핸들러 첫 줄에서 requireAuth('액션명')을 부르고, 인증이 없으면 false를 받아
+ *    로컬 상태를 건드리지 않고 전역 PiAuthSheet만 띄운다.
  */
 
 export type PiStatus = 'detecting' | 'web' | 'sdk-ready' | 'connecting' | 'connected' | 'unavailable';
@@ -35,7 +43,20 @@ export interface PiContextValue {
   status: PiStatus;
   username: string | null;
   inPiBrowser: boolean;
+  /** Pi.authenticate로 KYC 실명이 붙은 상태인가 (= 실행 권한 보유) */
+  authenticated: boolean;
   connect: () => void;
+  /**
+   * 실행 권한 확인. 인증돼 있으면 true.
+   * 인증이 없으면 false를 돌려주고 전역 안내 패널(읽기 전용)을 띄운다.
+   * write 핸들러 첫 줄에서 `if (!requireAuth(label)) return;` 으로 쓴다.
+   */
+  requireAuth: (action?: string) => boolean;
+  /** 안내 패널을 직접 연다 (읽기 전용 띠의 '인증 방법' 등) */
+  openAuthSheet: () => void;
+  /** 안내 패널 문구 언어 (10개국어) */
+  gateLang: GateLang;
+  setGateLang: (lang: GateLang) => void;
   /** Pi 결제 실행. Pi Browser 밖에서는 안내 상태만 반환한다. */
   pay: (amount: number, memo: string, metadata?: Record<string, unknown>) => Promise<PiPaymentResult>;
   /** 가장 최근 결제 결과 (UI 상태 표시용) */
@@ -48,7 +69,12 @@ const PiContext = createContext<PiContextValue>({
   status: 'detecting',
   username: null,
   inPiBrowser: false,
+  authenticated: false,
   connect: () => {},
+  requireAuth: () => false,
+  openAuthSheet: () => {},
+  gateLang: 'KR',
+  setGateLang: () => {},
   pay: async () => ({
     ok: false,
     status: 'unavailable',
@@ -109,8 +135,33 @@ export default function PiProvider({ children }: { children: React.ReactNode }) 
   const [inPiBrowser, setInPiBrowser] = useState(false);
   const [lastPayment, setLastPayment] = useState<PiPaymentResult | null>(null);
   const [paying, setPaying] = useState(false);
+  const [gateOpen, setGateOpen] = useState(false);
+  const [gateAction, setGateAction] = useState<string | null>(null);
+  const [gateLang, setGateLangState] = useState<GateLang>('KR');
   const busy = useRef(false);
   const payingRef = useRef(false);
+
+  /** 실행 권한: Pi.authenticate로 KYC user가 붙은 상태만 통과 */
+  const authenticated = status === 'connected' && !!username;
+
+  const requireAuth = useCallback(
+    (action?: string) => {
+      if (status === 'connected' && username) return true;
+      setGateAction(action ?? null);
+      setGateOpen(true);
+      return false;
+    },
+    [status, username]
+  );
+
+  const openAuthSheet = useCallback(() => {
+    setGateAction(null);
+    setGateOpen(true);
+  }, []);
+
+  const setGateLang = useCallback((lang: GateLang) => {
+    setGateLangState(lang);
+  }, []);
 
   /** Pi.init 은 세션당 한 번. 인증·결제가 같은 설정을 공유한다. */
   const ensureInit = useCallback((Pi: PiSdk) => {
@@ -326,9 +377,33 @@ export default function PiProvider({ children }: { children: React.ReactNode }) 
   }, [inPiBrowser, authenticate]);
 
   return (
-    <PiContext.Provider value={{ status, username, inPiBrowser, connect, pay, lastPayment, paying }}>
+    <PiContext.Provider
+      value={{
+        status,
+        username,
+        inPiBrowser,
+        authenticated,
+        connect,
+        requireAuth,
+        openAuthSheet,
+        gateLang,
+        setGateLang,
+        pay,
+        lastPayment,
+        paying
+      }}
+    >
       <Script src="https://sdk.minepi.com/pi-sdk.js" strategy="afterInteractive" />
       {children}
+      <PiAuthSheet
+        open={gateOpen}
+        lang={gateLang}
+        action={gateAction}
+        inPiBrowser={inPiBrowser}
+        connecting={status === 'connecting'}
+        onConnect={connect}
+        onClose={() => setGateOpen(false)}
+      />
     </PiContext.Provider>
   );
 }

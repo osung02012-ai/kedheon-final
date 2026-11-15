@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import PiBadge from './components/PiBadge';
+import { usePi } from './components/PiProvider';
+import PiReadOnlyBanner from './components/PiReadOnlyBanner';
 
 /** * [KEDHEON MASTER V271.0 - FINANCE CORE / TURBOPACK OPTIMIZATION PATCH]
  * -----------------------------------------------------------
@@ -70,7 +72,7 @@ interface Dictionary {
   feedTitle: string; feedLink: string; feedDesc: string; postBtn: string;
   marketBuyTab: string; marketSellTab: string; buyReqBtn: string; sellDoneBtn: string;
   copyPrompt: string; copiedAlert: string; inviteReveal: string; piLackAlert: string; convDoneAlert: string;
-  beomLackAlert: string; regDoneAlert: string; propDoneAlert: string;
+  beomLackAlert: string; buyDoneAlert: string; regDoneAlert: string; propDoneAlert: string;
   devRecruitTitle: string; devRecruitDesc: string; devRecruitBtn: string;
   cats: string[];
   fans: string[];
@@ -120,7 +122,7 @@ const DICT: Record<Lang, Dictionary> = {
     feedTitle: "제목 또는 팬심 공유", feedLink: "이미지/영상 링크 (URL)", feedDesc: "상세 내용을 기록하십시오", postBtn: "피드 등록 (10 BEOM)",
     marketBuyTab: "굿즈 구매", marketSellTab: "판매 등록", buyReqBtn: "구매 신청", sellDoneBtn: "굿즈 등록 완료",
     copyPrompt: "복사하려면 클릭", copiedAlert: "추천인 코드가 복사되었습니다!", inviteReveal: "초대 코드 확인 및 복사 (클릭)", piLackAlert: "PI 부족", convDoneAlert: "리워드 적립 완료!",
-    beomLackAlert: "BEOM 부족", regDoneAlert: "등록 성공", propDoneAlert: "제안서가 전송되었습니다.",
+    beomLackAlert: "BEOM 부족", buyDoneAlert: "구매 신청이 접수되었습니다.", regDoneAlert: "등록 성공", propDoneAlert: "제안서가 전송되었습니다.",
     devRecruitTitle: "파이 코어팀 개발자 공식 모집", devRecruitDesc: "파이 생태계를 함께 구축할 글로벌 개발자를 모집합니다.", devRecruitBtn: "공지 확인 및 지원하기",
     cats: ['CCM', '뮤지션', 'MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'],
     fans: ['케데헌', '헌트릭스', 'BTS'],
@@ -168,7 +170,7 @@ const DICT: Record<Lang, Dictionary> = {
     feedTitle: "Title or Share Spirit", feedLink: "Image/Video Link (URL)", feedDesc: "Describe your activity in detail", postBtn: "POST (10 BEOM)",
     marketBuyTab: "BUY GOODS", marketSellTab: "SELL ITEMS", buyReqBtn: "BUY REQUEST", sellDoneBtn: "COMPLETE REGISTRATION",
     copyPrompt: "Click to Copy", copiedAlert: "Invite Code Copied!", inviteReveal: "Reveal & copy invite code (tap)", piLackAlert: "Not enough PI", convDoneAlert: "Conversion Complete!",
-    beomLackAlert: "Not enough BEOM", regDoneAlert: "Registration Successful", propDoneAlert: "Proposal Submitted.",
+    beomLackAlert: "Not enough BEOM", buyDoneAlert: "Purchase request received.", regDoneAlert: "Registration Successful", propDoneAlert: "Proposal Submitted.",
     devRecruitTitle: "Pi Core Team Developer Recruitment", devRecruitDesc: "Join the official global developers building the Pi ecosystem.", devRecruitBtn: "CHECK & APPLY",
     cats: ['CCM', 'MUSICIAN', 'MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'],
     fans: ['KEDHEON', 'HUNTRIX', 'BTS'],
@@ -216,7 +218,7 @@ const DICT: Record<Lang, Dictionary> = {
     feedTitle: "标题或分享热情", feedLink: "图片/视频链接 (URL)", feedDesc: "详细描述您的活动", postBtn: "发布 (10 BEOM)",
     marketBuyTab: "购买商品", marketSellTab: "出售物品", buyReqBtn: "购买请求", sellDoneBtn: "完成注册",
     copyPrompt: "点击复制", copiedAlert: "邀请码已复制！", inviteReveal: "查看并复制邀请码（点击）", piLackAlert: "PI 余额不足", convDoneAlert: "奖励领取成功！",
-    beomLackAlert: "BEOM 余额不足", regDoneAlert: "注册成功", propDoneAlert: "提案已提交。",
+    beomLackAlert: "BEOM 余额不足", buyDoneAlert: "购买申请已提交。", regDoneAlert: "注册成功", propDoneAlert: "提案已提交。",
     devRecruitTitle: "Pi 核心团队开发者招募", devRecruitDesc: "加入官方全球开发者团队，共同构建 Pi 生态系统。", devRecruitBtn: "查看并申请",
     cats: ['CCM', '音乐家', 'MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'],
     fans: ['KEDHEON', 'HUNTRIX', 'BTS'],
@@ -264,7 +266,7 @@ const DICT: Record<Lang, Dictionary> = {
     feedTitle: "タイトルまたはスピリットを共有", feedLink: "画像/動画リンク (URL)", feedDesc: "活動の詳細を説明してください", postBtn: "投稿 (10 BEOM)",
     marketBuyTab: "グッズ購入", marketSellTab: "販売登録", buyReqBtn: "購入リクエスト", sellDoneBtn: "登録完了",
     copyPrompt: "クリックしてコピー", copiedAlert: "招待コードがコピーされました！", inviteReveal: "招待コードを表示してコピー（タップ）", piLackAlert: "PI が不足しています", convDoneAlert: "変換が完了しました！",
-    beomLackAlert: "BEOM が不足しています", regDoneAlert: "登録成功", propDoneAlert: "提案が送信されました。",
+    beomLackAlert: "BEOM が不足しています", buyDoneAlert: "購入リクエストを受け付けました。", regDoneAlert: "登録成功", propDoneAlert: "提案が送信されました。",
     devRecruitTitle: "Pi コアチーム開発者募集", devRecruitDesc: "Pi エコシステムを構築する公式グローバル開発者に参加してください。", devRecruitBtn: "確認して応募",
     cats: ['CCM', 'ミュージシャン', 'MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'],
     fans: ['KEDHEON', 'HUNTRIX', 'BTS'],
@@ -312,7 +314,7 @@ const DICT: Record<Lang, Dictionary> = {
     feedTitle: "Título o Espíritu", feedLink: "Enlace (URL)", feedDesc: "Describe tu actividad", postBtn: "PUBLICAR (10 BEOM)",
     marketBuyTab: "COMPRAR", marketSellTab: "VENDER", buyReqBtn: "SOLICITAR COMPRA", sellDoneBtn: "REGISTRO COMPLETO",
     copyPrompt: "Clic para Copiar", copiedAlert: "¡Código copiado!", inviteReveal: "Ver y copiar el código (toca aquí)", piLackAlert: "Falta PI", convDoneAlert: "¡Recompensa Recibida!",
-    beomLackAlert: "Falta BEOM", regDoneAlert: "Registro Exitoso", propDoneAlert: "Propuesta Enviada.",
+    beomLackAlert: "Falta BEOM", buyDoneAlert: "Solicitud de compra recibida.", regDoneAlert: "Registro Exitoso", propDoneAlert: "Propuesta Enviada.",
     devRecruitTitle: "Reclutamiento del Core Team", devRecruitDesc: "Únete a los desarrolladores oficiales de Pi.", devRecruitBtn: "REVISAR Y APLICAR",
     cats: ['CCM', 'MÚSICA', 'MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'],
     fans: ['KEDHEON', 'HUNTRIX', 'BTS'],
@@ -360,7 +362,7 @@ const DICT: Record<Lang, Dictionary> = {
     feedTitle: "Tiêu đề", feedLink: "Liên kết Ảnh/Video", feedDesc: "Mô tả hoạt động của bạn", postBtn: "ĐĂNG BÀI (10 BEOM)",
     marketBuyTab: "MUA HÀNG", marketSellTab: "BÁN HÀNG", buyReqBtn: "YÊU CẦU MUA", sellDoneBtn: "HOÀN TẤT ĐĂNG KÝ",
     copyPrompt: "Nhấn để sao chép", copiedAlert: "Đã sao chép mã mời!", inviteReveal: "Xem và sao chép mã mời (nhấn)", piLackAlert: "Không đủ PI", convDoneAlert: "Chuyển đổi thành công!",
-    beomLackAlert: "Không đủ BEOM", regDoneAlert: "Đăng ký thành công", propDoneAlert: "Đã gửi đề xuất.",
+    beomLackAlert: "Không đủ BEOM", buyDoneAlert: "Đã nhận yêu cầu mua.", regDoneAlert: "Đăng ký thành công", propDoneAlert: "Đã gửi đề xuất.",
     devRecruitTitle: "Tuyển dụng Nhà phát triển Pi", devRecruitDesc: "Tham gia nhóm phát triển xây dựng hệ sinh thái Pi.", devRecruitBtn: "KIỂM TRA & ỨNG TUYỂN",
     cats: ['CCM', 'NHẠC SĨ', 'MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'],
     fans: ['KEDHEON', 'HUNTRIX', 'BTS'],
@@ -408,7 +410,7 @@ const DICT: Record<Lang, Dictionary> = {
     feedTitle: "Titre", feedLink: "Lien Image/Vidéo", feedDesc: "Décrivez votre activité", postBtn: "PUBLIER (10 BEOM)",
     marketBuyTab: "ACHETER", marketSellTab: "VENDRE", buyReqBtn: "DEMANDER", sellDoneBtn: "TERMINÉ",
     copyPrompt: "Cliquez pour copier", copiedAlert: "Code copié !", inviteReveal: "Afficher et copier le code (toucher)", piLackAlert: "PI insuffisant", convDoneAlert: "Récompense reçue !",
-    beomLackAlert: "BEOM insuffisant", regDoneAlert: "Succès", propDoneAlert: "Proposition soumise.",
+    beomLackAlert: "BEOM insuffisant", buyDoneAlert: "Demande d’achat reçue.", regDoneAlert: "Succès", propDoneAlert: "Proposition soumise.",
     devRecruitTitle: "Recrutement Core Team Pi", devRecruitDesc: "Rejoignez les développeurs mondiaux officiels.", devRecruitBtn: "POSTULER",
     cats: ['CCM', 'MUSICIEN', 'MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'],
     fans: ['KEDHEON', 'HUNTRIX', 'BTS'],
@@ -456,7 +458,7 @@ const DICT: Record<Lang, Dictionary> = {
     feedTitle: "Título", feedLink: "Link da Imagem", feedDesc: "Descreva sua atividade", postBtn: "PUBLICAR",
     marketBuyTab: "COMPRAR", marketSellTab: "VENDER", buyReqBtn: "SOLICITAR", sellDoneBtn: "CONCLUÍDO",
     copyPrompt: "Clique para copiar", copiedAlert: "Copiado!", inviteReveal: "Ver e copiar o código (toque)", piLackAlert: "PI insuficiente", convDoneAlert: "Recompensa recebida!",
-    beomLackAlert: "BEOM insuficiente", regDoneAlert: "Sucesso", propDoneAlert: "Proposta enviada.",
+    beomLackAlert: "BEOM insuficiente", buyDoneAlert: "Pedido de compra recebido.", regDoneAlert: "Sucesso", propDoneAlert: "Proposta enviada.",
     devRecruitTitle: "Recrutamento Core Team", devRecruitDesc: "Junte-se aos desenvolvedores globais.", devRecruitBtn: "CANDIDATAR-SE",
     cats: ['CCM', 'MÚSICO', 'MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'],
     fans: ['KEDHEON', 'HUNTRIX', 'BTS'],
@@ -504,7 +506,7 @@ const DICT: Record<Lang, Dictionary> = {
     feedTitle: "Заголовок", feedLink: "Ссылка URL", feedDesc: "Описание активности", postBtn: "ОПУБЛИКОВАТЬ",
     marketBuyTab: "КУПИТЬ", marketSellTab: "ПРОДАТЬ", buyReqBtn: "ЗАПРОСИТЬ", sellDoneBtn: "ГОТОВО",
     copyPrompt: "Копировать", copiedAlert: "Скопировано!", inviteReveal: "Показать и скопировать код (нажмите)", piLackAlert: "Недостаточно PI", convDoneAlert: "Готово!",
-    beomLackAlert: "Недостаточно BEOM", regDoneAlert: "Успех", propDoneAlert: "Отправлено.",
+    beomLackAlert: "Недостаточно BEOM", buyDoneAlert: "Заявка на покупку принята.", regDoneAlert: "Успех", propDoneAlert: "Отправлено.",
     devRecruitTitle: "Набор Core Team", devRecruitDesc: "Присоединяйтесь к разработчикам.", devRecruitBtn: "ПОДАТЬ ЗАЯВКУ",
     cats: ['CCM', 'МУЗЫКАНТ', 'MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'],
     fans: ['KEDHEON', 'HUNTRIX', 'BTS'],
@@ -552,7 +554,7 @@ const DICT: Record<Lang, Dictionary> = {
     feedTitle: "Judul", feedLink: "Tautan URL", feedDesc: "Deskripsikan aktivitas", postBtn: "POSTING",
     marketBuyTab: "BELI", marketSellTab: "JUAL", buyReqBtn: "MINTA", sellDoneBtn: "SELESAI",
     copyPrompt: "Klik untuk menyalin", copiedAlert: "Tersalin!", inviteReveal: "Lihat & salin kode (ketuk)", piLackAlert: "PI tidak cukup", convDoneAlert: "Konversi selesai!",
-    beomLackAlert: "BEOM tidak cukup", regDoneAlert: "Sukses", propDoneAlert: "Proposal terkirim.",
+    beomLackAlert: "BEOM tidak cukup", buyDoneAlert: "Permintaan pembelian diterima.", regDoneAlert: "Sukses", propDoneAlert: "Proposal terkirim.",
     devRecruitTitle: "Rekrutmen Core Team", devRecruitDesc: "Bergabunglah dengan pengembang.", devRecruitBtn: "DAFTAR",
     cats: ['CCM', 'MUSISI', 'MUSIC', 'TECH', 'ART', 'FOOD', 'TRAVEL', 'GAME', 'NEWS', 'MOVIE'],
     fans: ['KEDHEON', 'HUNTRIX', 'BTS'],
@@ -594,6 +596,7 @@ const SectionHeader = ({ title, desc }: { title: string; desc: string; }) => (
 );
 
 export default function KedheonDesignSystemFinal() {
+  const { requireAuth, authenticated, setGateLang } = usePi();
   const [hasMounted, setHasMounted] = useState(false);
   const [lang, setLang] = useState<Lang>('KR');
   const [tab, setTab] = useState<'ROOKIE' | 'PIONEER'>('ROOKIE');
@@ -615,6 +618,11 @@ export default function KedheonDesignSystemFinal() {
     document.documentElement.lang = LANG_TAG[lang] || 'ko';
   }, [lang]);
 
+  // 실행 권한 안내 패널도 같은 언어로 (10개국어)
+  useEffect(() => {
+    setGateLang(lang);
+  }, [lang, setGateLang]);
+
   const L = DICT[lang];
   const displayGoods = [...userGoods, ...L.goodsMock];
 
@@ -630,10 +638,11 @@ export default function KedheonDesignSystemFinal() {
   }, [L.copiedAlert]);
 
   const handleFinanceConversion = useCallback(() => {
-    // Daily attendance & contribution reward (+50 BEOM)
+    // Daily attendance & contribution reward (+50 BEOM) — 실행 권한 게이트
+    if (!requireAuth(L.convertBtn)) return;
     setBeomToken(p => p + 50);
     alert("출석 및 생태계 기여 리워드 +50 BEOM 적립 완료!");
-  }, []);
+  }, [requireAuth, L.convertBtn]);
 
   if (!hasMounted) return <div className="bg-white min-h-screen" />;
 
@@ -679,6 +688,7 @@ export default function KedheonDesignSystemFinal() {
       </nav>
 
       <main className="w-full max-w-5xl px-4 py-3">
+        <PiReadOnlyBanner className="mb-3" />
         {tab === 'ROOKIE' ? (
           <div className="flex flex-col gap-3 animate-in fade-in duration-500 font-black">
             <div className="flex flex-col items-center text-center gap-3 py-6 bg-gray-50 rounded-2xl border border-black/5 relative shadow-inner overflow-hidden font-black">
@@ -766,7 +776,7 @@ export default function KedheonDesignSystemFinal() {
                   </div>
                   <div className="flex flex-col items-center justify-center p-3 bg-gray-50 rounded-xl text-center font-black">
                      <p className="text-black text-sm md:text-base font-black mb-2 italic">{L.convertTitle}</p>
-                     <button onClick={handleFinanceConversion} className="w-full bg-[#dc2626] text-white py-2 rounded-lg text-xs font-black hover:bg-black transition-all shadow-md">{L.convertBtn}</button>
+                     <button onClick={handleFinanceConversion} className="w-full bg-[#dc2626] text-white py-2 rounded-lg text-xs font-black hover:bg-black transition-all shadow-md">{L.convertBtn}{!authenticated && ' 🔒'}</button>
                   </div>
                </div>
             </div>
@@ -792,7 +802,7 @@ export default function KedheonDesignSystemFinal() {
                         <input value={qrState.biz} onChange={e=>setQrState({...qrState, biz:e.target.value.toUpperCase()})} placeholder={L.bizPlaceholder} className="w-full bg-gray-50 border border-black/5 p-2 rounded-lg text-[11px] font-black outline-none focus:border-black mb-2" />
                      )}
                   </div>
-                  <button onClick={() => {if(beomToken<50) return alert(L.beomLackAlert); setBeomToken(p=>p-50); setQrState({...qrState, active:true});}} className="w-full bg-black text-white py-3 rounded-lg text-xs font-black hover:bg-[#dc2626] transition-all shadow-md">{L.activate}</button>
+                  <button onClick={() => {if (!requireAuth(L.activate)) return; if(beomToken<50) return alert(L.beomLackAlert); setBeomToken(p=>p-50); setQrState({...qrState, active:true});}} className="w-full bg-black text-white py-3 rounded-lg text-xs font-black hover:bg-[#dc2626] transition-all shadow-md">{L.activate}{!authenticated && ' 🔒'}</button>
                </div>
             </div>
 
@@ -812,7 +822,7 @@ export default function KedheonDesignSystemFinal() {
                 <textarea value={feed.desc} onChange={e => setFeed({...feed, desc: e.target.value})} placeholder={L.feedDesc} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-xs md:text-sm font-bold h-24 outline-none focus:border-black leading-relaxed" />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-2 font-black">
-                <button onClick={() => {if(!feed.title) return; setBeomToken(p=>p-10); alert(L.regDoneAlert); setFeed({title:'', link:'', desc:''});}} className="md:col-span-2 bg-black text-white py-3 rounded-xl text-sm md:text-base font-black hover:bg-[#dc2626] transition-all shadow-lg active:scale-95">{L.postBtn}</button>
+                <button onClick={() => {if (!requireAuth(L.postBtn)) return; if(!feed.title) return; setBeomToken(p=>p-10); alert(L.regDoneAlert); setFeed({title:'', link:'', desc:''});}} className="md:col-span-2 bg-black text-white py-3 rounded-xl text-sm md:text-base font-black hover:bg-[#dc2626] transition-all shadow-lg active:scale-95">{L.postBtn}{!authenticated && ' 🔒'}</button>
                 <button className="bg-white border-2 border-black text-black py-3 rounded-xl text-xs md:text-sm font-black flex items-center justify-center gap-1.5 shadow active:scale-95">🚩 FAN ROOM</button>
               </div>
               <div className="space-y-1 bg-gray-50 p-3 rounded-xl border-l-[4px] border-[#dc2626] text-left font-black"><p className="text-gray-400 text-[11px] md:text-xs font-bold italic leading-none">{L.fanRoomDesc}</p></div>
@@ -833,7 +843,7 @@ export default function KedheonDesignSystemFinal() {
                                     <h4 className="text-[11px] md:text-xs font-black uppercase mb-0.5 truncate">{g.name}</h4>
                                     <p className="text-gray-400 text-[11px] md:text-xs mb-1 font-bold line-clamp-1 leading-tight">{g.desc}</p>
                                     <p className="text-[#dc2626] text-xs md:text-base font-black mb-2 leading-none">{g.price.toLocaleString()} <span className="notranslate text-[11px]" translate="no">BEOM</span></p>
-                                    <button className="w-full py-1.5 bg-black text-white rounded-lg text-[11px] md:text-xs font-black uppercase active:scale-95">{L.buyReqBtn}</button>
+                                    <button onClick={() => {if (!requireAuth(L.buyReqBtn)) return; alert(L.buyDoneAlert);}} className="w-full py-1.5 bg-black text-white rounded-lg text-[11px] md:text-xs font-black uppercase active:scale-95">{L.buyReqBtn}{!authenticated && ' 🔒'}</button>
                                 </div>
                             </div>
                         ))}
@@ -846,7 +856,7 @@ export default function KedheonDesignSystemFinal() {
                             <input value={sellItem.img} onChange={e => setSellItem({...sellItem, img:e.target.value})} placeholder={L.itemImg} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-xs md:text-sm font-black outline-none" />
                         </div>
                         <textarea value={sellItem.desc} onChange={e => setSellItem({...sellItem, desc:e.target.value})} placeholder={L.itemDesc} className="w-full bg-gray-50 border border-black/5 p-3 rounded-xl text-xs md:text-sm font-bold h-20 outline-none" />
-                        <button onClick={() => {if(!sellItem.name) return; setUserGoods([{id:Date.now(), ...sellItem, price:Number(sellItem.price), seller:"User"}, ...userGoods]); alert(L.regDoneAlert); setMarketMode('BUY');}} className="w-full bg-[#dc2626] text-white py-3 rounded-xl text-xs md:text-sm font-black shadow-lg">{L.sellDoneBtn}</button>
+                        <button onClick={() => {if (!requireAuth(L.sellDoneBtn)) return; if(!sellItem.name) return; setUserGoods([{id:Date.now(), ...sellItem, price:Number(sellItem.price), seller:"User"}, ...userGoods]); alert(L.regDoneAlert); setMarketMode('BUY');}} className="w-full bg-[#dc2626] text-white py-3 rounded-xl text-xs md:text-sm font-black shadow-lg">{L.sellDoneBtn}{!authenticated && ' 🔒'}</button>
                     </div>
                 )}
             </div>
@@ -861,7 +871,7 @@ export default function KedheonDesignSystemFinal() {
                     <input value={partner.contact} onChange={e=>setPartner({...partner, contact: e.target.value})} placeholder={L.contact} className="bg-white/10 border-none p-3 rounded-xl text-[11px] md:text-xs text-white outline-none focus:ring-1 ring-[#dc2626]" />
                 </div>
                 <textarea value={partner.msg} onChange={e=>setPartner({...partner, msg: e.target.value})} placeholder={L.vision} className="w-full bg-white/10 border-none p-4 rounded-2xl text-[11px] md:text-xs text-white h-24 outline-none focus:ring-1 ring-[#dc2626] z-10 relative text-left" />
-                <button onClick={()=>alert(L.propDoneAlert)} className="w-full bg-[#dc2626] text-white py-3.5 rounded-full text-sm md:text-base font-black hover:bg-white hover:text-black transition-all uppercase z-10 relative active:scale-95 shadow-xl">{L.submit}</button>
+                <button onClick={()=>{if (!requireAuth(L.submit)) return; alert(L.propDoneAlert);}} className="w-full bg-[#dc2626] text-white py-3.5 rounded-full text-sm md:text-base font-black hover:bg-white hover:text-black transition-all uppercase z-10 relative active:scale-95 shadow-xl">{L.submit}{!authenticated && ' 🔒'}</button>
             </div>
           </div>
         )}

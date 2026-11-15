@@ -7,6 +7,7 @@ import { usePi } from './PiProvider';
  * PiPayButton — 케드헌 표준 Pi 결제 버튼 (Civil · FactFilter · Hangang 공용)
  *  - Pi Browser: Pi 결제창 → 서버 승인(/api/pi/approve) → 서버 완료(/api/pi/complete)
  *  - 일반 웹: 결제를 만들지 않고 "Pi Browser에서만 결제" 안내만 인라인으로 보여 준다.
+ *  - Pi KYC 인증이 없는 상태에서는 결제를 만들지 않고 전역 Pi 지갑 인증 안내를 띄운다(읽기 전용 게이트).
  *  - 기존 화면 흐름을 건드리지 않도록 작은 보조 버튼으로 쓰고, 실패해도 페이지 동작은 유지된다.
  */
 
@@ -42,7 +43,7 @@ export default function PiPayButton({
   className = '',
   onPaid
 }: PiPayButtonProps) {
-  const { pay, paying } = usePi();
+  const { pay, paying, requireAuth } = usePi();
   const [msg, setMsg] = useState<string | null>(null);
   const [done, setDone] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -61,6 +62,8 @@ export default function PiPayButton({
 
   const handleClick = async () => {
     if (paying || done) return;
+    // 실행 권한 게이트: Pi KYC 인증이 없으면 결제를 만들지 않는다.
+    if (!requireAuth(label)) return;
     const result = await pay(amount, memo, metadata);
 
     if (result.ok) {

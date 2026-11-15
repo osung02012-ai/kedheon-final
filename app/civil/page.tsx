@@ -5,6 +5,8 @@ import { COUNTRIES, COUNTRY_MAP, GLOBAL_COUNTRY } from './countries';
 import type { Country } from './countries';
 import PiBadge from '../components/PiBadge';
 import PiPayButton from '../components/PiPayButton';
+import { usePi } from '../components/PiProvider';
+import PiReadOnlyBanner from '../components/PiReadOnlyBanner';
 
 /**
  * CIVIL — KYC 실명 1인 1표 거버넌스 DApp (전 세계 238개국 지원)
@@ -345,6 +347,7 @@ const CountryPicker = ({
 };
 
 export default function CivilPage() {
+  const { requireAuth, authenticated, setGateLang } = usePi();
   const [lang, setLang] = useState<'KO' | 'EN'>('KO');
   const [checkedIn, setCheckedIn] = useState(false);
   const [points, setPoints] = useState(847);
@@ -375,6 +378,12 @@ export default function CivilPage() {
   }, []);
 
   const ko = lang === 'KO';
+
+  // 실행 권한 안내 패널을 현재 언어로
+  useEffect(() => {
+    setGateLang(ko ? 'KR' : 'EN');
+  }, [ko, setGateLang]);
+
   const T = {
     subtitle: ko ? 'KYC 실명 1인 1표 거버넌스' : 'KYC One Person One Vote Governance',
     heroTitle: ko ? '1인 1표 직접민주주의' : 'One Person, One Vote',
@@ -432,6 +441,7 @@ export default function CivilPage() {
   };
 
   const handleCheckin = () => {
+    if (!requireAuth(T.checkin)) return;
     if (checkedIn) return alert(ko ? '오늘은 이미 출석체크를 완료했습니다.' : 'You already checked in today.');
     setCheckedIn(true);
     setPoints(p => p + 5);
@@ -441,6 +451,7 @@ export default function CivilPage() {
   const canVote = (a: Agenda) => a.country === 'GLOBAL' || a.country === myCountry;
 
   const handleVote = (a: Agenda, choice: 'YES' | 'NO') => {
+    if (!requireAuth(choice === 'YES' ? T.voteYes : T.voteNo)) return;
     if (!canVote(a)) {
       return alert(ko
         ? '주권 투표 락: 해당 국가 KYC 시민만 투표할 수 있습니다.'
@@ -453,6 +464,7 @@ export default function CivilPage() {
   };
 
   const handleDemand = (m: Mall) => {
+    if (!requireAuth(T.demand)) return;
     if (demanded[m.name]) return alert(ko ? '이미 서명에 참여하셨습니다.' : 'You already signed.');
     setDemanded(d => ({ ...d, [m.name]: true }));
     setPoints(p => p + 1);
@@ -460,12 +472,14 @@ export default function CivilPage() {
   };
 
   const handleGenerateLink = () => {
+    if (!requireAuth(T.generate)) return;
     const url = `https://kedheon.com/civil?vote=${linkAgenda}`;
     if (typeof navigator !== 'undefined' && navigator.clipboard) navigator.clipboard.writeText(url);
     alert(`${T.copied}\n${url}`);
   };
 
   const handlePropose = () => {
+    if (!requireAuth(T.propSubmit)) return;
     const titleKo = propKo.trim();
     const titleEn = propEn.trim() || titleKo;
     if (!titleKo && !titleEn) {
@@ -559,7 +573,7 @@ export default function CivilPage() {
             aria-label={checkedIn ? T.checkedIn : T.checkin}
           >
             {/* 390px 폰에서는 네비게이션이 넘치므로 아이콘만 보여 준다. */}
-            <span className="hidden min-[420px]:inline">{checkedIn ? T.checkedIn : T.checkin}</span>
+            <span className="hidden min-[420px]:inline">{checkedIn ? T.checkedIn : T.checkin}{!authenticated && ' 🔒'}</span>
             <span aria-hidden className="min-[420px]:hidden">{checkedIn ? '✓' : '⚡'}</span>
           </button>
         </div>
@@ -567,6 +581,7 @@ export default function CivilPage() {
 
       <main className="w-full max-w-5xl px-4 py-3 space-y-4">
 
+        <PiReadOnlyBanner />
         {/* Hero */}
         <div className="flex flex-col md:flex-row items-stretch gap-3">
           <div className="flex-1 bg-gray-50 rounded-2xl border border-black/5 p-4 md:p-5 relative shadow-inner overflow-hidden text-left flex flex-col justify-center">
@@ -656,10 +671,10 @@ export default function CivilPage() {
                 🔎 {ko ? '국가 변경' : 'Change'}
               </button>
               <button
-                onClick={() => setShowPropose(v => !v)}
+                onClick={() => { if (!requireAuth(T.propose)) return; setShowPropose(v => !v); }}
                 className="px-2.5 py-1.5 rounded-lg text-[11px] md:text-xs font-black border border-[#dc2626] bg-[#dc2626] text-white hover:bg-black hover:border-black"
               >
-                {T.propose}
+                {T.propose}{!authenticated && ' 🔒'}
               </button>
             </div>
           </div>
@@ -688,7 +703,7 @@ export default function CivilPage() {
                   onClick={handlePropose}
                   className="py-2.5 rounded-xl text-xs md:text-sm font-black bg-[#dc2626] text-white hover:bg-black transition-all active:scale-95"
                 >
-                  {T.propSubmit}
+                  {T.propSubmit}{!authenticated && ' 🔒'}
                 </button>
                 <button
                   onClick={() => setShowPropose(false)}
@@ -758,13 +773,13 @@ export default function CivilPage() {
                         onClick={() => handleVote(a, 'YES')}
                         className={`py-2.5 rounded-xl text-xs md:text-sm font-black transition-all active:scale-95 ${myVote === 'YES' ? 'bg-[#dc2626] text-white' : 'bg-black text-white hover:bg-[#dc2626]'}`}
                       >
-                        {T.voteYes}
+                        {T.voteYes}{!authenticated && ' 🔒'}
                       </button>
                       <button
                         onClick={() => handleVote(a, 'NO')}
                         className={`py-2.5 rounded-xl text-xs md:text-sm font-black transition-all active:scale-95 border-2 ${myVote === 'NO' ? 'bg-white text-[#dc2626] border-[#dc2626]' : 'bg-white text-black border-black hover:text-[#dc2626] hover:border-[#dc2626]'}`}
                       >
-                        {T.voteNo}
+                        {T.voteNo}{!authenticated && ' 🔒'}
                       </button>
                     </div>
                   )}
@@ -826,7 +841,7 @@ export default function CivilPage() {
                   onClick={() => handleDemand(m)}
                   className={`px-3 py-1.5 rounded-lg text-[11px] md:text-xs font-black whitespace-nowrap active:scale-95 transition-all ${demanded[m.name] ? 'bg-gray-100 text-gray-400 border border-black/10' : 'bg-[#dc2626] text-white hover:bg-black'}`}
                 >
-                  {demanded[m.name] ? T.demanded : T.demand}
+                  {demanded[m.name] ? T.demanded : T.demand}{!authenticated && ' 🔒'}
                 </button>
               </div>
             ))}
@@ -855,7 +870,7 @@ export default function CivilPage() {
               onClick={handleGenerateLink}
               className="w-full bg-[#dc2626] text-white py-3 rounded-xl text-xs md:text-sm font-black hover:bg-white hover:text-black transition-all active:scale-95"
             >
-              {T.generate}
+              {T.generate}{!authenticated && ' 🔒'}
             </button>
           </div>
         </div>

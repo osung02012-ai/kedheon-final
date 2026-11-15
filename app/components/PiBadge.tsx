@@ -117,8 +117,8 @@ export default function PiBadge({ en = false, className = '' }: { en?: boolean; 
             </div>
             <p className="text-[10px] md:text-[11px] text-gray-400 font-bold leading-relaxed">
               {en
-                ? 'Everything else works right here in your browser — KYC linking is optional.'
-                : 'KYC 연결 전에도 이 화면의 기능은 그대로 사용할 수 있습니다. 웹 체험 모드입니다.'}
+                ? 'Browsing, statistics and ledgers stay open to everyone. Voting, proposals, reports and payments unlock after Pi KYC verification.'
+                : '둘러보기·통계·원장 열람은 누구나 그대로 가능합니다. 투표·안건 제안·제보·결제는 Pi KYC 인증 후에 실행됩니다.'}
             </p>
           </>
         )}
