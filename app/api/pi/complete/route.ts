@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import {
   hasPiApiKey,
+  PI_API_KEY_ENVS,
   isValidPaymentId,
   isValidTxid,
   piRequest,
@@ -23,7 +24,8 @@ export async function GET() {
     action: 'complete',
     endpoint: '/api/pi/complete',
     mode: hasPiApiKey() ? 'live' : 'sandbox-ready',
-    missingEnv: hasPiApiKey() ? null : 'PI_API_KEY',
+    missingEnv: hasPiApiKey() ? null : 'PI_NETWORK_API_KEY',
+    acceptedEnv: PI_API_KEY_ENVS,
     body: { paymentId: 'string', txid: 'string' }
   });
 }

@@ -284,7 +284,7 @@ export default function HangangPage() {
               </p>
             </div>
             <button
-              onClick={() => setInquiry(true)}
+              onClick={() => { if (!requireAuth(T('bookBtn'))) return; setInquiry(true); }}
               className="bg-[#dc2626] hover:bg-white hover:text-black text-white text-xs md:text-sm font-black px-4 py-2.5 rounded-lg transition-all active:scale-95"
             >
               {T('bookBtn')}{!authenticated && ' 🔒'}

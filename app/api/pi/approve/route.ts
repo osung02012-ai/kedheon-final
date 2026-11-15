@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import {
   hasPiApiKey,
+  PI_API_KEY_ENVS,
   isValidPaymentId,
   piRequest,
   readPaymentBody,
@@ -10,8 +11,8 @@ import {
 /**
  * POST /api/pi/approve
  * Pi SDK가 결제를 만들면 프론트엔드의 onReadyForServerApproval(paymentId)가 이 라우트를 호출한다.
- *  - PI_API_KEY 있음  → Pi Platform API approve 전송 (mode: "live")
- *  - PI_API_KEY 없음  → 결제를 만들지 않고 준비 상태 JSON 반환 (mode: "sandbox-ready")
+ *  - 서버 키(PI_NETWORK_API_KEY 또는 PI_API_KEY) 있음  → Pi Platform API approve 전송 (mode: "live")
+ *  - 서버 키 없음  → 결제를 만들지 않고 준비 상태 JSON 반환 (mode: "sandbox-ready")
  */
 
 export const runtime = 'nodejs';
@@ -23,7 +24,8 @@ export async function GET() {
     action: 'approve',
     endpoint: '/api/pi/approve',
     mode: hasPiApiKey() ? 'live' : 'sandbox-ready',
-    missingEnv: hasPiApiKey() ? null : 'PI_API_KEY',
+    missingEnv: hasPiApiKey() ? null : 'PI_NETWORK_API_KEY',
+    acceptedEnv: PI_API_KEY_ENVS,
     body: { paymentId: 'string' }
   });
 }
