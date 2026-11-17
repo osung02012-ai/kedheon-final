@@ -13,7 +13,7 @@ import AppHeader from '../components/AppHeader';
  * FACTFILTER — AI 팩트체크 & 언론 책임 원장
  * 디자인 기준: KEDHEON (화이트 #FFFFFF / 블랙 #000000 / 레드 #DC2626)
  *  - 상단 네비게이션·하단 푸터는 app/page.tsx와 동일 규격
- *  - 타이포그래피: H1 text-2xl md:text-3xl / H2 text-lg md:text-xl / H3 text-sm md:text-base / 본문 text-xs md:text-sm
+ *  - 타이포그래피: H1 text-[24px] md:text-[28px] / H2 text-[18px] md:text-[20px] / H3 text-[13px] md:text-[16px] / 본문 text-[11px] md:text-[13px]
  *  - 국가 축: Civil과 동일한 ISO 3166-1 238개국 검색·선택(GLOBAL 포함) → 국가별 원장 조회·제보 태깅
  */
 
@@ -272,9 +272,9 @@ const VERIFIED_CASES: VerifiedCase[] = [
 ];
 
 const SectionTitle = ({ title, desc }: { title: string; desc: string }) => (
-  <div className="w-full border-t-2 border-[#dc2626] pt-3 mt-1 mb-2 text-left">
-    <h2 className="t-section text-neutral-900 uppercase border-l-[5px] border-black pl-2.5">{title}</h2>
-    <p className="t-sub text-neutral-500 pl-3.5 mt-1.5">{desc}</p>
+  <div className="w-full border-t border-[#dc2626] pt-2.5 mt-1 mb-1.5 text-left">
+    <h2 className="t-section text-neutral-900 uppercase border-l-[3px] border-neutral-900 pl-2">{title}</h2>
+    <p className="t-sub text-neutral-500 pl-3 mt-1">{desc}</p>
   </div>
 );
 
@@ -332,7 +332,7 @@ const CountryPicker = ({
               current === 'GLOBAL' ? 'bg-black text-white' : 'bg-neutral-100 text-neutral-800 hover:bg-neutral-200'
             }`}
           >
-            <span className="text-base">🌍</span>
+            <span className="text-[16px]">🌍</span>
             <span className="truncate">{ko ? '글로벌 (전 세계 공통)' : 'Global (worldwide)'}</span>
           </button>
           {list.length === 0 && (
@@ -348,7 +348,7 @@ const CountryPicker = ({
                 current === c.code ? 'bg-black text-white' : 'bg-neutral-100 text-neutral-800 hover:bg-neutral-200'
               }`}
             >
-              <span className="text-base">{c.flag}</span>
+              <span className="text-[16px]">{c.flag}</span>
               <span className="truncate flex-1">{ko ? c.ko : c.en}</span>
               <span className={`t-tag font-mono ${current === c.code ? 'text-white/60' : 'text-gray-400'}`}>{c.code}</span>
               {current === c.code && <span className="t-body">✓</span>}
@@ -552,7 +552,7 @@ export default function FactFilterPage() {
 
         <PiReadOnlyBanner />
         {/* Hero */}
-        <div className="bg-white rounded-2xl border-2 border-black px-3 py-2.5 md:p-5 relative overflow-hidden text-left">
+        <div className="bg-white rounded-2xl border border-[#E5E7EB] shadow-[var(--card-shadow)] px-3 py-2.5 md:p-5 relative overflow-hidden text-left">
           <div className="absolute top-0 left-0 w-full h-1 bg-[#dc2626]"></div>
           <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4 justify-between">
             <div className="min-w-0">
@@ -571,10 +571,10 @@ export default function FactFilterPage() {
                   100% KYC
                 </span>
               </div>
-              <h1 className="t-hero text-black mt-1.5">
+              <h1 className="t-hero text-black mt-1">
                 {ko ? '허위·왜곡 보도가 숨을 곳은 없다' : 'Nowhere to Hide for Disinformation'}
               </h1>
-              <p className="text-gray-500 t-sub mt-1.5 max-w-xl">
+              <p className="text-gray-500 t-sub mt-1 max-w-xl">
                 {ko
                   ? '허위·왜곡 보도를 일삼는 채널과 언론사를 블록체인 원장에 영구 기록합니다.'
                   : 'Channels and outlets that spread disinformation are recorded permanently on an immutable ledger.'}
@@ -714,7 +714,7 @@ export default function FactFilterPage() {
 
                 {cases.length === 0 && (
                   <div className="bg-neutral-50 border border-dashed border-neutral-300 rounded-xl p-5 text-center space-y-2">
-                    <div className="text-3xl">{viewInfo.flag}</div>
+                    <div className="text-[28px]">{viewInfo.flag}</div>
                     <p className="text-black t-card">
                       {ko ? `${viewInfo.ko} 검증 사례가 아직 없습니다` : `No verified cases for ${viewInfo.en} yet`}
                     </p>
@@ -894,7 +894,7 @@ export default function FactFilterPage() {
             {/* 선택 국가 원장 헤더 */}
             <div className="flex flex-wrap items-center justify-between gap-2 bg-neutral-50 border border-neutral-200 rounded-2xl px-3 py-2 mb-2">
               <div className="flex items-center gap-2 min-w-0">
-                <span className="text-lg">{viewInfo.flag}</span>
+                <span className="text-[18px]">{viewInfo.flag}</span>
                 <div className="min-w-0">
                   <p className="text-black t-card truncate">
                     {ko ? viewInfo.ko : viewInfo.en}
@@ -954,7 +954,7 @@ export default function FactFilterPage() {
               {ledgerItems.length === 0 && (
                 <div className="space-y-2">
                   <div className="bg-neutral-50 border border-dashed border-neutral-300 rounded-2xl p-5 text-center space-y-2">
-                    <div className="text-4xl">{viewInfo.flag}</div>
+                    <div className="text-[34px]">{viewInfo.flag}</div>
                     <p className="text-black t-card">
                       {ko ? `${viewInfo.ko} 언론 원장이 아직 비어 있습니다` : `No ${viewInfo.en} media reports yet`}
                     </p>

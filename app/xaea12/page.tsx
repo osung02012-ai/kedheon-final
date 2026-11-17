@@ -75,12 +75,12 @@ function fmtNum(n: number) {
 
 function SectionHead({ no, title, desc }: { no: string; title: string; desc: string }) {
   return (
-    <div className="mt-4 mb-1.5 text-left border-t-2 border-[#dc2626] pt-2.5">
+    <div className="mt-3 mb-1.5 text-left border-t border-[#dc2626] pt-2">
       <div className="flex items-baseline gap-2">
         <span className="t-tag text-[#dc2626] shrink-0">{no}</span>
-        <h2 className="t-section text-neutral-900 uppercase border-l-[5px] border-black pl-2.5">{title}</h2>
+        <h2 className="t-section text-neutral-900 uppercase border-l-[3px] border-neutral-900 pl-2">{title}</h2>
       </div>
-      <p className="t-sub text-neutral-500 mt-1 pl-[calc(5px+0.625rem)]">{desc}</p>
+      <p className="t-sub text-neutral-500 mt-1 pl-[13px]">{desc}</p>
     </div>
   );
 }
@@ -376,34 +376,34 @@ export default function Xaea12Page() {
         <PiReadOnlyBanner className="mb-3" />
 
         {/* ── 1. 히어로 ─────────────────────────────────────────── */}
-        {/* 모바일: 상단 중앙 240px 대표이미지 카드 / 데스크톱: 오른쪽 큰 그림 + 캡션. */}
-        <section className="relative bg-white rounded-2xl border-2 border-black overflow-hidden px-3 py-3 md:px-8 md:py-8">
+        {/* 모바일: 상단 중앙 158px 대표이미지 카드 / 데스크톱: 오른쪽 큰 그림 + 캡션. */}
+        <section className="relative bg-white rounded-2xl border border-[#E5E7EB] shadow-[var(--card-shadow)] overflow-hidden px-3 py-2.5 md:px-8 md:py-8">
           <div className="absolute top-0 left-0 w-full h-1 bg-[#dc2626]" />
           <div className="absolute -right-10 -bottom-10 w-40 h-40 rounded-full bg-[#dc2626]/5" />
 
           <div className="relative md:grid md:grid-cols-[1.08fr_0.92fr] md:gap-7 md:items-center">
-            <figure className="relative mx-auto w-full max-w-[240px] sm:max-w-[260px] md:order-2 md:max-w-[360px] md:shrink-0">
+            <figure className="relative mx-auto w-full max-w-[158px] sm:max-w-[180px] md:order-2 md:max-w-[340px] md:shrink-0">
               <img
                 src="/xaea12-hero.jpg"
                 alt={T('imgAlt')}
                 width={1024}
                 height={1024}
                 fetchPriority="high"
-                className="w-full aspect-square object-cover rounded-2xl border border-neutral-200 shadow-lg"
+                className="w-full aspect-square object-cover rounded-xl border border-[#E5E7EB] shadow-[var(--card-shadow)]"
               />
-              <figcaption className="hidden md:block mt-2.5 text-center t-tag font-mono uppercase text-gray-400">
+              <figcaption className="hidden md:block mt-2 text-center t-tag font-mono uppercase text-gray-400">
                 {T('imgCaption')}
               </figcaption>
             </figure>
 
-            <div className="min-w-0 text-left md:order-1 mt-2.5 md:mt-0">
+            <div className="min-w-0 text-left md:order-1 mt-2 md:mt-0">
               <p translate="no" className="notranslate hidden md:inline-block t-tag font-mono text-[#dc2626] uppercase whitespace-nowrap">
                 xaea12.pi · ecosystem game points
               </p>
               <h2 className="t-hero text-black mt-0.5">
                 {T('heroTitle')}
               </h2>
-              <p className="text-gray-500 t-sub mt-1.5 max-w-2xl">
+              <p className="text-gray-500 t-sub mt-1 max-w-2xl">
                 {T('heroDesc')}
               </p>
               <div className="hidden md:flex flex-wrap items-center justify-start gap-1.5 mt-3">
@@ -447,7 +447,7 @@ export default function Xaea12Page() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           {/* 1단계 · 지금 */}
-          <div className={`${stageCard} bg-white border-2 border-black`}>
+          <div className={`${stageCard} bg-white border border-[#E5E7EB] shadow-[var(--card-shadow)]`}>
             <div className="flex items-center justify-between gap-2">
               <span className="t-tag uppercase text-[#dc2626]">{T('stage1Label')}</span>
               <span className="notranslate t-tag bg-black text-white rounded-full px-2 py-0.5" translate="no">BOPIES · SIGIL · BEOM</span>
@@ -585,7 +585,7 @@ export default function Xaea12Page() {
               + {T('formOpen')}
             </button>
           ) : (
-            <div className="bg-white border-2 border-black rounded-2xl p-3 md:p-4">
+            <div className="bg-white border border-[#E5E7EB] shadow-[var(--card-shadow)] rounded-2xl p-3 md:p-4">
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0 text-left">
                   <p className="text-black t-card">{T('formTitle')}</p>

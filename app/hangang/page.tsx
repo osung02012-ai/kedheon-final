@@ -36,12 +36,12 @@ function fmtPi(n: number) {
 
 function SectionHead({ no, title, desc }: { no: string; title: string; desc: string }) {
   return (
-    <div className="mt-4 mb-1.5 text-left border-t-2 border-[#dc2626] pt-2.5">
+    <div className="mt-3 mb-1.5 text-left border-t border-[#dc2626] pt-2">
       <div className="flex items-baseline gap-2">
         <span className="t-tag text-[#dc2626] shrink-0">{no}</span>
-        <h2 className="t-section text-neutral-900 uppercase border-l-[5px] border-black pl-2.5">{title}</h2>
+        <h2 className="t-section text-neutral-900 uppercase border-l-[3px] border-neutral-900 pl-2">{title}</h2>
       </div>
-      <p className="t-sub text-neutral-500 mt-1 pl-[calc(5px+0.625rem)]">{desc}</p>
+      <p className="t-sub text-neutral-500 mt-1 pl-[13px]">{desc}</p>
     </div>
   );
 }
@@ -139,37 +139,38 @@ export default function HangangPage() {
 
         <PiReadOnlyBanner className="mb-3" />
         {/* ── 1. 히어로 ─────────────────────────────────────────── */}
-        {/* 첫 화면(360×800)에서 히어로 + '01 전국 7대 권역' 머리까지 같이 보이는 압축은 유지하되,
-            대표이미지는 모바일에서도 상단 중앙 240px 카드로 크게 되돌렸다(hangang.pi 명패 포함).
+        {/* 첫 화면(390×844)에서 히어로 + '01 전국 7대 권역' 머리까지 같이 보이도록,
+            대표이미지는 모바일 158px 카드로 묶었다(BNPi 기준). 큰 글씨 설정에서
+            히어로가 화면을 덮지 않게 하는 것이 목적이다. 명패(hangang.pi)는 그림 안에 있다.
             캡션·태그 뱃지·통계 카드박스는 데스크톱 전용. */}
-        <section className="relative bg-white rounded-2xl border-2 border-black overflow-hidden px-3 py-3 md:px-8 md:py-8">
+        <section className="relative bg-white rounded-2xl border border-[#E5E7EB] shadow-[var(--card-shadow)] overflow-hidden px-3 py-2.5 md:px-8 md:py-8">
           <div className="absolute top-0 left-0 w-full h-1 bg-[#dc2626]" />
           <div className="absolute -right-10 -bottom-10 w-40 h-40 rounded-full bg-[#dc2626]/5" />
 
           <div className="relative md:grid md:grid-cols-[1.08fr_0.92fr] md:gap-7 md:items-center">
             {/* 모바일: 상단 중앙 대표이미지 카드(그림에 hangang.pi 명패 포함) / 데스크톱: 오른쪽 칸 큰 그림 + 캡션 */}
-            <figure className="relative mx-auto w-full max-w-[240px] sm:max-w-[260px] md:order-2 md:max-w-[360px] md:shrink-0">
+            <figure className="relative mx-auto w-full max-w-[158px] sm:max-w-[180px] md:order-2 md:max-w-[340px] md:shrink-0">
               <img
                 src="/hangang-hero-emerald.jpg"
                 alt={T('imgAlt')}
                 width={1024}
                 height={1024}
                 fetchPriority="high"
-                className="w-full aspect-square object-cover rounded-2xl border border-neutral-200 shadow-lg"
+                className="w-full aspect-square object-cover rounded-xl border border-[#E5E7EB] shadow-[var(--card-shadow)]"
               />
-              <figcaption className="hidden md:block mt-2.5 text-center t-tag font-mono uppercase text-gray-400">
+              <figcaption className="hidden md:block mt-2 text-center t-tag font-mono uppercase text-gray-400">
                 {T('imgCaption')}
               </figcaption>
             </figure>
 
-            <div className="min-w-0 text-left md:order-1 mt-2.5 md:mt-0">
+            <div className="min-w-0 text-left md:order-1 mt-2 md:mt-0">
               <p translate="no" className="notranslate hidden md:inline-block t-tag font-mono text-[#dc2626] uppercase whitespace-nowrap">
                 hangang.pi · K-Culture Pass
               </p>
               <h2 className="t-hero text-black mt-0.5">
                 {T('heroTitle')}
               </h2>
-              <p className="text-gray-500 t-sub mt-1.5 max-w-2xl">
+              <p className="text-gray-500 t-sub mt-1 max-w-2xl">
                 {T('heroDesc')}
               </p>
               <div className="hidden md:flex flex-wrap items-center justify-start gap-1.5 mt-3">
@@ -317,7 +318,7 @@ export default function HangangPage() {
             <div key={g.id} className="bg-white border border-neutral-200 rounded-xl p-2.5 flex flex-col justify-between hover:border-neutral-400 transition-colors">
               <div>
                 <div className="flex items-start justify-between gap-1">
-                  <span className="text-lg md:text-xl leading-none text-black">
+                  <span className="text-[18px] md:text-[20px] leading-none text-black">
                     {g.id === 'hanbok' ? <HanbokIcon /> : g.icon}
                   </span>
                   <span className="notranslate t-tag bg-neutral-100 text-neutral-600 rounded-full px-1.5 py-0.5">{g.grade}</span>
@@ -404,7 +405,7 @@ export default function HangangPage() {
           ].map((u, i) => (
             <div key={i} className="bg-white border border-neutral-200 rounded-xl p-3">
               <p className="text-black t-card flex items-center gap-1.5">
-                <span className="text-base leading-none">{u.icon}</span>
+                <span className="text-[16px] leading-none">{u.icon}</span>
                 {u.title}
               </p>
               <p className="text-neutral-600 t-body mt-1.5">{u.body}</p>

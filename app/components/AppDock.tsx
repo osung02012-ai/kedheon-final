@@ -81,7 +81,7 @@ export default function AppDock({
   }, [measure, revealActive]);
 
   return (
-    <footer className="fixed bottom-3 sm:bottom-4 left-2 right-2 sm:left-4 sm:right-4 max-w-5xl mx-auto bg-white border border-neutral-200 px-1.5 py-1.5 rounded-2xl z-[1000] shadow-lg font-black">
+    <footer className="fixed bottom-3 sm:bottom-4 left-2 right-2 sm:left-4 sm:right-4 max-w-5xl mx-auto bg-white/95 backdrop-blur-md border border-[#E5E7EB] px-1.5 py-1.5 rounded-2xl z-[1000] shadow-[0_2px_10px_rgba(16,24,40,0.08)] font-bold">
       <div className="relative">
         <div ref={rowRef} className="no-scrollbar flex items-center gap-0.5 md:gap-1.5 overflow-x-auto">
           {DOCK_ITEMS.map(app => {
@@ -92,7 +92,7 @@ export default function AppDock({
                 type="button"
                 translate="no"
                 data-active={isActive ? 'true' : undefined}
-                style={{ fontSize: 'clamp(9px, 2.4vw, 11.5px)' }}
+                style={{ fontSize: 'clamp(10px, 2.6vw, 11.5px)' }}
                 onClick={() => {
                   if (app.path === '#') {
                     alert(app.name + soonMessage);
@@ -100,7 +100,7 @@ export default function AppDock({
                     window.location.href = app.path;
                   }
                 }}
-                className={`notranslate shrink-0 whitespace-nowrap leading-none px-1 py-3 md:flex-1 md:px-2.5 md:py-3.5 rounded-xl text-center tracking-tight transition-all cursor-pointer hover:scale-105 active:scale-95 ${
+                className={`notranslate shrink-0 whitespace-nowrap leading-none px-1 py-2.5 md:flex-1 md:px-2.5 md:py-3 rounded-xl text-center tracking-tight transition-all cursor-pointer hover:scale-105 active:scale-95 ${
                   isActive ? 'bg-black text-white shadow-sm' : 'text-neutral-500 hover:text-black'
                 }`}
               >

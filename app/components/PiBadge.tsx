@@ -59,12 +59,12 @@ export default function PiBadge({ en = false, className = '' }: { en?: boolean; 
       >
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0">
-            <h3 className="text-black text-sm md:text-base font-black">
+            <h3 className="text-black text-[13px] md:text-[16px] font-black">
               {connected
                 ? (en ? 'Pi KYC identity connected' : 'Pi KYC 실명 인증 연결됨')
                 : (en ? 'Connect your Pi account' : 'Pi 계정 연결')}
             </h3>
-            <p className="text-gray-400 text-[11px] md:text-xs font-bold mt-0.5 break-all">
+            <p className="text-gray-400 text-[11px] md:text-[12px] font-bold mt-0.5 break-all">
               {connected
                 ? `@${username}`
                 : inPiBrowser
@@ -75,7 +75,7 @@ export default function PiBadge({ en = false, className = '' }: { en?: boolean; 
           <button
             onClick={() => setOpen(false)}
             aria-label="close"
-            className="shrink-0 w-8 h-8 rounded-full bg-neutral-100 text-neutral-600 text-sm font-black hover:bg-neutral-200 cursor-pointer"
+            className="shrink-0 w-8 h-8 rounded-full bg-neutral-100 text-neutral-600 text-[13px] font-black hover:bg-neutral-200 cursor-pointer"
           >
             ✕
           </button>
@@ -83,10 +83,10 @@ export default function PiBadge({ en = false, className = '' }: { en?: boolean; 
 
         {connected ? (
           <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-3 space-y-1">
-            <p className="text-[11px] md:text-xs font-black text-black">
+            <p className="text-[11px] md:text-[12px] font-black text-black">
               🟢 {en ? 'KYC verified' : 'KYC 인증됨'} <span translate="no" className="notranslate text-[#7d4698]">@{username}</span>
             </p>
-            <p className="text-[11px] md:text-xs text-gray-500 font-bold leading-relaxed">
+            <p className="text-[11px] md:text-[12px] text-gray-500 font-bold leading-relaxed">
               {en
                 ? 'Votes and media reports are tied to this verified identity — one person, one vote.'
                 : '투표와 언론 제보가 이 실명 계정에 귀속됩니다. 1인 1표 원칙이 적용됩니다.'}
@@ -95,19 +95,19 @@ export default function PiBadge({ en = false, className = '' }: { en?: boolean; 
         ) : inPiBrowser ? (
           <button
             onClick={() => connect()}
-            className="w-full bg-[#dc2626] hover:bg-black text-white font-black py-3 rounded-xl text-xs md:text-sm transition-all active:scale-95 cursor-pointer"
+            className="w-full bg-[#dc2626] hover:bg-black text-white font-black py-3 rounded-xl text-[11px] md:text-[13px] transition-all active:scale-95 cursor-pointer"
           >
             {status === 'connecting' ? (en ? 'Connecting…' : 'Pi 인증 진행 중…') : (en ? 'Authenticate with Pi' : 'Pi로 KYC 인증하기')}
           </button>
         ) : (
           <>
-            <ol className="text-[11px] md:text-xs text-gray-600 font-bold space-y-1 list-decimal list-inside">
+            <ol className="text-[11px] md:text-[12px] text-gray-600 font-bold space-y-1 list-decimal list-inside">
               <li>{en ? 'Open the Pi Browser app on your phone.' : '폰에서 Pi Browser 앱을 엽니다.'}</li>
               <li>{en ? 'Enter the address below.' : '아래 주소를 입력합니다.'}</li>
               <li>{en ? 'Sign in with Pi and allow the KYC connection.' : 'Pi 로그인 후 KYC 연결을 승인합니다.'}</li>
             </ol>
             <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-2.5 flex items-center justify-between gap-2">
-              <code translate="no" className="notranslate text-[11px] md:text-xs font-mono text-black break-all">kedheon.com{path}</code>
+              <code translate="no" className="notranslate text-[11px] md:text-[12px] font-mono text-black break-all">kedheon.com{path}</code>
               <button
                 onClick={copyLink}
                 className="shrink-0 px-2 py-1 rounded-lg text-[11px] font-black bg-neutral-100 text-neutral-800 hover:bg-neutral-200 transition-all"
@@ -115,7 +115,7 @@ export default function PiBadge({ en = false, className = '' }: { en?: boolean; 
                 {copied ? (en ? 'copied' : '복사됨') : (en ? 'copy' : '복사')}
               </button>
             </div>
-            <p className="text-[10px] md:text-[11px] text-gray-400 font-bold leading-relaxed">
+            <p className="text-[10px] md:text-[12px] text-gray-400 font-bold leading-relaxed">
               {en
                 ? 'Browsing, statistics and ledgers stay open to everyone. Voting, proposals, reports and payments unlock after Pi KYC verification.'
                 : '둘러보기·통계·원장 열람은 누구나 그대로 가능합니다. 투표·안건 제안·제보·결제는 Pi KYC 인증 후에 실행됩니다.'}

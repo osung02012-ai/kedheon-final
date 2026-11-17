@@ -88,7 +88,7 @@ export default function PiPayButton({
         type="button"
         onClick={handleClick}
         disabled={paying || done}
-        className={`w-full flex items-center justify-center gap-1.5 rounded-lg py-2.5 text-[11px] md:text-xs font-black transition-all active:scale-95 ${
+        className={`w-full flex items-center justify-center gap-1.5 rounded-lg py-2.5 text-[11px] md:text-[12px] font-black transition-all active:scale-95 ${
           done
             ? 'bg-neutral-100 text-neutral-500'
             : 'bg-black text-white shadow-sm hover:bg-[#dc2626]'
@@ -100,7 +100,7 @@ export default function PiPayButton({
         </span>
       </button>
       {msg && (
-        <p className="text-[10px] md:text-[11px] text-gray-400 font-bold leading-snug text-center">{msg}</p>
+        <p className="text-[10px] md:text-[12px] text-gray-400 font-bold leading-snug text-center">{msg}</p>
       )}
     </div>
   );

@@ -14,7 +14,7 @@ import AppHeader from '../components/AppHeader';
  * CIVIL — KYC 실명 1인 1표 거버넌스 DApp (전 세계 238개국 지원)
  * 디자인 기준: KEDHEON (화이트 #FFFFFF / 블랙 #000000 / 레드 #DC2626)
  *  - 상단 네비게이션·하단 푸터는 app/page.tsx와 동일 규격
- *  - 타이포그래피: H1 text-2xl md:text-3xl / H2 text-lg md:text-xl / H3 text-sm md:text-base / 본문 text-xs md:text-sm
+ *  - 타이포그래피: H1 text-[24px] md:text-[28px] / H2 text-[18px] md:text-[20px] / H3 text-[13px] md:text-[16px] / 본문 text-[11px] md:text-[13px]
  *  - 주권 투표 락: 내 KYC 국가 안건만 투표, 타국 안건은 참관(읽기) 전용
  *  - 238개국 어디를 골라도 기본 의제가 자동 생성되어 빈 화면이 없고, 시민이 직접 안건을 제안해 즉시 투표할 수 있다.
  */
@@ -252,9 +252,9 @@ const defaultAgendas = (cc: string): Agenda[] => {
 };
 
 const SectionTitle = ({ title, desc }: { title: string; desc: string }) => (
-  <div className="w-full border-t-2 border-[#dc2626] pt-3 mt-1 mb-2 text-left">
-    <h2 className="t-section text-neutral-900 uppercase border-l-[5px] border-black pl-2.5">{title}</h2>
-    <p className="t-sub text-neutral-500 pl-3.5 mt-1.5">{desc}</p>
+  <div className="w-full border-t border-[#dc2626] pt-2.5 mt-1 mb-1.5 text-left">
+    <h2 className="t-section text-neutral-900 uppercase border-l-[3px] border-neutral-900 pl-2">{title}</h2>
+    <p className="t-sub text-neutral-500 pl-3 mt-1">{desc}</p>
   </div>
 );
 
@@ -314,7 +314,7 @@ const CountryPicker = ({
                 current === 'GLOBAL' ? 'bg-black text-white' : 'bg-neutral-100 text-neutral-800 hover:bg-neutral-200'
               }`}
             >
-              <span className="text-base">🌍</span>
+              <span className="text-[16px]">🌍</span>
               <span className="truncate">{ko ? '글로벌 (전 세계 공통)' : 'Global (worldwide)'}</span>
             </button>
           )}
@@ -331,7 +331,7 @@ const CountryPicker = ({
                 current === c.code ? 'bg-black text-white' : 'bg-neutral-100 text-neutral-800 hover:bg-neutral-200'
               }`}
             >
-              <span className="text-base">{c.flag}</span>
+              <span className="text-[16px]">{c.flag}</span>
               <span className="truncate flex-1">{ko ? c.ko : c.en}</span>
               <span className={`t-tag font-mono ${current === c.code ? 'text-white/60' : 'text-gray-400'}`}>{c.code}</span>
               {current === c.code && <span className="t-body">✓</span>}
@@ -590,14 +590,14 @@ export default function CivilPage() {
         <PiReadOnlyBanner />
         {/* Hero */}
         <div className="flex flex-col md:flex-row items-stretch gap-2 md:gap-3">
-          <div className="flex-1 bg-white rounded-2xl border-2 border-black px-3 py-2.5 md:p-5 relative overflow-hidden text-left flex flex-col justify-center">
+          <div className="flex-1 bg-white rounded-2xl border border-[#E5E7EB] shadow-[var(--card-shadow)] px-3 py-2.5 md:p-5 relative overflow-hidden text-left flex flex-col justify-center">
             <div className="absolute top-0 left-0 w-full h-1 bg-[#dc2626]"></div>
             <div className="flex flex-wrap items-center gap-1.5">
               <span className="text-[#dc2626] t-tag uppercase">{T.subtitle}</span>
               <span translate="no" className="notranslate bg-black text-white t-tag px-1.5 py-0.5 rounded">🌍 {T.globalCoverage}</span>
             </div>
             <h1 className="t-hero text-black uppercase mt-1">{T.heroTitle}</h1>
-            <p className="text-gray-500 t-sub mt-1.5">{T.heroLead}</p>
+            <p className="text-gray-500 t-sub mt-1">{T.heroLead}</p>
             <p className="hidden md:block text-gray-500 t-sub mt-1.5">{T.heroMore}</p>
           </div>
 
@@ -665,7 +665,7 @@ export default function CivilPage() {
           {/* 선택 국가 투표방 헤더 */}
           <div className="flex flex-wrap items-center justify-between gap-2 bg-neutral-50 border border-neutral-200 rounded-2xl px-3 py-2 mb-2">
             <div className="flex items-center gap-2 min-w-0">
-              <span className="text-lg">{viewInfo.flag}</span>
+              <span className="text-[18px]">{viewInfo.flag}</span>
               <div className="min-w-0 text-left">
                 <p className="text-black t-card truncate">
                   {ko ? viewInfo.ko : viewInfo.en}
@@ -692,7 +692,7 @@ export default function CivilPage() {
 
           {/* 안건 제안 폼 */}
           {showPropose && (
-            <div className="bg-white border-2 border-[#dc2626] rounded-2xl p-3 md:p-4 mb-2 space-y-2 text-left">
+            <div className="bg-white border border-[#dc2626]/35 rounded-2xl p-3 md:p-4 mb-2 space-y-2 text-left">
               <p className="text-black t-card">
                 {viewInfo.flag} {ko ? viewInfo.ko : viewInfo.en} — {ko ? '안건 제안' : 'Propose an agenda'}
               </p>

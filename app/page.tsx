@@ -590,9 +590,9 @@ const SafeText = ({ text }: { text: string }) => (
 );
 
 const SectionHeader = ({ title, desc }: { title: string; desc: string; }) => (
-  <div className="w-full border-t-2 border-[#dc2626] pt-3 mt-1 mb-2 text-left">
-    <h2 className="t-section text-neutral-900 uppercase border-l-[5px] border-black pl-2.5">{title}</h2>
-    <p className="t-sub text-neutral-500 pl-3.5 mt-1.5">{desc}</p>
+  <div className="w-full border-t border-[#dc2626] pt-2.5 mt-1 mb-1.5 text-left">
+    <h2 className="t-section text-neutral-900 uppercase border-l-[3px] border-neutral-900 pl-2">{title}</h2>
+    <p className="t-sub text-neutral-500 pl-3 mt-1">{desc}</p>
   </div>
 );
 
@@ -686,9 +686,9 @@ export default function KedheonDesignSystemFinal() {
         <PiReadOnlyBanner className="mb-3" />
         {tab === 'ROOKIE' ? (
           <div className="flex flex-col gap-3 animate-in fade-in duration-500">
-            <div className="flex items-center gap-3 px-3 py-3 md:flex-col md:items-center md:text-center md:gap-3 md:py-6 bg-white rounded-2xl border-2 border-black relative overflow-hidden">
+            <div className="flex items-center gap-3 px-3 py-2.5 md:flex-col md:items-center md:text-center md:gap-3 md:py-6 bg-white rounded-2xl border border-[#E5E7EB] shadow-[var(--card-shadow)] relative overflow-hidden">
               <div className="absolute top-0 left-0 w-full h-1 bg-[#dc2626]"></div>
-              <img src="/kedheon-character.png" className="w-[84px] h-[84px] md:w-56 md:h-56 object-contain drop-shadow-xl shrink-0" alt="K" />
+              <img src="/kedheon-character.png" className="w-[76px] h-[76px] md:w-52 md:h-52 object-contain drop-shadow-xl shrink-0" alt="K" />
               <div className="min-w-0 text-left md:px-4 md:text-center md:leading-none">
                 <h1 className="t-hero text-black uppercase mb-1">{L.procedure}</h1>
                 <p className="t-sub text-[#dc2626]">{L.piJoinDesc}</p>
@@ -737,7 +737,7 @@ export default function KedheonDesignSystemFinal() {
         ) : (
           <div className="flex flex-col gap-4 py-1 animate-in slide-in-from-bottom-5 duration-700 text-left">
             
-            <div className="w-full bg-white p-3.5 md:p-5 rounded-2xl border-2 border-black shadow-sm relative overflow-hidden group">
+            <div className="w-full bg-white p-3.5 md:p-5 rounded-2xl border border-[#E5E7EB] shadow-[var(--card-shadow)] relative overflow-hidden group">
                 <div className="min-w-0 relative z-10 leading-none text-left">
                     <h3 className="text-gray-400 t-tag uppercase mb-1.5">{L.assets}</h3>
                     <p className="t-hero text-black">

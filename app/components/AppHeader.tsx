@@ -19,11 +19,10 @@ export default function AppHeader({
   children: React.ReactNode;
 }) {
   return (
-    <nav className="w-full max-w-5xl sticky top-0 bg-white/95 backdrop-blur-md z-[500] border-b border-neutral-200">
+    <nav className="w-full max-w-5xl sticky top-0 bg-white/95 backdrop-blur-md z-[500] border-b border-[#E5E7EB]">
       <div className="flex flex-col gap-1.5 px-3 py-1.5 sm:flex-row sm:items-center sm:justify-between sm:gap-2 sm:px-4 sm:py-2">
         <div className="flex items-center gap-2 md:gap-3 min-w-0">{brand}</div>
         <div className="flex flex-wrap items-center gap-1.5 md:gap-2 min-w-0">{children}</div>
-      </div>
-    </nav>
+      </div>    </nav>
   );
 }
