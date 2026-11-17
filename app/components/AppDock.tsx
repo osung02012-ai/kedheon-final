@@ -3,13 +3,13 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 /**
- * 4대 앱 공통 하단 고정 독 — KEDHEON · CIVIL · FACTFILTER · HANGANG · NEXUS · VENDOR
+ * 앱 공통 하단 고정 독 — KEDHEON · CIVIL · FACTFILTER · HANGANG · XAEA12 · NEXUS · VENDOR
  *
  * Pi Browser(Android WebView)는 시스템 글꼴 배율을 텍스트에 그대로 곱한다(실측 약 1.5배).
  * 예전 구현은 `flex-1 min-w-0` 로 6개를 한 줄에 밀어 넣어, 글자가 커지면 라벨끼리
  * 겹쳐 뭉개졌다(`FACTFILTEHANGANGNEXUS`, 활성 알약 안 `KEDHEO`). 이제는
  *   - 각 항목 `shrink-0 whitespace-nowrap` (절대 찌그러지지 않음)
- *   - 412px 폰 기준 6개가 한 줄에 들어가고, 글자가 커지면 독 안에서 좌우 스와이프
+ *   - 412px 폰 기준 7개가 한 줄에 들어가고, 글자가 커지면 독 안에서 좌우 스와이프
  *   - 넘칠 때만 좌우 가장자리에 페이드를 띄워 '더 있다'를 알린다
  *   - 활성 항목이 화면 밖에 있으면 마운트 시 가운데로 스크롤한다
  * 규격(테두리 2px 검정·rounded-2xl·흰 바탕)은 종전과 동일하다.
@@ -19,6 +19,7 @@ const DOCK_ITEMS: { name: string; path: string }[] = [
   { name: 'CIVIL', path: '/civil' },
   { name: 'FACTFILTER', path: '/factfilter' },
   { name: 'HANGANG', path: '/hangang' },
+  { name: 'XAEA12', path: '/xaea12' },
   { name: 'NEXUS', path: '#' },
   { name: 'VENDOR', path: '#' },
 ];

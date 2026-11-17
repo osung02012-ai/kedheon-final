@@ -574,7 +574,7 @@ const DICT: Record<Lang, Dictionary> = {
 const LANG_TAG: Record<Lang, string> = {
   KR: 'ko', EN: 'en', CN: 'zh', JP: 'ja', ES: 'es', VN: 'vi', FR: 'fr', PT: 'pt', RU: 'ru', ID: 'id'
 };
-const NO_TRANSLATE_TOKENS = ['ohsangjo', 'KEDHEON', 'CIVIL', 'FACTFILTER', 'NEXUS', 'VENDOR', 'BEOM', 'KYC', 'PI', 'Pi', 'ROOKIE', 'PIONEER'];
+const NO_TRANSLATE_TOKENS = ['ohsangjo', 'KEDHEON', 'CIVIL', 'FACTFILTER', 'HANGANG', 'XAEA12', 'NEXUS', 'VENDOR', 'BEOM', 'KYC', 'PI', 'Pi', 'ROOKIE', 'PIONEER'];
 const NO_TRANSLATE_RE = new RegExp(`\\b(${NO_TRANSLATE_TOKENS.join('|')})\\b`, 'g');
 
 const SafeText = ({ text }: { text: string }) => (
