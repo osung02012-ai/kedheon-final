@@ -6,6 +6,7 @@ import { NextRequest } from 'next/server';
  *  - civil.kedheon.com      : Civil 앱
  *  - factfilter.kedheon.com : FactFilter 앱
  *  - hangang.kedheon.com    : Hangang 앱
+ *  - xaea12.kedheon.com     : XAEA12 앱
  * Pi 개발자 콘솔은 https://<앱 도메인>/validation-key.txt 의 본문이 앱별 키와
  * 정확히 일치하는지 확인한다. 한 도메인에 여러 앱을 올릴 수 없어 서브도메인별로 나눈다.
  */
@@ -18,13 +19,16 @@ const FACTFILTER_KEY =
   '6a7d23a8ad325063a2d4cf4886fab190e6092439b1c6fd0407b36193c880ca80136548afe43cfc3db0d52fce568aa9ab4b54445bbb3ca35db117b043753ce663';
 const HANGANG_KEY =
   '244a3b2ae912a076e9e6d9158f3b897cf0f618ff02b2892a419ee7424f50a6bb9cd696d0a70f6ecb0e1a2ecd022a5f90da71790d97232e4316937e6f0e0d483d';
+const XAEA12_KEY =
+  '20ef166646111fb87ee1bb45ac9a0ce65ea9643cd9095138a63b5ed30ee95f5bf12bead657ab2392b0f2a2931b1e95371b7a88defee2e9f1a427cad238e8a85b';
 
 const KEYS: Record<string, string> = {
   'kedheon.com': KEDHEON_KEY,
   'www.kedheon.com': KEDHEON_KEY,
   'civil.kedheon.com': CIVIL_KEY,
   'factfilter.kedheon.com': FACTFILTER_KEY,
-  'hangang.kedheon.com': HANGANG_KEY
+  'hangang.kedheon.com': HANGANG_KEY,
+  'xaea12.kedheon.com': XAEA12_KEY
 };
 
 export const dynamic = 'force-dynamic';
