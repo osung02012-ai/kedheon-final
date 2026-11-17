@@ -79,6 +79,9 @@ export default function Xaea12Page() {
 
   const T = (k: UIKey) => ui(k, lang);
   const L = (v: L10) => tr(v, lang);
+  /** KR·CN·JP는 수량과 단위를 붙여 쓴다(9명·14건). */
+  const countText = (n: number, unit: string) =>
+    lang === 'KR' || lang === 'CN' || lang === 'JP' ? `${n}${unit}` : `${n} ${unit}`;
 
   useEffect(() => {
     setLang(detectLang());
@@ -245,6 +248,10 @@ export default function Xaea12Page() {
   }, [hallTab, state.chips, state.fulls, state.totalPi, state.beom, authenticated, username]);
 
   const hallUnit = hallTab === 'today' ? T('unitCount') : hallTab === 'total' ? 'Pi' : '🐾';
+  /** 랭킹 값 뒤 단위 — KR·CN·JP는 붙여 쓰고(14건) 나머지는 띄어 쓴다(14 times). */
+  const hallUnitText = hallTab === 'today' && (lang === 'KR' || lang === 'CN' || lang === 'JP')
+    ? hallUnit
+    : ` ${hallUnit}`;
 
   if (!mounted) return <div className="bg-white min-h-screen" />;
 
@@ -579,7 +586,7 @@ export default function Xaea12Page() {
                   <p translate="no" className="notranslate t-tag text-gray-500">
                     <span className={`font-black ${done ? 'text-black' : 'text-[#dc2626]'}`}>{fmtPi(s.raised)}</span>
                     {' / '}{fmtPi(s.goal)} Pi
-                    <span className="text-gray-300"> · {s.backers} {T('backersUnit')}</span>
+                    <span className="text-gray-300"> · {countText(s.backers, T('backersUnit'))}</span>
                   </p>
                   <p translate="no" className="notranslate t-tag font-black text-black">{pct(s)}%</p>
                 </div>
@@ -665,7 +672,8 @@ export default function Xaea12Page() {
                   )}
                 </div>
                 <p translate="no" className="notranslate shrink-0 t-tag font-black text-black">
-                  {fmtPi(row.value)} <span className="text-gray-400">{hallUnit}</span>
+                  {fmtPi(row.value)}
+                  <span className="text-gray-400">{hallUnitText}</span>
                 </p>
               </div>
             ))}

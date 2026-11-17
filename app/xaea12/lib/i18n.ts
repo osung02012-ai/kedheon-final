@@ -120,9 +120,9 @@ export const UI = {
     'fecha automática em 100%', 'автозакрытие при 100%', 'tutup otomatis di 100%'
   ],
   statFeeS: ['수수료', 'fee', '手续费', '手数料', 'comisión', 'phí', 'frais', 'taxa', 'комиссия', 'biaya'],
-  statStageS: ['2단계', '2 stage', '两阶段', '2段階', '2 fases', '2 bước', '2 étapes', '2 fases', '2 этапа', '2 tahap'],
+  statStageS: ['1단계', 'stage 1', '第一阶段', 'ステージ1', 'fase 1', 'bước 1', 'étape 1', 'fase 1', 'этап 1', 'tahap 1'],
   statBeomS: ['BEOM', 'BEOM', 'BEOM', 'BEOM', 'BEOM', 'BEOM', 'BEOM', 'BEOM', 'BEOM', 'BEOM'],
-  statAutoS: ['100%', '100%', '100%', '100%', '100%', '100%', '100%', '100%', '100%', '100%'],
+  statAutoS: ['자동마감', 'auto-close', '自动关闭', '自動締切', 'cierre auto', 'tự đóng', 'clôture auto', 'fecha auto', 'автозакрытие', 'tutup auto'],
 
   secStageTitle: [
     '2단계 시나리오', 'The two stages', '两阶段路线', '2段階シナリオ',
