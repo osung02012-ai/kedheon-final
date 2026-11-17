@@ -92,7 +92,7 @@ export default function AppDock({
                 type="button"
                 translate="no"
                 data-active={isActive ? 'true' : undefined}
-                style={{ fontSize: 'clamp(10px, 2.6vw, 11.5px)' }}
+                style={{ fontSize: 'calc(clamp(10px, 2.6vw, 11.5px) * var(--pi-scale))' }}
                 onClick={() => {
                   if (app.path === '#') {
                     alert(app.name + soonMessage);

@@ -318,7 +318,7 @@ export default function HangangPage() {
             <div key={g.id} className="bg-white border border-neutral-200 rounded-xl p-2.5 flex flex-col justify-between hover:border-neutral-400 transition-colors">
               <div>
                 <div className="flex items-start justify-between gap-1">
-                  <span className="text-[18px] md:text-[20px] leading-none text-black">
+                  <span className="text-[length:calc(18px*var(--pi-scale))] md:text-[length:calc(20px*var(--pi-scale))] leading-none text-black">
                     {g.id === 'hanbok' ? <HanbokIcon /> : g.icon}
                   </span>
                   <span className="notranslate t-tag bg-neutral-100 text-neutral-600 rounded-full px-1.5 py-0.5">{g.grade}</span>
@@ -405,7 +405,7 @@ export default function HangangPage() {
           ].map((u, i) => (
             <div key={i} className="bg-white border border-neutral-200 rounded-xl p-3">
               <p className="text-black t-card flex items-center gap-1.5">
-                <span className="text-[16px] leading-none">{u.icon}</span>
+                <span className="text-[length:calc(16px*var(--pi-scale))] leading-none">{u.icon}</span>
                 {u.title}
               </p>
               <p className="text-neutral-600 t-body mt-1.5">{u.body}</p>

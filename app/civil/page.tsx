@@ -314,7 +314,7 @@ const CountryPicker = ({
                 current === 'GLOBAL' ? 'bg-black text-white' : 'bg-neutral-100 text-neutral-800 hover:bg-neutral-200'
               }`}
             >
-              <span className="text-[16px]">🌍</span>
+              <span className="text-[length:calc(16px*var(--pi-scale))]">🌍</span>
               <span className="truncate">{ko ? '글로벌 (전 세계 공통)' : 'Global (worldwide)'}</span>
             </button>
           )}
@@ -331,7 +331,7 @@ const CountryPicker = ({
                 current === c.code ? 'bg-black text-white' : 'bg-neutral-100 text-neutral-800 hover:bg-neutral-200'
               }`}
             >
-              <span className="text-[16px]">{c.flag}</span>
+              <span className="text-[length:calc(16px*var(--pi-scale))]">{c.flag}</span>
               <span className="truncate flex-1">{ko ? c.ko : c.en}</span>
               <span className={`t-tag font-mono ${current === c.code ? 'text-white/60' : 'text-gray-400'}`}>{c.code}</span>
               {current === c.code && <span className="t-body">✓</span>}
@@ -665,7 +665,7 @@ export default function CivilPage() {
           {/* 선택 국가 투표방 헤더 */}
           <div className="flex flex-wrap items-center justify-between gap-2 bg-neutral-50 border border-neutral-200 rounded-2xl px-3 py-2 mb-2">
             <div className="flex items-center gap-2 min-w-0">
-              <span className="text-[18px]">{viewInfo.flag}</span>
+              <span className="text-[length:calc(18px*var(--pi-scale))]">{viewInfo.flag}</span>
               <div className="min-w-0 text-left">
                 <p className="text-black t-card truncate">
                   {ko ? viewInfo.ko : viewInfo.en}

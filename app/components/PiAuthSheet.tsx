@@ -78,18 +78,18 @@ export default function PiAuthSheet({
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-1.5">
-              <span className="inline-block bg-black text-white text-[11px] md:text-[11px] font-black px-2 py-0.5 rounded">
+              <span className="inline-block bg-black text-white text-[length:calc(11px*var(--pi-scale))] md:text-[length:calc(11px*var(--pi-scale))] font-black px-2 py-0.5 rounded">
                 🔒 {gate(GATE.readOnly, lang)}
               </span>
-              <span translate="no" className="notranslate text-[#7d4698] text-[11px] md:text-[11px] font-black">
+              <span translate="no" className="notranslate text-[#7d4698] text-[length:calc(11px*var(--pi-scale))] md:text-[length:calc(11px*var(--pi-scale))] font-black">
                 π Pi KYC
               </span>
             </div>
-            <h3 className="text-black text-[13px] md:text-[16px] font-black mt-1.5">
+            <h3 className="text-black text-[length:calc(13px*var(--pi-scale))] md:text-[length:calc(16px*var(--pi-scale))] font-black mt-1.5">
               {gate(GATE.title, lang)}
             </h3>
             {actionLine && (
-              <p className="text-[#dc2626] text-[11px] md:text-[11px] font-black mt-1 leading-snug break-words">
+              <p className="text-[#dc2626] text-[length:calc(11px*var(--pi-scale))] md:text-[length:calc(11px*var(--pi-scale))] font-black mt-1 leading-snug break-words">
                 {actionLine}
               </p>
             )}
@@ -97,43 +97,43 @@ export default function PiAuthSheet({
           <button
             onClick={onClose}
             aria-label={gate(GATE.close, lang)}
-            className="shrink-0 w-8 h-8 rounded-full bg-neutral-100 text-neutral-600 text-[13px] font-black hover:bg-neutral-200 cursor-pointer"
+            className="shrink-0 w-8 h-8 rounded-full bg-neutral-100 text-neutral-600 text-[length:calc(13px*var(--pi-scale))] font-black hover:bg-neutral-200 cursor-pointer"
           >
             ✕
           </button>
         </div>
 
-        <p className="text-gray-500 text-[11px] md:text-[11px] font-bold leading-relaxed">
+        <p className="text-gray-500 text-[length:calc(11px*var(--pi-scale))] md:text-[length:calc(11px*var(--pi-scale))] font-bold leading-relaxed">
           {gate(GATE.body, lang)}
         </p>
 
         {inPiBrowser ? (
           <>
-            <p className="text-gray-400 text-[11px] md:text-[11px] font-bold leading-snug">
+            <p className="text-gray-400 text-[length:calc(11px*var(--pi-scale))] md:text-[length:calc(11px*var(--pi-scale))] font-bold leading-snug">
               {gate(GATE.piBrowserHint, lang)}
             </p>
             <button
               onClick={onConnect}
               disabled={connecting}
-              className="w-full bg-[#dc2626] hover:bg-black disabled:opacity-60 text-white font-black py-3 rounded-xl text-[11px] md:text-[13px] transition-all active:scale-95 cursor-pointer"
+              className="w-full bg-[#dc2626] hover:bg-black disabled:opacity-60 text-white font-black py-3 rounded-xl text-[length:calc(11px*var(--pi-scale))] md:text-[length:calc(13px*var(--pi-scale))] transition-all active:scale-95 cursor-pointer"
             >
               {connecting ? gate(GATE.connecting, lang) : gate(GATE.authBtn, lang)}
             </button>
           </>
         ) : (
           <>
-            <ol className="text-[11px] md:text-[11px] text-gray-600 font-bold space-y-1 list-decimal list-inside">
+            <ol className="text-[length:calc(11px*var(--pi-scale))] md:text-[length:calc(11px*var(--pi-scale))] text-gray-600 font-bold space-y-1 list-decimal list-inside">
               <li>{gate(GATE.step1, lang)}</li>
               <li>{gate(GATE.step2, lang)}</li>
               <li>{gate(GATE.step3, lang)}</li>
             </ol>
             <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-2.5 flex items-center justify-between gap-2">
-              <code translate="no" className="notranslate text-[11px] md:text-[11px] font-mono text-black break-all">
+              <code translate="no" className="notranslate text-[length:calc(11px*var(--pi-scale))] md:text-[length:calc(11px*var(--pi-scale))] font-mono text-black break-all">
                 {address}
               </code>
               <button
                 onClick={copyLink}
-                className="shrink-0 px-2 py-1 rounded-lg text-[11px] font-black bg-neutral-100 text-neutral-800 hover:bg-neutral-200 transition-all"
+                className="shrink-0 px-2 py-1 rounded-lg text-[length:calc(11px*var(--pi-scale))] font-black bg-neutral-100 text-neutral-800 hover:bg-neutral-200 transition-all"
               >
                 {copied ? gate(GATE.copied, lang) : gate(GATE.copy, lang)}
               </button>
@@ -142,7 +142,7 @@ export default function PiAuthSheet({
               href="https://kedheon.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between gap-2 bg-black text-white rounded-xl px-3 py-2.5 text-[11px] md:text-[11px] font-black hover:bg-[#dc2626] transition-all"
+              className="flex items-center justify-between gap-2 bg-black text-white rounded-xl px-3 py-2.5 text-[length:calc(11px*var(--pi-scale))] md:text-[length:calc(11px*var(--pi-scale))] font-black hover:bg-[#dc2626] transition-all"
             >
               <span className="min-w-0 truncate">📘 {gate(GATE.guide, lang)}</span>
               <span className="shrink-0 text-gray-400">↗</span>
@@ -152,7 +152,7 @@ export default function PiAuthSheet({
 
         <button
           onClick={onClose}
-          className="w-full bg-neutral-100 text-neutral-800 font-black py-2 rounded-lg text-[11px] md:text-[11px] hover:bg-neutral-200 transition-all"
+          className="w-full bg-neutral-100 text-neutral-800 font-black py-2 rounded-lg text-[length:calc(11px*var(--pi-scale))] md:text-[length:calc(11px*var(--pi-scale))] hover:bg-neutral-200 transition-all"
         >
           {gate(GATE.close, lang)}
         </button>

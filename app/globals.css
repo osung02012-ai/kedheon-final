@@ -50,21 +50,34 @@ body {
  * 기준은 BNPi 의 모바일 화면이다. 핵심은 **단위를 px 로 고정**하는 것:
  * 주군의 안드로이드 폰은 '큰 글씨' 설정이 켜져 있으면 rem 기준(html 기본 글꼴)이
  * 1.5~2배로 커져, Tailwind 기본 텍스트(text-sm 등)·rem 여백까지 함께 부풀어
- * 히어로 제목이 화면을 덮었다. px 는 이 배율을 타지 않으므로 위계는 전부 px 로 둔다.
+ * 히어로 제목이 화면을 덮었다. 그래서 위계는 전부 px 로 둔다.
+ *
+ * 단, 안드로이드 WebView(Pi Browser)는 OS '큰 글씨' 배율(textZoom)을 px 글자에도
+ * 한 번 더 곱한다(실측 1.3~1.5배). 그래서 px 값은 모두 --pi-scale 을 곱해 쓰고,
+ * PiTextScale 이 **실제 렌더 글자가 팽창했을 때만** 1/배율을 넣어 상쇄한다.
+ * 일반 브라우저에서 --pi-scale 은 1 이므로 크기는 예전과 한 픽셀도 다르지 않다.
  *
  * 크기 간격은 1~2px 로 촘촘히 두고, 크기 차이만큼 굵기(700/600/500/400)와
  * 색(neutral-900/600/500)으로도 간격을 겹쳐 둔다. 이탤릭은 로고·장식 숫자에만 쓴다.
  */
 :root {
+  /*
+   * Pi Browser(안드로이드 WebView) 글자 배율 자동 보정 계수.
+   *  - 일반 브라우저에서는 1 (1px도 달라지지 않는다).
+   *  - WebView 가 OS '큰 글씨'(textZoom)를 px 글자에까지 곱해 실제 렌더 글자가
+   *    커진 경우에만 PiTextScale 이 1/배율(0.65~1)로 내려 준다.
+   *  - 모든 타이포 위계가 이 계수를 곱해 쓰므로, 보정이 본문·버튼·카드에 한 번에 먹는다.
+   */
+  --pi-scale: 1;
   /* 모바일 실측 기준 (390px) */
-  --t-hero: 18px;      /* 2~3줄 안에 단정하게 */
-  --t-section: 15px;
-  --t-card: 14px;
-  --t-sub: 12px;
-  --t-body: 13px;      /* 한 화면에 6~7줄이 여유 있게 */
-  --t-tag: 11px;       /* 보조·라벨·태그 */
-  --t-btn: 12px;
-  --t-stat: 17px;
+  --t-hero: calc(18px * var(--pi-scale));      /* 2~3줄 안에 단정하게 */
+  --t-section: calc(15px * var(--pi-scale));
+  --t-card: calc(14px * var(--pi-scale));
+  --t-sub: calc(12px * var(--pi-scale));
+  --t-body: calc(13px * var(--pi-scale));      /* 한 화면에 6~7줄이 여유 있게 */
+  --t-tag: calc(11px * var(--pi-scale));       /* 보조·라벨·태그 */
+  --t-btn: calc(12px * var(--pi-scale));
+  --t-stat: calc(17px * var(--pi-scale));
   /* 테두리는 검정 2px 대신 옅은 회색 1px + 은은한 그림자 */
   --line: #e5e7eb;
   --line-strong: #d1d5db;
@@ -73,14 +86,14 @@ body {
 
 @media (min-width: 640px) {
   :root {
-    --t-hero: 24px;
-    --t-section: 17px;
-    --t-card: 15px;
-    --t-body: 13.5px;
-    --t-sub: 13px;
-    --t-tag: 11px;
-    --t-btn: 12.5px;
-    --t-stat: 21px;
+    --t-hero: calc(24px * var(--pi-scale));
+    --t-section: calc(17px * var(--pi-scale));
+    --t-card: calc(15px * var(--pi-scale));
+    --t-body: calc(13.5px * var(--pi-scale));
+    --t-sub: calc(13px * var(--pi-scale));
+    --t-tag: calc(11px * var(--pi-scale));
+    --t-btn: calc(12.5px * var(--pi-scale));
+    --t-stat: calc(21px * var(--pi-scale));
   }
 }
 
@@ -150,7 +163,7 @@ body {
 
 /* 초대 코드처럼 자릿수를 또렷하게 보여야 하는 값 */
 .t-code {
-  font-size: 18px;
+  font-size: calc(18px * var(--pi-scale));
   line-height: 1.15;
   font-weight: 700;
   letter-spacing: 0.18em;
@@ -159,7 +172,7 @@ body {
 
 /* 상단 브랜드 로고타입 — 5개 앱 공통 */
 .t-brand {
-  font-size: 13px;
+  font-size: calc(13px * var(--pi-scale));
   line-height: 1;
   font-weight: 800;
   letter-spacing: -0.01em;
@@ -167,7 +180,7 @@ body {
 
 @media (min-width: 640px) {
   .t-brand {
-    font-size: 14px;
+    font-size: calc(14px * var(--pi-scale));
   }
 }
 
