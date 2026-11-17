@@ -88,7 +88,7 @@ const DICT: Record<Lang, Dictionary> = {
   KR: {
     rookie: "ROOKIE", pioneer: "PIONEER", exchange: "01. 파이 결제 & 생태계 기여 리워드 (BEOM Rewards)", auth: "02. 스마트 보안 큐알 (Smart Security QR)",
     creative: "03. 팬심 토큰 보상 시스템", market: "04. 굿즈 판매 및 구입", partnership: "05. 글로벌 파트너십",
-    invitation: "Web3 초대장", procedure: "파이코인 시작하기", assets: "보유 자산",
+    invitation: "Web3 초대장", procedure: "파이네트워크 시작하기", assets: "보유 자산",
     activate: "스마트 보안 QR 생성 (안심 결제)", convert: "출석 포인트 받기", post: "피드 등록 (10 BEOM)",
     buy: "구매하기", register: "판매 등록", submit: "제안 제출하기", 
     downloadAOS: "안드로이드 다운로드", downloadiOS: "아이폰 다운로드", buyBeom: "BEOM 구매",
@@ -137,7 +137,7 @@ const DICT: Record<Lang, Dictionary> = {
   EN: {
     rookie: "ROOKIE", pioneer: "PIONEER", exchange: "01. PI PAY & BEOM REWARDS", auth: "02. SMART SECURITY QR",
     creative: "03. FANDOM REWARDS", market: "04. GOODS MARKET", partnership: "05. PARTNERSHIP",
-    invitation: "Web3 Invitation", procedure: "Getting Started with Pi", assets: "ASSETS",
+    invitation: "Web3 Invitation", procedure: "Getting Started with Pi Network", assets: "ASSETS",
     activate: "GENERATE SMART QR (SECURE)", convert: "CONVERT NOW", post: "POST (10 BEOM)",
     buy: "BUY", register: "SELL", submit: "SUBMIT PROPOSAL",
     downloadAOS: "Android", downloadiOS: "iPhone", buyBeom: "BUY BEOM",
@@ -185,7 +185,7 @@ const DICT: Record<Lang, Dictionary> = {
   CN: {
     rookie: "新手", pioneer: "先锋", exchange: "01. PI 支付与生态贡献奖励", auth: "02. 安全二维码",
     creative: "03. 粉丝奖励系统", market: "04. 商品市场", partnership: "05. 全球合作伙伴",
-    invitation: "Web3 邀请函", procedure: "加入指南", assets: "我的资产",
+    invitation: "Web3 邀请函", procedure: "开始使用 Pi Network", assets: "我的资产",
     activate: "生成智能安全二维码", convert: "领取奖励", post: "发布 (10 BEOM)",
     buy: "购买", register: "出售注册", submit: "提交提案",
     downloadAOS: "Android 下载", downloadiOS: "iPhone 下载", buyBeom: "购买 BEOM",
@@ -233,7 +233,7 @@ const DICT: Record<Lang, Dictionary> = {
   JP: {
     rookie: "ルーキー", pioneer: "パイオニア", exchange: "01. Pi 決済＆貢献リワード", auth: "02. セキュリティ QR",
     creative: "03. ファン報酬システム", market: "04. グッズ市場", partnership: "05. パートナーシップ",
-    invitation: "Web3 招待状", procedure: "参加ガイド", assets: "資産",
+    invitation: "Web3 招待状", procedure: "Pi Network 参加ガイド", assets: "資産",
     activate: "スマートセキュリティ QR 生成", convert: "リワード受取", post: "投稿 (10 BEOM)",
     buy: "購入", register: "販売登録", submit: "提案を送信",
     downloadAOS: "Android", downloadiOS: "iPhone", buyBeom: "BEOM を購入",
@@ -329,7 +329,7 @@ const DICT: Record<Lang, Dictionary> = {
   VN: {
     rookie: "NGƯỜI MỚI", pioneer: "TIÊN PHONG", exchange: "01. THANH TOÁN PI & PHẦN THƯỞNG BEOM", auth: "02. MÃ QR BẢO MẬT",
     creative: "03. PHẦN THƯỞNG FANDOM", market: "04. THỊ TRƯỜNG", partnership: "05. ĐỐI TÁC",
-    invitation: "Lời mời Web3", procedure: "Hướng dẫn Tham gia", assets: "TÀI SẢN",
+    invitation: "Lời mời Web3", procedure: "Bắt đầu với Pi Network", assets: "TÀI SẢN",
     activate: "TẠO MÃ QR BẢO MẬT", convert: "NHẬN THƯỞNG", post: "ĐĂNG BÀI (10 BEOM)",
     buy: "MUA", register: "BÁN", submit: "GỬI ĐỀ XUẤT",
     downloadAOS: "Tải Android", downloadiOS: "Tải iPhone", buyBeom: "MUA BEOM",
@@ -377,7 +377,7 @@ const DICT: Record<Lang, Dictionary> = {
   FR: {
     rookie: "NOVICE", pioneer: "PIONNIER", exchange: "01. PAIEMENT PI & RÉCOMPENSES BEOM", auth: "02. QR SÉCURISÉ",
     creative: "03. RÉCOMPENSES", market: "04. MARCHÉ", partnership: "05. PARTENARIAT",
-    invitation: "Invitation Web3", procedure: "Guide d'inscription", assets: "ACTIFS",
+    invitation: "Invitation Web3", procedure: "Débuter avec Pi Network", assets: "ACTIFS",
     activate: "GÉNÉRER QR SÉCURISÉ", convert: "RÉCUPÉRER", post: "PUBLIER (10 BEOM)",
     buy: "ACHETER", register: "VENDRE", submit: "SOUMETTRE",
     downloadAOS: "Télécharger Android", downloadiOS: "Télécharger iPhone", buyBeom: "ACHETER BEOM",
@@ -425,7 +425,7 @@ const DICT: Record<Lang, Dictionary> = {
   PT: {
     rookie: "NOVATO", pioneer: "PIONEIRO", exchange: "01. PAGAMENTO PI & RECOMPENSAS BEOM", auth: "02. QR SEGURO",
     creative: "03. RECOMPENSAS", market: "04. MERCADO", partnership: "05. PARCERIA",
-    invitation: "Convite Web3", procedure: "Guia de Entrada", assets: "ATIVOS",
+    invitation: "Convite Web3", procedure: "Começar com Pi Network", assets: "ATIVOS",
     activate: "GERAR QR SEGURO", convert: "RECEBER", post: "PUBLICAR (10 BEOM)",
     buy: "COMPRAR", register: "VENDER", submit: "ENVIAR",
     downloadAOS: "Baixar Android", downloadiOS: "Baixar iPhone", buyBeom: "COMPRAR BEOM",
@@ -473,7 +473,7 @@ const DICT: Record<Lang, Dictionary> = {
   RU: {
     rookie: "НОВИЧОК", pioneer: "ПИОНЕР", exchange: "01. ОПЛАТА PI И НАГРАДЫ BEOM", auth: "02. БЕЗОПАСНЫЙ QR",
     creative: "03. НАГРАДЫ FANDOM", market: "04. РЫНОК", partnership: "05. ПАРТНЕРСТВО",
-    invitation: "Приглашение Web3", procedure: "Гид по входу", assets: "АКТИВЫ",
+    invitation: "Приглашение Web3", procedure: "Начало работы с Pi Network", assets: "АКТИВЫ",
     activate: "СОЗДАТЬ БЕЗОПАСНЫЙ QR", convert: "ПОЛУЧИТЬ", post: "ОПУБЛИКОВАТЬ",
     buy: "КУПИТЬ", register: "ПРОДАТЬ", submit: "ОТПРАВИТЬ",
     downloadAOS: "Скачать Android", downloadiOS: "Скачать iPhone", buyBeom: "КУПИТЬ BEOM",
@@ -521,7 +521,7 @@ const DICT: Record<Lang, Dictionary> = {
   ID: {
     rookie: "PEMULA", pioneer: "PELOPOR", exchange: "01. PEMBAYARAN PI & HADIAH BEOM", auth: "02. QR AMAN",
     creative: "03. HADIAH FANDOM", market: "04. PASAR", partnership: "05. KEMITRAAN",
-    invitation: "Undangan Web3", procedure: "Panduan Bergabung", assets: "ASET",
+    invitation: "Undangan Web3", procedure: "Mulai dengan Pi Network", assets: "ASET",
     activate: "BUAT QR AMAN", convert: "KLAIM", post: "POSTING (10 BEOM)",
     buy: "BELI", register: "JUAL", submit: "KIRIM",
     downloadAOS: "Unduh Android", downloadiOS: "Unduh iPhone", buyBeom: "BELI BEOM",
