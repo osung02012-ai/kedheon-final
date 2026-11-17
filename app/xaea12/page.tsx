@@ -20,7 +20,7 @@ import {
 /* ------------------------------------------------------------------
  * XAEA12 — 생태계 게임 포인트 & 선물하기 매칭 허브
  * 디자인 시스템: 케데헌과 동일 (White / Black / Red #DC2626)
- * 10개국어 · 1단계(게임 포인트·타 앱 선물하기) → 2단계(Mainnet) · 안전장치 3종
+ * 10개국어 · 1단계(게임 포인트·타 앱 선물하기) → 2단계(Mainnet) · 안전장치 1줄 안내
  * ------------------------------------------------------------------ */
 
 const STORE_KEY = 'xaea12.hub.v2';
@@ -540,25 +540,13 @@ export default function Xaea12Page() {
           <p className="t-sub text-neutral-400 mt-1">{T('checkinNote')}</p>
         </div>
 
-        {/* ── 5. 코어팀 3대 안전장치 ───────────────────────────── */}
-        <SectionHead no="03" title={T('secSafetyTitle')} desc={T('secSafetyDesc')} />
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-1.5 md:gap-2">
-          {[
-            { no: '00', title: T('safe1Title'), body: T('safe1Body') },
-            { no: '01', title: T('safe2Title'), body: T('safe2Body') },
-            { no: '02', title: T('safe3Title'), body: T('safe3Body') }
-          ].map((s, i) => (
-            <div key={i} className="bg-white border border-neutral-200 border-l-[3px] border-l-[#dc2626] rounded-xl p-3">
-              <p className="t-tag text-[#dc2626] notranslate" translate="no">{s.no}</p>
-              <p className="text-black t-card mt-0.5">{s.title}</p>
-              <p className="text-neutral-600 t-body mt-1.5">{s.body}</p>
-            </div>
-          ))}
-        </div>
+        {/* ── 5. 코어팀 안전장치 1줄 안내 ──────────────────────── */}
+        <p className="mt-3 bg-neutral-50 border border-neutral-200 rounded-lg px-3 py-1.5 t-sub text-neutral-500 text-center">
+          {T('safetyLine')}
+        </p>
 
         {/* ── 6. 사연 보드 ─────────────────────────────────────── */}
-        <SectionHead no="04" title={T('secBoardTitle')} desc={T('secBoardDesc')} />
+        <SectionHead no="03" title={T('secBoardTitle')} desc={T('secBoardDesc')} />
 
         {/* 앱 필터 */}
         <div className="flex gap-1.5 overflow-x-auto pb-1 no-scrollbar">
@@ -864,7 +852,7 @@ export default function Xaea12Page() {
         </div>
 
         {/* ── 7. 선물 명예의 전당 ───────────────────────────────── */}
-        <SectionHead no="05" title={T('hallTitle')} desc={T('hallDesc')} />
+        <SectionHead no="04" title={T('hallTitle')} desc={T('hallDesc')} />
 
         <div className="bg-white border border-neutral-200 rounded-2xl p-3 md:p-4">
           <div className="flex gap-1.5 overflow-x-auto pb-1 no-scrollbar">
