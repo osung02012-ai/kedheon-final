@@ -1,224 +1,243 @@
 /* ------------------------------------------------------------------
- * XAEA12 — story board data
+ * XAEA12 — game-point & gifting hub data
  * 10-tuple order: KR EN CN JP ES VN FR PT RU ID
  *
  * 규칙(코어팀 가이드라인):
- *  - @username + 사연 요약 + 순수 Pi 단위 목표만. 실명·계좌·연락처 0건.
+ *  - @username + 사연 요약 + 앱의 게임 포인트 수량만. 실명·계좌·연락처 0건.
  *  - 유명인 이름·사진·인용 0건. 추첨·확률형 리워드 0건.
+ *  - 파이 생태계 앱의 포인트(BOPIES · Sigil · Gems · BEOM 등)는 환전 대상이 아니다.
  * ------------------------------------------------------------------ */
 
 import type { L10, UIKey } from './i18n';
 
-export type CatKey = 'home' | 'gift' | 'shop' | 'travel' | 'life';
+export type AppKey = 'BOPI' | 'ELF' | 'HANGANG' | 'KEDHEON' | 'ETC';
 
-export interface Cat {
-  key: CatKey;
+export interface AppMeta {
+  key: AppKey;
+  /** 앱 고유명사 — 화면에서 translate="no" 로 둔다. */
+  name: string;
   icon: string;
-  labelKey: UIKey;
+  /** 기본 재화 단위 (기타 앱은 사연 작성자가 직접 적는다) */
+  unit: string;
+  /** 필터 라벨 — 기타 앱만 번역이 필요하다. */
+  labelKey?: UIKey;
 }
 
-/** 필터 순서 — 전체는 별도로 앞에 붙인다. */
-export const CATS: Cat[] = [
-  { key: 'home', icon: '🏠', labelKey: 'catHome' },
-  { key: 'gift', icon: '🎁', labelKey: 'catGift' },
-  { key: 'shop', icon: '🛒', labelKey: 'catShop' },
-  { key: 'travel', icon: '✈️', labelKey: 'catTravel' },
-  { key: 'life', icon: '🏥', labelKey: 'catLife' }
+export const APPS: AppMeta[] = [
+  { key: 'BOPI', name: 'BoPi World', icon: '🏠', unit: 'BOPIES' },
+  { key: 'ELF', name: 'Pi ELF', icon: '🧝', unit: 'Sigil' },
+  { key: 'HANGANG', name: 'Hangang', icon: '✈️', unit: 'BEOM' },
+  { key: 'KEDHEON', name: 'Kedheon', icon: '🐆', unit: 'BEOM' },
+  { key: 'ETC', name: 'Other apps', icon: '🎮', unit: 'CREDIT', labelKey: 'appOther' }
 ];
 
-export const CAT_ICON: Record<CatKey, string> = {
-  home: '🏠', gift: '🎁', shop: '🛒', travel: '✈️', life: '🏥'
-};
+export const APP_MAP: Record<AppKey, AppMeta> = APPS.reduce(
+  (acc, app) => ({ ...acc, [app.key]: app }),
+  {} as Record<AppKey, AppMeta>
+);
 
 export interface Story {
   id: string;
-  cat: CatKey;
-  /** 사연이 시작된 생태계 앱 이름(고유명사 — 번역하지 않는다) */
-  src: string;
+  /** 포인트가 필요한 생태계 앱 */
+  app: AppKey;
+  /** 재화 단위 — BOPIES · Sigil · Gems · BEOM · 사용자 입력 */
+  unit: string;
   /** @ 를 뺀 Pi username */
   user: string;
   goal: number;
   raised: number;
-  backers: number;
+  /** 선물을 기록한 사람 수 */
+  gifters: number;
+  /** BEOM 응원 수 */
+  cheer: number;
   title: L10;
   /** 방문자가 이 브라우저에서 올린 사연 */
   local?: boolean;
 }
 
-/** 샘플 사연 — 1단계(Test-Pi) 리허설 보드. */
+/** 샘플 사연 — 1단계(게임 포인트 & 선물하기 매칭) 보드. */
 export const SAMPLE_STORIES: Story[] = [
   {
-    id: 'bnpi-lease',
-    cat: 'home',
-    src: 'BNPi',
-    user: 'hana_pioneer',
-    goal: 20,
-    raised: 13,
-    backers: 9,
+    id: 'bopi-house',
+    app: 'BOPI',
+    unit: 'BOPIES',
+    user: 'bopi_hanul',
+    goal: 200,
+    raised: 128,
+    gifters: 7,
+    cheer: 41,
     title: [
-      'BNPi 매물 계약까지 딱 20 Pi 부족합니다 🏠',
-      'Just 20 Pi short of signing a BNPi lease 🏠',
-      'BNPi 房源签约还差 20 Pi 🏠',
-      'BNPi 物件の契約まであと20 Pi 🏠',
-      'Faltan 20 Pi para firmar un alquiler en BNPi 🏠',
-      'Thiếu đúng 20 Pi để ký hợp đồng BNPi 🏠',
-      'Il manque 20 Pi pour signer un bail BNPi 🏠',
-      'Faltam 20 Pi para assinar um aluguel na BNPi 🏠',
-      'Не хватает 20 Pi до договора на BNPi 🏠',
-      'Kurang 20 Pi untuk kontrak sewa di BNPi 🏠'
+      'BoPi World에서 집 사려는데 200 BOPIES 부족 🏠',
+      'Buying a home in BoPi World — 200 BOPIES short 🏠',
+      '想买 BoPi World 的房子，差 200 BOPIES 🏠',
+      'BoPi World で家を買いたいのに 200 BOPIES 不足 🏠',
+      'Quiero comprar casa en BoPi World: faltan 200 BOPIES 🏠',
+      'Muốn mua nhà trong BoPi World, thiếu 200 BOPIES 🏠',
+      'Acheter une maison dans BoPi World : 200 BOPIES manquent 🏠',
+      'Quero comprar casa no BoPi World: faltam 200 BOPIES 🏠',
+      'Хочу дом в BoPi World — не хватает 200 BOPIES 🏠',
+      'Mau beli rumah di BoPi World, kurang 200 BOPIES 🏠'
+    ]
+  },
+  {
+    id: 'elf-kitchen',
+    app: 'ELF',
+    unit: 'Sigil',
+    user: 'elf_mint',
+    goal: 35,
+    raised: 21,
+    gifters: 5,
+    cheer: 18,
+    title: [
+      'Pi ELF Kitchen Book 사는데 35 Sigil 모자람 📚',
+      'Pi ELF Kitchen Book — 35 Sigil short 📚',
+      '买 Pi ELF Kitchen Book 差 35 Sigil 📚',
+      'Pi ELF Kitchen Book を買うのに 35 Sigil 足りません 📚',
+      'El Kitchen Book de Pi ELF: faltan 35 Sigil 📚',
+      'Mua Kitchen Book của Pi ELF, thiếu 35 Sigil 📚',
+      'Le Kitchen Book de Pi ELF : 35 Sigil manquants 📚',
+      'Kitchen Book do Pi ELF: faltam 35 Sigil 📚',
+      'Kitchen Book в Pi ELF — не хватает 35 Sigil 📚',
+      'Kitchen Book Pi ELF kurang 35 Sigil 📚'
     ]
   },
   {
     id: 'hangang-jeju',
-    cat: 'travel',
-    src: 'Hangang',
-    user: 'jeju_walker',
-    goal: 12,
-    raised: 12,
-    backers: 11,
-    title: [
-      'Hangang 제주 3일 패스, 딱 12 Pi 부족했습니다 ✈️',
-      'Hangang Jeju 3-day pass — was 12 Pi short ✈️',
-      'Hangang 济州 3 日通票，当时差 12 Pi ✈️',
-      'Hangang 済州3日パス、あと12 Pi でした ✈️',
-      'Pase Hangang Jeju 3 días: faltaban 12 Pi ✈️',
-      'Pass Hangang Jeju 3 ngày — từng thiếu 12 Pi ✈️',
-      'Pass Hangang Jeju 3 jours : il manquait 12 Pi ✈️',
-      'Passe Hangang Jeju 3 dias: faltavam 12 Pi ✈️',
-      'Пасс Hangang Чеджу на 3 дня — не хватало 12 Pi ✈️',
-      'Pass Hangang Jeju 3 hari — kurang 12 Pi ✈️'
-    ]
-  },
-  {
-    id: 'gift-mother',
-    cat: 'gift',
-    src: 'Kedheon',
-    user: 'miso_k',
-    goal: 6,
-    raised: 2,
-    backers: 2,
-    title: [
-      '어머니 생신 선물, 6 Pi만 보태면 완성됩니다 🎁',
-      'A birthday gift for my mother — 6 Pi completes it 🎁',
-      '给妈妈的生日礼物，再补 6 Pi 就完成 🎁',
-      '母の誕生日プレゼント、あと6 Pi で完成 🎁',
-      'Un regalo de cumpleaños para mi madre: 6 Pi lo completan 🎁',
-      'Quà sinh nhật cho mẹ, thêm 6 Pi là đủ 🎁',
-      'Un cadeau d’anniversaire pour ma mère : 6 Pi le complètent 🎁',
-      'Um presente de aniversário para minha mãe: 6 Pi completam 🎁',
-      'Подарок маме на день рождения — не хватает 6 Pi 🎁',
-      'Hadiah ulang tahun untuk ibu, kurang 6 Pi 🎁'
-    ]
-  },
-  {
-    id: 'farm-rice',
-    cat: 'shop',
-    src: 'Kedheon',
-    user: 'green_farm',
-    goal: 8,
-    raised: 5,
-    backers: 4,
-    title: [
-      '농가 직거래 쌀 5kg 첫 주문, 8 Pi 부족 🛒',
-      'First 5 kg direct-from-farm rice order — 8 Pi short 🛒',
-      '农户直供大米 5kg 首单，差 8 Pi 🛒',
-      '農家直送米5kgの初回注文、8 Pi 不足 🛒',
-      'Primer pedido de 5 kg de arroz directo del campo: faltan 8 Pi 🛒',
-      'Đơn gạo 5kg thẳng từ nông trại, thiếu 8 Pi 🛒',
-      'Première commande de 5 kg de riz à la ferme : 8 Pi manquent 🛒',
-      'Primeiro pedido de 5 kg de arroz direto da fazenda: faltam 8 Pi 🛒',
-      'Первый заказ 5 кг риса от фермера — не хватает 8 Pi 🛒',
-      'Pesanan pertama beras 5 kg langsung petani, kurang 8 Pi 🛒'
-    ]
-  },
-  {
-    id: 'clinic-ride',
-    cat: 'life',
-    src: 'FactFilter',
-    user: 'care_neo',
-    goal: 4,
-    raised: 1,
-    backers: 1,
-    title: [
-      '병원 왕복 교통비, 4 Pi만 있으면 됩니다 🏥',
-      'Round-trip fare to the clinic needs only 4 Pi 🏥',
-      '往返医院的交通费，只差 4 Pi 🏥',
-      '病院までの往復交通費、あと4 Pi 🏥',
-      'El viaje de ida y vuelta a la clínica: solo 4 Pi 🏥',
-      'Tiền xe khứ hồi tới phòng khám, chỉ 4 Pi 🏥',
-      'Le trajet aller-retour à la clinique : 4 Pi suffisent 🏥',
-      'A ida e volta à clínica: só 4 Pi 🏥',
-      'Дорога до клиники и обратно — нужно лишь 4 Pi 🏥',
-      'Ongkos pulang-pergi ke klinik, cukup 4 Pi 🏥'
-    ]
-  },
-  {
-    id: 'studio-deposit',
-    cat: 'home',
-    src: 'BNPi',
-    user: 'studio_han',
-    goal: 30,
-    raised: 21,
-    backers: 15,
-    title: [
-      '설계 작업실 보증금 30 Pi, 21 Pi까지 모였습니다 🏠',
-      'Deposit for a design studio: 21 of 30 Pi gathered 🏠',
-      '设计工作室押金 30 Pi，已筹到 21 Pi 🏠',
-      '設計スタジオの保証金30 Pi、21 Pi まで集まりました 🏠',
-      'Depósito de un estudio de diseño: 21 de 30 Pi 🏠',
-      'Tiền cọc xưởng thiết kế: đã góp 21/30 Pi 🏠',
-      'Dépôt d’un studio de design : 21 Pi sur 30 🏠',
-      'Depósito de um estúdio de design: 21 de 30 Pi 🏠',
-      'Залог за мастерскую: собрано 21 из 30 Pi 🏠',
-      'Deposit studio desain: terkumpul 21 dari 30 Pi 🏠'
-    ]
-  },
-  {
-    id: 'busan-pass',
-    cat: 'travel',
-    src: 'Hangang',
-    user: 'surf_busan',
+    app: 'HANGANG',
+    unit: 'BEOM',
+    user: 'han_river',
     goal: 15,
-    raised: 6,
-    backers: 5,
+    raised: 9,
+    gifters: 6,
+    cheer: 27,
     title: [
-      '부산 KTX+숙소 묶음, 15 Pi 부족 ✈️',
-      'Busan KTX plus stay bundle — 15 Pi short ✈️',
-      '釜山 KTX+住宿套票，差 15 Pi ✈️',
-      '釜山 KTX＋宿泊セット、15 Pi 不足 ✈️',
-      'Pack KTX y alojamiento en Busan: faltan 15 Pi ✈️',
-      'Combo KTX và lưu trú Busan: thiếu 15 Pi ✈️',
-      'Forfait KTX et séjour à Busan : 15 Pi manquent ✈️',
-      'Combo KTX e hospedagem em Busan: faltam 15 Pi ✈️',
-      'Пакет KTX и жильё в Пусане — не хватает 15 Pi ✈️',
-      'Paket KTX dan penginapan Busan, kurang 15 Pi ✈️'
+      'Hangang 제주 패스 15 BEOM 부족 ✈️',
+      'Hangang Jeju pass — 15 BEOM short ✈️',
+      'Hangang 济州通票差 15 BEOM ✈️',
+      'Hangang 済州パス、15 BEOM 不足 ✈️',
+      'Pase Jeju de Hangang: faltan 15 BEOM ✈️',
+      'Pass Jeju của Hangang thiếu 15 BEOM ✈️',
+      'Pass Jeju Hangang : 15 BEOM manquants ✈️',
+      'Passe Jeju do Hangang: faltam 15 BEOM ✈️',
+      'Пас Jeju в Hangang — не хватает 15 BEOM ✈️',
+      'Pass Jeju Hangang kurang 15 BEOM ✈️'
     ]
   },
   {
-    id: 'book-shelf',
-    cat: 'shop',
-    src: 'Kedheon',
-    user: 'page_turner',
-    goal: 5,
-    raised: 3,
-    backers: 3,
+    id: 'bopi-furniture',
+    app: 'BOPI',
+    unit: 'BOPIES',
+    user: 'bopi_nabi',
+    goal: 90,
+    raised: 90,
+    gifters: 4,
+    cheer: 12,
     title: [
-      '동네 서점 첫 진열대, 5 Pi 부족 🛒',
-      'First shelf for a neighbourhood bookshop — 5 Pi short 🛒',
-      '社区书店第一个书架，差 5 Pi 🛒',
-      '町の書店の最初の棚、5 Pi 不足 🛒',
-      'Primera estantería de una librería de barrio: faltan 5 Pi 🛒',
-      'Kệ sách đầu tiên của hiệu sách nhỏ: thiếu 5 Pi 🛒',
-      'Première étagère d’une librairie de quartier : 5 Pi manquent 🛒',
-      'Primeira estante de uma livraria de bairro: faltam 5 Pi 🛒',
-      'Первая полка книжной лавки — не хватает 5 Pi 🛒',
-      'Rak pertama toko buku lingkungan, kurang 5 Pi 🛒'
+      'BoPi World 가구 꾸미기 90 BOPIES, 선물로 채웠습니다 🛋️',
+      'My BoPi World furniture — 90 BOPIES fully gifted 🛋️',
+      'BoPi World 家具 90 BOPIES，已由赠送补齐 🛋️',
+      'BoPi World の家具 90 BOPIES、ギフトで満額に 🛋️',
+      'Mis muebles de BoPi World: 90 BOPIES completados 🛋️',
+      'Nội thất BoPi World 90 BOPIES đã được tặng đủ 🛋️',
+      'Mes meubles BoPi World : 90 BOPIES complétés 🛋️',
+      'Meus móveis no BoPi World: 90 BOPIES completos 🛋️',
+      'Мебель в BoPi World — 90 BOPIES собраны 🛋️',
+      'Furnitur BoPi World 90 BOPIES sudah terpenuhi 🛋️'
+    ]
+  },
+  {
+    id: 'elf-seed',
+    app: 'ELF',
+    unit: 'Gems',
+    user: 'elf_seed',
+    goal: 12,
+    raised: 4,
+    gifters: 2,
+    cheer: 5,
+    title: [
+      'Pi ELF 씨앗 상점 12 Gems 부족 🌱',
+      'Pi ELF seed shop — 12 Gems short 🌱',
+      'Pi ELF 种子商店差 12 Gems 🌱',
+      'Pi ELF の種ショップ、12 Gems 不足 🌱',
+      'Tienda de semillas Pi ELF: faltan 12 Gems 🌱',
+      'Cửa hàng hạt giống Pi ELF thiếu 12 Gems 🌱',
+      'Boutique de graines Pi ELF : 12 Gems manquants 🌱',
+      'Loja de sementes Pi ELF: faltam 12 Gems 🌱',
+      'Магазин семян Pi ELF — не хватает 12 Gems 🌱',
+      'Toko bibit Pi ELF kurang 12 Gems 🌱'
+    ]
+  },
+  {
+    id: 'kedheon-goods',
+    app: 'KEDHEON',
+    unit: 'BEOM',
+    user: 'ked_rookie',
+    goal: 40,
+    raised: 25,
+    gifters: 3,
+    cheer: 9,
+    title: [
+      'Kedheon 루키 굿즈 40 BEOM 부족 🐆',
+      'Kedheon rookie goods — 40 BEOM short 🐆',
+      'Kedheon 新秀周边差 40 BEOM 🐆',
+      'Kedheon ルーキーグッズ、40 BEOM 不足 🐆',
+      'Artículos rookie de Kedheon: faltan 40 BEOM 🐆',
+      'Đồ rookie Kedheon thiếu 40 BEOM 🐆',
+      'Goods rookie Kedheon : 40 BEOM manquants 🐆',
+      'Itens rookie Kedheon: faltam 40 BEOM 🐆',
+      'Товары rookie в Kedheon — не хватает 40 BEOM 🐆',
+      'Merch rookie Kedheon kurang 40 BEOM 🐆'
+    ]
+  },
+  {
+    id: 'bopi-dog',
+    app: 'BOPI',
+    unit: 'BOPIES',
+    user: 'bopi_sora',
+    goal: 60,
+    raised: 18,
+    gifters: 3,
+    cheer: 6,
+    title: [
+      'BoPi World 강아지 집 60 BOPIES 모자람 🐶',
+      'A dog house in BoPi World — 60 BOPIES short 🐶',
+      'BoPi World 小狗屋差 60 BOPIES 🐶',
+      'BoPi World の犬小屋、60 BOPIES 不足 🐶',
+      'Casa de perro en BoPi World: faltan 60 BOPIES 🐶',
+      'Nhà cho cún trong BoPi World thiếu 60 BOPIES 🐶',
+      'Une niche dans BoPi World : 60 BOPIES manquants 🐶',
+      'Casinha no BoPi World: faltam 60 BOPIES 🐶',
+      'Собачья будка в BoPi World — не хватает 60 BOPIES 🐶',
+      'Rumah anjing di BoPi World kurang 60 BOPIES 🐶'
+    ]
+  },
+  {
+    id: 'pi-arcade',
+    app: 'ETC',
+    unit: 'CREDIT',
+    user: 'pi_arcade',
+    goal: 300,
+    raised: 120,
+    gifters: 6,
+    cheer: 14,
+    title: [
+      '새로 나온 파이 게임 300 크레딧 부족 🎮',
+      'New Pi game — 300 credits short 🎮',
+      '新上的 Pi 游戏差 300 积分 🎮',
+      '新作パイゲーム、300 クレジット不足 🎮',
+      'Nuevo juego Pi: faltan 300 créditos 🎮',
+      'Game Pi mới thiếu 300 credit 🎮',
+      'Nouveau jeu Pi : 300 crédits manquants 🎮',
+      'Novo jogo Pi: faltam 300 créditos 🎮',
+      'Новая игра Pi — не хватает 300 кредитов 🎮',
+      'Game Pi baru kurang 300 kredit 🎮'
     ]
   }
 ];
 
 /* ------------------------------------------------------------------
- * 놀이터 명예의 전당 — 상품·추첨 없음. 순수 명예 기록.
+ * 명예의 전당 — 상품·추첨 없음. 앱별 단위가 달라 수량은 합산하지 않고
+ * 오직 '선물 기록 건수'와 'BEOM 포인트'만 집계한다.
  * ------------------------------------------------------------------ */
 export type HallTab = 'today' | 'total' | 'beom';
 
@@ -229,25 +248,25 @@ export interface HallRow {
 
 export const HALL_SEED: Record<HallTab, HallRow[]> = {
   today: [
-    { user: 'pioneer_0721', value: 14 },
-    { user: 'hana_pioneer', value: 9 },
-    { user: 'wallet_angel', value: 7 },
-    { user: 'green_farm', value: 6 },
-    { user: 'jeju_walker', value: 4 }
+    { user: 'pioneer_0721', value: 12 },
+    { user: 'bopi_hanul', value: 9 },
+    { user: 'wallet_angel', value: 8 },
+    { user: 'elf_mint', value: 6 },
+    { user: 'han_river', value: 4 }
   ],
   total: [
-    { user: 'kedheon_guardian', value: 240 },
+    { user: 'kedheon_guardian', value: 214 },
     { user: 'wallet_angel', value: 186 },
     { user: 'pioneer_0721', value: 151 },
-    { user: 'care_neo', value: 98 },
-    { user: 'miso_k', value: 74 }
+    { user: 'elf_mint', value: 98 },
+    { user: 'bopi_nabi', value: 74 }
   ],
   beom: [
     { user: 'wallet_angel', value: 520 },
     { user: 'kedheon_guardian', value: 480 },
-    { user: 'hana_pioneer', value: 310 },
-    { user: 'page_turner', value: 260 },
-    { user: 'studio_han', value: 190 }
+    { user: 'bopi_hanul', value: 310 },
+    { user: 'elf_mint', value: 260 },
+    { user: 'han_river', value: 190 }
   ]
 };
 
@@ -260,11 +279,28 @@ export const CELEB_BLOCKLIST = [
 ];
 
 /**
- * 순수 Pi 단위만 — 원화·달러·GCV 금액 표기를 접수 단계에서 막는다.
+ * 금액 표기 차단 — 원화·달러·Pi·GCV 금액을 접수 단계에서 막는다.
  * ('지원'·'원룸' 같은 낱말을 막지 않도록 통화 기호·금액 패턴만 본다.)
  */
 export const FIAT_PATTERNS: RegExp[] = [
-  /[₩$]\s?\d/,
+  /[₩$€]\s?\d/,
   /\d[\d,.]*\s*(원|달러|만원|억원|usd|krw)/i,
-  /\b(gcv|usd|krw)\b/i
+  /\b(gcv|usd|krw)\b/i,
+  /\b\d[\d,.]*\s*pi\b/i,
+  /\bpi\s?\d/i
 ];
+
+/** 재화 단위로 쓸 수 없는 표기 (환전·법정화폐 오해) */
+const FORBIDDEN_UNITS = ['pi', 'krw', 'usd', 'gcv', 'won', 'dollar'];
+
+export function validUnit(raw: string): string | null {
+  const unit = raw.trim().toUpperCase();
+  if (!/^[A-Z][A-Z0-9]{1,9}$/.test(unit)) return null;
+  if (FORBIDDEN_UNITS.includes(unit.toLowerCase())) return null;
+  return unit;
+}
+
+/** 단위 표기 정규화 — BOPIES 처럼 이미 대문자면 그대로, Sigil 같은 표기는 살린다. */
+export function cleanUnit(raw: string): string {
+  return raw.trim().replace(/\s+/g, '').slice(0, 10);
+}
