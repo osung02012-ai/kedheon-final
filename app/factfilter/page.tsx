@@ -378,7 +378,7 @@ const SummitFactCheck = ({ ko }: { ko: boolean }) => (
             </p>
             {(ko ? f.rumor : f.rumorEn) && (
               <p className="t-sub text-neutral-500 mt-0.5 flex items-start gap-1.5">
-                <span className="shrink-0 px-1.5 rounded bg-neutral-100 text-neutral-500 t-tag">{ko ? '❌ 루머' : '❌ Rumor'}</span>
+                <span className="shrink-0 px-1.5 rounded bg-neutral-100 text-neutral-500 t-tag">{ko ? '루머' : 'Rumor'}</span>
                 <span className="min-w-0">{ko ? f.rumor : f.rumorEn}</span>
               </p>
             )}
