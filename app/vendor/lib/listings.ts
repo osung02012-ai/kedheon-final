@@ -203,9 +203,7 @@ type RawSeed = {
   piMin?: number;
   piMax?: number;
   /** 과거 필드 — 신뢰는 이제 원장에서만 계산하므로 쓰지 않는다 */
-  dev: number;
   escrow?: boolean;
-  posted: string;
 };
 
 const SEED_RAW: RawSeed[] = [
@@ -236,7 +234,7 @@ const SEED_RAW: RawSeed[] = [
       'Доставка трижды в неделю из студии в Бенгалуру. Точность выше 98%, правки бесплатно.',
       'Dikirim tiga kali seminggu dari studio Bengaluru. Akurasi di atas 98%, revisi gratis.'
     ],
-    mode: 'pi', piMin: 0.5, piMax: 2, dev: 96, posted: '2h'
+    mode: 'pi', piMin: 0.5, piMax: 2
   },
   {
     id: 'wk-ng-1', rail: 'WORK', country: 'NG', city: 'Lagos', tag: 'repair',
@@ -264,7 +262,7 @@ const SEED_RAW: RawSeed[] = [
       'Оригинальные или совместимые детали. Деталь оплачивается отдельно, работа — 1,5 Pi.',
       'Suku cadang asli atau kompatibel. Biaya part terpisah, jasa 1,5 Pi tetap.'
     ],
-    mode: 'pi', pi: 1.5, dev: 93, posted: '5h'
+    mode: 'pi', pi: 1.5
   },
   {
     id: 'wk-ke-1', rail: 'WORK', country: 'KE', city: 'Nairobi', tag: 'translate',
@@ -292,7 +290,7 @@ const SEED_RAW: RawSeed[] = [
       'Два переводчика с образованием в Найроби сверяют друг друга. Срок — 48 часов.',
       'Dua penerjemah lulusan Nairobi memeriksa silang. Selesai dalam 48 jam.'
     ],
-    mode: 'pi', pi: 3, dev: 97, posted: '1d'
+    mode: 'pi', pi: 3
   },
   {
     id: 'wk-ph-1', rail: 'WORK', country: 'PH', city: 'Manila', tag: 'support',
@@ -320,7 +318,7 @@ const SEED_RAW: RawSeed[] = [
       'Опыт колл-центра в Маниле более 3 лет, работа по времени США. Оплата еженедельно.',
       'Pengalaman call center Manila 3+ tahun, melayani jam Amerika. Dibayar mingguan.'
     ],
-    mode: 'pi', pi: 45, dev: 91, posted: '1d'
+    mode: 'pi', pi: 45
   },
   {
     id: 'wk-kr-1', rail: 'WORK', country: 'KR', city: '서울', tag: 'translate',
@@ -348,7 +346,7 @@ const SEED_RAW: RawSeed[] = [
       'Семь лет юридического перевода. Таблица по пунктам, две итерации правок.',
       'Tujuh tahun interpretasi hukum. Dilengkapi tabel per pasal, dua kali revisi.'
     ],
-    mode: 'pi', pi: 12, dev: 99, posted: '3h'
+    mode: 'pi', pi: 12
   },
   {
     id: 'wk-vn-1', rail: 'WORK', country: 'VN', city: 'Hanoi', tag: 'translate',
@@ -376,7 +374,7 @@ const SEED_RAW: RawSeed[] = [
       'Сопровождает на заводы и рынки. Восемь часов, проезд и питание включены.',
       'Mendampingi kunjungan pabrik dan pasar. Delapan jam, termasuk transport dan makan.'
     ],
-    mode: 'pi', pi: 18, dev: 95, posted: '6h'
+    mode: 'pi', pi: 18
   },
   {
     id: 'wk-eg-1', rail: 'WORK', country: 'EG', city: 'Cairo', tag: 'translate',
@@ -404,7 +402,7 @@ const SEED_RAW: RawSeed[] = [
       'Команда в Каире; стандартный арабский или египетский диалект. С таймкодами.',
       'Tim Kairo; pilih Arab standar atau dialek Mesir. Termasuk timecode.'
     ],
-    mode: 'pi', pi: 4, dev: 92, posted: '9h'
+    mode: 'pi', pi: 4
   },
   {
     id: 'wk-us-1', rail: 'WORK', country: 'US', city: 'Austin', tag: 'dev',
@@ -432,7 +430,7 @@ const SEED_RAW: RawSeed[] = [
       'Включает проверку скорости и доступности. Результат — pull request в репозитории.',
       'Termasuk audit performa dan aksesibilitas. Dikirim sebagai pull request.'
     ],
-    mode: 'pi', pi: 50, dev: 98, posted: '1d'
+    mode: 'pi', pi: 50
   },
 
   /* ── 🥕 동네 당근·바터 ────────────────────────────────────────── */
@@ -462,7 +460,7 @@ const SEED_RAW: RawSeed[] = [
       'Личная передача в Андхери, Мумбаи. Две мелкие царапины, чехол и зарядка в комплекте.',
       'Serah terima langsung di Andheri, Mumbai. Dua lecet halus, termasuk casing dan charger.'
     ],
-    mode: 'pi', pi: 45, dev: 94, posted: '4h'
+    mode: 'pi', pi: 45
   },
   {
     id: 'lc-ng-1', rail: 'LOCAL', country: 'NG', city: 'Lagos', tag: 'goods',
@@ -490,7 +488,7 @@ const SEED_RAW: RawSeed[] = [
       'Сурулере, Лагос. Батарея на три часа, Windows 11 установлена, зарядка в комплекте.',
       'Surulere, Lagos. Baterai tiga jam, Windows 11 terpasang, termasuk charger.'
     ],
-    mode: 'pi', pi: 28, dev: 90, posted: '7h'
+    mode: 'pi', pi: 28
   },
   {
     id: 'lc-ke-1', rail: 'LOCAL', country: 'KE', city: 'Nairobi', tag: 'goods',
@@ -518,7 +516,7 @@ const SEED_RAW: RawSeed[] = [
       'Казарани, Найроби. 220 л; самовывоз. Можно проверить на месте.',
       'Kasarani, Nairobi. 220 L; diambil sendiri. Bisa dicoba di tempat.'
     ],
-    mode: 'pi', pi: 22, dev: 88, posted: '1d'
+    mode: 'pi', pi: 22
   },
   {
     id: 'lc-gh-1', rail: 'LOCAL', country: 'GH', city: 'Accra', tag: 'barter',
@@ -546,7 +544,7 @@ const SEED_RAW: RawSeed[] = [
       'Мадина, Аккра. Местный рис, упаковка целая; нужен Android 8 или новее.',
       'Madina, Accra. Beras lokal belum dibuka; ingin tukar Android 8 ke atas.'
     ],
-    mode: 'barter', dev: 89, posted: '1d'
+    mode: 'barter'
   },
   {
     id: 'lc-za-1', rail: 'LOCAL', country: 'ZA', city: 'Johannesburg', tag: 'goods',
@@ -574,7 +572,7 @@ const SEED_RAW: RawSeed[] = [
       'Соуэто, Йоханнесбург. Протектор больше 6 мм; одно колесо в запас.',
       'Soweto, Johannesburg. Tapak di atas 6 mm; termasuk satu cadangan.'
     ],
-    mode: 'pi', pi: 9, dev: 87, posted: '2d'
+    mode: 'pi', pi: 9
   },
   {
     id: 'lc-id-1', rail: 'LOCAL', country: 'ID', city: 'Jakarta', tag: 'goods',
@@ -602,7 +600,7 @@ const SEED_RAW: RawSeed[] = [
       'Южная Джакарта. 20 000 км, есть история обслуживания. Поможет с переоформлением.',
       'Jakarta Selatan. 20.000 km, ada riwayat servis. Dibantu proses balik nama.'
     ],
-    mode: 'pi', pi: 120, dev: 86, posted: '2d'
+    mode: 'pi', pi: 120
   },
   {
     id: 'lc-kr-1', rail: 'LOCAL', country: 'KR', city: '부산', tag: 'goods',
@@ -630,7 +628,7 @@ const SEED_RAW: RawSeed[] = [
       'Хаундэ, Пусан. Три года эксплуатации; шланг и слив меняются на новые при установке.',
       'Haeundae, Busan. Dipakai tiga tahun; selang dan pembuangan diganti baru saat pasang.'
     ],
-    mode: 'pi', pi: 15, dev: 96, posted: '3h'
+    mode: 'pi', pi: 15
   },
   {
     id: 'lc-br-1', rail: 'LOCAL', country: 'BR', city: 'São Paulo', tag: 'barter',
@@ -658,7 +656,7 @@ const SEED_RAW: RawSeed[] = [
       'Вила-Мадалена, Сан-Паулу. Горный велосипед на 21 скорость; нужен УШМ и дрель.',
       'Vila Madalena, São Paulo. Sepeda gunung 21 gigi; ingin tukar gerinda dan bor.'
     ],
-    mode: 'barter', dev: 91, posted: '1d'
+    mode: 'barter'
   },
 
   /* ── 🛰️ B2B·대형 실물 ────────────────────────────────────────── */
@@ -688,7 +686,7 @@ const SEED_RAW: RawSeed[] = [
       'Поставка напрямую с завода в Бенгалуру. Монтаж, пуск, гарантия 90 дней; оплата частями (30/70).',
       'Dipasok langsung dari pabrik Bengaluru. Termasuk pemasangan, uji jalan, garansi 90 hari; pembayaran bertahap (30/70).'
     ],
-    mode: 'pi', pi: 900, dev: 97, escrow: true, posted: '5h'
+    mode: 'pi', pi: 900, escrow: true
   },
   {
     id: 'b2-ng-1', rail: 'B2B', country: 'NG', city: 'Lagos', tag: 'energy',
@@ -716,7 +714,7 @@ const SEED_RAW: RawSeed[] = [
       'Доставка на склад в Икедже, Лагос. LiFePO4, 6000 циклов, гарантия два года.',
       'Pengiriman di gudang Ikeja, Lagos. LiFePO4, 6.000 siklus, garansi dua tahun.'
     ],
-    mode: 'pi', pi: 640, dev: 93, escrow: true, posted: '1d'
+    mode: 'pi', pi: 640, escrow: true
   },
   {
     id: 'b2-za-1', rail: 'B2B', country: 'ZA', city: 'Johannesburg', tag: 'equip',
@@ -744,7 +742,7 @@ const SEED_RAW: RawSeed[] = [
       'На складе в Йоханнесбурге, отгрузка в течение 48 часов. Пришлите чертёж.',
       'Stok di gudang Johannesburg, keluar dalam 48 jam. Kirim gambar spesifikasi.'
     ],
-    mode: 'pi', pi: 1200, dev: 95, escrow: true, posted: '1d'
+    mode: 'pi', pi: 1200, escrow: true
   },
   {
     id: 'b2-eg-1', rail: 'B2B', country: 'EG', city: 'Cairo', tag: 'telecom',
@@ -772,7 +770,7 @@ const SEED_RAW: RawSeed[] = [
       'Три площадки под Каиром. Бригада демонтажа и монтажа включена; возможна ночная работа.',
       'Tiga lokasi pinggiran Kairo. Termasuk tim bongkar-pasang; bisa kerja malam.'
     ],
-    mode: 'pi', pi: 780, dev: 90, escrow: true, posted: '2d'
+    mode: 'pi', pi: 780, escrow: true
   },
   {
     id: 'b2-kr-1', rail: 'B2B', country: 'KR', city: '인천', tag: 'energy',
@@ -800,7 +798,7 @@ const SEED_RAW: RawSeed[] = [
       'Комплекс Намдон, Инчхон. Включает проверку конструкций и оформление разрешений. Гарантия выработки 20 лет; условия аренды обсуждаемы.',
       'Kawasan Namdong, Incheon. Termasuk cek struktur dan perizinan. Garansi produksi 20 tahun; syarat sewa bisa dinegosiasi.'
     ],
-    mode: 'quote', dev: 99, escrow: true, posted: '4h'
+    mode: 'quote', escrow: true
   },
   {
     id: 'b2-vn-1', rail: 'B2B', country: 'VN', city: 'Hai Phong', tag: 'equip',
@@ -828,7 +826,7 @@ const SEED_RAW: RawSeed[] = [
       'Промзона Хайфона. Ширина 600 мм, длина 24 м. Электрика и шкаф управления включены; срок шесть недель.',
       'Kawasan industri Hai Phong. Lebar 600 mm, panjang 24 m. Termasuk kelistrikan dan panel kontrol; pengiriman enam minggu.'
     ],
-    mode: 'pi', pi: 1050, dev: 94, escrow: true, posted: '2d'
+    mode: 'pi', pi: 1050, escrow: true
   },
   {
     id: 'b2-global-1', rail: 'B2B', country: 'GLOBAL', city: 'Asia · Africa', tag: 'telecom',
@@ -856,7 +854,7 @@ const SEED_RAW: RawSeed[] = [
       'Диапазон C или Ku, покрытие Азии и Африки. Договор с ежемесячным расчётом.',
       'Pilih pita C atau Ku, cakupan Asia dan Afrika. Kontrak dengan penyelesaian bulanan.'
     ],
-    mode: 'pi', pi: 8800, dev: 96, escrow: true, posted: '3d'
+    mode: 'pi', pi: 8800, escrow: true
   },
   {
     id: 'b2-ke-1', rail: 'B2B', country: 'KE', city: 'Nairobi', tag: 'energy',
@@ -884,7 +882,7 @@ const SEED_RAW: RawSeed[] = [
       'Три деревни под Найроби. Счётчики и приложение управления включены; обслуживание три года.',
       'Tiga desa di luar Nairobi. Termasuk meter dan aplikasi pengelola; pemeliharaan tiga tahun.'
     ],
-    mode: 'pi', pi: 320, dev: 92, escrow: true, posted: '2d'
+    mode: 'pi', pi: 320, escrow: true
   },
 
   /* ── 추가: 양방향 인력(내 기술·시간) · 구해요 · 무료 나눔 ────────── */
@@ -914,7 +912,7 @@ const SEED_RAW: RawSeed[] = [
       '3000 слов в день. Пять лет юридических и медицинских текстов. 2–3 Pi за 1000 слов.',
       '3.000 kata per hari. Lima tahun dokumen hukum dan medis. 2–3 Pi per 1.000 kata.'
     ],
-    mode: 'pi', piMin: 2, piMax: 3, dev: 0, posted: ''
+    mode: 'pi', piMin: 2, piMax: 3
   },
   {
     id: 'wk-tal-ng-1', rail: 'WORK', country: 'NG', city: 'Lagos', tag: 'repair',
@@ -942,7 +940,7 @@ const SEED_RAW: RawSeed[] = [
       'Экраны, АКБ, разъёмы. Детали по себестоимости + 8 Pi за работу. Выезд в тот же день.',
       'Layar, baterai, port pengisian. Part harga pokok plus 8 Pi jasa. Datang hari yang sama.'
     ],
-    mode: 'pi', pi: 8, dev: 0, posted: ''
+    mode: 'pi', pi: 8
   },
   {
     id: 'lc-kr-2', rail: 'LOCAL', country: 'KR', city: '부산', tag: 'goods',
@@ -970,7 +968,7 @@ const SEED_RAW: RawSeed[] = [
       'Нужна после переезда. До 15 Pi за аппарат не старше пяти лет, с проверкой до оплаты. Заберу сам.',
       'Butuh setelah pindahan. Hingga 15 Pi untuk unit di bawah lima tahun, dites sebelum bayar. Saya ambil sendiri.'
     ],
-    mode: 'pi', pi: 15, dev: 0, posted: ''
+    mode: 'pi', pi: 15
   },
   {
     id: 'lc-kr-3', rail: 'LOCAL', country: 'KR', city: '부산', tag: 'goods',
@@ -998,7 +996,7 @@ const SEED_RAW: RawSeed[] = [
       'Прочные коробки, использовались один раз. Забрать до вечера; вынесу к двери.',
       'Kardus kokoh, dipakai sekali. Diambil sebelum malam ini; saya bawa sampai depan pintu.'
     ],
-    mode: 'pi', dev: 0, posted: ''
+    mode: 'pi'
   }
 ];
 
