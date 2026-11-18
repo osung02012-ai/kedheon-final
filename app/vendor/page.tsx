@@ -314,6 +314,10 @@ export default function VendorPage() {
 
   const stepOf = (s: ListingStatus) => (s === 'open' ? 0 : s === 'reserved' ? 1 : 2);
 
+  /** '이웃' 배지는 GPS가 아니라 완료 기록이 증명한다 — 이 도시에서 완료 3건 이상. */
+  const neighborDeals = (it: Listing) =>
+    posts.filter(p => p.mine && norm(p.city) === norm(it.city) && p.status === 'done').length;
+
   /* ── 쓰기 동작 (0단계: 이 기기 안에서만) ───────────────────── */
 
   const toggleSave = (id: string) => setSaved(cur => (cur.includes(id) ? cur.filter(x => x !== id) : [id, ...cur]));
@@ -732,7 +736,7 @@ export default function VendorPage() {
                 onClick={() => setFReserved(true)}
                 className={`px-1.5 py-0.5 rounded-md t-tag border ${fReserved ? 'bg-black text-white border-black' : 'bg-white text-neutral-600 border-neutral-200'}`}
               >
-                {T('statusOpen')} + {T('statusReserved')}
+                {T('statusOpen')} · {T('statusReserved')}
               </button>
             </div>
 
@@ -829,6 +833,14 @@ export default function VendorPage() {
                     <span aria-hidden>{h.icon}</span> {T(h.label)} · <span className="text-black">{settleLabel(it)}</span>
                     {it.qty && <span className="text-gray-400"> · {it.qty}</span>}
                   </p>
+                  {it.place && (
+                    <p className="t-tag text-neutral-500">
+                      📍 {it.place}
+                      {neighborDeals(it) >= 3 && (
+                        <span className="text-[#dc2626]"> · {T('neighborBadge')} 🐾 {neighborDeals(it)}</span>
+                      )}
+                    </p>
+                  )}
                   {it.escrowSoon && <p className="t-tag text-[#dc2626]">🔒 {T('settleEscrowSoon')}</p>}
                   {it.priceBreaks && it.priceBreaks.length > 0 && (
                     <p translate="no" className="notranslate t-tag text-neutral-600">
@@ -842,8 +854,6 @@ export default function VendorPage() {
                     <span className="text-gray-300"> · </span>
                     {T('verifiedDeal')} {it.reviews}
                     {it.stars !== undefined && <span className="text-black"> ⭐ {it.stars}</span>}
-                    <span className="text-gray-300"> · </span>
-                    {T('footprintRule').split('.')[0]}
                   </p>
                   {it.tier >= 2 && <p className="t-tag text-neutral-500">🛡️ {T('disputeSeal')}</p>}
                   {it.status === 'done' && it.reviews === 0 && <p className="t-tag text-neutral-400">{T('reviewLocked')}</p>}
@@ -1191,8 +1201,10 @@ export default function VendorPage() {
             icon="📦"
             title={T('myDeals')}
             badge={
-              <span translate="no" className="notranslate shrink-0 t-tag bg-neutral-100 text-neutral-600 rounded-full px-1.5 py-0.5">
-                {myPosts} · {myReserved} · {myDone}
+              <span className="shrink-0 t-tag text-neutral-500 whitespace-nowrap">
+                {T('myPosts')} {myPosts}
+                <span className="text-gray-300"> · </span>
+                {T('myReserved')} {myReserved}
               </span>
             }
             price={`★ ${saved.length}`}
