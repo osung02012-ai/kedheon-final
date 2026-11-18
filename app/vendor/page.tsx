@@ -97,10 +97,10 @@ function StatusChip({ status, label }: { status: ListingStatus; label: string })
 /** 모집 → 예약 → 완료 3단계. 지금 어디인지 점과 글자로 보여 준다. */
 function StepBar({ step, labels }: { step: number; labels: [string, string, string] }) {
   return (
-    <div className="flex items-center gap-1 pt-0.5">
+    <div className="flex items-center gap-1.5 pt-0.5 flex-wrap">
       {labels.map((label, i) => (
         <React.Fragment key={i}>
-          {i > 0 && <span className={`h-px flex-1 ${i <= step ? 'bg-black' : 'bg-neutral-200'}`} />}
+          {i > 0 && <span aria-hidden className={`w-3 h-px shrink-0 ${i <= step ? 'bg-black' : 'bg-neutral-200'}`} />}
           <span className={`t-tag whitespace-nowrap ${i <= step ? 'text-black font-bold' : 'text-gray-300'}`}>
             <span aria-hidden>{i <= step ? '●' : '○'}</span> {label}
           </span>

@@ -1019,16 +1019,16 @@ type SeedMeta = {
 
 const SEED_META: Record<string, SeedMeta> = {
   /* 👷 인력 — 일감 8 · 내 기술·시간 2 */
-  'wk-in-1': { side: 'gig', handoff: 'remote', tier: 0, hours: 2, place: 'Bengaluru', qty: '500건' },
-  'wk-ng-1': { side: 'gig', handoff: 'meet', tier: 0, hours: 5, place: 'Ikeja', qty: '1건' },
-  'wk-ke-1': { side: 'gig', handoff: 'remote', tier: 0, hours: 24, place: 'Nairobi', qty: '2,000단어' },
-  'wk-ph-1': { side: 'gig', handoff: 'remote', tier: 0, hours: 24, place: 'Manila', qty: '20시간/주' },
-  'wk-kr-1': { side: 'gig', handoff: 'remote', tier: 1, hours: 3, place: '서울', qty: '10쪽' },
-  'wk-vn-1': { side: 'gig', handoff: 'meet', tier: 0, hours: 6, place: 'Hanoi', qty: '1일' },
-  'wk-eg-1': { side: 'gig', handoff: 'remote', tier: 0, hours: 9, place: 'Cairo', qty: '10분' },
-  'wk-us-1': { side: 'gig', handoff: 'remote', tier: 2, hours: 24, place: 'Austin', qty: '3일' },
-  'wk-tal-in-1': { side: 'skill', handoff: 'remote', tier: 0, hours: 6, place: 'Bengaluru', qty: '주 20시간' },
-  'wk-tal-ng-1': { side: 'skill', handoff: 'meet', tier: 0, hours: 18, place: 'Lagos', qty: '1일' },
+  'wk-in-1': { side: 'gig', handoff: 'remote', tier: 0, hours: 2, place: 'Bengaluru', qty: '×500' },
+  'wk-ng-1': { side: 'gig', handoff: 'meet', tier: 0, hours: 5, place: 'Ikeja', qty: '×1' },
+  'wk-ke-1': { side: 'gig', handoff: 'remote', tier: 0, hours: 24, place: 'Nairobi', qty: '2,000 w' },
+  'wk-ph-1': { side: 'gig', handoff: 'remote', tier: 0, hours: 24, place: 'Manila', qty: '20 h/wk' },
+  'wk-kr-1': { side: 'gig', handoff: 'remote', tier: 1, hours: 3, place: '서울', qty: '10 p' },
+  'wk-vn-1': { side: 'gig', handoff: 'meet', tier: 0, hours: 6, place: 'Hanoi', qty: '1 d' },
+  'wk-eg-1': { side: 'gig', handoff: 'remote', tier: 0, hours: 9, place: 'Cairo', qty: '10 min' },
+  'wk-us-1': { side: 'gig', handoff: 'remote', tier: 2, hours: 24, place: 'Austin', qty: '3 d' },
+  'wk-tal-in-1': { side: 'skill', handoff: 'remote', tier: 0, hours: 6, place: 'Bengaluru', qty: '20 h/wk' },
+  'wk-tal-ng-1': { side: 'skill', handoff: 'meet', tier: 0, hours: 18, place: 'Lagos', qty: '1 d' },
 
   /* 🥕 동네 — 직거래 6 · 구해요 1 · 나눔 1 */
   'lc-in-1': { side: 'sell', handoff: 'meet', tier: 0, hours: 4, place: 'Andheri' },
