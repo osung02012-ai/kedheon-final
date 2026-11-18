@@ -271,6 +271,276 @@ const VERIFIED_CASES: VerifiedCase[] = [
   }
 ];
 
+interface SummitFact {
+  key: string;
+  head: string;
+  headEn: string;
+  rumor: string;
+  rumorEn: string;
+  fact: string;
+  factEn: string;
+}
+
+/**
+ * Pi Ecosystem Summit Day 1 공식 팩트체크 (2026-11-17 · 2026-11-18 대조)
+ *  - 1차 출처: minepi.com 공식 블로그 Ecosystem Summit Begins / 공식 서밋 페이지
+ *  - 커뮤니티에 도는 루머와 공식 발표를 1:1로 맞세운다. 추측·전망은 넣지 않는다.
+ */
+const SUMMIT_FACTS: SummitFact[] = [
+  {
+    key: '01',
+    head: 'Pi Launchpad · DEX · AMM',
+    headEn: 'Pi Launchpad · DEX · AMM',
+    rumor: '당장 오늘 메인넷 DEX가 열린다',
+    rumorEn: 'The Mainnet DEX opens today',
+    fact: '2027년 1분기(Q1) 메인넷 출시 목표 — 생태계 토큰 런칭 인프라',
+    factEn: 'Targeted for Mainnet in Q1 2027 — infrastructure for ecosystem token launches'
+  },
+  {
+    key: '02',
+    head: '2,000만 Pi App Growth Initiative',
+    headEn: '20M Pi App Growth Initiative',
+    rumor: '전 유저에게 2,000만 Pi를 무상 에어드랍한다',
+    rumorEn: '20M Pi will be airdropped free to every user',
+    fact: 'KYC 유저 초대·유입 리워드로 앱 성장을 지원하는 프로그램 (최대 2,000만 Pi 예산)',
+    factEn: 'An app-growth program paying KYC invite/onboarding rewards (budget up to 20M Pi)'
+  },
+  {
+    key: '03',
+    head: 'x402 결제 표준 & 온체인 구독',
+    headEn: 'x402 payments & on-chain subscriptions',
+    rumor: '이미 메인넷에서 AI 자동 결제가 열린다',
+    rumorEn: 'AI auto-payments already run on Mainnet',
+    fact: 'OpenMind RoboPay 시연은 Pi Testnet에서 라이브 작동 · Mainnet 일정은 추후 공지 · x402 재단 표준 등재 심사 중',
+    factEn: 'The OpenMind RoboPay demo runs live on Pi Testnet; Mainnet timing to be announced; x402 Foundation spec under review'
+  },
+  {
+    key: '04',
+    head: '앱 디렉토리 전면 개편 & 후속 일정',
+    headEn: 'App Directory redesign & what comes next',
+    rumor: '',
+    rumorEn: '',
+    fact: '디렉토리(Bookmarked·Pi-Staked·Rising Apps·Discover·Keep Coming Back) 개편 완료 · Day 2(AI & Ecosystem) 11월 19일 01:00 KST · 20만 USDT Pi Next 해커톤도 11월 19일 개막',
+    factEn: 'Directory redesigned (Bookmarked · Pi-Staked · Rising Apps · Discover · Keep Coming Back); Day 2 (AI & Ecosystem) Nov 19, 01:00 KST; the 200,000 USDT Pi Next hackathon opens Nov 19 as well'
+  }
+];
+
+const SUMMIT_SOURCES = [
+  {
+    label: '공식 블로그 · Summit Begins',
+    labelEn: 'Official blog · Summit Begins',
+    url: 'https://minepi.com/blog/ecosystem-summit-begins/'
+  },
+  {
+    label: '공식 서밋 페이지',
+    labelEn: 'Official Summit page',
+    url: 'https://minepi.com/ecosystem-summit/'
+  }
+];
+
+/** 케드헌 편대 — 서밋 App Growth 흐름과 연결되는 4개 앱 */
+const FLEET_APPS = [
+  { name: 'Kedheon', url: 'https://kedheon.com', ko: '거버넌스 본부', en: 'Governance HQ' },
+  { name: 'Civil', url: 'https://civil.kedheon.com', ko: 'Pi KYC 1인 1표', en: 'KYC one-person-one-vote' },
+  { name: 'Hangang', url: 'https://hangang.kedheon.com', ko: 'K-실물 경제 · 파이 패스', en: 'K-economy · Pi pass' },
+  { name: 'XAEA12', url: 'https://xaea12.kedheon.com', ko: '생태계 포인트 허브', en: 'Ecosystem points hub' }
+];
+
+/** 상단 피처드 — 서밋 Day 1 공식 팩트체크 + 케드헌 편대 링크 */
+const SummitFactCheck = ({ ko }: { ko: boolean }) => (
+  <section className="bg-white border border-[#E5E7EB] rounded-2xl shadow-[var(--card-shadow)] overflow-hidden text-left">
+    <div className="flex items-center justify-between gap-2 bg-neutral-50 border-b border-[#E5E7EB] px-3 py-1.5">
+      <span className="flex items-center gap-1.5 t-tag font-bold uppercase text-[#dc2626]">
+        <span className="w-1.5 h-1.5 rounded-full bg-[#dc2626] inline-block shrink-0" />
+        {ko ? '피처드 · 공식 팩트체크' : 'Featured · Official fact check'}
+      </span>
+      <span translate="no" className="notranslate t-tag text-neutral-500 whitespace-nowrap">
+        2026.11.17 · Day 1
+      </span>
+    </div>
+
+    <div className="px-3 py-2.5 md:p-4">
+      <h2 className="t-section text-black">
+        {ko ? 'Pi Ecosystem Summit Day 1 — 루머 vs 공식 발표' : 'Pi Ecosystem Summit Day 1 — Rumors vs Official'}
+      </h2>
+      <p className="t-sub text-neutral-500 mt-0.5">
+        {ko
+          ? '코어팀 공식 블로그·서밋 페이지 원문과 1:1로 대조한 결과입니다.'
+          : 'Checked line by line against the Core Team’s official blog and Summit page.'}
+      </p>
+
+      <div className="mt-2 space-y-1.5">
+        {SUMMIT_FACTS.map(f => (
+          <div key={f.key} className="border-t border-neutral-200 pt-1.5">
+            <p className="t-card text-black flex items-start gap-1.5">
+              <span translate="no" className="notranslate font-mono t-tag text-neutral-400 shrink-0 pt-0.5">{f.key}</span>
+              <span className="min-w-0">{ko ? f.head : f.headEn}</span>
+            </p>
+            {(ko ? f.rumor : f.rumorEn) && (
+              <p className="t-sub text-neutral-500 mt-0.5 flex items-start gap-1.5">
+                <span className="shrink-0 px-1.5 rounded bg-neutral-100 text-neutral-500 t-tag">{ko ? '❌ 루머' : '❌ Rumor'}</span>
+                <span className="min-w-0">{ko ? f.rumor : f.rumorEn}</span>
+              </p>
+            )}
+            <p className="t-sub text-black mt-0.5 flex items-start gap-1.5">
+              <span className="shrink-0 px-1.5 rounded bg-black text-white t-tag">{ko ? '✅ 팩트' : '✅ Fact'}</span>
+              <span className="min-w-0">{ko ? f.fact : f.factEn}</span>
+            </p>
+          </div>
+        ))}
+      </div>
+
+      <div className="flex flex-wrap items-center gap-1.5 mt-2">
+        <span className="t-tag text-neutral-400">{ko ? '공식 출처' : 'Sources'}</span>
+        {SUMMIT_SOURCES.map(s => (
+          <a
+            key={s.url}
+            href={s.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="t-tag px-2 py-1 rounded-lg bg-neutral-100 text-black hover:bg-black hover:text-white transition-colors"
+          >
+            🔗 {ko ? s.label : s.labelEn}
+          </a>
+        ))}
+      </div>
+
+    </div>
+  </section>
+);
+
+/** 런던 대정전·11월 19일 시스템 붕괴 음모론 — 가짜뉴스 박제 (2026-11-16~17 확인) */
+const BLACKOUT_FACTS = [
+  {
+    key: '01',
+    head: 'National Grid 공식 부인',
+    headEn: 'National Grid denies it',
+    fact: '“11월 19일 전국 정전을 예고하는 게시물은 거짓(false)” 공식 채널 성명(2026.11.16) · 전국 정전 예정 없음',
+    factEn: '“A false social media post… There is no outage expected” — official statement, 16 Nov 2026'
+  },
+  {
+    key: '02',
+    head: '영국 전력망 예비율 정상',
+    headEn: 'GB margin is normal',
+    fact: 'NESO 겨울 전망 2026/27 · 예비 마진 5.9GW(9.5%), 신뢰도 기준(LOLE 3시간/년) 이내',
+    factEn: 'NESO Winter Outlook 2026/27 · 5.9 GW (9.5%) de-rated margin, within the Reliability Standard'
+  },
+  {
+    key: '03',
+    head: '국지 사고를 대정전으로 과장',
+    headEn: 'A local fault sold as a blackout',
+    fact: '실제 런던 국지 정전은 가구 단위 — 보우(Bow) 수도관 파열(2026.7.9) 때 UK Power Networks가 159가구 정전, 약 3시간 내 대부분 복구',
+    factEn: 'Real London cuts are house-sized — after the Bow water-main burst (9 Jul 2026) UK Power Networks isolated 159 customers, nearly all restored within about three hours'
+  }
+];
+
+const BLACKOUT_SOURCES = [
+  { label: 'National Grid UK 공식', labelEn: 'National Grid UK', url: 'https://x.com/nationalgriduk' },
+  { label: 'Full Fact 팩트체크', labelEn: 'Full Fact check', url: 'https://fullfact.org/hoaxes/national-grid-warning-major-UK-blackout-outage-fake/' },
+  { label: 'NESO 겨울 전망', labelEn: 'NESO Winter Outlook', url: 'https://www.neso.energy/document/388726/download' },
+  { label: 'UKPN 보우 현장', labelEn: 'UKPN Bow incident', url: 'https://www.standard.co.uk/news/london/bow-flooding-homes-old-ford-road-thames-water-power-heatwave-b1289370.html' }
+];
+
+/** 피처드 2 — 가짜뉴스 박제 카드 */
+const FakeNewsArchive = ({ ko }: { ko: boolean }) => (
+  <section className="bg-white border border-[#dc2626]/30 rounded-2xl shadow-[var(--card-shadow)] overflow-hidden text-left">
+    <div className="flex items-center justify-between gap-2 bg-[#dc2626] px-3 py-1.5">
+      <span className="flex items-center gap-1.5 t-tag font-bold uppercase text-white">
+        <span className="w-1.5 h-1.5 rounded-full bg-white inline-block shrink-0" />
+        {ko ? '가짜뉴스 박제' : 'Fake news archived'}
+      </span>
+      <span translate="no" className="notranslate t-tag text-white/80 whitespace-nowrap">
+        2026.11.19 · UK
+      </span>
+    </div>
+
+    <div className="px-3 py-2.5 md:p-4">
+      <h2 className="t-section text-black">
+        {ko ? '런던 대정전 · 11월 19일 시스템 붕괴 음모론' : 'London blackout · the “19 November grid collapse” conspiracy'}
+      </h2>
+      <p className="t-sub text-neutral-500 mt-0.5">
+        {ko ? '조작 이미지 + 국지 사고 과장' : 'Forged notice plus inflated local faults'}
+      </p>
+
+      <div className="mt-1.5 rounded-lg bg-neutral-50 border border-neutral-200 px-2.5 py-2">
+        <p className="t-tag font-bold text-[#dc2626] uppercase">{ko ? '유포된 루머' : 'What was spread'}</p>
+        <p className="t-sub text-neutral-700 mt-0.5">
+          {ko
+            ? '“11월 19일 오후 4시, 영국 전국 대정전이 시작된다” — National Grid 공문으로 위장한 조작 이미지와 어두운 거리 영상이 함께 돌았습니다.'
+            : '“A nationwide UK blackout starts at 4pm on 19 November” — a forged National Grid notice spread together with dark street footage.'}
+        </p>
+      </div>
+
+      <div className="mt-1.5 rounded-lg bg-[#dc2626] px-2.5 py-2">
+        <p className="t-tag font-bold text-white uppercase">{ko ? '공식 팩트 판정' : 'Verdict'}</p>
+        <p className="t-card text-white mt-0.5">
+          {ko ? '❌ 거짓 — 조작 이미지 + 국지 사고 과장' : '❌ FALSE — forged image, local faults inflated'}
+        </p>
+      </div>
+
+      <div className="mt-2 space-y-1.5">
+        {BLACKOUT_FACTS.map(f => (
+          <div key={f.key} className="border-t border-neutral-200 pt-1.5">
+            <p className="t-card text-black flex items-start gap-1.5">
+              <span translate="no" className="notranslate font-mono t-tag text-neutral-400 shrink-0 pt-0.5">{f.key}</span>
+              <span className="min-w-0">{ko ? f.head : f.headEn}</span>
+            </p>
+            <p className="t-sub text-neutral-700 mt-0.5 pl-0">
+              {ko ? f.fact : f.factEn}
+            </p>
+          </div>
+        ))}
+      </div>
+
+      <div className="flex flex-wrap items-center gap-1.5 mt-2">
+        <span className="t-tag text-neutral-400">{ko ? '공식 출처' : 'Sources'}</span>
+        {BLACKOUT_SOURCES.map(s => (
+          <a
+            key={s.url}
+            href={s.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="t-tag px-2 py-1 rounded-lg bg-neutral-100 text-black hover:bg-black hover:text-white transition-colors"
+          >
+            🔗 {ko ? s.label : s.labelEn}
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+);
+
+/** 하단 — 케드헌 편대 링크 카드 */
+const FleetPromo = ({ ko }: { ko: boolean }) => (
+  <section className="bg-neutral-50 border border-[#E5E7EB] rounded-2xl px-3 py-2.5 text-left">
+    <p className="t-card text-black">
+      {ko ? '2,000만 Pi App Growth 흐름에 올라탄 케드헌 편대' : 'The Kedheon fleet, built for the 20M Pi App Growth wave'}
+    </p>
+    <p className="t-sub text-neutral-500 mt-0.5">
+      {ko
+        ? '중립 집계 원장 · 실물 경제 · 포인트 허브 — 파이 생태계에 세운 네 개의 앱.'
+        : 'Neutral counting ledgers, real-world economy and a points hub — four apps built on Pi.'}
+    </p>
+    <div className="grid grid-cols-2 gap-1.5 mt-1.5">
+      {FLEET_APPS.map(a => (
+        <a
+          key={a.name}
+          href={a.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-between gap-1.5 bg-white border border-neutral-200 rounded-lg px-2.5 py-1.5 hover:border-black transition-colors"
+        >
+          <span className="min-w-0">
+            <span translate="no" className="notranslate block t-btn font-bold text-black truncate">{a.name}</span>
+            <span className="block t-tag text-neutral-500 truncate">{ko ? a.ko : a.en}</span>
+          </span>
+          <span className="t-tag text-neutral-400 shrink-0">↗</span>
+        </a>
+      ))}
+    </div>
+  </section>
+);
+
 const SectionTitle = ({ title, desc }: { title: string; desc: string }) => (
   <div className="w-full border-t border-[#dc2626] pt-2.5 mt-1 mb-1.5 text-left">
     <h2 className="t-section text-neutral-900 uppercase border-l-[3px] border-neutral-900 pl-2">{title}</h2>
@@ -645,6 +915,11 @@ export default function FactFilterPage() {
         {/* TAB 1: AI FACT CHECK */}
         {activeTab === 'CHECK' && (
           <div className="space-y-3">
+            {/* 피처드 — 서밋 Day 1 공식 팩트체크 · 가짜뉴스 박제 · 케드헌 편대 */}
+            <SummitFactCheck ko={ko} />
+            <FakeNewsArchive ko={ko} />
+            <FleetPromo ko={ko} />
+
             <div className="bg-white border border-neutral-200 rounded-2xl p-4 md:p-5 space-y-3 text-left">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <h2 className="text-black t-card flex items-center gap-2">
