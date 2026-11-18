@@ -1102,7 +1102,7 @@ export default function VendorPage() {
             <input
               value={fPlace}
               onChange={e => setFPlace(e.target.value)}
-              placeholder="동네 · 거점 (예: 해운대 · Ikeja)"
+              placeholder={`${T('radiusHood')} · Ikeja`}
               aria-label={T('areaLabel')}
               className="w-full bg-white border border-neutral-300 rounded-lg px-2.5 py-2 t-tag text-black placeholder-neutral-400 shadow-xs outline-none focus:border-black focus:ring-2 focus:ring-black/10"
             />
@@ -1328,7 +1328,7 @@ export default function VendorPage() {
                   <input
                     value={area.district}
                     onChange={e => setArea(cur => ({ ...cur, district: e.target.value }))}
-                    placeholder="해운대 · Ikeja"
+                    placeholder={`${T('radiusHood')} · Ikeja`}
                     className="w-full bg-white border border-neutral-300 rounded-lg px-2 py-2 t-tag text-black placeholder-neutral-400 outline-none focus:border-black focus:ring-2 focus:ring-black/10"
                   />
                 </label>

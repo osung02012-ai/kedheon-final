@@ -180,9 +180,9 @@ export const STATUS_LABEL: Record<ListingStatus, UIKey> = {
 /** 판매자 등급 — 글자로만 표기한다(색만으로 뜻을 전하지 않는다). */
 export const TIER_BADGE: Record<Tier, string> = {
   0: 'L0 · KYC',
-  1: 'L1 · 사업자',
-  2: 'L2 · 장인',
-  3: 'L3 · B2B'
+  1: 'L1 · 🏢',
+  2: 'L2 · 🛠️',
+  3: 'L3 · 🚢'
 };
 
 /* ------------------------------------------------------------------
