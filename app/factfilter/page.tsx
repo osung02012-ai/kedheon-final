@@ -459,7 +459,7 @@ const FakeNewsArchive = ({ ko }: { ko: boolean }) => (
         {ko ? '런던 대정전 · 11월 19일 시스템 붕괴 음모론' : 'London blackout · the “19 November grid collapse” conspiracy'}
       </h2>
       <p className="t-sub text-neutral-500 mt-0.5">
-        {ko ? '조작 이미지 + 국지 사고 과장' : 'Forged notice plus inflated local faults'}
+        {ko ? '영국 전력망 공식 채널·실측 현황과 대조' : 'Checked against National Grid and UK Power Networks'}
       </p>
 
       <div className="mt-1.5 rounded-lg bg-neutral-50 border border-neutral-200 px-2.5 py-2">
@@ -474,7 +474,7 @@ const FakeNewsArchive = ({ ko }: { ko: boolean }) => (
       <div className="mt-1.5 rounded-lg bg-[#dc2626] px-2.5 py-2">
         <p className="t-tag font-bold text-white uppercase">{ko ? '공식 팩트 판정' : 'Verdict'}</p>
         <p className="t-card text-white mt-0.5">
-          {ko ? '❌ 거짓 — 조작 이미지 + 국지 사고 과장' : '❌ FALSE — forged image, local faults inflated'}
+          {ko ? '거짓 — 조작 이미지 + 국지 사고 과장' : 'FALSE — forged image, local faults inflated'}
         </p>
       </div>
 
