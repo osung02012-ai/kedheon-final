@@ -24,6 +24,7 @@ export default function AccRow({
   icon,
   title,
   titleNoTranslate = false,
+  badge,
   region,
   price,
   accent = 'plain',
@@ -35,6 +36,8 @@ export default function AccRow({
   icon?: string;
   title: string;
   titleNoTranslate?: boolean;
+  /** 상태 칩 — 제목 옆. 글자로 뜻을 전한다(색만 의존 금지) */
+  badge?: React.ReactNode;
   /** 지역(도시·국기) — 접힌 줄에 그대로 보인다 */
   region?: React.ReactNode;
   /** 조건(Pi) — 접힌 줄 오른쪽 */
@@ -80,6 +83,7 @@ export default function AccRow({
         >
           {title}
         </span>
+        {badge}
         {region && <span className="shrink-0 max-w-[86px] truncate t-tag text-gray-400">{region}</span>}
         {price && <span className="shrink-0 t-tag text-[#dc2626] whitespace-nowrap">{price}</span>}
         <span

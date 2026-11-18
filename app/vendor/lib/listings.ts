@@ -1,43 +1,87 @@
 import type { L10, UIKey } from './i18n';
 
 /* ------------------------------------------------------------------
- * Vendor — 3대 거래 레일과 초기 원장(seed)
+ * Vendor — 3대 거래 레일 · 상태기계 · 초기 원장(seed)
  *
- * 초기 목록은 한 지역에 몰리지 않게 인도(벵갈루루·뭄바이) · 아프리카(라고스·나이로비·
- * 아크라·요하네스버그·카이로) · 동남아(마닐라·자카르타·하노이·하이퐁) · 한국 ·
- * 미주(오스틴·상파울루)를 고르게 배치했다. 국가를 바꾸면 그 국가의 목록만 남는다.
+ * 0단계 원칙 (설계서 docs/vendor-karrot-upgrade.md 6~8장):
+ *  · 거래는 '상태'를 가진다 — 모집(open) → 예약중(reserved) → 완료(done).
+ *  · 이행(handoff)과 정산(settle)은 서로 다른 축이다. 같은 물건이라도 만나서 주면
+ *    즉시 정산, 택배면 수령 확인 후, 컨테이너면 30/70 분할이다.
+ *  · 신뢰는 '측정값'만 적는다. 완료율(dev) 같은 지어낸 숫자는 삭제했고,
+ *    시드(예시) 데이터는 발자국 0 · 실거래 인증 0 으로 표시한다.
+ *  · 보관형 에스크로는 아직 작동하지 않는다 → 화면에는 '준비 중'으로만 쓴다.
+ * 초기 목록은 인도·아프리카·동남아·한국·미주에 고르게 배치했다.
  * ------------------------------------------------------------------ */
 
 export type RailKey = 'WORK' | 'LOCAL' | 'B2B';
-export type DealMode = 'pi' | 'barter' | 'quote';
+
+/** 레일 안의 두 방향. WORK는 '일감 올리기 ↔ 내 기술·시간' 양방향이다. */
+export type SideKey = 'gig' | 'skill' | 'sell' | 'want' | 'free' | 'rfq';
+
+/** 거래방식(정산 축). escrow는 여기 없다 — 아직 '준비 중'이기 때문이다. */
+export type DealMode = 'pi' | 'milestone' | 'barter' | 'free' | 'offer';
+
+/** 이행 축 */
+export type Handoff = 'meet' | 'delivery' | 'freight' | 'remote';
+
+export type ListingStatus = 'open' | 'reserved' | 'done';
+
+/** 판매자 검증 등급 (L0 Pi KYC 개인 → L3 B2B 법인) */
+export type Tier = 0 | 1 | 2 | 3;
 
 export type TagKey =
   | 'translate' | 'data' | 'repair' | 'dev' | 'support'
   | 'goods' | 'barter' | 'equip' | 'energy' | 'telecom' | 'agri';
 
+/** 수량 구간 단가 (B2B) */
+export type PriceBreak = { label: string; price: number };
+
 export type Listing = {
   id: string;
   rail: RailKey;
+  side: SideKey;
   /** ISO 3166-1 alpha-2, 'GLOBAL' */
   country: string;
   /** 도시·지역 — 고유명사라 번역하지 않는다 */
   city: string;
+  /** 동네·거점 (생활권 반경 '동네'의 기준) */
+  place?: string;
   tag: TagKey;
   title: L10 | string;
   detail: L10 | string;
+  /** 이행 조건(배송비·출고·반품 / MOQ·선적항·검수 / 납품물·마일스톤) */
+  terms?: string;
   mode: DealMode;
+  handoff: Handoff;
   /** 고정가 */
   pi?: number;
   /** 범위 (0.5~50 Pi 같은 소액 일감) */
   piMin?: number;
   piMax?: number;
-  /** 발자국 완료율(%) — 신뢰 이력 */
-  dev: number;
-  escrow?: boolean;
-  /** 올라온 시각 표시 (2h · 1d) */
-  posted: string;
-  /** 내가 이 기기에서 올린 글 */
+  /** 수량·규모 표기 (500건 · ×5대) */
+  qty?: string;
+  priceBreaks?: PriceBreak[];
+  moq?: number;
+  /** 보관형 에스크로가 아직 '준비 중'임을 표기 (기능 아님) */
+  escrowSoon?: boolean;
+  tier: Tier;
+  status: ListingStatus;
+  /** 올라온 시각 (ISO) — 상대 시간은 ageLabel()이 계산한다 */
+  createdAt: string;
+  /** 시드(예시) 데이터 — 실거래가 아니다 */
+  demo?: boolean;
+  /** 이 기기에서 올린 글 */
   mine?: boolean;
+  bumpCount?: number;
+  bumpAt?: string;
+  reservedUntil?: string;
+  /* ── 신뢰 원장: 정산까지 끝난 거래만 센다 (시드는 0) ── */
+  dealsDone: number;
+  dealsClosed: number;
+  reviews: number;
+  stars?: number;
+  reDeal?: number;
+  disputes: number;
 };
 
 export const TAGS: Record<TagKey, { icon: string; label: L10 }> = {
@@ -93,7 +137,78 @@ export const RAILS: { key: RailKey; icon: string; title: UIKey; short: UIKey; de
   { key: 'B2B', icon: '🛰️', title: 'rail3', short: 'rail3S', desc: 'rail3D' }
 ];
 
-export const SEED_LISTINGS: Listing[] = [
+
+/** 레일별 서브칩 — 상시 요소 2번째 줄. WORK는 양방향(일감 ↔ 내 기술·시간)이다. */
+export const RAIL_SIDES: Record<RailKey, { key: SideKey; label: UIKey }[]> = {
+  WORK: [
+    { key: 'gig', label: 'sideWork' },
+    { key: 'skill', label: 'sideSkill' }
+  ],
+  LOCAL: [
+    { key: 'sell', label: 'sideSell' },
+    { key: 'want', label: 'sideWant' },
+    { key: 'free', label: 'sideFree' }
+  ],
+  B2B: [
+    { key: 'sell', label: 'sideSell' },
+    { key: 'rfq', label: 'sideRfq' }
+  ]
+};
+
+export const HANDOFFS: { key: Handoff; label: UIKey; icon: string }[] = [
+  { key: 'meet', label: 'handoffMeet', icon: '🤝' },
+  { key: 'delivery', label: 'handoffDelivery', icon: '📦' },
+  { key: 'freight', label: 'handoffFreight', icon: '🚢' },
+  { key: 'remote', label: 'handoffRemote', icon: '💻' }
+];
+
+/** 거래방식 5종 — 정산 축. 보관형 에스크로는 목록에 없다(준비 중). */
+export const DEAL_MODES: { key: DealMode; label: UIKey }[] = [
+  { key: 'pi', label: 'modePi' },
+  { key: 'milestone', label: 'settleMilestone' },
+  { key: 'barter', label: 'modeBarter' },
+  { key: 'free', label: 'sideFree' },
+  { key: 'offer', label: 'modeOffer' }
+];
+
+export const STATUS_LABEL: Record<ListingStatus, UIKey> = {
+  open: 'statusOpen',
+  reserved: 'statusReserved',
+  done: 'statusDone'
+};
+
+/** 판매자 등급 — 글자로만 표기한다(색만으로 뜻을 전하지 않는다). */
+export const TIER_BADGE: Record<Tier, string> = {
+  0: 'L0 · KYC',
+  1: 'L1 · 사업자',
+  2: 'L2 · 장인',
+  3: 'L3 · B2B'
+};
+
+/* ------------------------------------------------------------------
+ * 시드 원장 — 시드 자체는 '예시'다. 제목·설명은 10개국어 원문을 그대로 두고,
+ * 상태·이행·정산·등급 같은 구조 정보만 SEED_META에서 붙인다.
+ * ------------------------------------------------------------------ */
+
+type RawSeed = {
+  id: string;
+  rail: RailKey;
+  country: string;
+  city: string;
+  tag: TagKey;
+  title: L10 | string;
+  detail: L10 | string;
+  mode: 'pi' | 'barter' | 'quote';
+  pi?: number;
+  piMin?: number;
+  piMax?: number;
+  /** 과거 필드 — 신뢰는 이제 원장에서만 계산하므로 쓰지 않는다 */
+  dev: number;
+  escrow?: boolean;
+  posted: string;
+};
+
+const SEED_RAW: RawSeed[] = [
   /* ── 👷 인력·소액 일감 ─────────────────────────────────────────── */
   {
     id: 'wk-in-1', rail: 'WORK', country: 'IN', city: 'Bengaluru', tag: 'data',
@@ -562,16 +677,16 @@ export const SEED_LISTINGS: Listing[] = [
       'Penawaran inverter industri 100 kW ×5'
     ],
     detail: [
-      '벵갈루루 공장 직접 공급. 설치·시운전 포함, 90일 보증. 에스크로 정산.',
-      'Supplied direct from a Bengaluru plant. Install, commissioning and 90-day warranty; escrow settlement.',
-      '班加罗尔工厂直供，含安装调试与 90 天保修，托管结算。',
-      'ベンガルール工場から直送。設置・試運転込み、90日保証。エスクロー精算。',
-      'Suministro directo desde planta de Bangalore. Instalación, puesta en marcha y garantía de 90 días; pago en escrow.',
-      'Cung cấp trực tiếp từ nhà máy Bengaluru. Gồm lắp đặt, chạy thử, bảo hành 90 ngày; thanh toán ký quỹ.',
-      'Fourni directement par l’usine de Bangalore. Installation, mise en service et garantie 90 jours ; règlement sous séquestre.',
-      'Fornecido direto da fábrica em Bengaluru. Instalação, comissionamento e garantia de 90 dias; pagamento em escrow.',
-      'Поставка напрямую с завода в Бенгалуру. Монтаж, пуск, гарантия 90 дней; расчёт через эскроу.',
-      'Dipasok langsung dari pabrik Bengaluru. Termasuk pemasangan, uji jalan, garansi 90 hari; pembayaran escrow.'
+      '벵갈루루 공장 직접 공급. 설치·시운전 포함, 90일 보증. 분할 지급(30/70).',
+      'Supplied direct from a Bengaluru plant. Install, commissioning and 90-day warranty; split payment (30/70).',
+      '班加罗尔工厂直供，含安装调试与 90 天保修，分期付款（30/70）。',
+      'ベンガルール工場から直送。設置・試運転込み、90日保証。分割支払い(30/70)。',
+      'Suministro directo desde planta de Bangalore. Instalación, puesta en marcha y garantía de 90 días; pago dividido (30/70).',
+      'Cung cấp trực tiếp từ nhà máy Bengaluru. Gồm lắp đặt, chạy thử, bảo hành 90 ngày; thanh toán chia đợt (30/70).',
+      'Fourni directement par l’usine de Bangalore. Installation, mise en service et garantie 90 jours ; paiement échelonné (30/70).',
+      'Fornecido direto da fábrica em Bengaluru. Instalação, comissionamento e garantia de 90 dias; pagamento dividido (30/70).',
+      'Поставка напрямую с завода в Бенгалуру. Монтаж, пуск, гарантия 90 дней; оплата частями (30/70).',
+      'Dipasok langsung dari pabrik Bengaluru. Termasuk pemasangan, uji jalan, garansi 90 hari; pembayaran bertahap (30/70).'
     ],
     mode: 'pi', pi: 900, dev: 97, escrow: true, posted: '5h'
   },
@@ -730,16 +845,16 @@ export const SEED_LISTINGS: Listing[] = [
       'Bandwidth satelit 36 MHz (tahunan)'
     ],
     detail: [
-      'C·Ku 밴드 선택, 아시아·아프리카 커버리지. 계약은 에스크로, 월 단위 정산.',
-      'C or Ku band, Asia and Africa coverage. Contract held in escrow, settled monthly.',
-      '可选 C 或 Ku 波段，覆盖亚洲与非洲，合同托管，按月结算。',
-      'Cバンド・Kuバンド選択可、アジア・アフリカをカバー。契約はエスクロー、月次精算。',
-      'Banda C o Ku, cobertura Asia y África. Contrato en escrow, liquidación mensual.',
-      'Chọn băng C hoặc Ku, phủ châu Á và châu Phi. Hợp đồng ký quỹ, thanh toán theo tháng.',
-      'Bande C ou Ku, couverture Asie et Afrique. Contrat sous séquestre, règlement mensuel.',
-      'Banda C ou Ku, cobertura Ásia e África. Contrato em escrow, liquidação mensal.',
-      'Диапазон C или Ku, покрытие Азии и Африки. Договор через эскроу, расчёт ежемесячно.',
-      'Pilih pita C atau Ku, cakupan Asia dan Afrika. Kontrak escrow, penyelesaian bulanan.'
+      'C·Ku 밴드 선택, 아시아·아프리카 커버리지. 계약 후 월 단위 정산.',
+      'C or Ku band, Asia and Africa coverage. Contract with monthly settlement.',
+      '可选 C 或 Ku 波段，覆盖亚洲与非洲，签约后按月结算。',
+      'Cバンド・Kuバンド選択可、アジア・アフリカをカバー。契約後の月次精算。',
+      'Banda C o Ku, cobertura Asia y África. Contrato con liquidación mensual.',
+      'Chọn băng C hoặc Ku, phủ châu Á và châu Phi. Hợp đồng và thanh toán theo tháng.',
+      'Bande C ou Ku, couverture Asie et Afrique. Contrat avec règlement mensuel.',
+      'Banda C ou Ku, cobertura Ásia e África. Contrato com liquidação mensal.',
+      'Диапазон C или Ku, покрытие Азии и Африки. Договор с ежемесячным расчётом.',
+      'Pilih pita C atau Ku, cakupan Asia dan Afrika. Kontrak dengan penyelesaian bulanan.'
     ],
     mode: 'pi', pi: 8800, dev: 96, escrow: true, posted: '3d'
   },
@@ -770,5 +885,253 @@ export const SEED_LISTINGS: Listing[] = [
       'Tiga desa di luar Nairobi. Termasuk meter dan aplikasi pengelola; pemeliharaan tiga tahun.'
     ],
     mode: 'pi', pi: 320, dev: 92, escrow: true, posted: '2d'
+  },
+
+  /* ── 추가: 양방향 인력(내 기술·시간) · 구해요 · 무료 나눔 ────────── */
+  {
+    id: 'wk-tal-in-1', rail: 'WORK', country: 'IN', city: 'Bengaluru', tag: 'translate',
+    title: [
+      '힌디·영어 번역·검수 (벵갈루루, 원격)',
+      'Hindi–English translator & proofreader (Bengaluru, remote)',
+      '印地语—英语翻译与校对（班加罗尔，远程）',
+      'ヒンディー語—英語の翻訳・校正（ベンガルール、リモート）',
+      'Traductor y corrector hindi–inglés (Bangalore, remoto)',
+      'Dịch và hiệu đính Hindi–Anh (Bengaluru, từ xa)',
+      'Traducteur et relecteur hindi–anglais (Bangalore, à distance)',
+      'Tradutor e revisor hindi–inglês (Bengaluru, remoto)',
+      'Переводчик и редактор хинди–английский (Бенгалуру, удалённо)',
+      'Penerjemah & penyunting Hindi–Inggris (Bengaluru, jarak jauh)'
+    ],
+    detail: [
+      '하루 3,000단어. 법률·의료 문서 경험 5년. 1,000단어당 2–3 Pi.',
+      '3,000 words a day. Five years of legal and medical documents. 2–3 Pi per 1,000 words.',
+      '每天 3,000 词，5 年法律与医疗文件经验，每千词 2–3 Pi。',
+      '1日3,000語。法律・医療文書の経験5年。1,000語あたり2〜3 Pi。',
+      '3.000 palabras al día. Cinco años en documentos legales y médicos. 2–3 Pi por 1.000 palabras.',
+      '3.000 từ mỗi ngày. Năm năm tài liệu pháp lý và y tế. 2–3 Pi mỗi 1.000 từ.',
+      '3 000 mots par jour. Cinq ans de documents juridiques et médicaux. 2–3 Pi les 1 000 mots.',
+      '3.000 palavras por dia. Cinco anos em documentos jurídicos e médicos. 2–3 Pi por 1.000 palavras.',
+      '3000 слов в день. Пять лет юридических и медицинских текстов. 2–3 Pi за 1000 слов.',
+      '3.000 kata per hari. Lima tahun dokumen hukum dan medis. 2–3 Pi per 1.000 kata.'
+    ],
+    mode: 'pi', piMin: 2, piMax: 3, dev: 0, posted: ''
+  },
+  {
+    id: 'wk-tal-ng-1', rail: 'WORK', country: 'NG', city: 'Lagos', tag: 'repair',
+    title: [
+      '스마트폰 수리 기술자 (라고스, 출장)',
+      'Phone repair technician (Lagos, on site)',
+      '手机维修技师（拉各斯，上门）',
+      'スマホ修理技術者（ラゴス、出張）',
+      'Técnico de reparación de móviles (Lagos, a domicilio)',
+      'Kỹ thuật viên sửa điện thoại (Lagos, tận nơi)',
+      'Technicien de réparation de téléphones (Lagos, à domicile)',
+      'Técnico de reparo de celulares (Lagos, em domicílio)',
+      'Мастер по ремонту телефонов (Лагос, с выездом)',
+      'Teknisi servis ponsel (Lagos, panggilan)'
+    ],
+    detail: [
+      '액정·배터리·충전 단자. 부품 실비 + 공임 8 Pi. 당일 방문.',
+      'Screens, batteries, charging ports. Parts at cost plus 8 Pi labour. Same-day visit.',
+      '屏幕、电池、充电口。配件实价加工费 8 Pi，当日上门。',
+      '画面・バッテリー・充電端子。部品実費＋工賃8 Pi。当日訪問。',
+      'Pantallas, baterías y puertos de carga. Piezas a coste más 8 Pi de mano de obra. Visita el mismo día.',
+      'Màn hình, pin, chân sạc. Linh kiện giá gốc cộng 8 Pi công. Đến trong ngày.',
+      'Écrans, batteries, connecteurs. Pièces au prix coûtant + 8 Pi de main-d’œuvre. Visite le jour même.',
+      'Telas, baterias e conectores. Peças pelo custo mais 8 Pi de mão de obra. Visita no mesmo dia.',
+      'Экраны, АКБ, разъёмы. Детали по себестоимости + 8 Pi за работу. Выезд в тот же день.',
+      'Layar, baterai, port pengisian. Part harga pokok plus 8 Pi jasa. Datang hari yang sama.'
+    ],
+    mode: 'pi', pi: 8, dev: 0, posted: ''
+  },
+  {
+    id: 'lc-kr-2', rail: 'LOCAL', country: 'KR', city: '부산', tag: 'goods',
+    title: [
+      '구해요 — 9kg 세탁기 (부산 해운대)',
+      'Wanted — 9 kg washing machine (Haeundae, Busan)',
+      '求购 — 9 公斤洗衣机（釜山海云台）',
+      '求む — 9kg洗濯機（釜山・海雲台）',
+      'Busco — lavadora de 9 kg (Haeundae, Busan)',
+      'Cần mua — máy giặt 9 kg (Haeundae, Busan)',
+      'Recherche — lave-linge 9 kg (Haeundae, Busan)',
+      'Procuro — máquina de lavar 9 kg (Haeundae, Busan)',
+      'Куплю — стиральную машину 9 кг (Хаундэ, Пусан)',
+      'Cari — mesin cuci 9 kg (Haeundae, Busan)'
+    ],
+    detail: [
+      '이사 오면서 필요해졌습니다. 5년 이내 제품, 시운전 확인 후 15 Pi까지. 직접 가져갑니다.',
+      'Needed after moving in. Up to 15 Pi for a unit under five years old, tested before payment. I collect.',
+      '搬家后需要。五年以内机器、试机确认后最高 15 Pi，自取。',
+      '引っ越しで必要になりました。5年以内の製品、試運転確認後に15 Piまで。こちらが引き取りに伺います。',
+      'Me hace falta tras la mudanza. Hasta 15 Pi por una unidad de menos de cinco años, probada antes de pagar. Yo la recojo.',
+      'Cần sau khi chuyển nhà. Tối đa 15 Pi cho máy dưới 5 năm, chạy thử trước khi trả. Tôi tự vận chuyển.',
+      'Besoin après un déménagement. Jusqu’à 15 Pi pour un appareil de moins de cinq ans, testé avant paiement. Je viens le chercher.',
+      'Preciso após a mudança. Até 15 Pi por um aparelho com menos de cinco anos, testado antes do pagamento. Eu retiro.',
+      'Нужна после переезда. До 15 Pi за аппарат не старше пяти лет, с проверкой до оплаты. Заберу сам.',
+      'Butuh setelah pindahan. Hingga 15 Pi untuk unit di bawah lima tahun, dites sebelum bayar. Saya ambil sendiri.'
+    ],
+    mode: 'pi', pi: 15, dev: 0, posted: ''
+  },
+  {
+    id: 'lc-kr-3', rail: 'LOCAL', country: 'KR', city: '부산', tag: 'goods',
+    title: [
+      '무료 나눔 — 이삿짐 박스 20개 (부산 수영구)',
+      'Free — 20 moving boxes (Suyeong, Busan)',
+      '免费赠送 — 搬家纸箱 20 个（釜山水营区）',
+      '無料で譲ります — 引っ越し用段ボール20個（釜山・水営区）',
+      'Gratis — 20 cajas de mudanza (Suyeong, Busan)',
+      'Tặng miễn phí — 20 thùng carton chuyển nhà (Suyeong, Busan)',
+      'Don — 20 cartons de déménagement (Suyeong, Busan)',
+      'Doação — 20 caixas de mudança (Suyeong, Busan)',
+      'Отдам даром — 20 коробок для переезда (Суён, Пусан)',
+      'Gratis — 20 kardus pindahan (Suyeong, Busan)'
+    ],
+    detail: [
+      '한 번 쓴 튼튼한 박스입니다. 오늘 저녁까지 가져가실 분. 문 앞까지 내드립니다.',
+      'Sturdy boxes, used once. Take them by tonight; I will carry them to the door.',
+      '结实的纸箱，用过一次。今晚前自取，我送到门口。',
+      '丈夫な段ボール、一度だけ使用。今夜までに取りに来られる方。玄関まで運びます。',
+      'Cajas resistentes, usadas una vez. Antes de esta noche; las bajo a la puerta.',
+      'Thùng chắc, dùng một lần. Nhận trước tối nay; tôi mang ra cửa.',
+      'Cartons solides, utilisés une fois. À retirer avant ce soir ; je les descends à la porte.',
+      'Caixas resistentes, usadas uma vez. Retirada até hoje à noite; levo até a porta.',
+      'Прочные коробки, использовались один раз. Забрать до вечера; вынесу к двери.',
+      'Kardus kokoh, dipakai sekali. Diambil sebelum malam ini; saya bawa sampai depan pintu.'
+    ],
+    mode: 'pi', dev: 0, posted: ''
   }
 ];
+
+
+type SeedMeta = {
+  side: SideKey;
+  handoff: Handoff;
+  tier: Tier;
+  /** 몇 시간 전에 올라온 글인지 */
+  hours: number;
+  place?: string;
+  mode?: DealMode;
+  qty?: string;
+  priceBreaks?: PriceBreak[];
+  moq?: number;
+  status?: ListingStatus;
+};
+
+const SEED_META: Record<string, SeedMeta> = {
+  /* 👷 인력 — 일감 8 · 내 기술·시간 2 */
+  'wk-in-1': { side: 'gig', handoff: 'remote', tier: 0, hours: 2, place: 'Bengaluru', qty: '500건' },
+  'wk-ng-1': { side: 'gig', handoff: 'meet', tier: 0, hours: 5, place: 'Ikeja', qty: '1건' },
+  'wk-ke-1': { side: 'gig', handoff: 'remote', tier: 0, hours: 24, place: 'Nairobi', qty: '2,000단어' },
+  'wk-ph-1': { side: 'gig', handoff: 'remote', tier: 0, hours: 24, place: 'Manila', qty: '20시간/주' },
+  'wk-kr-1': { side: 'gig', handoff: 'remote', tier: 1, hours: 3, place: '서울', qty: '10쪽' },
+  'wk-vn-1': { side: 'gig', handoff: 'meet', tier: 0, hours: 6, place: 'Hanoi', qty: '1일' },
+  'wk-eg-1': { side: 'gig', handoff: 'remote', tier: 0, hours: 9, place: 'Cairo', qty: '10분' },
+  'wk-us-1': { side: 'gig', handoff: 'remote', tier: 2, hours: 24, place: 'Austin', qty: '3일' },
+  'wk-tal-in-1': { side: 'skill', handoff: 'remote', tier: 0, hours: 6, place: 'Bengaluru', qty: '주 20시간' },
+  'wk-tal-ng-1': { side: 'skill', handoff: 'meet', tier: 0, hours: 18, place: 'Lagos', qty: '1일' },
+
+  /* 🥕 동네 — 직거래 6 · 구해요 1 · 나눔 1 */
+  'lc-in-1': { side: 'sell', handoff: 'meet', tier: 0, hours: 4, place: 'Andheri' },
+  'lc-ng-1': { side: 'sell', handoff: 'meet', tier: 0, hours: 7, place: 'Surulere' },
+  'lc-ke-1': { side: 'sell', handoff: 'meet', tier: 0, hours: 24, place: 'Kasarani' },
+  'lc-gh-1': { side: 'sell', handoff: 'meet', tier: 0, hours: 24, place: 'Madina', mode: 'barter' },
+  'lc-za-1': { side: 'sell', handoff: 'meet', tier: 0, hours: 48, place: 'Soweto' },
+  'lc-id-1': { side: 'sell', handoff: 'meet', tier: 0, hours: 48, place: 'Jakarta Selatan' },
+  'lc-kr-1': { side: 'sell', handoff: 'meet', tier: 0, hours: 3, place: '해운대' },
+  'lc-br-1': { side: 'sell', handoff: 'meet', tier: 0, hours: 24, place: 'Vila Madalena', mode: 'barter' },
+  'lc-kr-2': { side: 'want', handoff: 'meet', tier: 0, hours: 9, place: '해운대' },
+  'lc-kr-3': { side: 'free', handoff: 'meet', tier: 0, hours: 12, place: '수영구', mode: 'free' },
+
+  /* 🛰️ B2B — 매물 7 · 견적요청(RFQ) 1 */
+  'b2-in-1': {
+    side: 'sell', handoff: 'freight', tier: 3, hours: 5, place: 'Bengaluru', mode: 'milestone',
+    moq: 5,
+    priceBreaks: [
+      { label: '1–4', price: 900 },
+      { label: '5–9', price: 870 },
+      { label: '10+', price: 840 }
+    ]
+  },
+  'b2-ng-1': { side: 'sell', handoff: 'delivery', tier: 3, hours: 24, place: 'Ikeja', mode: 'milestone' },
+  'b2-za-1': { side: 'sell', handoff: 'delivery', tier: 2, hours: 24, place: 'Johannesburg', mode: 'milestone' },
+  'b2-eg-1': { side: 'sell', handoff: 'freight', tier: 2, hours: 48, place: 'Cairo', mode: 'milestone' },
+  'b2-kr-1': { side: 'rfq', handoff: 'freight', tier: 3, hours: 4, place: '남동공단', mode: 'offer' },
+  'b2-vn-1': { side: 'sell', handoff: 'freight', tier: 3, hours: 48, place: 'Hai Phong', mode: 'milestone' },
+  'b2-global-1': { side: 'sell', handoff: 'remote', tier: 3, hours: 72, place: 'Asia · Africa', mode: 'milestone' },
+  'b2-ke-1': { side: 'sell', handoff: 'freight', tier: 3, hours: 48, place: 'Nairobi', mode: 'milestone' }
+};
+
+const HOUR = 3600_000;
+
+/**
+ * 시드 → 원장 행. dev·posted 같은 지어낸 값은 여기서 버린다.
+ * 시드는 전부 demo: true 이고 발자국·실거래 인증이 0이다(측정된 적이 없으므로).
+ */
+export const SEED_LISTINGS: Listing[] = SEED_RAW.map(raw => {
+  const fallback: SeedMeta = {
+    side: raw.rail === 'WORK' ? 'gig' : 'sell',
+    handoff: 'meet',
+    tier: 0,
+    hours: 24
+  };
+  const m = SEED_META[raw.id] ?? fallback;
+  return {
+    id: raw.id,
+    rail: raw.rail,
+    side: m.side,
+    country: raw.country,
+    city: raw.city,
+    place: m.place,
+    tag: raw.tag,
+    title: raw.title,
+    detail: raw.detail,
+    mode: m.mode ?? (raw.mode === 'quote' ? 'offer' : raw.mode),
+    handoff: m.handoff,
+    pi: raw.pi,
+    piMin: raw.piMin,
+    piMax: raw.piMax,
+    qty: m.qty,
+    priceBreaks: m.priceBreaks,
+    moq: m.moq,
+    escrowSoon: raw.escrow === true,
+    tier: m.tier,
+    status: m.status ?? 'open',
+    createdAt: new Date(Date.now() - m.hours * HOUR).toISOString(),
+    demo: true,
+    dealsDone: 0,
+    dealsClosed: 0,
+    reviews: 0,
+    disputes: 0
+  };
+});
+
+/* ------------------------------------------------------------------
+ * 표시 도우미
+ * ------------------------------------------------------------------ */
+
+/** 올라온 지 얼마나 됐는지 — '2h' · '3d' (시드도 실제 시각에서 계산한다). */
+export function ageLabel(iso: string | undefined): string {
+  if (!iso) return '—';
+  const diff = Date.now() - new Date(iso).getTime();
+  if (!Number.isFinite(diff) || diff < 0) return 'now';
+  const min = Math.floor(diff / 60000);
+  if (min < 60) return `${Math.max(1, min)}m`;
+  const h = Math.floor(min / 60);
+  if (h < 24) return `${h}h`;
+  return `${Math.floor(h / 24)}d`;
+}
+
+/** 예약 지속 시간 — 상대가 24시간 응답하지 않으면 자동으로 모집중으로 돌아간다. */
+export const RESERVE_HOURS = 24;
+
+/** 끌올은 open 상태에서만, 7일에 3회까지. */
+export const BUMP_LIMIT = 3;
+export const BUMP_WINDOW = 7 * 24 * HOUR;
+
+/** 5단계 이행 타임라인 — 이행 방식마다 실제로 쓰는 칸이 다르다. */
+export const DEAL_STAGES: Record<Handoff, UIKey[]> = {
+  meet: ['statusReserved', 'handoffMeet', 'statusDone'],
+  delivery: ['statusReserved', 'handoffDelivery', 'statusDone'],
+  freight: ['statusReserved', 'handoffFreight', 'statusDone'],
+  remote: ['statusReserved', 'handoffRemote', 'statusDone']
+};

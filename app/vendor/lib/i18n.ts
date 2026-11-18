@@ -128,8 +128,8 @@ export const UI = {
     'phí giao dịch trực tiếp 0%', '0 % de commission directe', '0% de taxa direta', '0% комиссии при прямой сделке', 'biaya transaksi langsung 0%'
   ],
   tagEscrow: [
-    '에스크로 정산', 'Escrow settlement', '托管结算', 'エスクロー精算', 'Pago en escrow',
-    'Thanh toán ký quỹ', 'Règlement sous séquestre', 'Liquidação em escrow', 'Расчёт через эскроу', 'Penyelesaian escrow'
+    'Pi 에스크로 · 준비 중', 'Pi escrow · not live yet', 'Pi 托管 · 准备中', 'Piエスクロー・準備中', 'Escrow Pi · aún no activo',
+    'Ký quỹ Pi · chưa mở', 'Séquestre Pi · pas encore actif', 'Escrow Pi · ainda não ativo', 'Эскроу Pi · пока не работает', 'Escrow Pi · belum aktif'
   ],
   statCountries: ['거래 국가', 'Countries', '交易国家', '取引国', 'Países', 'Quốc gia', 'Pays', 'Países', 'Стран', 'Negara'],
   statCountriesS: ['국가', 'Countries', '国家', '国', 'Países', 'Nước', 'Pays', 'Países', 'Страны', 'Negara'],
@@ -223,16 +223,16 @@ export const UI = {
   rail3: ['B2B·대형 실물', 'B2B & heavy goods', 'B2B·大型实物', 'B2B・大型実物', 'B2B y bienes pesados', 'B2B & hàng lớn', 'B2B et biens lourds', 'B2B e bens grandes', 'B2B и крупные товары', 'B2B & barang besar'],
   rail3S: ['B2B', 'B2B', 'B2B', 'B2B', 'B2B', 'B2B', 'B2B', 'B2B', 'B2B', 'B2B'],
   rail3D: [
-    '설비·장비·통신·위성 등 견적·에스크로',
-    'Equipment, machinery, telecom, satellite — quote & escrow',
-    '设备、机械、通信、卫星 报价与托管',
-    '設備・機械・通信・衛星 見積・エスクロー',
-    'Equipos, maquinaria, telecom, satélite — cotización y escrow',
-    'Thiết bị, máy móc, viễn thông, vệ tinh — báo giá & ký quỹ',
-    'Équipements, machines, télécom, satellite — devis et séquestre',
-    'Equipamentos, máquinas, telecom, satélite — cotação e escrow',
-    'Оборудование, техника, связь, спутники — расчёт и эскроу',
-    'Peralatan, mesin, telekomunikasi, satelit — penawaran & escrow'
+    '설비·장비·통신·위성 등 견적·분할 지급',
+    'Equipment, machinery, telecom, satellite — quote & staged payment',
+    '设备、机械、通信、卫星 报价与分期',
+    '設備・機械・通信・衛星 見積・分割払い',
+    'Equipos, maquinaria, telecom, satélite — cotización y pago por etapas',
+    'Thiết bị, máy móc, viễn thông, vệ tinh — báo giá & trả theo đợt',
+    'Équipements, machines, télécom, satellite — devis et paiement échelonné',
+    'Equipamentos, máquinas, telecom, satélite — cotação e pagamento por etapas',
+    'Оборудование, техника, связь, спутники — расчёт и оплата частями',
+    'Peralatan, mesin, telekomunikasi, satelit — penawaran & bayar bertahap'
   ],
 
   listHint: [
@@ -276,11 +276,16 @@ export const UI = {
     'Следы выполнены на {n}%', 'Jejak selesai {n}%'
   ],
   escrowLine: [
-    '에스크로 정산 가능 · 인도 확인 후 지급', 'Escrow available — released after delivery is confirmed',
-    '可托管结算 · 确认交付后付款', 'エスクロー可 · 受け渡し確認後に支払',
-    'Escrow disponible: se paga al confirmar la entrega', 'Có ký quỹ: thanh toán sau khi xác nhận giao hàng',
-    'Séquestre possible : paiement après livraison confirmée', 'Escrow disponível: pagamento após confirmar a entrega',
-    'Доступен эскроу — оплата после подтверждения поставки', 'Escrow tersedia — dibayar setelah pengiriman dikonfirmasi'
+    'Pi 에스크로(수령 후 정산)는 준비 중 · 지금은 30/70 분할 지급',
+    'Pi escrow (paid on receipt) is not live yet — for now it is a 30/70 split',
+    'Pi 托管（收货后结算）准备中 · 现在为 30/70 分期',
+    'Piエスクロー（受取後精算）は準備中・現在は30/70分割払い',
+    'El escrow Pi (pago al recibir) aún no está activo: por ahora es un pago 30/70',
+    'Ký quỹ Pi (trả sau khi nhận) chưa mở — hiện chia 30/70',
+    'Le séquestre Pi (paiement à réception) n’est pas encore actif : pour l’instant 30/70',
+    'O escrow Pi (pago no recebimento) ainda não está ativo: por ora é 30/70',
+    'Эскроу Pi (оплата после получения) пока не работает — сейчас оплата 30/70',
+    'Escrow Pi (bayar saat terima) belum aktif — sekarang dibagi 30/70'
   ],
   directLine: [
     'Pi 직거래 · 수수료 0%', 'Direct Pi deal · 0% fee', 'Pi 直连交易 · 0% 手续费', 'Pi直接取引 · 手数料0%',
@@ -336,21 +341,21 @@ export const UI = {
   postErrTitle: ['품목·일감을 입력해 주세요.', 'Please enter the item or job.', '请填写物品或活。', '品目・案件を入力してください。', 'Escribe el artículo o encargo.', 'Vui lòng nhập món đồ hoặc việc.', 'Indiquez l’objet ou la mission.', 'Informe o item ou a tarefa.', 'Укажите товар или работу.', 'Isi barang atau pekerjaan.'],
   postErrCity: ['도시·지역을 입력해 주세요.', 'Please enter the city or area.', '请填写城市或地区。', '都市・地域を入力してください。', 'Escribe la ciudad o zona.', 'Vui lòng nhập thành phố hoặc khu vực.', 'Indiquez la ville ou la zone.', 'Informe a cidade ou região.', 'Укажите город или район.', 'Isi kota atau wilayah.'],
   postNote: [
-    '등록한 거래는 이 기기(localStorage)에 저장됩니다.',
-    'Listings you post are stored on this device (localStorage).',
-    '发布的交易保存在本设备（localStorage）。',
-    '投稿した取引はこの端末に保存されます（localStorage）。',
-    'Los avisos que publicas se guardan en este dispositivo (localStorage).',
-    'Tin bạn đăng được lưu trên thiết bị này (localStorage).',
-    'Vos annonces sont enregistrées sur cet appareil (localStorage).',
-    'Os anúncios que você publica ficam neste dispositivo (localStorage).',
-    'Ваши объявления хранятся на этом устройстве (localStorage).',
-    'Iklan Anda disimpan di perangkat ini (localStorage).'
+    '0단계 · 올린 글은 이 기기에만 저장됩니다. 다른 기기와의 거래 연결(서버 원장)은 다음 단계입니다.',
+    'Stage 0 · posts are stored on this device only. Trading with another device (server ledger) comes next.',
+    '第 0 阶段 · 发布内容仅存于本设备，与其他设备的交易（服务器账簿）是下一步。',
+    '第0段階 · 投稿はこの端末にのみ保存されます。他端末との取引（サーバー台帳）は次の段階です。',
+    'Etapa 0 · los avisos se guardan solo en este dispositivo. Negociar con otro dispositivo (libro en servidor) es el paso siguiente.',
+    'Giai đoạn 0 · tin chỉ lưu trên thiết bị này. Giao dịch với thiết bị khác (sổ cái máy chủ) là bước tiếp theo.',
+    'Étape 0 · les annonces restent sur cet appareil. Échanger avec un autre appareil (registre serveur) viendra ensuite.',
+    'Etapa 0 · os anúncios ficam só neste dispositivo. Negociar com outro dispositivo (livro no servidor) vem depois.',
+    'Этап 0 · объявления хранятся только на этом устройстве. Сделки с другим устройством (серверный реестр) — следующий шаг.',
+    'Tahap 0 · iklan hanya tersimpan di perangkat ini. Bertransaksi dengan perangkat lain (buku server) menyusul.'
   ],
   mineBadge: ['내 등록', 'Mine', '我发布', '自分の投稿', 'Mío', 'Của tôi', 'À moi', 'Meu', 'Моё', 'Milik saya'],
   mineDelete: ['삭제', 'Delete', '删除', '削除', 'Borrar', 'Xóa', 'Supprimer', 'Excluir', 'Удалить', 'Hapus'],
 
-  safetyToggle: ['안전 거래 3원칙', 'Three rules of safe trade', '安全交易三原则', '安全取引の3原則', 'Tres reglas del trato seguro', 'Ba nguyên tắc giao dịch an toàn', 'Trois règles d’un échange sûr', 'Três regras do negócio seguro', 'Три правила безопасной сделки', 'Tiga aturan transaksi aman'],
+  safetyToggle: ['안전 거래 4원칙', 'Four rules of safe trade', '安全交易四原则', '安全取引の4原則', 'Cuatro reglas del trato seguro', 'Bốn nguyên tắc giao dịch an toàn', 'Quatre règles d’un échange sûr', 'Quatro regras do negócio seguro', 'Четыре правила безопасной сделки', 'Empat aturan transaksi aman'],
   safety1: [
     '등록·신청은 Pi KYC 1계정으로만 합니다. 1인 1계정, 실명 확인.',
     'Listing and requesting use one Pi KYC account. One person, one account, real name checked.',
@@ -376,17 +381,198 @@ export const UI = {
     'Sepakati harga, jumlah, dan waktu di baris itu dulu; jangan kirim Pi sebelum sepakat.'
   ],
   safety3: [
-    '대형 실물·B2B는 에스크로로 묶고, 인도 확인 후에 정산합니다.',
-    'Heavy goods and B2B go through escrow and settle after delivery is confirmed.',
-    '大型实物与 B2B 走托管，确认交付后结算。',
-    '大型実物・B2Bはエスクローで拘束し、受け渡し確認後に精算します。',
-    'Los bienes pesados y el B2B van por escrow y se liquidan tras confirmar la entrega.',
-    'Hàng lớn và B2B dùng ký quỹ, thanh toán sau khi xác nhận giao hàng.',
-    'Les biens lourds et le B2B passent par le séquestre, réglé après livraison confirmée.',
-    'Bens grandes e B2B passam por escrow, liquidado após confirmar a entrega.',
-    'Крупные товары и B2B — через эскроу, расчёт после подтверждения поставки.',
-    'Barang besar dan B2B lewat escrow, dicairkan setelah pengiriman dikonfirmasi.'
+    '선입금·계좌 이체·외부 메신저 링크를 요구하는 상대와는 거래하지 않습니다. 결제는 Pi로만 합니다.',
+    'Never trade with someone who asks for a deposit, a bank transfer or an outside messenger link. Pay in Pi only.',
+    '对方要求预付、银行转账或外部聊天链接时不交易，付款只用 Pi。',
+    '前払い・銀行振込・外部メッセンジャーのリンクを求める相手とは取引しません。支払いはPiのみ。',
+    'No trates con quien pida un anticipo, una transferencia o un enlace a otro mensajero. Paga solo en Pi.',
+    'Không giao dịch với người đòi tiền trước, chuyển khoản hay link ứng dụng khác. Chỉ trả bằng Pi.',
+    'Ne traitez pas avec qui demande un acompte, un virement ou un lien vers une messagerie externe. Payez en Pi uniquement.',
+    'Não negocie com quem pede sinal, transferência ou link de outro mensageiro. Pague só em Pi.',
+    'Не работайте с теми, кто просит предоплату, перевод или ссылку на другой мессенджер. Оплата только в Pi.',
+    'Jangan bertransaksi dengan yang meminta uang muka, transfer bank, atau tautan aplikasi lain. Bayar hanya dengan Pi.'
   ],
+  safety4: [
+    '만남은 공공장소에서. 대형 실물·B2B는 30/70 분할로 하고 잔금은 인도·검수 후에. 보관형 에스크로는 아직 준비 중입니다.',
+    'Meet in a public place. Heavy goods and B2B use a 30/70 split, balance after delivery and inspection. Held-in-escrow payment is not live yet.',
+    '当面交易选公共场所。大型实物与 B2B 用 30/70 分期，尾款在交付验收后。托管支付尚未上线。',
+    '待ち合わせは公共の場所で。大型実物・B2Bは30/70分割、残金は受け渡し・検収後。エスクロー保管はまだ準備中です。',
+    'Quedad en un lugar público. Bienes pesados y B2B: pago 30/70, el resto tras la entrega y la inspección. El escrow aún no está activo.',
+    'Gặp ở nơi công cộng. Hàng lớn và B2B chia 30/70, phần còn lại sau khi giao và kiểm. Ký quỹ chưa hoạt động.',
+    'Rendez-vous dans un lieu public. Biens lourds et B2B : 30/70, le solde après livraison et contrôle. Le séquestre n’est pas encore actif.',
+    'Encontro em local público. Bens grandes e B2B: 30/70, o restante após entrega e inspeção. O escrow ainda não está ativo.',
+    'Встречайтесь в публичном месте. Крупные товары и B2B — 30/70, остаток после поставки и проверки. Эскроу пока не работает.',
+    'Bertemu di tempat umum. Barang besar dan B2B pakai 30/70, sisanya setelah serah dan pemeriksaan. Escrow belum aktif.'
+  ],
+  /* ── 0단계 신규: 생활권 · 서브칩 · 상태 · 이행/정산 · 필터 · 내 거래함 ── */
+  areaLabel: ['생활권', 'My area', '我的生活圈', '生活圏', 'Mi zona', 'Khu vực của tôi', 'Ma zone', 'Minha área', 'Мой район', 'Area saya'],
+  areaSet: ['생활권 설정', 'Set my area', '设置生活圈', '生活圏を設定', 'Configurar zona', 'Đặt khu vực', 'Régler ma zone', 'Definir área', 'Настроить район', 'Atur area'],
+  radius: ['반경', 'Radius', '范围', '範囲', 'Radio', 'Bán kính', 'Rayon', 'Raio', 'Радиус', 'Radius'],
+  radiusHood: ['동네', 'Neighbourhood', '街区', 'ご近所', 'Barrio', 'Xóm', 'Quartier', 'Bairro', 'Район', 'Lingkungan'],
+  radiusCity: ['도시', 'City', '城市', '都市', 'Ciudad', 'Thành phố', 'Ville', 'Cidade', 'Город', 'Kota'],
+  radiusCountry: ['국가', 'Country', '国家', '国', 'País', 'Quốc gia', 'Pays', 'País', 'Страна', 'Negara'],
+  radiusGlobal: ['전체', 'All', '全部', 'すべて', 'Todo', 'Tất cả', 'Tout', 'Tudo', 'Всё', 'Semua'],
+  areaNoGps: [
+    '위치를 추적하지 않습니다 — 생활권은 직접 고릅니다.',
+    'We never track your location — you pick your area.',
+    '不追踪位置 — 生活圈由你自己选择。',
+    '位置は追跡しません — 生活圏は自分で選びます。',
+    'No seguimos tu ubicación: tú eliges tu zona.',
+    'Chúng tôi không theo dõi vị trí — bạn tự chọn khu vực.',
+    'Nous ne suivons pas votre position — vous choisissez votre zone.',
+    'Não rastreamos sua localização — você escolhe a área.',
+    'Мы не отслеживаем геопозицию — район выбираете вы.',
+    'Kami tidak melacak lokasi — Anda memilih area.'
+  ],
+  areaWideHint: [
+    '이 반경에는 거래가 적습니다 — 한 단계 넓혀 보세요.',
+    'Few listings at this radius — widen one step.',
+    '此范围交易较少 — 请扩大一级。',
+    'この範囲は取引が少なめです — 一段広げてみてください。',
+    'Pocos avisos en este radio: amplía un nivel.',
+    'Ít tin trong bán kính này — mở rộng một bậc.',
+    'Peu d’annonces dans ce rayon — élargissez d’un cran.',
+    'Poucos anúncios neste raio — amplie um nível.',
+    'Мало объявлений в этом радиусе — расширьте на шаг.',
+    'Sedikit iklan di radius ini — perluas satu tingkat.'
+  ],
+  neighborBadge: ['이웃', 'Neighbour', '邻居', 'ご近所', 'Vecino', 'Hàng xóm', 'Voisin', 'Vizinho', 'Сосед', 'Tetangga'],
+
+  sideWork: ['일감 올리기', 'Post a job', '发布工作', '仕事を出す', 'Publicar trabajo', 'Đăng việc', 'Publier une mission', 'Publicar tarefa', 'Разместить работу', 'Pasang pekerjaan'],
+  sideSkill: ['내 기술·시간', 'My skills & time', '我的技能与时间', '自分の技術・時間', 'Mis habilidades y tiempo', 'Kỹ năng & thời gian', 'Mes compétences et mon temps', 'Minhas habilidades e tempo', 'Мои навыки и время', 'Keahlian & waktu saya'],
+  sideSell: ['직거래', 'Sell', '直卖', '直接取引', 'Vender', 'Bán', 'Vendre', 'Vender', 'Продать', 'Jual'],
+  sideWant: ['구해요', 'Wanted', '求购', '求む', 'Busco', 'Cần mua', 'Recherche', 'Procuro', 'Куплю', 'Cari'],
+  sideFree: ['무료 나눔', 'Free', '免费赠送', '無料で譲る', 'Gratis', 'Tặng miễn phí', 'Don', 'Doação', 'Отдам даром', 'Gratis'],
+  sideRfq: ['견적 요청', 'Request quote', '询价', '見積依頼', 'Pedir cotización', 'Yêu cầu báo giá', 'Demander un devis', 'Pedir cotação', 'Запросить расчёт', 'Minta penawaran'],
+
+  statusOpen: ['모집중', 'Open', '招募中', '募集中', 'Abierto', 'Đang mở', 'Ouvert', 'Aberto', 'Набор', 'Terbuka'],
+  statusReserved: ['예약중', 'Reserved', '预订中', '予約中', 'Reservado', 'Đã đặt', 'Réservé', 'Reservado', 'Забронировано', 'Dipesan'],
+  statusDone: ['완료', 'Done', '已完成', '完了', 'Hecho', 'Xong', 'Terminé', 'Concluído', 'Завершено', 'Selesai'],
+
+  handoffLabel: ['이행 방식', 'Handoff', '交付方式', '受け渡し方法', 'Entrega', 'Cách giao', 'Remise', 'Entrega', 'Способ передачи', 'Cara serah'],
+  handoffMeet: ['만나서 직거래', 'Meet in person', '当面交易', '対面で受け渡し', 'En mano', 'Gặp trực tiếp', 'Remise en main propre', 'Em mãos', 'Личная передача', 'Ketemu langsung'],
+  handoffDelivery: ['택배', 'Courier', '快递', '宅配', 'Mensajería', 'Chuyển phát', 'Livraison', 'Entrega', 'Доставка', 'Kurir'],
+  handoffFreight: ['컨테이너·설치', 'Container & install', '集装箱·安装', 'コンテナ・設置', 'Contenedor e instalación', 'Container & lắp đặt', 'Conteneur et pose', 'Contêiner e instalação', 'Контейнер и монтаж', 'Kontainer & pemasangan'],
+  handoffRemote: ['원격', 'Remote', '远程', 'リモート', 'Remoto', 'Từ xa', 'À distance', 'Remoto', 'Удалённо', 'Jarak jauh'],
+
+  settleDirect: ['Pi 즉시', 'Pi at once', 'Pi 即时', 'Pi 即時', 'Pi al instante', 'Pi ngay', 'Pi immédiat', 'Pi na hora', 'Pi сразу', 'Pi langsung'],
+  settleMilestone: ['분할 지급 30/70', 'Split payment 30/70', '分期付款 30/70', '分割払い 30/70', 'Pago 30/70', 'Chia đợt 30/70', 'Paiement 30/70', 'Pagamento 30/70', 'Оплата 30/70', 'Bayar bertahap 30/70'],
+  settleEscrowSoon: [
+    'Pi 결제(수령 후 정산) · 준비 중',
+    'Pi held until receipt · not live yet',
+    'Pi 付款（收货后结算）· 准备中',
+    'Pi決済（受取後精算）・準備中',
+    'Pago Pi (al recibir) · aún no activo',
+    'Thanh toán Pi (sau khi nhận) · chưa mở',
+    'Paiement Pi (après réception) · pas encore actif',
+    'Pagamento Pi (após receber) · ainda não ativo',
+    'Оплата Pi (после получения) · пока не работает',
+    'Bayar Pi (setelah terima) · belum aktif'
+  ],
+
+  verifiedDeal: ['실거래 인증', 'Verified trade', '实交易认证', '実取引認証', 'Trato verificado', 'Giao dịch xác thực', 'Échange vérifié', 'Negócio verificado', 'Подтверждённая сделка', 'Transaksi terverifikasi'],
+  demoBadge: ['예시', 'Sample', '示例', '見本', 'Ejemplo', 'Mẫu', 'Exemple', 'Exemplo', 'Пример', 'Contoh'],
+  reviewLocked: [
+    '실거래 인증 리뷰는 거래가 정산된 뒤에만 열립니다.',
+    'Verified reviews open only after a deal settles.',
+    '实交易认证评价仅在结算完成后开放。',
+    '実取引認証レビューは精算後にのみ開きます。',
+    'Las reseñas verificadas se abren al liquidarse el trato.',
+    'Đánh giá xác thực chỉ mở sau khi tất toán.',
+    'Les avis vérifiés s’ouvrent après règlement.',
+    'Avaliações verificadas abrem após a liquidação.',
+    'Отзывы открываются только после расчёта.',
+    'Ulasan terverifikasi terbuka setelah transaksi tuntas.'
+  ],
+  footprintRule: [
+    '발자국 1개 = 정산까지 끝난 거래 1건. 완료율은 분모(전체 거래)와 함께 보여 줍니다.',
+    'One footprint = one settled deal. Completion is always shown with its denominator.',
+    '一个足迹＝一笔结算完成的交易，完成率同时给出分母。',
+    '足あと1つ＝精算まで終わった取引1件。完了率は分母も併記します。',
+    'Una huella = un trato liquidado. La tasa siempre muestra su denominador.',
+    'Một dấu chân = một giao dịch đã tất toán. Tỷ lệ luôn kèm mẫu số.',
+    'Une trace = un échange réglé. Le taux affiche toujours son dénominateur.',
+    'Uma pegada = um negócio liquidado. A taxa sempre mostra o denominador.',
+    'Один след = одна завершённая сделка. Доля показывается со знаменателем.',
+    'Satu jejak = satu transaksi tuntas. Rasio selalu dengan penyebut.'
+  ],
+  disputeSeal: [
+    '분쟁은 플랫폼이 판정하지 않고, 증거 해시만 FactFilter에 봉인합니다.',
+    'We never judge a dispute — evidence hashes are sealed to FactFilter.',
+    '平台不裁决争议，只把证据哈希封存到 FactFilter。',
+    '紛争は判定せず、証拠ハッシュだけをFactFilterに封印します。',
+    'No juzgamos: sellamos los hashes de las pruebas en FactFilter.',
+    'Không phán xử — chỉ niêm phong mã băm bằng chứng vào FactFilter.',
+    'Nous ne jugeons pas : les empreintes des preuves sont scellées dans FactFilter.',
+    'Não julgamos: selamos os hashes das provas no FactFilter.',
+    'Мы не судим: хеши доказательств запечатываются в FactFilter.',
+    'Kami tidak mengadili — hash bukti disegel ke FactFilter.'
+  ],
+
+  filterLabel: ['조건 · 정렬', 'Terms · sort', '条件·排序', '条件・並び順', 'Condiciones y orden', 'Điều kiện & sắp xếp', 'Conditions et tri', 'Condições e ordem', 'Условия и сортировка', 'Syarat & urutan'],
+  stateLabel: ['상태', 'Status', '状态', '状態', 'Estado', 'Trạng thái', 'État', 'Status', 'Статус', 'Status'],
+  sortNew: ['최신', 'Newest', '最新', '新着', 'Recientes', 'Mới nhất', 'Récents', 'Recentes', 'Новые', 'Terbaru'],
+  sortNear: ['가까운', 'Nearest', '最近', '近い順', 'Más cerca', 'Gần nhất', 'Plus proche', 'Mais perto', 'Ближайшие', 'Terdekat'],
+  sortCheap: ['낮은 가격', 'Lowest price', '价格低', '安い順', 'Menor precio', 'Giá thấp', 'Prix croissant', 'Menor preço', 'Дешевле', 'Termurah'],
+  sortTrust: ['신뢰', 'Trust', '信任', '信頼', 'Confianza', 'Uy tín', 'Confiance', 'Confiança', 'Доверие', 'Kepercayaan'],
+
+  myDeals: ['내 거래함', 'My deals', '我的交易', 'マイ取引', 'Mis tratos', 'Giao dịch của tôi', 'Mes échanges', 'Meus negócios', 'Мои сделки', 'Transaksi saya'],
+  myPosts: ['내 글', 'My posts', '我的发布', '自分の投稿', 'Mis avisos', 'Tin của tôi', 'Mes annonces', 'Meus anúncios', 'Мои объявления', 'Iklan saya'],
+  myReserved: ['예약', 'Reserved', '预订', '予約', 'Reservas', 'Đặt trước', 'Réservations', 'Reservas', 'Брони', 'Dipesan'],
+  myDone: ['완료', 'Done', '已完成', '完了', 'Hechos', 'Đã xong', 'Terminés', 'Concluídos', 'Завершено', 'Selesai'],
+  mySaved: ['찜', 'Saved', '收藏', 'お気に入り', 'Guardados', 'Đã lưu', 'Enregistrés', 'Salvos', 'Избранное', 'Disimpan'],
+  bump: ['끌올', 'Bump', '顶帖', '上げ直す', 'Subir', 'Đẩy tin', 'Remonter', 'Subir', 'Поднять', 'Naikkan'],
+
+  modeOffer: ['가격 제안', 'Make an offer', '出价', '価格提案', 'Proponer precio', 'Đề xuất giá', 'Proposer un prix', 'Propor preço', 'Предложить цену', 'Ajukan harga'],
+  postTermsDelivery: [
+    '배송비·출고 소요일·반품 기간 (예: 3 Pi · 2일 · 7일)',
+    'Shipping cost · dispatch days · return window (e.g. 3 Pi · 2 days · 7 days)',
+    '运费·出货天数·退货期（例：3 Pi·2 天·7 天）',
+    '送料・出荷日数・返品期限（例：3 Pi・2日・7日）',
+    'Envío · días de salida · plazo de devolución (ej. 3 Pi · 2 días · 7 días)',
+    'Phí ship · ngày xuất · hạn trả (vd 3 Pi · 2 ngày · 7 ngày)',
+    'Frais d’envoi · jours d’expédition · retour (ex. 3 Pi · 2 j · 7 j)',
+    'Frete · dias de envio · prazo de devolução (ex. 3 Pi · 2 dias · 7 dias)',
+    'Доставка · дни отправки · возврат (напр. 3 Pi · 2 дня · 7 дней)',
+    'Ongkir · hari kirim · batas retur (mis. 3 Pi · 2 hari · 7 hari)'
+  ],
+  postTermsFreight: [
+    'MOQ·선적항·검수 조건 (예: 5대 · FOB Chennai · 90일 보증)',
+    'MOQ · port · inspection (e.g. 5 units · FOB Chennai · 90-day warranty)',
+    'MOQ·装运港·验收（例：5 台·FOB Chennai·90 天保修）',
+    'MOQ・積出港・検収（例：5台・FOB Chennai・90日保証）',
+    'MOQ · puerto · inspección (ej. 5 uds · FOB Chennai · garantía 90 días)',
+    'MOQ · cảng · kiểm định (vd 5 chiếc · FOB Chennai · bảo hành 90 ngày)',
+    'MOQ · port · contrôle (ex. 5 unités · FOB Chennai · garantie 90 j)',
+    'MOQ · porto · inspeção (ex. 5 un · FOB Chennai · garantia 90 dias)',
+    'MOQ · порт · приёмка (напр. 5 шт · FOB Chennai · гарантия 90 дней)',
+    'MOQ · pelabuhan · inspeksi (mis. 5 unit · FOB Chennai · garansi 90 hari)'
+  ],
+  postTermsRemote: [
+    '납품물·마일스톤 (예: 1차 3일 · 검수 후 잔금)',
+    'Deliverables · milestones (e.g. first draft in 3 days · balance after review)',
+    '交付物·里程碑（例：首稿 3 天·验收后尾款）',
+    '納品物・マイルストーン（例：初稿3日・検収後残金）',
+    'Entregables · hitos (ej. primer borrador en 3 días · resto tras revisión)',
+    'Sản phẩm · mốc (vd bản đầu 3 ngày · còn lại sau kiểm)',
+    'Livrables · jalons (ex. première version 3 j · solde après contrôle)',
+    'Entregas · marcos (ex. primeira versão 3 dias · restante após revisão)',
+    'Результаты · этапы (напр. черновик 3 дня · остаток после проверки)',
+    'Hasil · tahapan (mis. draf awal 3 hari · sisanya setelah telaah)'
+  ],
+  postErrTerms: [
+    '이행 방식을 고르면 그 조건을 적어 주세요.',
+    'Add the terms that match the handoff you chose.',
+    '请填写所选交付方式的条件。',
+    '選んだ受け渡し方法の条件を記入してください。',
+    'Escribe las condiciones de la entrega elegida.',
+    'Hãy ghi điều kiện của cách giao đã chọn.',
+    'Indiquez les conditions de la remise choisie.',
+    'Informe as condições da entrega escolhida.',
+    'Укажите условия выбранного способа передачи.',
+    'Isi syarat untuk cara serah yang dipilih.'
+  ],
+
   footerTag: ['실물 경제 거래소', 'Real-economy exchange', '实体经济交易所', '実物経済取引所', 'Bolsa de economía real', 'Sàn kinh tế thực', 'Bourse de l’économie réelle', 'Bolsa da economia real', 'Биржа реальной экономики', 'Bursa ekonomi nyata'],
   alertSoon: [
     ' 서비스 준비 중입니다.', ' is coming soon.', ' 服务准备中。', ' は準備中です。', ' estará disponible pronto.', ' sắp ra mắt.', ' arrive bientôt.', ' chega em breve.', ' скоро появится.', ' segera hadir.'
