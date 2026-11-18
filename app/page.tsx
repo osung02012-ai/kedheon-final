@@ -5,6 +5,7 @@ import PiBadge from './components/PiBadge';
 import { usePi } from './components/PiProvider';
 import PiReadOnlyBanner from './components/PiReadOnlyBanner';
 import AppDock from './components/AppDock';
+import EcosystemBookmarkAndReview from './components/EcosystemBookmarkAndReview';
 import AppHeader from './components/AppHeader';
 import LangSelect from './components/LangSelect';
 
@@ -871,6 +872,7 @@ export default function KedheonDesignSystemFinal() {
             </div>
           </div>
         )}
+        <EcosystemBookmarkAndReview current="KEDHEON" lang={lang} />
       </main>
 
       <AppDock active="KEDHEON" soonMessage=" 서비스 연동 준비 중입니다." />

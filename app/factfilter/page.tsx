@@ -7,6 +7,7 @@ import PiPayButton from '../components/PiPayButton';
 import { usePi } from '../components/PiProvider';
 import PiReadOnlyBanner from '../components/PiReadOnlyBanner';
 import AppDock from '../components/AppDock';
+import EcosystemBookmarkAndReview from '../components/EcosystemBookmarkAndReview';
 import AppHeader from '../components/AppHeader';
 
 /**
@@ -1319,6 +1320,7 @@ export default function FactFilterPage() {
           </div>
         )}
 
+        <EcosystemBookmarkAndReview current="FACTFILTER" lang={lang} />
       </main>
 
       {/* Footer — Kedheon 규격 */}

@@ -8,6 +8,7 @@ import PiPayButton from '../components/PiPayButton';
 import { usePi } from '../components/PiProvider';
 import PiReadOnlyBanner from '../components/PiReadOnlyBanner';
 import AppDock from '../components/AppDock';
+import EcosystemBookmarkAndReview from '../components/EcosystemBookmarkAndReview';
 import AppHeader from '../components/AppHeader';
 
 /**
@@ -886,6 +887,7 @@ export default function CivilPage() {
           </div>
         </div>
 
+        <EcosystemBookmarkAndReview current="CIVIL" lang={lang} />
       </main>
 
       {/* 국가 선택 패널 */}

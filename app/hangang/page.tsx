@@ -6,6 +6,7 @@ import PiPayButton from '../components/PiPayButton';
 import { usePi } from '../components/PiProvider';
 import PiReadOnlyBanner from '../components/PiReadOnlyBanner';
 import AppDock from '../components/AppDock';
+import EcosystemBookmarkAndReview from '../components/EcosystemBookmarkAndReview';
 import AppHeader from '../components/AppHeader';
 import HanbokIcon from '../components/HanbokIcon';
 import LangSelect from '../components/LangSelect';
@@ -461,6 +462,8 @@ export default function HangangPage() {
             {T('safetyNote')}
           </p>
         </div>
+
+        <EcosystemBookmarkAndReview current="HANGANG" lang={lang} />
 
         <p className="text-center text-gray-300 t-tag mt-6 mb-2">
           <span translate="no" className="notranslate">Hangang</span> · <span translate="no" className="notranslate">hangang.pi</span> · {T('footerTag')}
