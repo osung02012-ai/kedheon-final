@@ -300,7 +300,7 @@ export default function VendorPage() {
               {[
                 { v: '238', label: T('statCountries'), short: T('statCountriesS') },
                 { v: T('statFee'), label: T('statFeeLabel'), short: T('statFeeS') },
-                { v: T('statKyc'), label: T('statKyc'), short: T('statKycS') },
+                { v: '1', label: T('statKyc'), short: T('statKycS') },
                 { v: `🐾 ${beom}`, label: T('statBeom'), short: T('statBeomS') }
               ].map((s, i) => (
                 <div key={i} className="flex flex-col items-center gap-0 md:items-start md:bg-white md:border md:border-neutral-200 md:rounded-xl md:px-2 md:py-2">
