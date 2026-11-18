@@ -338,12 +338,12 @@ const SUMMIT_SOURCES = [
   }
 ];
 
-/** 케드헌 편대 — 서밋 App Growth 흐름과 연결되는 4개 앱 */
+/** 케드헌 5대 축 — 계정(근본) · 투표 · 진실 · 문화 · 기여 중 진실(FactFilter)을 뺀 4개 자리 */
 const FLEET_APPS = [
-  { name: 'Kedheon', url: 'https://kedheon.com', ko: '거버넌스 본부', en: 'Governance HQ' },
-  { name: 'Civil', url: 'https://civil.kedheon.com', ko: 'Pi KYC 1인 1표', en: 'KYC one-person-one-vote' },
-  { name: 'Hangang', url: 'https://hangang.kedheon.com', ko: 'K-실물 경제 · 파이 패스', en: 'K-economy · Pi pass' },
-  { name: 'XAEA12', url: 'https://xaea12.kedheon.com', ko: '생태계 포인트 허브', en: 'Ecosystem points hub' }
+  { name: 'Kedheon', url: 'https://kedheon.com', ko: '계정 (근본)', en: 'Account (Root)' },
+  { name: 'Civil', url: 'https://civil.kedheon.com', ko: '투표', en: 'Vote' },
+  { name: 'Hangang', url: 'https://hangang.kedheon.com', ko: '문화', en: 'Culture' },
+  { name: 'XAEA12', url: 'https://xaea12.kedheon.com', ko: '기여', en: 'Contribution' }
 ];
 
 /** 상단 피처드 — 서밋 Day 1 공식 팩트체크 + 케드헌 편대 링크 */
@@ -443,27 +443,33 @@ const BLACKOUT_SOURCES = [
 
 /** 피처드 2 — 가짜뉴스 박제 카드 */
 const FakeNewsArchive = ({ ko }: { ko: boolean }) => (
-  <section className="bg-white border border-[#dc2626]/30 rounded-2xl shadow-[var(--card-shadow)] overflow-hidden text-left">
-    <div className="flex items-center justify-between gap-2 bg-[#dc2626] px-3 py-1.5">
-      <span className="flex items-center gap-1.5 t-tag font-bold uppercase text-white">
-        <span className="w-1.5 h-1.5 rounded-full bg-white inline-block shrink-0" />
+  <section className="bg-white border border-[#E5E7EB] rounded-2xl shadow-[var(--card-shadow)] overflow-hidden text-left">
+    <div className="flex items-center justify-between gap-2 bg-neutral-50 border-b border-[#E5E7EB] px-3 py-1.5">
+      <span className="flex items-center gap-1.5 t-tag font-bold uppercase text-[#dc2626]">
+        <span className="w-1.5 h-1.5 rounded-full bg-[#dc2626] inline-block shrink-0" />
         {ko ? '가짜뉴스 박제' : 'Fake news archived'}
       </span>
-      <span translate="no" className="notranslate t-tag text-white/80 whitespace-nowrap">
+      <span translate="no" className="notranslate t-tag text-neutral-500 whitespace-nowrap">
         2026.11.19 · UK
       </span>
     </div>
 
-    <div className="px-3 py-2.5 md:p-4">
+    <div className="px-3 py-3 md:p-4">
       <h2 className="t-section text-black">
         {ko ? '런던 대정전 · 11월 19일 시스템 붕괴 음모론' : 'London blackout · the “19 November grid collapse” conspiracy'}
       </h2>
-      <p className="t-sub text-neutral-500 mt-0.5">
-        {ko ? '영국 전력망 공식 채널·실측 현황과 대조' : 'Checked against National Grid and UK Power Networks'}
-      </p>
 
-      <div className="mt-1.5 rounded-lg bg-neutral-50 border border-neutral-200 px-2.5 py-2">
-        <p className="t-tag font-bold text-[#dc2626] uppercase">{ko ? '유포된 루머' : 'What was spread'}</p>
+      <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-1.5">
+        <span className="inline-flex items-center rounded-full border border-[#dc2626]/30 bg-[#dc2626]/5 px-2 py-0.5 t-tag font-bold text-[#dc2626]">
+          {ko ? '❌ 거짓 — 조작 이미지 + 국지 사고 과장' : '❌ FALSE — forged image, local faults inflated'}
+        </span>
+        <span className="t-tag font-normal text-neutral-500">
+          {ko ? '영국 전력망 공식 채널·실측 현황과 대조' : 'Checked against National Grid and UK Power Networks'}
+        </span>
+      </div>
+
+      <div className="mt-2 rounded-lg bg-neutral-50 border border-neutral-200 px-2.5 py-2">
+        <p className="t-tag font-bold text-neutral-500 uppercase">{ko ? '유포된 루머' : 'What was spread'}</p>
         <p className="t-sub text-neutral-700 mt-0.5">
           {ko
             ? '“11월 19일 오후 4시, 영국 전국 대정전이 시작된다” — National Grid 공문으로 위장한 조작 이미지와 어두운 거리 영상이 함께 돌았습니다.'
@@ -471,16 +477,9 @@ const FakeNewsArchive = ({ ko }: { ko: boolean }) => (
         </p>
       </div>
 
-      <div className="mt-1.5 rounded-lg bg-[#dc2626] px-2.5 py-2">
-        <p className="t-tag font-bold text-white uppercase">{ko ? '공식 팩트 판정' : 'Verdict'}</p>
-        <p className="t-card text-white mt-0.5">
-          {ko ? '거짓 — 조작 이미지 + 국지 사고 과장' : 'FALSE — forged image, local faults inflated'}
-        </p>
-      </div>
-
-      <div className="mt-2 space-y-1.5">
+      <div className="mt-2.5 space-y-2">
         {BLACKOUT_FACTS.map(f => (
-          <div key={f.key} className="border-t border-neutral-200 pt-1.5">
+          <div key={f.key} className="border-t border-neutral-200 pt-2">
             <p className="t-card text-black flex items-start gap-1.5">
               <span translate="no" className="notranslate font-mono t-tag text-neutral-400 shrink-0 pt-0.5">{f.key}</span>
               <span className="min-w-0">{ko ? f.head : f.headEn}</span>
@@ -510,16 +509,16 @@ const FakeNewsArchive = ({ ko }: { ko: boolean }) => (
   </section>
 );
 
-/** 하단 — 케드헌 편대 링크 카드 */
+/** 하단 — 케드헌 5대 축 링크 카드 */
 const FleetPromo = ({ ko }: { ko: boolean }) => (
   <section className="bg-neutral-50 border border-[#E5E7EB] rounded-2xl px-3 py-2.5 text-left">
     <p className="t-card text-black">
-      {ko ? '2,000만 Pi App Growth 흐름에 올라탄 케드헌 편대' : 'The Kedheon fleet, built for the 20M Pi App Growth wave'}
+      {ko ? '하나의 뿌리 — 계정(근본) · 투표 · 진실 · 문화 · 기여' : 'One Root — Account · Vote · Truth · Culture · Contribution'}
     </p>
     <p className="t-sub text-neutral-500 mt-0.5">
       {ko
-        ? '중립 집계 원장 · 실물 경제 · 포인트 허브 — 파이 생태계에 세운 네 개의 앱.'
-        : 'Neutral counting ledgers, real-world economy and a points hub — four apps built on Pi.'}
+        ? '진실(FactFilter)과 함께 움직이는 네 개의 자리'
+        : 'Four pillars connected alongside Truth (FactFilter)'}
     </p>
     <div className="grid grid-cols-2 gap-1.5 mt-1.5">
       {FLEET_APPS.map(a => (
