@@ -21,8 +21,22 @@ const DOCK_ITEMS: { name: string; path: string }[] = [
   { name: 'HANGANG', path: '/hangang' },
   { name: 'XAEA12', path: '/xaea12' },
   { name: 'NEXUS', path: '#' },
-  { name: 'VENDOR', path: '#' },
+  { name: 'VENDOR', path: 'https://vendor.kedheon.com' },
 ];
+
+/**
+ * 다른 앱으로 이동할 주소.
+ *  - Vendor처럼 오리진이 다른 앱은 절대 URL을 그대로 쓴다.
+ *  - 경로 앱('/civil' 등)은 지금 호스트가 앱 서브도메인이면 본도메인(kedheon.com)으로
+ *    보낸다. (hangang.kedheon.com/civil 은 미들웨어가 /hangang/civil 로 리라이트해 404가 된다.)
+ */
+function appHref(path: string) {
+  if (/^https?:\/\//.test(path)) return path;
+  if (typeof window === 'undefined') return path;
+  const host = window.location.hostname;
+  const onSubdomain = /^[a-z0-9-]+\.kedheon\.com$/.test(host);
+  return onSubdomain ? `https://kedheon.com${path}` : path;
+}
 
 export default function AppDock({
   active,
@@ -97,7 +111,7 @@ export default function AppDock({
                   if (app.path === '#') {
                     alert(app.name + soonMessage);
                   } else if (!isActive) {
-                    window.location.href = app.path;
+                    window.location.href = appHref(app.path);
                   }
                 }}
                 className={`notranslate shrink-0 whitespace-nowrap leading-none px-1 py-2.5 md:flex-1 md:px-2.5 md:py-3 rounded-xl text-center tracking-tight transition-all cursor-pointer hover:scale-105 active:scale-95 ${
