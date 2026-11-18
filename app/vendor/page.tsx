@@ -850,10 +850,10 @@ export default function VendorPage() {
                   )}
                   {it.terms && <p className="t-tag text-neutral-500">📄 {it.terms}</p>}
                   <p className="t-tag text-neutral-500">
-                    🐾 {it.dealsDone}
+                    {`🐾 ${it.dealsDone}`}
                     <span className="text-gray-300"> · </span>
-                    {T('verifiedDeal')} {it.reviews}
-                    {it.stars !== undefined && <span className="text-black"> ⭐ {it.stars}</span>}
+                    {`${T('verifiedDeal')}\u00A0${it.reviews}`}
+                    {it.stars !== undefined && <span className="text-black">{` ⭐ ${it.stars}`}</span>}
                   </p>
                   {it.tier >= 2 && <p className="t-tag text-neutral-500">🛡️ {T('disputeSeal')}</p>}
                   {it.status === 'done' && it.reviews === 0 && <p className="t-tag text-neutral-400">{T('reviewLocked')}</p>}
