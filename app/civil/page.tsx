@@ -8,7 +8,6 @@ import PiPayButton from '../components/PiPayButton';
 import { usePi } from '../components/PiProvider';
 import PiReadOnlyBanner from '../components/PiReadOnlyBanner';
 import AppDock from '../components/AppDock';
-import PiBookmarkNotice from '../components/PiBookmarkNotice';
 import AppHeader from '../components/AppHeader';
 
 /**
@@ -886,8 +885,6 @@ export default function CivilPage() {
             </button>
           </div>
         </div>
-
-        <PiBookmarkNotice lang={lang} />
       </main>
 
       {/* 국가 선택 패널 */}

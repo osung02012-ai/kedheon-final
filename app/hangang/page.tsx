@@ -5,7 +5,6 @@ import PiBadge from '../components/PiBadge';
 import PiPayButton from '../components/PiPayButton';
 import { usePi } from '../components/PiProvider';
 import PiReadOnlyBanner from '../components/PiReadOnlyBanner';
-import PiBookmarkNotice from '../components/PiBookmarkNotice';
 import AppDock from '../components/AppDock';
 import AppHeader from '../components/AppHeader';
 import HanbokIcon from '../components/HanbokIcon';
@@ -554,9 +553,6 @@ export default function HangangPage() {
             </div>
           ))}
         </div>
-
-        {/* Pi Browser 공식 ★ 북마크 안내 (자체 즐겨찾기·후기 폼은 두지 않는다) */}
-        <PiBookmarkNotice lang={lang} />
 
         <p className="text-center text-gray-300 t-tag mt-6 mb-2">
           <span translate="no" className="notranslate">Hangang</span> · <span translate="no" className="notranslate">hangang.pi</span> · {T('footerTag')}

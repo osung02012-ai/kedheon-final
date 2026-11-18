@@ -4,7 +4,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 import PiBadge from '../components/PiBadge';
 import { usePi } from '../components/PiProvider';
 import PiReadOnlyBanner from '../components/PiReadOnlyBanner';
-import PiBookmarkNotice from '../components/PiBookmarkNotice';
 import AppDock from '../components/AppDock';
 import AppHeader from '../components/AppHeader';
 import LangSelect from '../components/LangSelect';
@@ -571,9 +570,6 @@ export default function VendorPage() {
             </ul>
           </AccRow>
         </div>
-
-        {/* Pi Browser 공식 ★ 북마크 안내 */}
-        <PiBookmarkNotice lang={lang} />
 
         <p className="text-center text-gray-300 t-tag mt-6 mb-2">
           <span translate="no" className="notranslate">Vendor</span> · <span translate="no" className="notranslate">vendor.kedheon.com</span> · {T('footerTag')}
