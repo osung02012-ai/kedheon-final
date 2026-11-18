@@ -2,9 +2,10 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 import SectionHead from './SectionHead';
+import AccRow, { Requirement, useAccordion } from './Accordion';
 import { BypassNote } from './JourneySection';
-import AuthBadge from './AuthBadge';
 import { SEC, JLABEL } from '../lib/journey';
+import { ACL } from '../lib/accordion';
 import { EXPERIENCE } from '../lib/culture';
 import {
   FOOD_AREAS, FOOD_TAGS, DISH, RESTAURANTS, FOOD_LABEL, mapLinks,
@@ -13,6 +14,8 @@ import {
 import { tr, type Lang, type L10 } from '../lib/i18n';
 
 const STORE_KEY = 'hangang.foodmap.v1';
+/** 처음 화면에 보이는 가게 행 수 — 나머지는 '전체 보기' 뒤로 접는다 */
+const COLLAPSED_ROWS = 5;
 
 type VisitorEntry = {
   id: string;
@@ -60,11 +63,13 @@ function Stars({ value, size = 't-tag' }: { value: number; size?: string }) {
 
 const areaOf = (key: string) => FOOD_AREAS.find(a => a.key === key) ?? FOOD_AREAS[0];
 
-/** 05 순수 관광객 맛집 지도 — No Ads · No Influencer + 관광객 직접 등록 */
+/** 05 순수 관광객 맛집 지도 — 1줄 행(가게명 · 지역 · ★) 클릭 시 메뉴·지도가 열린다 */
 export default function FoodMapSection({ lang, bypass }: { lang: Lang; bypass?: L10[] }) {
   const [area, setArea] = useState<string>('ALL');
   const [entries, setEntries] = useState<VisitorEntry[]>([]);
   const [mounted, setMounted] = useState(false);
+  const [showAll, setShowAll] = useState(false);
+  const { open, toggle } = useAccordion();
 
   const [fName, setFName] = useState('');
   const [fArea, setFArea] = useState(FOOD_AREAS[0].key);
@@ -129,6 +134,20 @@ export default function FoodMapSection({ lang, bypass }: { lang: Lang; bypass?: 
   );
   const totalCount = dishes.length + visitors.length;
 
+  // 1줄 행 목록 — 지역 전체에서도 5줄만 먼저 보이고 나머지는 '전체 보기'로 펼친다
+  const rows: { key: string; kind: 'v' | 'd'; v?: VisitorEntry; d?: (typeof RESTAURANTS)[number] }[] = [
+    ...(mounted ? visitors.map(v => ({ key: `v-${v.id}`, kind: 'v' as const, v })) : []),
+    ...dishes.map(d => ({ key: `d-${d.id}`, kind: 'd' as const, d })),
+  ];
+  const limited = area === 'ALL' && !showAll;
+  const shown = limited ? rows.slice(0, COLLAPSED_ROWS) : rows;
+  const hidden = rows.length - shown.length;
+
+  const pickArea = (key: string) => {
+    setArea(key);
+    setShowAll(false);
+  };
+
   return (
     <section id="journey-eat" className="scroll-mt-3">
       <SectionHead no="05" title={tr(SEC.food.title, lang)} desc={tr(SEC.food.desc, lang)} />
@@ -138,7 +157,9 @@ export default function FoodMapSection({ lang, bypass }: { lang: Lang; bypass?: 
           {tr(FOOD_LABEL.noAds, lang)}
         </span>
         <span className="t-tag text-gray-400">
-          {tr(FOOD_LABEL.curation, lang)} · <span translate="no" className="notranslate">{totalCount}</span>{lang === 'KR' ? '' : ' '}{tr(FOOD_LABEL.count, lang)}
+          {tr(FOOD_LABEL.curation, lang)} · <span translate="no" className="notranslate">{totalCount}</span>
+          {lang === 'KR' ? '' : ' '}
+          {tr(FOOD_LABEL.count, lang)}
         </span>
       </div>
 
@@ -147,7 +168,7 @@ export default function FoodMapSection({ lang, bypass }: { lang: Lang; bypass?: 
       <div className="flex gap-1.5 overflow-x-auto pb-1 no-scrollbar">
         <button
           type="button"
-          onClick={() => setArea('ALL')}
+          onClick={() => pickArea('ALL')}
           className={`shrink-0 t-tag rounded-lg px-2.5 py-1.5 transition-colors ${area === 'ALL' ? 'bg-black text-white' : 'bg-neutral-100 text-neutral-600 hover:text-black'}`}
         >
           {tr(FOOD_LABEL.all, lang)}
@@ -156,7 +177,7 @@ export default function FoodMapSection({ lang, bypass }: { lang: Lang; bypass?: 
           <button
             key={a.key}
             type="button"
-            onClick={() => setArea(a.key)}
+            onClick={() => pickArea(a.key)}
             className={`shrink-0 t-tag rounded-lg px-2.5 py-1.5 whitespace-nowrap transition-colors ${area === a.key ? 'bg-black text-white' : 'bg-neutral-100 text-neutral-600 hover:text-black'}`}
           >
             {tr(a.label, lang)}
@@ -164,32 +185,40 @@ export default function FoodMapSection({ lang, bypass }: { lang: Lang; bypass?: 
         ))}
       </div>
 
-      {/* 맛집 카드 — 관광객 등록이 먼저 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
-        {mounted && visitors.map(v => {
-          const links = mapLinks(v.name, v.where || areaOf(v.area).ko);
-          return (
-            <article key={v.id} className="bg-white border border-[#dc2626]/40 rounded-xl p-3 text-left">
-              <div className="flex items-start justify-between gap-2">
-                <div className="min-w-0">
-                  <h3 translate="no" className="notranslate t-card text-black break-words">{v.name}</h3>
-                  <p className="t-tag text-gray-400 mt-0.5">
-                    {tr(areaOf(v.area).label, lang)}
-                    {v.where && <span translate="no" className="notranslate"> · {v.where}</span>}
-                  </p>
-                </div>
-                <div className="shrink-0 text-right">
+      {/* 가게 1줄 행 — 누른 행만 메뉴·태그·지도 링크가 열린다 */}
+      <div className="space-y-1 mt-2">
+        {shown.map(row => {
+          if (row.kind === 'v' && row.v) {
+            const v = row.v;
+            const rowId = `food-${row.key}`;
+            const links = mapLinks(v.name, v.where || areaOf(v.area).ko);
+            return (
+              <AccRow
+                key={row.key}
+                id={rowId}
+                open={open === rowId}
+                onToggle={() => toggle(rowId)}
+                icon="🙋"
+                title={v.name}
+                titleNoTranslate
+                meta={
+                  <>
+                    {tr(areaOf(v.area).label, lang)} · <span className="text-[#dc2626]">★</span>{' '}
+                    <span translate="no" className="notranslate">{v.rating.toFixed(1)}</span>
+                  </>
+                }
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <span className="t-tag bg-neutral-100 text-neutral-600 rounded-full px-1.5 py-0.5">
+                    {tr(FOOD_LABEL.visitor, lang)}
+                  </span>
                   <Stars value={v.rating} />
-                  <p translate="no" className="notranslate t-tag text-gray-400 mt-0.5">{v.rating.toFixed(1)}</p>
                 </div>
-              </div>
-
-              {v.menu && <p translate="no" className="notranslate t-body text-neutral-700 mt-1.5">{v.menu}</p>}
-              <p className="t-body text-neutral-600 mt-1">{v.note}</p>
-
-              <div className="mt-2 flex items-center justify-between gap-2">
-                <span className="t-tag bg-neutral-100 text-neutral-600 rounded-full px-1.5 py-0.5">{tr(FOOD_LABEL.visitor, lang)}</span>
-                <div className="flex items-center gap-2">
+                {v.menu && (
+                  <p translate="no" className="notranslate t-body text-neutral-700">{v.menu}</p>
+                )}
+                <p className="t-body text-neutral-600">{v.note}</p>
+                <div className="flex items-center justify-end gap-2 pt-0.5">
                   <a href={links.naver} target="_blank" rel="noopener noreferrer" className="t-tag text-[#dc2626] hover:underline">
                     {tr(FOOD_LABEL.mapLink, lang)} ↗
                   </a>
@@ -200,37 +229,41 @@ export default function FoodMapSection({ lang, bypass }: { lang: Lang; bypass?: 
                     {tr(FOOD_LABEL.delete, lang)}
                   </button>
                 </div>
-              </div>
-            </article>
-          );
-        })}
+              </AccRow>
+            );
+          }
 
-        {dishes.map(r => {
+          const r = row.d!;
+          const rowId = `food-${row.key}`;
           const links = mapLinks(r.name, r.where);
           return (
-            <article key={r.id} className="bg-white border border-neutral-200 rounded-xl p-3 text-left hover:border-neutral-400 transition-colors">
-              <div className="flex items-start justify-between gap-2">
-                <div className="min-w-0">
-                  <h3 translate="no" className="notranslate t-card text-black break-words">{r.name}</h3>
-                  <p className="t-tag text-gray-400 mt-0.5">
-                    {tr(areaOf(r.area).label, lang)}
-                  </p>
-                </div>
-                <div className="shrink-0 text-right">
-                  <Stars value={r.rating} />
-                  <p translate="no" className="notranslate t-tag text-gray-400 mt-0.5">{r.rating.toFixed(1)}</p>
-                </div>
+            <AccRow
+              key={row.key}
+              id={rowId}
+              open={open === rowId}
+              onToggle={() => toggle(rowId)}
+              title={r.name}
+              titleNoTranslate
+              meta={
+                <>
+                  {tr(areaOf(r.area).label, lang)} · <span className="text-[#dc2626]">★</span>{' '}
+                  <span translate="no" className="notranslate">{r.rating.toFixed(1)}</span>
+                </>
+              }
+            >
+              <div className="flex items-center justify-between gap-2">
+                <p className="t-body text-neutral-700 min-w-0">
+                  {tr(DISH[r.dish], lang)}
+                  <span translate="no" className="notranslate t-tag text-gray-400 ml-1.5">
+                    {r.price.replace(/~/g, '–')}
+                    {lang === 'KR' ? '원' : ' KRW'}
+                    {r.per === 'person' ? ` ${tr(FOOD_LABEL.perPerson, lang)}` : r.per === 'two' ? ` ${tr(FOOD_LABEL.perTwo, lang)}` : ''}
+                  </span>
+                </p>
+                <Stars value={r.rating} />
               </div>
 
-              <p className="t-body text-neutral-700 mt-1.5">
-                {tr(DISH[r.dish], lang)}
-                <span translate="no" className="notranslate t-tag text-gray-400 ml-1.5">
-                  {r.price.replace(/~/g, '–')}{lang === 'KR' ? '원' : ' KRW'}
-                  {r.per === 'person' ? ` ${tr(FOOD_LABEL.perPerson, lang)}` : r.per === 'two' ? ` ${tr(FOOD_LABEL.perTwo, lang)}` : ''}
-                </span>
-              </p>
-
-              <div className="flex flex-wrap gap-1 mt-1.5">
+              <div className="flex flex-wrap gap-1">
                 {r.tags.map(t => (
                   <span key={t} className="t-tag bg-neutral-100 text-neutral-600 rounded-full px-1.5 py-0.5">
                     {tr(FOOD_TAGS[t as FoodTag], lang)}
@@ -238,7 +271,7 @@ export default function FoodMapSection({ lang, bypass }: { lang: Lang; bypass?: 
                 ))}
               </div>
 
-              <div className="mt-2 flex items-center justify-end gap-2">
+              <div className="flex items-center justify-end gap-2 pt-0.5">
                 <a href={links.naver} target="_blank" rel="noopener noreferrer" className="t-tag text-[#dc2626] hover:underline">
                   {tr(FOOD_LABEL.mapLink, lang)} ↗
                 </a>
@@ -246,10 +279,29 @@ export default function FoodMapSection({ lang, bypass }: { lang: Lang; bypass?: 
                   Google ↗
                 </a>
               </div>
-            </article>
+            </AccRow>
           );
         })}
       </div>
+
+      {/* 전체 보기 / 접기 */}
+      {(hidden > 0 || (area === 'ALL' && showAll && rows.length > COLLAPSED_ROWS)) && (
+        <button
+          type="button"
+          onClick={() => setShowAll(v => !v)}
+          className="w-full mt-1.5 bg-white border border-neutral-300 rounded-xl t-tag text-neutral-600 py-2.5 hover:border-neutral-500 hover:text-black transition-colors active:scale-[0.99]"
+        >
+          {showAll ? (
+            <>▲ {tr(ACL.showLess, lang)}</>
+          ) : (
+            <>
+              ▼ {tr(ACL.showAll, lang)} {hidden}
+              {lang === 'KR' ? '' : ' '}
+              {tr(FOOD_LABEL.count, lang)}
+            </>
+          )}
+        </button>
+      )}
 
       {mounted && totalCount === 0 && (
         <p className="t-body text-gray-400 mt-2 text-left">{tr(FOOD_LABEL.empty, lang)}</p>
@@ -257,136 +309,160 @@ export default function FoodMapSection({ lang, bypass }: { lang: Lang; bypass?: 
 
       <p className="t-tag text-gray-400 mt-2 text-left">{tr(JLABEL.priceNote, lang)}</p>
 
-      {/* 관광객 직접 등록 폼 */}
-      <div className="mt-3 bg-white border border-neutral-200 rounded-2xl p-3 md:p-4 text-left">
-        <p className="t-card text-black">{tr(FOOD_LABEL.formTitle, lang)}</p>
-        <p className="t-sub text-gray-400 mt-0.5">{tr(FOOD_LABEL.formDesc, lang)}</p>
+      {/* 관광객 직접 등록 폼 — 기본 접힘 */}
+      <div className="mt-2">
+        <AccRow
+          id="food-form"
+          open={open === 'food-form'}
+          onToggle={() => toggle('food-form')}
+          icon="✍️"
+          title={tr(FOOD_LABEL.formTitle, lang)}
+        >
+          <p className="t-sub text-gray-400">{tr(FOOD_LABEL.formDesc, lang)}</p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 mt-2">
-          <label className="block">
-            <span className="block t-tag uppercase text-gray-400 mb-1">{tr(FOOD_LABEL.name, lang)}</span>
-            <input
-              value={fName}
-              onChange={e => { setFName(e.target.value); if (hint) setHint(''); }}
-              maxLength={40}
-              aria-label={tr(FOOD_LABEL.name, lang)}
-              className="w-full bg-neutral-50 border border-neutral-300 rounded-lg px-2.5 py-2 t-body text-black placeholder-neutral-400 outline-none focus:bg-white focus:border-black focus:ring-2 focus:ring-black/10"
-            />
-          </label>
-          <label className="block">
-            <span className="block t-tag uppercase text-gray-400 mb-1">{tr(FOOD_LABEL.area, lang)}</span>
-            <select
-              value={fArea}
-              onChange={e => setFArea(e.target.value)}
-              aria-label={tr(FOOD_LABEL.area, lang)}
-              className="w-full bg-white border border-neutral-300 rounded-lg px-2.5 py-2 t-tag text-black outline-none cursor-pointer focus:border-black focus:ring-2 focus:ring-black/10"
-            >
-              {FOOD_AREAS.map(a => (
-                <option key={a.key} value={a.key}>{tr(a.label, lang)}</option>
-              ))}
-            </select>
-          </label>
-          <label className="block">
-            <span className="block t-tag uppercase text-gray-400 mb-1">{tr(FOOD_LABEL.where, lang)}</span>
-            <input
-              value={fWhere}
-              onChange={e => setFWhere(e.target.value)}
-              maxLength={40}
-              aria-label={tr(FOOD_LABEL.where, lang)}
-              className="w-full bg-neutral-50 border border-neutral-300 rounded-lg px-2.5 py-2 t-body text-black placeholder-neutral-400 outline-none focus:bg-white focus:border-black focus:ring-2 focus:ring-black/10"
-            />
-          </label>
-          <label className="block">
-            <span className="block t-tag uppercase text-gray-400 mb-1">{tr(FOOD_LABEL.menu, lang)}</span>
-            <input
-              value={fMenu}
-              onChange={e => setFMenu(e.target.value)}
-              maxLength={40}
-              aria-label={tr(FOOD_LABEL.menu, lang)}
-              className="w-full bg-neutral-50 border border-neutral-300 rounded-lg px-2.5 py-2 t-body text-black placeholder-neutral-400 outline-none focus:bg-white focus:border-black focus:ring-2 focus:ring-black/10"
-            />
-          </label>
-        </div>
-
-        <div className="mt-2">
-          <span className="block t-tag uppercase text-gray-400 mb-1">{tr(FOOD_LABEL.rating, lang)}</span>
-          <div className="flex items-center gap-1" role="group" aria-label={tr(FOOD_LABEL.rating, lang)}>
-            {[1, 2, 3, 4, 5].map(n => (
-              <button
-                key={n}
-                type="button"
-                aria-label={`${n} / 5`}
-                aria-pressed={fRating === n}
-                onClick={() => setFRating(n)}
-                className={`w-8 h-8 rounded-lg border t-btn leading-none transition-colors active:scale-95 ${
-                  n <= fRating
-                    ? 'border-[#E5E7EB] bg-neutral-100 text-[#dc2626]'
-                    : 'border-[#E5E7EB] bg-white text-gray-300 hover:text-neutral-500'
-                }`}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+            <label className="block">
+              <span className="block t-tag uppercase text-gray-400 mb-1">{tr(FOOD_LABEL.name, lang)}</span>
+              <input
+                value={fName}
+                onChange={e => { setFName(e.target.value); if (hint) setHint(''); }}
+                maxLength={40}
+                aria-label={tr(FOOD_LABEL.name, lang)}
+                className="w-full bg-neutral-50 border border-neutral-300 rounded-lg px-2.5 py-2 t-body text-black placeholder-neutral-400 outline-none focus:bg-white focus:border-black focus:ring-2 focus:ring-black/10"
+              />
+            </label>
+            <label className="block">
+              <span className="block t-tag uppercase text-gray-400 mb-1">{tr(FOOD_LABEL.area, lang)}</span>
+              <select
+                value={fArea}
+                onChange={e => setFArea(e.target.value)}
+                aria-label={tr(FOOD_LABEL.area, lang)}
+                className="w-full bg-white border border-neutral-300 rounded-lg px-2.5 py-2 t-tag text-black outline-none cursor-pointer focus:border-black focus:ring-2 focus:ring-black/10"
               >
-                ★
-              </button>
-            ))}
-            <span translate="no" className="notranslate t-tag text-gray-400 ml-1">{fRating}/5</span>
+                {FOOD_AREAS.map(a => (
+                  <option key={a.key} value={a.key}>{tr(a.label, lang)}</option>
+                ))}
+              </select>
+            </label>
+            <label className="block">
+              <span className="block t-tag uppercase text-gray-400 mb-1">{tr(FOOD_LABEL.where, lang)}</span>
+              <input
+                value={fWhere}
+                onChange={e => setFWhere(e.target.value)}
+                maxLength={40}
+                aria-label={tr(FOOD_LABEL.where, lang)}
+                className="w-full bg-neutral-50 border border-neutral-300 rounded-lg px-2.5 py-2 t-body text-black placeholder-neutral-400 outline-none focus:bg-white focus:border-black focus:ring-2 focus:ring-black/10"
+              />
+            </label>
+            <label className="block">
+              <span className="block t-tag uppercase text-gray-400 mb-1">{tr(FOOD_LABEL.menu, lang)}</span>
+              <input
+                value={fMenu}
+                onChange={e => setFMenu(e.target.value)}
+                maxLength={40}
+                aria-label={tr(FOOD_LABEL.menu, lang)}
+                className="w-full bg-neutral-50 border border-neutral-300 rounded-lg px-2.5 py-2 t-body text-black placeholder-neutral-400 outline-none focus:bg-white focus:border-black focus:ring-2 focus:ring-black/10"
+              />
+            </label>
           </div>
-        </div>
 
-        <div className="mt-2">
-          <span className="block t-tag uppercase text-gray-400 mb-1">{tr(FOOD_LABEL.note, lang)}</span>
-          <textarea
-            value={fNote}
-            onChange={e => { setFNote(e.target.value); if (hint) setHint(''); }}
-            maxLength={100}
-            placeholder={tr(FOOD_LABEL.notePh, lang)}
-            aria-label={tr(FOOD_LABEL.note, lang)}
-            className="w-full bg-neutral-50 border border-neutral-300 rounded-lg t-body text-black placeholder-neutral-400 outline-none p-2.5 h-16 focus:bg-white focus:border-black focus:ring-2 focus:ring-black/10"
-          />
-        </div>
+          <div>
+            <span className="block t-tag uppercase text-gray-400 mb-1">{tr(FOOD_LABEL.rating, lang)}</span>
+            <div className="flex items-center gap-1" role="group" aria-label={tr(FOOD_LABEL.rating, lang)}>
+              {[1, 2, 3, 4, 5].map(n => (
+                <button
+                  key={n}
+                  type="button"
+                  aria-label={`${n} / 5`}
+                  aria-pressed={fRating === n}
+                  onClick={() => setFRating(n)}
+                  className={`w-8 h-8 rounded-lg border t-btn leading-none transition-colors active:scale-95 ${
+                    n <= fRating
+                      ? 'border-[#E5E7EB] bg-neutral-100 text-[#dc2626]'
+                      : 'border-[#E5E7EB] bg-white text-gray-300 hover:text-neutral-500'
+                  }`}
+                >
+                  ★
+                </button>
+              ))}
+              <span translate="no" className="notranslate t-tag text-gray-400 ml-1">{fRating}/5</span>
+            </div>
+          </div>
 
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mt-2">
-          <p className="t-tag text-gray-400">{tr(FOOD_LABEL.saved, lang)}</p>
-          <button
-            type="button"
-            onClick={submit}
-            className="shrink-0 bg-black hover:bg-[#dc2626] text-white t-btn px-4 py-2.5 rounded-lg transition-all active:scale-95"
+          <div>
+            <span className="block t-tag uppercase text-gray-400 mb-1">{tr(FOOD_LABEL.note, lang)}</span>
+            <textarea
+              value={fNote}
+              onChange={e => { setFNote(e.target.value); if (hint) setHint(''); }}
+              maxLength={100}
+              placeholder={tr(FOOD_LABEL.notePh, lang)}
+              aria-label={tr(FOOD_LABEL.note, lang)}
+              className="w-full bg-neutral-50 border border-neutral-300 rounded-lg t-body text-black placeholder-neutral-400 outline-none p-2.5 h-16 focus:bg-white focus:border-black focus:ring-2 focus:ring-black/10"
+            />
+          </div>
+
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <p className="t-tag text-gray-400">{tr(FOOD_LABEL.saved, lang)}</p>
+            <button
+              type="button"
+              onClick={submit}
+              className="shrink-0 bg-black hover:bg-[#dc2626] text-white t-btn px-4 py-2.5 rounded-lg transition-all active:scale-95"
+            >
+              {tr(FOOD_LABEL.submit, lang)}
+            </button>
+          </div>
+
+          {hint && <p className="t-tag text-[#dc2626]">{hint}</p>}
+          {savedMsg && !hint && (
+            <div className="bg-neutral-50 border-l-[3px] border-[#dc2626] rounded-lg px-2.5 py-2">
+              <p className="t-tag text-black">{tr(FOOD_LABEL.visitor, lang)} · {tr(FOOD_LABEL.saved, lang)}</p>
+            </div>
+          )}
+        </AccRow>
+      </div>
+
+      {/* 체험·예약 창구 — 1줄 행 */}
+      <p className="t-tag uppercase text-gray-400 text-left mt-3 mb-1">{tr(FOOD_LABEL.experience, lang)}</p>
+      <div className="space-y-1">
+        {EXPERIENCE.map(c => {
+          const rowId = `exp-${c.id}`;
+          return (
+            <AccRow
+              key={c.id}
+              id={rowId}
+              open={open === rowId}
+              onToggle={() => toggle(rowId)}
+              icon={c.icon}
+              title={tr(c.title, lang)}
+              titleNoTranslate
+            >
+              <Requirement kind={c.badge} lang={lang} />
+              <p className="t-body text-neutral-600">{tr(c.body, lang)}</p>
+              {c.url && (
+                <div className="flex justify-end">
+                  <a href={c.url} target="_blank" rel="noopener noreferrer" className="t-tag text-[#dc2626] hover:underline">
+                    <span translate="no" className="notranslate">{c.urlName}</span> ↗
+                  </a>
+                </div>
+              )}
+            </AccRow>
+          );
+        })}
+
+        {bypass && bypass.length > 0 && (
+          <AccRow
+            id="food-bypass"
+            open={open === 'food-bypass'}
+            onToggle={() => toggle('food-bypass')}
+            icon="🧷"
+            title={tr(JLABEL.bypassTitle, lang)}
+            accent="red"
           >
-            {tr(FOOD_LABEL.submit, lang)}
-          </button>
-        </div>
-
-        {hint && <p className="t-tag text-[#dc2626] mt-1.5">{hint}</p>}
-        {savedMsg && !hint && (
-          <div className="mt-2 bg-neutral-50 border-l-[3px] border-[#dc2626] rounded-lg px-2.5 py-2">
-            <p className="t-tag text-black">{tr(FOOD_LABEL.visitor, lang)} · {tr(FOOD_LABEL.saved, lang)}</p>
-          </div>
+            <BypassNote lines={bypass} lang={lang} />
+            <p className="t-tag text-gray-400">{tr(ACL.bypassHint, lang)}</p>
+          </AccRow>
         )}
       </div>
-
-      {/* 체험·예약 창구 */}
-      <p className="t-tag uppercase text-gray-400 text-left mt-3 mb-1">{tr(FOOD_LABEL.experience, lang)}</p>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-        {EXPERIENCE.map(c => (
-          <article key={c.id} className="bg-white border border-neutral-200 rounded-xl p-3 text-left flex flex-col hover:border-neutral-400 transition-colors">
-            <div className="flex items-start gap-1.5">
-              <span aria-hidden translate="no" className="notranslate shrink-0 text-[length:calc(15px*var(--pi-scale))] leading-none mt-[1px]">
-                {c.icon}
-              </span>
-              <h3 translate="no" className="notranslate t-card text-black min-w-0 flex-1">{tr(c.title, lang)}</h3>
-            </div>
-            <div className="mt-1.5">
-              <AuthBadge kind={c.badge} lang={lang} />
-            </div>
-            <p className="t-body text-neutral-600 mt-1.5 flex-1">{tr(c.body, lang)}</p>
-            {c.url && (
-              <a href={c.url} target="_blank" rel="noopener noreferrer" className="mt-2 t-tag text-[#dc2626] hover:underline self-end">
-                <span translate="no" className="notranslate">{c.urlName}</span> ↗
-              </a>
-            )}
-          </article>
-        ))}
-      </div>
-
-      {bypass && <BypassNote lines={bypass} lang={lang} />}
     </section>
   );
 }

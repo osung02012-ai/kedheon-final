@@ -11,7 +11,7 @@ import AppHeader from '../components/AppHeader';
 import HanbokIcon from '../components/HanbokIcon';
 import LangSelect from '../components/LangSelect';
 import SectionHead from './components/SectionHead';
-import AuthBadge from './components/AuthBadge';
+import AccRow, { Requirement, useAccordion } from './components/Accordion';
 import JourneyRail from './components/JourneyRail';
 import JourneySection, { BypassNote } from './components/JourneySection';
 import TicketsSection from './components/TicketsSection';
@@ -22,7 +22,8 @@ import {
 } from './lib/i18n';
 import { ZONES, PICK_ORDER, type PickKey } from './lib/zones';
 import { GOODS, LINKS } from './lib/packs';
-import { SEC, ARRIVAL, TRANSIT, STAY, BYPASS } from './lib/journey';
+import { SEC, ARRIVAL, TRANSIT, STAY, BYPASS, JLABEL } from './lib/journey';
+import { ACL } from './lib/accordion';
 import { GOODS_CHANNELS } from './lib/culture';
 
 /* ------------------------------------------------------------------
@@ -56,6 +57,8 @@ export default function HangangPage() {
   const [reqZone, setReqZone] = useState('SEOUL');
   const [reqNote, setReqNote] = useState('');
   const [requests, setRequests] = useState<{ id: string; type: string; zone: string; note: string }[]>([]);
+  // 06 굿즈·응급 — 1줄 클릭형 아코디언(누른 항목만 안쪽이 열린다)
+  const goodsAcc = useAccordion();
 
   const T = (k: UIKey) => ui(k, lang);
   const L = (v: L10) => tr(v, lang);
@@ -245,30 +248,47 @@ export default function HangangPage() {
         <section id="journey-goods" className="scroll-mt-3">
         <SectionHead no="06" title={L(SEC.goods.title)} desc={L(SEC.goods.desc)} />
 
-        {/* 06-1. 장인 굿즈 3대 공식 판로 */}
+        {/* 06-1. 장인 굿즈 3대 공식 판로 — 1줄 행(누른 항목만 안쪽이 열린다) */}
         <p className="t-tag uppercase text-gray-400 text-left mb-1">K-CRAFT OFFICIAL STORES</p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+        <div className="space-y-1">
           {GOODS_CHANNELS.map(g => (
-            <article key={g.id} className="bg-white border border-neutral-200 rounded-xl p-3 text-left flex flex-col hover:border-neutral-400 transition-colors">
-              <div className="flex items-start justify-between gap-2">
-                <h3 translate="no" className="notranslate t-card text-black min-w-0">{g.name}</h3>
-                <AuthBadge kind={g.badge} lang={lang} />
+            <AccRow
+              key={g.id}
+              id={`goods-${g.id}`}
+              open={goodsAcc.open === `goods-${g.id}`}
+              onToggle={() => goodsAcc.toggle(`goods-${g.id}`)}
+              icon="🏺"
+              title={g.name}
+              titleNoTranslate
+            >
+              <Requirement kind={g.badge} lang={lang} />
+              <p className="t-body text-neutral-600">{L(g.desc)}</p>
+              <p className="t-tag text-neutral-500 border-t border-neutral-100 pt-1.5">{L(g.items)}</p>
+              <div className="flex justify-end">
+                <a
+                  href={g.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="t-tag text-[#dc2626] hover:underline"
+                >
+                  <span translate="no" className="notranslate">{g.urlName}</span> ↗
+                </a>
               </div>
-              <p className="t-body text-neutral-600 mt-1.5 flex-1">{L(g.desc)}</p>
-              <p className="t-tag text-neutral-500 mt-1.5 border-t border-neutral-100 pt-1.5">{L(g.items)}</p>
-              <a
-                href={g.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-2 self-end t-tag text-[#dc2626] hover:underline"
-              >
-                <span translate="no" className="notranslate">{g.urlName}</span> ↗
-              </a>
-            </article>
+            </AccRow>
           ))}
-        </div>
 
-        <BypassNote lines={[BYPASS[4]]} lang={lang} />
+          <AccRow
+            id="goods-bypass"
+            open={goodsAcc.open === 'goods-bypass'}
+            onToggle={() => goodsAcc.toggle('goods-bypass')}
+            icon="🧷"
+            title={L(JLABEL.bypassTitle)}
+            accent="red"
+          >
+            <BypassNote lines={[BYPASS[4]]} lang={lang} />
+            <p className="t-tag text-gray-400">{L(ACL.bypassHint)}</p>
+          </AccRow>
+        </div>
 
         {/* 06-2. K-굿즈 · 한복 · 짐보관 대행 보드 (기존 구조 유지) */}
         <p className="t-tag uppercase text-gray-400 text-left mt-3 mb-1">{T('sec2Title')}</p>
@@ -293,10 +313,14 @@ export default function HangangPage() {
           ))}
         </div>
 
-        <div className="mt-2 bg-white border border-neutral-200 rounded-2xl p-3 md:p-4">
-          <p className="t-tag uppercase text-gray-400 mb-2">
-            {T('requestLabel')}
-          </p>
+        <div className="mt-2">
+          <AccRow
+            id="goods-request"
+            open={goodsAcc.open === 'goods-request'}
+            onToggle={() => goodsAcc.toggle('goods-request')}
+            icon="✍️"
+            title={T('requestLabel')}
+          >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5">
             <select
               value={reqType}
@@ -351,6 +375,7 @@ export default function HangangPage() {
               ))}
             </div>
           )}
+          </AccRow>
         </div>
 
         {/* 06-3. 전국 세이프티 실드 */}
