@@ -497,7 +497,7 @@ export default function VendorPage() {
               onClick={() => setPickerFor('view')}
               className="mt-1 w-full flex items-center justify-between gap-2 bg-neutral-50 border border-neutral-200 rounded-xl px-3 py-2 text-left active:scale-[0.99] transition-transform"
             >
-              <span className="flex items-center gap-1.5 min-w-0">
+              <span className="flex items-center gap-1.5 min-w-0 flex-1">
                 <span translate="no" className="notranslate shrink-0 text-[length:calc(15px*var(--pi-scale))] leading-none">{view.flag}</span>
                 <span className="truncate t-card text-black">{countryName(country)}</span>
                 <span translate="no" className="notranslate shrink-0 t-tag font-mono text-gray-400">{country === 'GLOBAL' ? 'ALL' : country}</span>
