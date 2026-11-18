@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 /**
- * 앱 공통 하단 고정 독 — KEDHEON · CIVIL · FACTFILTER · HANGANG · XAEA12 · NEXUS · VENDOR
+ * 앱 공통 하단 고정 독 — KEDHEON · CIVIL · FACTFILTER · HANGANG · XAEA12 · VENDOR · NEXUS
  *
  * Pi Browser(Android WebView)는 시스템 글꼴 배율을 텍스트에 그대로 곱한다(실측 약 1.5배).
  * 예전 구현은 `flex-1 min-w-0` 로 6개를 한 줄에 밀어 넣어, 글자가 커지면 라벨끼리
@@ -20,8 +20,8 @@ const DOCK_ITEMS: { name: string; path: string }[] = [
   { name: 'FACTFILTER', path: '/factfilter' },
   { name: 'HANGANG', path: '/hangang' },
   { name: 'XAEA12', path: '/xaea12' },
-  { name: 'NEXUS', path: '#' },
   { name: 'VENDOR', path: 'https://vendor.kedheon.com' },
+  { name: 'NEXUS', path: '#' },
 ];
 
 /**
