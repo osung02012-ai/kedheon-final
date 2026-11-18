@@ -221,7 +221,7 @@ export default function VendorPage() {
           <div className="absolute -right-10 -bottom-10 w-40 h-40 rounded-full bg-[#dc2626]/5" />
 
           <div className="relative md:grid md:grid-cols-[1.08fr_0.92fr] md:gap-7 md:items-center">
-            {/* 모바일: 상단 중앙 대표이미지 카드(그림 안에 vendor.pi 명패 포함) / 데스크톱: 오른쪽 큰 그림 + 캡션.
+            {/* 모바일: 상단 중앙 대표이미지 카드(그림 안에 VENDOR 명패 포함) / 데스크톱: 오른쪽 큰 그림 + 캡션.
                 히어로가 첫 화면을 덮지 않도록 모바일 카드는 148px 로 묶는다(BNPi·Hangang 기준). */}
             <figure className="relative mx-auto w-full max-w-[148px] sm:max-w-[176px] md:order-2 md:max-w-[340px] md:shrink-0">
               <img
@@ -573,7 +573,7 @@ export default function VendorPage() {
         <PiBookmarkNotice lang={lang} />
 
         <p className="text-center text-gray-300 t-tag mt-6 mb-2">
-          <span translate="no" className="notranslate">Vendor</span> · <span translate="no" className="notranslate">pivendor.pi</span> · {T('footerTag')}
+          <span translate="no" className="notranslate">Vendor</span> · <span translate="no" className="notranslate">vendor.kedheon.com</span> · {T('footerTag')}
         </p>
       </main>
 
