@@ -252,7 +252,10 @@ export default function VendorPage() {
           <div className="relative mt-2.5 md:mt-4">
             <div className="flex items-center justify-between gap-2">
               <p className="t-tag uppercase text-gray-400">{T('countryLabel')}</p>
-              <span className="t-tag text-gray-300">{T('countryCount')}</span>
+              <span className="t-tag text-gray-300 whitespace-nowrap">
+                <span className="sm:hidden">{T('countryCountShort')}</span>
+                <span className="hidden sm:inline">{T('countryCount')}</span>
+              </span>
             </div>
             <button
               type="button"

@@ -186,6 +186,10 @@ export const UI = {
     'ISO 3166-1 基準 238か国', '238 países · ISO 3166-1', '238 quốc gia · ISO 3166-1',
     '238 pays · ISO 3166-1', '238 países · ISO 3166-1', '238 стран · ISO 3166-1', '238 negara · ISO 3166-1'
   ],
+  countryCountShort: [
+    '238개국', '238 countries', '238 国', '238か国', '238 países',
+    '238 quốc gia', '238 pays', '238 países', '238 стран', '238 negara'
+  ],
   noCountry: ['검색 결과가 없습니다.', 'No country found.', '没有找到国家。', '該当する国がありません。', 'No se encontró el país.', 'Không tìm thấy quốc gia.', 'Aucun pays trouvé.', 'Nenhum país encontrado.', 'Страна не найдена.', 'Negara tidak ditemukan.'],
 
   rail1: ['인력·소액 일감', 'Work & small jobs', '人力·小额活', '人手・小口案件', 'Trabajo y encargos', 'Việc làm nhỏ', 'Travail et petites missions', 'Trabalho e tarefas', 'Работа и мелкие задачи', 'Kerja & tugas kecil'],
