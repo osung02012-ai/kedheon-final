@@ -5,7 +5,7 @@ import PiBadge from '../components/PiBadge';
 import { usePi } from '../components/PiProvider';
 import PiReadOnlyBanner from '../components/PiReadOnlyBanner';
 import AppDock from '../components/AppDock';
-import EcosystemBookmarkAndReview from '../components/EcosystemBookmarkAndReview';
+import PiBookmarkNotice from '../components/PiBookmarkNotice';
 import AppHeader from '../components/AppHeader';
 import LangSelect from '../components/LangSelect';
 import {
@@ -906,7 +906,7 @@ export default function Xaea12Page() {
           </div>
         </div>
 
-        <EcosystemBookmarkAndReview current="XAEA12" lang={lang} />
+        <PiBookmarkNotice lang={lang} />
 
         <p className="text-center text-gray-300 t-tag mt-6 mb-2">
           <span translate="no" className="notranslate">XAEA12</span> · <span translate="no" className="notranslate">xaea12.pi</span> · {T('footerTag')}

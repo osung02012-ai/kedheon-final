@@ -124,8 +124,8 @@ export const UI = {
     '7 regiones', '7 vùng', '7 régions', '7 regiões', '7 регионов', '7 wilayah'
   ],
   statHotline: [
-    '1330 관광 통역 24h', '1330 hotline 24h', '1330 旅游翻译 24h', '1330 観光通訳 24h',
-    '1330 · 24 h', '1330 trợ giúp 24h', '1330 · 24 h', '1330 · 24 h', '1330 · 24 ч', '1330 · 24 jam'
+    '관광 통역 07–24', 'hotline 07–24', '旅游翻译 07–24', '観光通訳 07–24',
+    'turismo 07–24', 'du lịch 07–24', 'tourisme 07–24', 'turismo 07–24', 'туризм 07–24', 'wisata 07–24'
   ],
   statBeom: [
     'BEOM 리워드', 'BEOM rewards', 'BEOM 奖励', 'BEOM リワード',
@@ -141,8 +141,8 @@ export const UI = {
     'regiones', 'vùng', 'régions', 'regiões', 'регионы', 'wilayah'
   ],
   statHotlineS: [
-    '1330', '1330', '1330', '1330',
-    '1330', '1330', '1330', '1330', '1330', '1330'
+    '07–24', '07–24', '07–24', '07–24',
+    '07–24', '07–24', '07–24', '07–24', '07–24', '07–24'
   ],
   statBeomS: [
     'BEOM', 'BEOM', 'BEOM', 'BEOM',
@@ -253,16 +253,16 @@ export const UI = {
   ],
   util1Title: ['교통카드', 'Transit card', '交通卡', '交通カード', 'Tarjeta de transporte', 'Thẻ giao thông', 'Carte de transport', 'Cartão de transporte', 'Транспортная карта', 'Kartu transportasi'],
   util1Body: [
-    '티머니 2,500~4,000원(편의점) 충전식. 서울만 다니면 기후동행카드 단기권 1일 5,000·3일 10,000·5일 15,000·7일 20,000원(카드값 3,000원, 1~8호선 발매기에서 해외카드 결제, 서울 밖·신분당선·GTX 불가).',
-    'T-money costs ₩2,500–4,000 at convenience stores and is rechargeable. Staying in Seoul? The Climate Card short pass is ₩5,000/1 day, ₩10,000/3 days, ₩15,000/5 days, ₩20,000/7 days (card ₩3,000; buy at Line 1–8 vending machines with a foreign card; Seoul only, no Shinbundang Line or GTX).',
-    'T-money 卡 2,500~4,000 韩元（便利店购买）可充值。只在首尔活动就买气候同行卡短期券：1 日 5,000、3 日 10,000、5 日 15,000、7 日 20,000 韩元（卡费 3,000 韩元，1~8 号线售票机可用海外卡支付，首尔以外及新盆唐线、GTX 不可用）。',
-    'T-money は 2,500〜4,000ウォン（コンビニ）で購入しチャージ式。ソウル中心なら気候同行カード短期券が1日5,000・3日10,000・5日15,000・7日20,000ウォン（カード3,000ウォン、1〜8号線の券売機で海外カード決済可、ソウル外・新盆唐線・GTXは不可）。',
-    'La T-money cuesta ₩2,500–4,000 en tiendas y se recarga. Si te quedas en Seúl, el pase corto Climate Card cuesta ₩5,000/1 día, ₩10,000/3 días, ₩15,000/5 días y ₩20,000/7 días (tarjeta ₩3,000; se compra en máquinas de líneas 1–8 con tarjeta extranjera; solo Seúl, sin Shinbundang ni GTX).',
-    'Thẻ T-money giá 2.500–4.000 KRW (mua ở cửa hàng tiện lợi), nạp tiền. Nếu chỉ ở Seoul, vé ngắn hạn Climate Card: 1 ngày 5.000, 3 ngày 10.000, 5 ngày 15.000, 7 ngày 20.000 KRW (thẻ 3.000 KRW, mua ở máy bán vé tuyến 1–8 bằng thẻ nước ngoài; chỉ trong Seoul, không dùng tuyến Shinbundang hay GTX).',
-    'La T-money coûte 2 500–4 000 ₩ en supérette et se recharge. Si vous restez à Séoul, le pass court Climate Card est à 5 000 ₩/1 j, 10 000 ₩/3 j, 15 000 ₩/5 j, 20 000 ₩/7 j (carte 3 000 ₩, achat aux distributeurs des lignes 1–8 par carte étrangère ; Séoul uniquement, hors Shinbundang et GTX).',
-    'O T-money custa ₩2.500–4.000 em lojas e é recarregável. Ficando em Seul, o passe curto Climate Card custa ₩5.000/1 dia, ₩10.000/3 dias, ₩15.000/5 dias e ₩20.000/7 dias (cartão ₩3.000; compra nas máquinas das linhas 1–8 com cartão estrangeiro; só Seul, sem Shinbundang nem GTX).',
-    'T-money стоит 2 500–4 000 вон в магазинах, пополняется. Если вы только в Сеуле — короткий проездной Climate Card: 5 000 вон/1 день, 10 000/3 дня, 15 000/5 дней, 20 000/7 дней (карта 3 000 вон, покупка в автоматах линий 1–8 иностранной картой; только Сеул, без Shinbundang и GTX).',
-    'T-money ₩2.500–4.000 di toko dan bisa diisi ulang. Kalau hanya di Seoul, pass pendek Climate Card: ₩5.000/1 hari, ₩10.000/3 hari, ₩15.000/5 hari, ₩20.000/7 hari (kartu ₩3.000, beli di mesin jalur 1–8 dengan kartu asing; hanya Seoul, tanpa Shinbundang dan GTX).'
+    '티머니 2,500~4,000원(편의점) 충전식. 서울만 다니면 기후동행카드 단기권 1일 5,000·3일 10,000·5일 15,000·7일 20,000원(카드값 3,000원, 1~8호선 발매기에서 해외카드 결제, 서울 밖·신분당선·GTX 불가). 2026-03-17부터는 해외 발행 카드로도 구매·충전됩니다.',
+    'T-money costs ₩2,500–4,000 at convenience stores and is rechargeable. Staying in Seoul? The Climate Card short pass is ₩5,000/1 day, ₩10,000/3 days, ₩15,000/5 days, ₩20,000/7 days (card ₩3,000; buy at Line 1–8 vending machines with a foreign card; Seoul only, no Shinbundang Line or GTX). From 2026-03-17 foreign-issued cards can buy and top it up.',
+    'T-money 卡 2,500~4,000 韩元（便利店购买）可充值。只在首尔活动就买气候同行卡短期券：1 日 5,000、3 日 10,000、5 日 15,000、7 日 20,000 韩元（卡费 3,000 韩元，1~8 号线售票机可用海外卡支付，首尔以外及新盆唐线、GTX 不可用）。 2026-03-17 起也可用海外发行卡购买·充值。',
+    'T-money は 2,500〜4,000ウォン（コンビニ）で購入しチャージ式。ソウル中心なら気候同行カード短期券が1日5,000・3日10,000・5日15,000・7日20,000ウォン（カード3,000ウォン、1〜8号線の券売機で海外カード決済可、ソウル外・新盆唐線・GTXは不可）。 2026-03-17からは海外発行カードでも購入・チャージできます。',
+    'La T-money cuesta ₩2,500–4,000 en tiendas y se recarga. Si te quedas en Seúl, el pase corto Climate Card cuesta ₩5,000/1 día, ₩10,000/3 días, ₩15,000/5 días y ₩20,000/7 días (tarjeta ₩3,000; se compra en máquinas de líneas 1–8 con tarjeta extranjera; solo Seúl, sin Shinbundang ni GTX). Desde el 2026-03-17 también se compra y recarga con tarjeta extranjera.',
+    'Thẻ T-money giá 2.500–4.000 KRW (mua ở cửa hàng tiện lợi), nạp tiền. Nếu chỉ ở Seoul, vé ngắn hạn Climate Card: 1 ngày 5.000, 3 ngày 10.000, 5 ngày 15.000, 7 ngày 20.000 KRW (thẻ 3.000 KRW, mua ở máy bán vé tuyến 1–8 bằng thẻ nước ngoài; chỉ trong Seoul, không dùng tuyến Shinbundang hay GTX). Từ 17-03-2026 mua và nạp được bằng thẻ nước ngoài.',
+    'La T-money coûte 2 500–4 000 ₩ en supérette et se recharge. Si vous restez à Séoul, le pass court Climate Card est à 5 000 ₩/1 j, 10 000 ₩/3 j, 15 000 ₩/5 j, 20 000 ₩/7 j (carte 3 000 ₩, achat aux distributeurs des lignes 1–8 par carte étrangère ; Séoul uniquement, hors Shinbundang et GTX). Depuis le 17-03-2026, achat et recharge aussi par carte étrangère.',
+    'O T-money custa ₩2.500–4.000 em lojas e é recarregável. Ficando em Seul, o passe curto Climate Card custa ₩5.000/1 dia, ₩10.000/3 dias, ₩15.000/5 dias e ₩20.000/7 dias (cartão ₩3.000; compra nas máquinas das linhas 1–8 com cartão estrangeiro; só Seul, sem Shinbundang nem GTX). Desde 17-03-2026 também compra e recarrega com cartão estrangeiro.',
+    'T-money стоит 2 500–4 000 вон в магазинах, пополняется. Если вы только в Сеуле — короткий проездной Climate Card: 5 000 вон/1 день, 10 000/3 дня, 15 000/5 дней, 20 000/7 дней (карта 3 000 вон, покупка в автоматах линий 1–8 иностранной картой; только Сеул, без Shinbundang и GTX). С 17.03.2026 покупка и пополнение также зарубежной картой.',
+    'T-money ₩2.500–4.000 di toko dan bisa diisi ulang. Kalau hanya di Seoul, pass pendek Climate Card: ₩5.000/1 hari, ₩10.000/3 hari, ₩15.000/5 hari, ₩20.000/7 hari (kartu ₩3.000, beli di mesin jalur 1–8 dengan kartu asing; hanya Seoul, tanpa Shinbundang dan GTX). Mulai 17-03-2026 bisa juga dibeli dan diisi dengan kartu asing.'
   ],
   util2Title: ['전압·콘센트', 'Power & plugs', '电压·插座', '電圧・コンセント', 'Voltaje y enchufes', 'Điện áp & ổ cắm', 'Tension et prises', 'Voltagem e tomadas', 'Напряжение и розетки', 'Tegangan & colokan'],
   util2Body: [
@@ -279,16 +279,16 @@ export const UI = {
   ],
   util3Title: ['택스리펀', 'Tax refund', '退税', '免税還付', 'Devolución de IVA', 'Hoàn thuế', 'Détaxe', 'Restituição de imposto', 'Tax free', 'Pengembalian pajak'],
   util3Body: [
-    '영수증 1건 15,000원 이상 + 여권 필수. 즉시환급은 1회 100만원 미만·총 500만원 이하, 실제 환급액은 구매액의 5~8%.',
-    '₩15,000+ per receipt and your passport. Instant refund up to ₩1,000,000 per purchase and ₩5,000,000 in total; you get back about 5–8%.',
-    '单张发票满 15,000 韩元并出示护照。即时退税单次 100 万韩元以下、累计 500 万韩元以下，实际退税额约为消费额的 5~8%。',
-    '1レシート15,000ウォン以上＋パスポート必須。即時還付は1回100万ウォン未満・合計500万ウォン以下、実際の還付は購入額の5〜8%程度。',
-    'Desde ₩15.000 por recibo y con pasaporte. La devolución inmediata admite hasta ₩1.000.000 por compra y ₩5.000.000 en total; recuperas un 5–8 %.',
-    'Từ 15.000 KRW/hóa đơn và cần hộ chiếu. Hoàn thuế ngay tối đa 1.000.000 KRW/lần và 5.000.000 KRW tổng; thực nhận khoảng 5–8%.',
-    'À partir de 15 000 ₩ par ticket, passeport obligatoire. Détaxe immédiate jusqu’à 1 000 000 ₩ par achat et 5 000 000 ₩ au total ; vous récupérez 5–8 %.',
-    'A partir de ₩15.000 por recibo e com passaporte. A restituição imediata vai até ₩1.000.000 por compra e ₩5.000.000 no total; você recebe 5–8%.',
-    'От 15 000 вон в чеке и паспорт. Мгновенный возврат — до 1 000 000 вон за покупку и 5 000 000 вон всего; реально возвращают 5–8%.',
-    'Minimal ₩15.000 per struk dan wajib paspor. Pengembalian langsung maksimal ₩1.000.000 per pembelian dan ₩5.000.000 total; yang kembali sekitar 5–8%.'
+    '영수증 1건 15,000원 이상 + 여권 필수. 즉시환급은 1회 100만원 미만·총 500만원 이하, 실제 환급액은 구매액의 5~8%. 구매 3개월 내, 출국 3개월 전 조건입니다.',
+    '₩15,000+ per receipt and your passport. Instant refund up to ₩1,000,000 per purchase and ₩5,000,000 in total; you get back about 5–8%. Conditions: bought within 3 months, departure within 3 months.',
+    '单张发票满 15,000 韩元并出示护照。即时退税单次 100 万韩元以下、累计 500 万韩元以下，实际退税额约为消费额的 5~8%。 条件：购买后 3 个月内、出境前 3 个月内。',
+    '1レシート15,000ウォン以上＋パスポート必須。即時還付は1回100万ウォン未満・合計500万ウォン以下、実際の還付は購入額の5〜8%程度。 購入から3か月以内・出国3か月前までの条件です。',
+    'Desde ₩15.000 por recibo y con pasaporte. La devolución inmediata admite hasta ₩1.000.000 por compra y ₩5.000.000 en total; recuperas un 5–8 %. Condiciones: compra en los últimos 3 meses y salida en los próximos 3.',
+    'Từ 15.000 KRW/hóa đơn và cần hộ chiếu. Hoàn thuế ngay tối đa 1.000.000 KRW/lần và 5.000.000 KRW tổng; thực nhận khoảng 5–8%. Điều kiện: mua trong 3 tháng, xuất cảnh trong 3 tháng.',
+    'À partir de 15 000 ₩ par ticket, passeport obligatoire. Détaxe immédiate jusqu’à 1 000 000 ₩ par achat et 5 000 000 ₩ au total ; vous récupérez 5–8 %. Conditions : achat de moins de 3 mois, départ dans les 3 mois.',
+    'A partir de ₩15.000 por recibo e com passaporte. A restituição imediata vai até ₩1.000.000 por compra e ₩5.000.000 no total; você recebe 5–8%. Condições: compra em até 3 meses e saída em até 3 meses.',
+    'От 15 000 вон в чеке и паспорт. Мгновенный возврат — до 1 000 000 вон за покупку и 5 000 000 вон всего; реально возвращают 5–8%. Условия: покупка не старше 3 месяцев, вылет в течение 3 месяцев.',
+    'Minimal ₩15.000 per struk dan wajib paspor. Pengembalian langsung maksimal ₩1.000.000 per pembelian dan ₩5.000.000 total; yang kembali sekitar 5–8%. Syarat: beli dalam 3 bulan, berangkat dalam 3 bulan.'
   ],
   util4Title: ['휴관일', 'Closing days', '闭馆日', '休館日', 'Días de cierre', 'Ngày đóng cửa', 'Jours de fermeture', 'Dias de fechamento', 'Выходные дни', 'Hari tutup'],
   util4Body: [
@@ -309,16 +309,16 @@ export const UI = {
     'Escudo de segurança nacional', 'Щит безопасности по всей стране', 'Perisai keselamatan nasional'
   ],
   sec4Desc: [
-    '여행 중 혼자 남지 않도록 — 24시간 긴급·통역 핫라인과 공식 안전망을 한 화면에 모았습니다.',
-    'So no one is left alone on the road: 24-hour emergency and interpretation hotlines with official safety networks in one screen.',
-    '旅途中不让你独自应对——24 小时紧急与翻译热线、官方安全网络集中在一屏。',
-    '旅先で一人にならないように — 24時間の緊急・通訳ホットラインと公式安全網を1画面に。',
-    'Para que nadie quede solo en el viaje: líneas de emergencia e interpretación 24 h y redes oficiales en una pantalla.',
-    'Để bạn không bao giờ phải xử lý một mình: đường dây khẩn cấp và phiên dịch 24h cùng mạng an toàn chính thức trên một màn hình.',
-    'Pour ne jamais rester seul en route : lignes d’urgence et d’interprétation 24 h et réseaux officiels sur un seul écran.',
-    'Para ninguém ficar sozinho na viagem: linhas de emergência e interpretação 24 h e redes oficiais em uma tela.',
-    'Чтобы вы не остались одни в поездке: круглосуточные экстренные и переводческие линии и официальные службы на одном экране.',
-    'Agar tidak sendirian di perjalanan: hotline darurat dan penerjemah 24 jam serta jaringan resmi dalam satu layar.'
+    '여행 중 혼자 남지 않도록 — 24시간 긴급(112·119)과 관광 통역 1330(07:00~24:00), 공식 안전망을 한 화면에 모았습니다.',
+    'So no one is left alone on the road: 24-hour emergency lines (112/119), the 1330 travel hotline (07:00–24:00) and official safety networks on one screen.',
+    '旅途中不让你独自应对——24 小时紧急电话(112·119)、旅游翻译 1330(07:00~24:00) 与官方安全网络集中在一屏。',
+    '旅先で一人にならないように — 24時間の緊急(112・119)、観光通訳1330(07:00〜24:00)、公式安全網を1画面に。',
+    'Para que nadie quede solo: emergencias 24 h (112/119), la línea 1330 (07:00–24:00) y redes oficiales en una pantalla.',
+    'Để bạn không phải xử lý một mình: khẩn cấp 24h (112/119), tổng đài 1330 (07:00–24:00) và mạng an toàn chính thức trên một màn hình.',
+    'Pour ne jamais rester seul : urgences 24 h (112/119), ligne 1330 (07:00–24:00) et réseaux officiels sur un écran.',
+    'Para ninguém ficar sozinho: emergências 24 h (112/119), linha 1330 (07:00–24:00) e redes oficiais em uma tela.',
+    'Чтобы вы не остались одни: экстренные линии 24 ч (112/119), линия 1330 (07:00–24:00) и официальные службы на одном экране.',
+    'Agar tidak sendirian: darurat 24 jam (112/119), hotline 1330 (07:00–24:00), dan jaringan resmi dalam satu layar.'
   ],
   hotlinePolice: ['경찰 신고', 'Police', '报警', '警察', 'Policía', 'Cảnh sát', 'Police', 'Polícia', 'Полиция', 'Polisi'],
   hotlineAmbulance: ['응급·구조', 'Ambulance', '急救', '救急', 'Ambulancia', 'Cấp cứu', 'Urgences', 'Ambulância', 'Скорая', 'Ambulans'],
@@ -326,19 +326,19 @@ export const UI = {
   hotlineSeoul: ['서울 다산콜', 'Seoul 120', '首尔 120', 'ソウル120', 'Seúl 120', 'Seoul 120', 'Séoul 120', 'Seul 120', 'Сеул 120', 'Seoul 120'],
   hotlinePoliceSub: ['24시간', '24h', '24 小时', '24時間', '24 h', '24h', '24 h', '24 h', '24 ч', '24 jam'],
   hotlineAmbulanceSub: ['24시간', '24h', '24 小时', '24時間', '24 h', '24h', '24 h', '24 h', '24 ч', '24 jam'],
-  hotlineTourSub: ['24시간 다국어', '24h, 13 languages', '24 小时·多语', '24時間・多言語', '24 h, 13 idiomas', '24h, 13 ngôn ngữ', '24 h, 13 langues', '24 h, 13 idiomas', '24 ч, 13 языков', '24 jam, 13 bahasa'],
+  hotlineTourSub: ['07:00~24:00 · 8개 언어', '07:00–24:00 · 8 languages', '07:00~24:00 · 8 种语言', '07:00〜24:00・8言語', '07:00–24:00 · 8 idiomas', '07:00–24:00 · 8 ngôn ngữ', '07:00–24:00 · 8 langues', '07:00–24:00 · 8 idiomas', '07:00–24:00 · 8 языков', '07:00–24:00 · 8 bahasa'],
   hotlineSeoulSub: ['야간·공휴일', 'nights & holidays', '夜间·公休日', '夜間・祝日', 'noches y festivos', 'đêm & ngày lễ', 'nuits et jours fériés', 'noites e feriados', 'ночью и в праздники', 'malam & libur'],
   safetyNote: [
-    '응급은 112·119, 언어가 막히면 1330(24시간 13개 언어). 서울에서는 120으로 심야 안심귀가 동행(평일 22시~01시)을 요청할 수 있습니다. DMZ·판문점은 여권과 사전 예약이 필수입니다.',
-    'Emergency: 112 / 119. Language help: 1330 (24 h, 13 languages). In Seoul, call 120 for a late-night safe-return escort (weekdays 22:00–01:00). The DMZ and Panmunjom require your passport and advance booking.',
-    '紧急拨打 112·119，语言不通拨 1330（24 小时·13 种语言）。首尔可拨 120 申请深夜安心回家陪伴（平日 22 时~01 时）。DMZ·板门店必须携带护照并提前预约。',
-    '緊急は112・119、言葉に困ったら1330（24時間・13言語）。ソウルでは120で深夜の安心帰宅同行（平日22時〜01時）を依頼できます。DMZ・板門店はパスポートと事前予約が必須です。',
-    'Emergencias: 112 / 119. Ayuda idiomática: 1330 (24 h, 13 idiomas). En Seúl, llama al 120 para un acompañamiento nocturno de regreso (laborables 22:00–01:00). La DMZ y Panmunjom exigen pasaporte y reserva previa.',
-    'Khẩn cấp: 112 / 119. Trợ giúp ngôn ngữ: 1330 (24h, 13 ngôn ngữ). Tại Seoul, gọi 120 để được hộ tống về đêm (ngày thường 22:00–01:00). DMZ và Bàn Môn Điếm bắt buộc hộ chiếu và đặt trước.',
-    'Urgences : 112 / 119. Aide linguistique : 1330 (24 h, 13 langues). À Séoul, appelez le 120 pour un accompagnement nocturne (en semaine 22 h–1 h). DMZ et Panmunjom exigent passeport et réservation.',
-    'Emergências: 112 / 119. Ajuda em idiomas: 1330 (24 h, 13 idiomas). Em Seul, ligue 120 para acompanhamento noturno de volta (dias úteis 22h–1h). DMZ e Panmunjom exigem passaporte e reserva antecipada.',
-    'Экстренно: 112 / 119. Языковая помощь: 1330 (24 ч, 13 языков). В Сеуле звоните 120 для ночного сопровождения (будни 22:00–01:00). Для DMZ и Пханмунджома нужны паспорт и бронь заранее.',
-    'Darurat: 112 / 119. Bantuan bahasa: 1330 (24 jam, 13 bahasa). Di Seoul, hubungi 120 untuk pengantaran pulang malam (hari kerja 22.00–01.00). DMZ dan Panmunjom wajib paspor dan reservasi.'
+    '응급은 112·119, 언어가 막히면 1330(07:00~24:00·8개 언어). 서울에서는 120으로 심야 안심귀가 동행(평일 22시~01시)을 요청할 수 있습니다. DMZ·판문점은 여권과 사전 예약이 필수입니다.',
+    'Emergency: 112 / 119. Language help: 1330 (07:00–24:00, 8 languages). In Seoul, call 120 for a late-night safe-return escort (weekdays 22:00–01:00). The DMZ and Panmunjom require your passport and advance booking.',
+    '紧急拨打 112·119，语言不通拨 1330（07:00~24:00·8 种语言）。首尔可拨 120 申请深夜安心回家陪伴（平日 22 时~01 时）。DMZ·板门店必须携带护照并提前预约。',
+    '緊急は112・119、言葉に困ったら1330（07:00〜24:00・8言語）。ソウルでは120で深夜の安心帰宅同行（平日22時〜01時）を依頼できます。DMZ・板門店はパスポートと事前予約が必須です。',
+    'Emergencias: 112 / 119. Ayuda idiomática: 1330 (07:00–24:00, 8 idiomas). En Seúl, llama al 120 para un acompañamiento nocturno de regreso (laborables 22:00–01:00). La DMZ y Panmunjom exigen pasaporte y reserva previa.',
+    'Khẩn cấp: 112 / 119. Trợ giúp ngôn ngữ: 1330 (07:00–24:00, 8 ngôn ngữ). Tại Seoul, gọi 120 để được hộ tống về đêm (ngày thường 22:00–01:00). DMZ và Bàn Môn Điếm bắt buộc hộ chiếu và đặt trước.',
+    'Urgences : 112 / 119. Aide linguistique : 1330 (07:00–24:00, 8 langues). À Séoul, appelez le 120 pour un accompagnement nocturne (en semaine 22 h–1 h). DMZ et Panmunjom exigent passeport et réservation.',
+    'Emergências: 112 / 119. Ajuda em idiomas: 1330 (07:00–24:00, 8 idiomas). Em Seul, ligue 120 para acompanhamento noturno de volta (dias úteis 22h–1h). DMZ e Panmunjom exigem passaporte e reserva antecipada.',
+    'Экстренно: 112 / 119. Языковая помощь: 1330 (07:00–24:00, 8 языков). В Сеуле звоните 120 для ночного сопровождения (будни 22:00–01:00). Для DMZ и Пханмунджома нужны паспорт и бронь заранее.',
+    'Darurat: 112 / 119. Bantuan bahasa: 1330 (07:00–24:00, 8 bahasa). Di Seoul, hubungi 120 untuk pengantaran pulang malam (hari kerja 22.00–01.00). DMZ dan Panmunjom wajib paspor dan reservasi.'
   ],
   requestLabel: [
     '직접 요청 등록 · KYC 호스트 매칭', 'Register a request · KYC host matching', '直接登记需求 · KYC 房东匹配', '直接リクエスト · KYC ホスト照合',

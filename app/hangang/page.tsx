@@ -5,22 +5,30 @@ import PiBadge from '../components/PiBadge';
 import PiPayButton from '../components/PiPayButton';
 import { usePi } from '../components/PiProvider';
 import PiReadOnlyBanner from '../components/PiReadOnlyBanner';
+import PiBookmarkNotice from '../components/PiBookmarkNotice';
 import AppDock from '../components/AppDock';
-import EcosystemBookmarkAndReview from '../components/EcosystemBookmarkAndReview';
 import AppHeader from '../components/AppHeader';
 import HanbokIcon from '../components/HanbokIcon';
 import LangSelect from '../components/LangSelect';
+import SectionHead from './components/SectionHead';
+import AuthBadge from './components/AuthBadge';
+import JourneyRail from './components/JourneyRail';
+import JourneySection, { BypassNote } from './components/JourneySection';
+import TicketsSection from './components/TicketsSection';
+import FoodMapSection from './components/FoodMapSection';
 import {
   LANGS, LANG_TAG, detectLang, tr, ui,
   type Lang, type L10, type UIKey
 } from './lib/i18n';
 import { ZONES, PICK_ORDER, type PickKey } from './lib/zones';
 import { GOODS, LINKS } from './lib/packs';
+import { SEC, ARRIVAL, TRANSIT, STAY, BYPASS } from './lib/journey';
+import { GOODS_CHANNELS } from './lib/culture';
 
 /* ------------------------------------------------------------------
  * Hangang — Korea-wide K-culture pass (Kedheon ecosystem)
  * 디자인 시스템: 케데헌과 동일 (White / Black / Red #DC2626)
- * 10개국어 · 전국 7개 권역 · 실속 가이드 · KYC 안전망
+ * 10개국어 · 1~100 여정(입국→출국) · 인증 뱃지 · 순수 관광객 맛집 지도
  * ------------------------------------------------------------------ */
 
 const PICK_ICON: Record<PickKey, string> = {
@@ -33,18 +41,6 @@ const PICK_LABEL_KEY: Record<PickKey, UIKey> = {
 
 function fmtPi(n: number) {
   return Number.isInteger(n) ? n.toString() : n.toFixed(2);
-}
-
-function SectionHead({ no, title, desc }: { no: string; title: string; desc: string }) {
-  return (
-    <div className="mt-3 mb-1.5 text-left border-t border-[#dc2626] pt-2">
-      <div className="flex items-baseline gap-2">
-        <span className="t-tag text-[#dc2626] shrink-0">{no}</span>
-        <h2 className="t-section text-neutral-900 uppercase border-l-[3px] border-neutral-900 pl-2">{title}</h2>
-      </div>
-      <p className="t-sub text-neutral-500 mt-1 pl-[13px]">{desc}</p>
-    </div>
-  );
 }
 
 export default function HangangPage() {
@@ -190,7 +186,7 @@ export default function HangangPage() {
             {[
               { v: '0%', label: T('statFee'), short: T('statFeeS') },
               { v: '7', label: T('statZones'), short: T('statZonesS') },
-              { v: '24h', label: T('statHotline'), short: T('statHotlineS') },
+              { v: '1330', label: T('statHotline'), short: T('statHotlineS') },
               { v: `🐾 ${beom}`, label: T('statBeom'), short: T('statBeomS') }
             ].map((s, i) => (
               <div key={i} className="flex flex-col items-center gap-0 md:items-start md:gap-0 md:bg-white md:border md:border-neutral-200 md:rounded-xl md:px-2 md:py-2">
@@ -204,8 +200,211 @@ export default function HangangPage() {
           </div>
         </section>
 
-        {/* ── 2. 전국 7대 권역 올인원 빌더 ──────────────────────── */}
-        <SectionHead no="01" title={T('sec1Title')} desc={T('sec1Desc')} />
+        {/* ── 여정 스텝 레일 + 인증 뱃지 범례 ───────────────────── */}
+        <JourneyRail lang={lang} />
+
+        {/* ── 01 입국·공항 ─────────────────────────────────────── */}
+        <JourneySection
+          id="journey-arrival"
+          no="01"
+          title={SEC.arrival.title}
+          desc={SEC.arrival.desc}
+          cards={ARRIVAL}
+          lang={lang}
+          bypass={[BYPASS[1]]}
+        />
+
+        {/* ── 02 교통·결제 ─────────────────────────────────────── */}
+        <JourneySection
+          id="journey-transit"
+          no="02"
+          title={SEC.transit.title}
+          desc={SEC.transit.desc}
+          cards={TRANSIT}
+          lang={lang}
+        />
+
+        {/* ── 03 숙소·짐 ───────────────────────────────────────── */}
+        <JourneySection
+          id="journey-stay"
+          no="03"
+          title={SEC.stay.title}
+          desc={SEC.stay.desc}
+          cards={STAY}
+          lang={lang}
+          bypass={[BYPASS[2]]}
+        />
+
+        {/* ── 04 콘서트·공연 예매 ──────────────────────────────── */}
+        <TicketsSection lang={lang} />
+
+        {/* ── 05 순수 관광객 맛집 지도 ─────────────────────────── */}
+        <FoodMapSection lang={lang} bypass={[BYPASS[3]]} />
+
+        {/* ── 06 한국 장인 굿즈 · 응급 안전망 ──────────────────── */}
+        <section id="journey-goods" className="scroll-mt-3">
+        <SectionHead no="06" title={L(SEC.goods.title)} desc={L(SEC.goods.desc)} />
+
+        {/* 06-1. 장인 굿즈 3대 공식 판로 */}
+        <p className="t-tag uppercase text-gray-400 text-left mb-1">K-CRAFT OFFICIAL STORES</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+          {GOODS_CHANNELS.map(g => (
+            <article key={g.id} className="bg-white border border-neutral-200 rounded-xl p-3 text-left flex flex-col hover:border-neutral-400 transition-colors">
+              <div className="flex items-start justify-between gap-2">
+                <h3 translate="no" className="notranslate t-card text-black min-w-0">{g.name}</h3>
+                <AuthBadge kind={g.badge} lang={lang} />
+              </div>
+              <p className="t-body text-neutral-600 mt-1.5 flex-1">{L(g.desc)}</p>
+              <p className="t-tag text-neutral-500 mt-1.5 border-t border-neutral-100 pt-1.5">{L(g.items)}</p>
+              <a
+                href={g.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-2 self-end t-tag text-[#dc2626] hover:underline"
+              >
+                <span translate="no" className="notranslate">{g.urlName}</span> ↗
+              </a>
+            </article>
+          ))}
+        </div>
+
+        <BypassNote lines={[BYPASS[4]]} lang={lang} />
+
+        {/* 06-2. K-굿즈 · 한복 · 짐보관 대행 보드 (기존 구조 유지) */}
+        <p className="t-tag uppercase text-gray-400 text-left mt-3 mb-1">{T('sec2Title')}</p>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-1.5 md:gap-2">
+          {GOODS.map(g => (
+            <div key={g.id} className="bg-white border border-neutral-200 rounded-xl p-2.5 flex flex-col justify-between hover:border-neutral-400 transition-colors">
+              <div>
+                <div className="flex items-start justify-between gap-1">
+                  <span className="text-[length:calc(18px*var(--pi-scale))] md:text-[length:calc(20px*var(--pi-scale))] leading-none text-black">
+                    {g.id === 'hanbok' ? <HanbokIcon /> : g.icon}
+                  </span>
+                  <span className="notranslate t-tag bg-neutral-100 text-neutral-600 rounded-full px-1.5 py-0.5">{g.grade}</span>
+                </div>
+                <p className="t-tag text-black mt-1.5">{L(g.t)}</p>
+              </div>
+              <div className="flex items-center justify-between mt-2">
+                <span translate="no" className="notranslate t-tag text-[#dc2626]">{fmtPi(g.pi)} Pi</span>
+                <span className="t-tag text-gray-300">FactFilter {g.grade}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-2 bg-white border border-neutral-200 rounded-2xl p-3 md:p-4">
+          <p className="t-tag uppercase text-gray-400 mb-2">
+            {T('requestLabel')}
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5">
+            <select
+              value={reqType}
+              onChange={e => setReqType(e.target.value)}
+              aria-label={T('requestLabel')}
+              className="bg-white border border-neutral-300 rounded-lg px-2.5 py-2 t-tag shadow-xs outline-none cursor-pointer focus:border-black focus:ring-2 focus:ring-black/10"
+            >
+              {GOODS.map(g => (
+                <option key={g.id} value={g.id}>{L(g.t)}</option>
+              ))}
+            </select>
+            <select
+              value={reqZone}
+              onChange={e => setReqZone(e.target.value)}
+              aria-label="Region"
+              className="bg-white border border-neutral-300 rounded-lg px-2.5 py-2 t-tag shadow-xs outline-none cursor-pointer focus:border-black focus:ring-2 focus:ring-black/10"
+            >
+              {ZONES.map(z => (
+                <option key={z.key} value={z.key} translate="no" className="notranslate">{z.code} · {L(z.sub)}</option>
+              ))}
+            </select>
+          </div>
+          <textarea
+            value={reqNote}
+            onChange={e => setReqNote(e.target.value)}
+            placeholder={T('reqPlaceholder')}
+            className="w-full mt-1.5 bg-neutral-50 border border-neutral-300 rounded-lg t-body text-black placeholder-neutral-400 outline-none transition-colors focus:bg-white focus:border-black focus:ring-2 focus:ring-black/10 p-2.5 h-16"
+          />
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 mt-2">
+            <p className="text-gray-400 t-tag">{T('reqNote')}</p>
+            <button
+              onClick={submitRequest}
+              className="shrink-0 bg-black hover:bg-[#dc2626] text-white t-btn px-4 py-2.5 rounded-lg transition-all active:scale-95"
+            >
+              {T('submitBtn')}{!authenticated && ' 🔒'}
+            </button>
+          </div>
+
+          {requests.length > 0 && (
+            <div className="mt-2 space-y-1">
+              {requests.map(r => (
+                <div key={r.id} className="flex items-start justify-between gap-2 bg-neutral-50 rounded-lg px-2.5 py-2 border-l-[3px] border-neutral-400">
+                  <div className="min-w-0 text-left">
+                    <p className="t-tag text-black truncate">{L(goodsOf(r.type).t)}</p>
+                    <p className="t-tag text-gray-400 truncate">{r.note}</p>
+                  </div>
+                  <div className="shrink-0 text-right">
+                    <p className="notranslate t-tag text-gray-400" translate="no">{r.zone} #{r.id}</p>
+                    <p className="t-tag text-[#dc2626]">{T('matchingHost')}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* 06-3. 전국 세이프티 실드 */}
+        <p className="t-tag uppercase text-gray-400 text-left mt-3 mb-1">{T('sec4Title')}</p>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-1.5 md:gap-2">
+          {[
+            { num: '112', tel: '112', label: T('hotlinePolice'), sub: T('hotlinePoliceSub') },
+            { num: '119', tel: '119', label: T('hotlineAmbulance'), sub: T('hotlineAmbulanceSub') },
+            { num: '1330', tel: '1330', label: T('hotlineTour'), sub: T('hotlineTourSub') },
+            { num: '120', tel: '02120', label: T('hotlineSeoul'), sub: T('hotlineSeoulSub') }
+          ].map(h => (
+            <a
+              key={h.num}
+              href={`tel:${h.tel}`}
+              className="bg-black rounded-xl p-3 text-left transition-colors group hover:opacity-90"
+            >
+              <p translate="no" className="notranslate t-stat text-white group-hover:text-[#dc2626]">{h.num}</p>
+              <p className="text-white/70 t-tag mt-1">{h.label}</p>
+              <p className="text-white/40 t-tag mt-1">{h.sub}</p>
+            </a>
+          ))}
+        </div>
+
+        <div className="mt-2 space-y-1.5">
+          {LINKS.map(l => (
+            <a
+              key={l.url}
+              href={l.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-start justify-between gap-2 bg-white border border-neutral-200 rounded-xl px-3 py-2.5 hover:border-neutral-400 transition-colors"
+            >
+              <div className="min-w-0 text-left">
+                <p className="t-card text-black">{L(l.t)}</p>
+                <p className="t-tag text-gray-400 mt-0.5">{L(l.d)}</p>
+              </div>
+              <div className="shrink-0 flex items-center gap-1.5">
+                <span translate="no" className="notranslate t-tag bg-neutral-100 text-neutral-600 rounded-full px-1.5 py-0.5">{l.tag}</span>
+                <span className="text-gray-300 t-sub">↗</span>
+              </div>
+            </a>
+          ))}
+        </div>
+
+        <div className="mt-2 bg-neutral-50 border-l-[3px] border-[#dc2626] rounded-lg px-3 py-2.5">
+          <p className="t-tag text-gray-500 text-left">
+            {T('safetyNote')}
+          </p>
+        </div>
+        </section>
+
+        {/* ── 07 전국 7대 권역 올인원 빌더 ──────────────────────── */}
+        <SectionHead no="07" title={T('sec1Title')} desc={T('sec1Desc')} />
 
         <div className="flex gap-1.5 overflow-x-auto pb-1 no-scrollbar">
           {ZONES.map(z => (
@@ -311,91 +510,8 @@ export default function HangangPage() {
           </div>
         )}
 
-        {/* ── 3. K-굿즈 · 한복 · 짐보관 대행 보드 ───────────────── */}
-        <SectionHead no="02" title={T('sec2Title')} desc={T('sec2Desc')} />
-
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-1.5 md:gap-2">
-          {GOODS.map(g => (
-            <div key={g.id} className="bg-white border border-neutral-200 rounded-xl p-2.5 flex flex-col justify-between hover:border-neutral-400 transition-colors">
-              <div>
-                <div className="flex items-start justify-between gap-1">
-                  <span className="text-[length:calc(18px*var(--pi-scale))] md:text-[length:calc(20px*var(--pi-scale))] leading-none text-black">
-                    {g.id === 'hanbok' ? <HanbokIcon /> : g.icon}
-                  </span>
-                  <span className="notranslate t-tag bg-neutral-100 text-neutral-600 rounded-full px-1.5 py-0.5">{g.grade}</span>
-                </div>
-                <p className="t-tag text-black mt-1.5">{L(g.t)}</p>
-              </div>
-              <div className="flex items-center justify-between mt-2">
-                <span translate="no" className="notranslate t-tag text-[#dc2626]">{fmtPi(g.pi)} Pi</span>
-                <span className="t-tag text-gray-300">FactFilter {g.grade}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-2 bg-white border border-neutral-200 rounded-2xl p-3 md:p-4">
-          <p className="t-tag uppercase text-gray-400 mb-2">
-            {T('requestLabel')}
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5">
-            <select
-              value={reqType}
-              onChange={e => setReqType(e.target.value)}
-              aria-label={T('requestLabel')}
-              className="bg-white border border-neutral-300 rounded-lg px-2.5 py-2 t-tag shadow-xs outline-none cursor-pointer focus:border-black focus:ring-2 focus:ring-black/10"
-            >
-              {GOODS.map(g => (
-                <option key={g.id} value={g.id}>{L(g.t)}</option>
-              ))}
-            </select>
-            <select
-              value={reqZone}
-              onChange={e => setReqZone(e.target.value)}
-              aria-label="Region"
-              className="bg-white border border-neutral-300 rounded-lg px-2.5 py-2 t-tag shadow-xs outline-none cursor-pointer focus:border-black focus:ring-2 focus:ring-black/10"
-            >
-              {ZONES.map(z => (
-                <option key={z.key} value={z.key} translate="no" className="notranslate">{z.code} · {L(z.sub)}</option>
-              ))}
-            </select>
-          </div>
-          <textarea
-            value={reqNote}
-            onChange={e => setReqNote(e.target.value)}
-            placeholder={T('reqPlaceholder')}
-            className="w-full mt-1.5 bg-neutral-50 border border-neutral-300 rounded-lg t-body text-black placeholder-neutral-400 outline-none transition-colors focus:bg-white focus:border-black focus:ring-2 focus:ring-black/10 p-2.5 h-16"
-          />
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 mt-2">
-            <p className="text-gray-400 t-tag">{T('reqNote')}</p>
-            <button
-              onClick={submitRequest}
-              className="shrink-0 bg-black hover:bg-[#dc2626] text-white t-btn px-4 py-2.5 rounded-lg transition-all active:scale-95"
-            >
-              {T('submitBtn')}{!authenticated && ' 🔒'}
-            </button>
-          </div>
-
-          {requests.length > 0 && (
-            <div className="mt-2 space-y-1">
-              {requests.map(r => (
-                <div key={r.id} className="flex items-start justify-between gap-2 bg-neutral-50 rounded-lg px-2.5 py-2 border-l-[3px] border-neutral-400">
-                  <div className="min-w-0 text-left">
-                    <p className="t-tag text-black truncate">{L(goodsOf(r.type).t)}</p>
-                    <p className="t-tag text-gray-400 truncate">{r.note}</p>
-                  </div>
-                  <div className="shrink-0 text-right">
-                    <p className="notranslate t-tag text-gray-400" translate="no">{r.zone} #{r.id}</p>
-                    <p className="t-tag text-[#dc2626]">{T('matchingHost')}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* ── 4. 한국 여행 실속 팩 ─────────────────────────────── */}
-        <SectionHead no="03" title={T('sec3Title')} desc={T('sec3Desc')} />
+        {/* ── 08 한국 여행 실속 팩 ─────────────────────────────── */}
+        <SectionHead no="08" title={T('sec3Title')} desc={T('sec3Desc')} />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           {[
@@ -414,56 +530,8 @@ export default function HangangPage() {
           ))}
         </div>
 
-        {/* ── 5. 전국 세이프티 실드 ─────────────────────────────── */}
-        <SectionHead no="04" title={T('sec4Title')} desc={T('sec4Desc')} />
-
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-1.5 md:gap-2">
-          {[
-            { num: '112', tel: '112', label: T('hotlinePolice'), sub: T('hotlinePoliceSub') },
-            { num: '119', tel: '119', label: T('hotlineAmbulance'), sub: T('hotlineAmbulanceSub') },
-            { num: '1330', tel: '1330', label: T('hotlineTour'), sub: T('hotlineTourSub') },
-            { num: '120', tel: '02120', label: T('hotlineSeoul'), sub: T('hotlineSeoulSub') }
-          ].map(h => (
-            <a
-              key={h.num}
-              href={`tel:${h.tel}`}
-              className="bg-black rounded-xl p-3 text-left transition-colors group hover:opacity-90"
-            >
-              <p translate="no" className="notranslate t-stat text-white group-hover:text-[#dc2626]">{h.num}</p>
-              <p className="text-white/70 t-tag mt-1">{h.label}</p>
-              <p className="text-white/40 t-tag mt-1">{h.sub}</p>
-            </a>
-          ))}
-        </div>
-
-        <div className="mt-2 space-y-1.5">
-          {LINKS.map(l => (
-            <a
-              key={l.url}
-              href={l.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-start justify-between gap-2 bg-white border border-neutral-200 rounded-xl px-3 py-2.5 hover:border-neutral-400 transition-colors"
-            >
-              <div className="min-w-0 text-left">
-                <p className="t-card text-black">{L(l.t)}</p>
-                <p className="t-tag text-gray-400 mt-0.5">{L(l.d)}</p>
-              </div>
-              <div className="shrink-0 flex items-center gap-1.5">
-                <span translate="no" className="notranslate t-tag bg-neutral-100 text-neutral-600 rounded-full px-1.5 py-0.5">{l.tag}</span>
-                <span className="text-gray-300 t-sub">↗</span>
-              </div>
-            </a>
-          ))}
-        </div>
-
-        <div className="mt-2 bg-neutral-50 border-l-[3px] border-[#dc2626] rounded-lg px-3 py-2.5">
-          <p className="t-tag text-gray-500 text-left">
-            {T('safetyNote')}
-          </p>
-        </div>
-
-        <EcosystemBookmarkAndReview current="HANGANG" lang={lang} />
+        {/* Pi Browser 공식 ★ 북마크 안내 (자체 즐겨찾기·후기 폼은 두지 않는다) */}
+        <PiBookmarkNotice lang={lang} />
 
         <p className="text-center text-gray-300 t-tag mt-6 mb-2">
           <span translate="no" className="notranslate">Hangang</span> · <span translate="no" className="notranslate">hangang.pi</span> · {T('footerTag')}

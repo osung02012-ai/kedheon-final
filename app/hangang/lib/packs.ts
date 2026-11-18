@@ -82,8 +82,8 @@ export interface SafetyLink {
 
 export const LINKS: SafetyLink[] = [
   {
-    t: ['1330 관광통역안내 · 24시간', 'Visit Korea 1330 · 24 h', '1330 旅游翻译咨询 · 24 小时', '1330 観光通訳案内 · 24時間', 'Visit Korea 1330 · 24 h', 'Visit Korea 1330 · 24h', 'Visit Korea 1330 · 24 h', 'Visit Korea 1330 · 24 h', 'Visit Korea 1330 · 24 ч', 'Visit Korea 1330 · 24 jam'],
-    d: ['관광지·교통·쇼핑 상담을 13개 언어로. 전국 어디서나 국번 없이 1330.', 'Travel, transit and shopping help in 13 languages. Dial 1330 anywhere in Korea.', '景点、交通、购物咨询，13 种语言。全韩任何地方直拨 1330。', '観光地・交通・買い物の相談を13言語で。全国どこからでも1330。', 'Ayuda turística, de transporte y compras en 13 idiomas. Marca 1330 en toda Corea.', 'Tư vấn du lịch, giao thông, mua sắm bằng 13 ngôn ngữ. Gọi 1330 ở bất kỳ đâu.', 'Aide tourisme, transport et shopping en 13 langues. Composez le 1330 partout.', 'Ajuda de turismo, transporte e compras em 13 idiomas. Disque 1330 em qualquer lugar.', 'Туризм, транспорт и покупки на 13 языках. Звоните 1330 по всей Корее.', 'Bantuan wisata, transportasi, belanja dalam 13 bahasa. Hubungi 1330 di mana saja.'],
+    t: ['1330 관광통역안내 · 07:00~24:00', 'Visit Korea 1330 · 07:00–24:00', '1330 旅游翻译咨询 · 07:00~24:00', '1330 観光通訳案内 · 07:00〜24:00', 'Visit Korea 1330 · 07:00–24:00', 'Visit Korea 1330 · 07:00–24:00', 'Visit Korea 1330 · 07:00–24:00', 'Visit Korea 1330 · 07:00–24:00', 'Visit Korea 1330 · 07:00–24:00', 'Visit Korea 1330 · 07.00–24.00'],
+    d: ['관광지·교통·쇼핑 상담을 8개 언어(한·영·일·중·러·태·베·인도)로. 07:00~24:00, 전국 어디서나 국번 없이 1330.', 'Travel, transit and shopping help in 8 languages (Korean, English, Japanese, Chinese, Russian, Thai, Vietnamese, Indonesian). 07:00–24:00, dial 1330 anywhere in Korea.', '景点、交通、购物咨询，8 种语言（韩英日中俄泰越印尼）。07:00~24:00，全韩直拨 1330。', '観光地・交通・買い物の相談を8言語（韓英日中露タイベトナム・インドネシア）で。07:00〜24:00、全国どこからでも1330。', 'Ayuda turística, de transporte y compras en 8 idiomas (coreano, inglés, japonés, chino, ruso, tailandés, vietnamita, indonesio). 07:00–24:00, marca 1330.', 'Tư vấn du lịch, giao thông, mua sắm bằng 8 ngôn ngữ (Hàn, Anh, Nhật, Trung, Nga, Thái, Việt, Indonesia). 07:00–24:00, gọi 1330.', 'Aide tourisme, transport et shopping en 8 langues (coréen, anglais, japonais, chinois, russe, thaï, vietnamien, indonésien). 07:00–24:00, composez le 1330.', 'Ajuda de turismo, transporte e compras em 8 idiomas (coreano, inglês, japonês, chinês, russo, tailandês, vietnamita, indonésio). 07:00–24:00, disque 1330.', 'Туризм, транспорт и покупки на 8 языках (корейский, английский, японский, китайский, русский, тайский, вьетнамский, индонезийский). 07:00–24:00, звоните 1330.', 'Bantuan wisata, transportasi, belanja dalam 8 bahasa (Korea, Inggris, Jepang, Mandarin, Rusia, Thai, Vietnam, Indonesia). 07.00–24.00, hubungi 1330.'],
     url: 'https://www.visitkorea.or.kr',
     tag: '1330'
   },
@@ -104,5 +104,35 @@ export const LINKS: SafetyLink[] = [
     d: ['올빼미버스 N13~N75 실시간 운행 정보. 23:00~06:00 운행.', 'Live Night Owl routes N13–N75. Runs 23:00–06:00.', '猫头鹰巴士 N13~N75 实时运行信息。23:00~06:00 运行。', '深夜バス N13〜N75 の運行情報。23:00〜06:00 運行。', 'Información en vivo de las rutas N13–N75, de 23:00 a 06:00.', 'Thông tin trực tiếp tuyến N13–N75, chạy 23:00–06:00.', 'Infos en direct des lignes N13–N75, de 23 h à 6 h.', 'Informação ao vivo das linhas N13–N75, das 23h às 6h.', 'Онлайн-информация по маршрутам N13–N75, 23:00–06:00.', 'Info langsung rute N13–N75, 23.00–06.00.'],
     url: 'https://topis.seoul.go.kr',
     tag: 'TRANSIT'
+  }
+  ,{
+    t: ['1345 외국인종합안내센터', '1345 Immigration Contact Centre', '1345 外国人综合咨询中心', '1345 外国人総合案内センター', 'Centro de información 1345', 'Trung tâm hỗ trợ 1345', 'Centre d’information 1345', 'Central de informações 1345', 'Информцентр 1345', 'Pusat informasi 1345'],
+    d: ['비자·체류·출입국·생활 상담을 외국어로. 전화 1345(국번 없이).', 'Visa, stay, immigration and daily-life help in foreign languages. Dial 1345.', '签证、居留、出入境与生活咨询，提供外语服务。直拨 1345。', 'ビザ・滞在・出入国・生活の相談を外国語で。1345（局番なし）。', 'Visados, estancia, inmigración y vida diaria en idiomas extranjeros. Marca 1345.', 'Tư vấn visa, lưu trú, xuất nhập cảnh và đời sống bằng ngoại ngữ. Gọi 1345.', 'Visas, séjour, immigration et vie quotidienne en langues étrangères. Composez le 1345.', 'Visto, permanência, imigração e vida diária em idiomas estrangeiros. Disque 1345.', 'Визы, пребывание, иммиграция и быт на иностранных языках. Звоните 1345.', 'Visa, izin tinggal, imigrasi, dan kehidupan sehari-hari dalam bahasa asing. Hubungi 1345.'],
+    url: 'tel:1345',
+    tag: '1345'
+  },
+  {
+    t: ['관광불편신고센터', 'Tourist complaint centre', '旅游不便举报中心', '観光不便申告センター', 'Centro de reclamaciones turísticas', 'Trung tâm phản ánh du lịch', 'Centre de réclamations touristiques', 'Central de reclamações turísticas', 'Центр жалоб туристов', 'Pusat pengaduan wisata'],
+    d: ['바가지요금·부당요금·불친절을 온라인으로 신고합니다. 영문 접수 가능.', 'Report overcharging, unfair fees or rudeness online. English accepted.', '可在线举报宰客、乱收费与不友好行为，支持英文提交。', 'ぼったくり・不当料金・不親切をオンラインで申告。英語受付可。', 'Denuncia en línea cobros abusivos o mal trato. Se acepta inglés.', 'Báo giá chặt chém, phí vô lý hoặc thái độ qua mạng. Nhận tiếng Anh.', 'Signalez en ligne les prix abusifs ou l’impolitesse. Anglais accepté.', 'Denuncie cobranças abusivas ou mau atendimento online. Aceita inglês.', 'Сообщайте о завышенных ценах и грубости онлайн. Принимают по-английски.', 'Laporkan harga berlebihan atau layanan kasar secara online. Bisa bahasa Inggris.'],
+    url: 'https://www.touristcomplaint.or.kr',
+    tag: 'CLAIM'
+  },
+  {
+    t: ['응급의료정보 E-Gen', 'E-Gen emergency medical info', '急救医疗信息 E-Gen', '救急医療情報 E-Gen', 'Información médica E-Gen', 'Thông tin y tế khẩn cấp E-Gen', 'Infos médicales E-Gen', 'Informação médica E-Gen', 'Экстренная медицина E-Gen', 'Info medis darurat E-Gen'],
+    d: ['외국인 진료가 가능한 병원·약국을 언어별로 찾고, 응급 시 통역 지원을 받습니다.', 'Find hospitals and pharmacies that treat foreigners, by language, with interpretation support in emergencies.', '可按语言查找可接待外国人的医院与药局，紧急时提供翻译支援。', '外国人診療可能な病院・薬局を言語別に検索。緊急時は通訳支援があります。', 'Encuentra hospitales y farmacias que atienden extranjeros por idioma, con interpretación en emergencias.', 'Tìm bệnh viện, nhà thuốc nhận người nước ngoài theo ngôn ngữ, có hỗ trợ phiên dịch khi khẩn cấp.', 'Trouvez hôpitaux et pharmacies accueillant les étrangers par langue, avec interprétation en urgence.', 'Encontre hospitais e farmácias que atendem estrangeiros por idioma, com interpretação em emergências.', 'Ищите больницы и аптеки для иностранцев по языкам; в экстренном случае — перевод.', 'Cari rumah sakit dan apotek yang melayani asing per bahasa, dengan bantuan penerjemah saat darurat.'],
+    url: 'https://www.e-gen.or.kr',
+    tag: 'MEDICAL'
+  },
+  {
+    t: ['Medical Korea · 외국인 진료 안내', 'Medical Korea · care for visitors', 'Medical Korea · 外国人就医指南', 'Medical Korea · 外国人診療案内', 'Medical Korea · atención a extranjeros', 'Medical Korea · khám cho người nước ngoài', 'Medical Korea · soins pour étrangers', 'Medical Korea · atendimento a estrangeiros', 'Medical Korea · помощь иностранцам', 'Medical Korea · layanan medis asing'],
+    d: ['외국인 환자를 받는 병원·전문의 정보를 영문으로 확인합니다. 예약 전에 진료과와 통역 여부를 보세요.', 'English information on hospitals and specialists that take foreign patients — check department and interpretation before booking.', '以英文查看可接待外国患者的医院与专科医生，预约前确认科室与翻译服务。', '外国人患者を受け入れる病院・専門医を英語で確認。予約前に診療科と通訳の有無を。', 'Información en inglés sobre hospitales y especialistas que atienden extranjeros: mira especialidad e interpretación antes de reservar.', 'Thông tin tiếng Anh về bệnh viện và bác sĩ nhận bệnh nhân nước ngoài — xem khoa và phiên dịch trước khi đặt.', 'Informations en anglais sur les hôpitaux et spécialistes recevant des étrangers : vérifiez service et interprétation avant de réserver.', 'Informações em inglês sobre hospitais e especialistas que atendem estrangeiros: veja especialidade e interpretação antes.', 'Английская информация о больницах и врачах для иностранцев — проверьте отделение и перевод до записи.', 'Info bahasa Inggris soal rumah sakit dan dokter untuk pasien asing — cek poliklinik dan penerjemah sebelum memesan.'],
+    url: 'https://www.medicalkorea.or.kr/en/index',
+    tag: 'MEDICAL'
+  },
+  {
+    t: ['외교부 해외안전여행 0404', 'MOFA travel safety 0404', '外交部海外安全旅行 0404', '外交部 海外安全旅行 0404', 'Seguridad en el exterior 0404', 'An toàn du lịch 0404', 'Sécurité à l’étranger 0404', 'Segurança no exterior 0404', 'Безопасность за рубежом 0404', 'Keamanan luar negeri 0404'],
+    d: ['국가별 여행경보와 재외공관 연락처를 확인합니다. 사건·사고 시 영사 도움을 받는 첫 창구입니다.', 'Country-by-country travel alerts and embassy contacts — the first place to turn for consular help.', '查看各国旅行警报与驻外使领馆联系方式，事故时可获得领事协助。', '国別の渡航警報と在外公館の連絡先を確認。事件・事故の際の領事支援の窓口です。', 'Alertas por país y contactos de embajadas: la primera vía para ayuda consular.', 'Cảnh báo theo quốc gia và liên hệ đại sứ quán — nơi đầu tiên cần đến khi có sự cố.', 'Alertes par pays et contacts des ambassades : le premier recours consulaire.', 'Alertas por país e contatos de embaixadas: o primeiro caminho para ajuda consular.', 'Оповещения по странам и контакты посольств — первая точка консульской помощи.', 'Peringatan per negara dan kontak kedutaan — jalur pertama bantuan konsuler.'],
+    url: 'https://www.0404.go.kr',
+    tag: '0404'
   }
 ];
