@@ -275,61 +275,44 @@ interface SummitFact {
   key: string;
   head: string;
   headEn: string;
-  rumor: string;
-  rumorEn: string;
   fact: string;
   factEn: string;
 }
 
 /**
- * Pi Ecosystem Summit Day 1 공식 팩트체크 (2026-11-17 · 2026-11-18 대조)
- *  - 1차 출처: minepi.com 공식 블로그 Ecosystem Summit Begins / 공식 서밋 페이지
- *  - 커뮤니티에 도는 루머와 공식 발표를 1:1로 맞세운다. 추측·전망은 넣지 않는다.
+ * Pi Ecosystem Summit Day 2 공식 발표 (2026-11-18 발표 · 2026-11-19 게시)
+ *  - 1차 출처: minepi.com/blog/pi-ecosystem-summit-2/
+ *  - 공식 블로그 원문만 옮긴다. 추측·전망은 넣지 않는다.
  */
 const SUMMIT_FACTS: SummitFact[] = [
   {
     key: '01',
-    head: 'Pi Launchpad · DEX · AMM',
-    headEn: 'Pi Launchpad · DEX · AMM',
-    rumor: '당장 오늘 메인넷 DEX가 열린다',
-    rumorEn: 'The Mainnet DEX opens today',
-    fact: '2027년 1분기(Q1) 메인넷 출시 목표 — 생태계 토큰 런칭 인프라',
-    factEn: 'Targeted for Mainnet in Q1 2027 — infrastructure for ecosystem token launches'
+    head: 'Pi DataLab — 사람 판단이 필요한 AI 작업을 파이오니어에게',
+    headEn: 'Pi DataLab — human-in-the-loop work for Pioneers',
+    fact: 'AI 기업·개발자가 데이터 라벨링·랭킹·평가·피지컬 AI 데이터 같은 과제를 KYC 인증 파이오니어에게 맡기고, 참여자는 Pi 또는 파이 생태계 토큰으로 보상받는 구조. 과제 생성·참여 조건·품질 관리·결과 회수를 한곳에서 처리합니다.',
+    factEn: 'Businesses and AI developers fund tasks — data labeling, ranking, evaluation, physical AI data — and identity-verified Pioneers are paid in Pi or Pi-launched tokens. Project setup, quality controls and result collection run in one place.'
   },
   {
     key: '02',
-    head: '2,000만 Pi App Growth Initiative',
-    headEn: '20M Pi App Growth Initiative',
-    rumor: '전 유저에게 2,000만 Pi를 무상 에어드랍한다',
-    rumorEn: '20M Pi will be airdropped free to every user',
-    fact: 'KYC 유저 초대·유입 리워드로 앱 성장을 지원하는 프로그램 (최대 2,000만 Pi 예산)',
-    factEn: 'An app-growth program paying KYC invite/onboarding rewards (budget up to 20M Pi)'
+    head: 'SoloHost AI 패키징 · CiDi Games Ads SDK',
+    headEn: 'SoloHost AI packaging · CiDi Games Ads SDK',
+    fact: '기존 앱의 Docker 이미지를 AI 에이전트에 넘기면 docker-compose.yml·config_options.yml을 만들어 SoloHost 등록까지 돕습니다 — 42만+ 노드 운영자와 Pi Desktop 사용자에게 배포. CiDi Games는 Pi 로그인·Pi 결제·Pi Ads SDK 통합을 시연했고, Go·FastAPI·Node/Express·Laravel·Ruby 지원과 통합 개발자 문서도 함께 공개됐습니다.',
+    factEn: 'Hand an existing app’s Docker image to an AI agent and it generates docker-compose.yml and config_options.yml for listing through SoloHost, reaching 420,000+ Node operators and Pi Desktop users. CiDi Games demoed Pi authentication, Pi Payments and the Pi Ads SDK, alongside new Go, FastAPI, Node/Express, Laravel and Ruby support and unified developer docs.'
   },
   {
     key: '03',
-    head: 'x402 결제 표준 & 온체인 구독',
-    headEn: 'x402 payments & on-chain subscriptions',
-    rumor: '이미 메인넷에서 AI 자동 결제가 열린다',
-    rumorEn: 'AI auto-payments already run on Mainnet',
-    fact: 'OpenMind RoboPay 시연은 Pi Testnet에서 라이브 작동 · Mainnet 일정은 추후 공지 · x402 재단 표준 등재 심사 중',
-    factEn: 'The OpenMind RoboPay demo runs live on Pi Testnet; Mainnet timing to be announced; x402 Foundation spec under review'
-  },
-  {
-    key: '04',
-    head: '앱 디렉토리 전면 개편 & 후속 일정',
-    headEn: 'App Directory redesign & what comes next',
-    rumor: '',
-    rumorEn: '',
-    fact: '디렉토리(Bookmarked·Pi-Staked·Rising Apps·Discover·Keep Coming Back) 개편 완료 · Day 2(AI & Ecosystem) 11월 19일 01:00 KST · 20만 USDT Pi Next 해커톤도 11월 19일 개막',
-    factEn: 'Directory redesigned (Bookmarked · Pi-Staked · Rising Apps · Discover · Keep Coming Back); Day 2 (AI & Ecosystem) Nov 19, 01:00 KST; the 200,000 USDT Pi Next hackathon opens Nov 19 as well'
+    head: 'Day 3 — Pi Next 해커톤, 11월 19일 개막',
+    headEn: 'Day 3 — the Pi Next hackathon opens Nov 19',
+    fact: '미국 시간 11월 19일 공식 개막 · 상금 200,000 USDT · 공동 마케팅 지원 최대 2,000만 Pi. 서밋에서 공개된 도구를 실제 앱으로 옮기는 무대입니다.',
+    factEn: 'Opens officially on Nov 19 (US time) with a 200,000 USDT prize pool and up to 20 million Pi in shared marketing support — where the tools shown at the Summit become real apps.'
   }
 ];
 
 const SUMMIT_SOURCES = [
   {
-    label: '공식 블로그 · Summit Begins',
-    labelEn: 'Official blog · Summit Begins',
-    url: 'https://minepi.com/blog/ecosystem-summit-begins/'
+    label: '공식 블로그 · Day 2',
+    labelEn: 'Official blog · Day 2',
+    url: 'https://minepi.com/blog/pi-ecosystem-summit-2/'
   },
   {
     label: '공식 서밋 페이지',
@@ -346,27 +329,27 @@ const FLEET_APPS = [
   { name: 'XAEA12', url: 'https://xaea12.kedheon.com', ko: '기여', en: 'Contribution' }
 ];
 
-/** 상단 피처드 — 서밋 Day 1 공식 팩트체크 + 케드헌 편대 링크 */
+/** 상단 피처드 — 오늘의 진짜뉴스(서밋 Day 2 공식 발표) + 케드헌 편대 링크 */
 const SummitFactCheck = ({ ko }: { ko: boolean }) => (
   <section className="bg-white border border-[#E5E7EB] rounded-2xl shadow-[var(--card-shadow)] overflow-hidden text-left">
     <div className="flex items-center justify-between gap-2 bg-neutral-50 border-b border-[#E5E7EB] px-3 py-1.5">
       <span className="flex items-center gap-1.5 t-tag font-bold uppercase text-[#dc2626]">
         <span className="w-1.5 h-1.5 rounded-full bg-[#dc2626] inline-block shrink-0" />
-        {ko ? '피처드 · 공식 팩트체크' : 'Featured · Official fact check'}
+        {ko ? '피처드 · 오늘의 진짜뉴스' : 'Featured · Today’s real news'}
       </span>
       <span translate="no" className="notranslate t-tag text-neutral-500 whitespace-nowrap">
-        2026.11.17 · Day 1
+        2026.11.19 · Day 2
       </span>
     </div>
 
     <div className="px-3 py-2.5 md:p-4">
       <h2 className="t-section text-black">
-        {ko ? 'Pi Ecosystem Summit Day 1 — 루머 vs 공식 발표' : 'Pi Ecosystem Summit Day 1 — Rumors vs Official'}
+        {ko ? 'Pi Ecosystem Summit Day 2 — 공식 발표' : 'Pi Ecosystem Summit Day 2 — Official announcements'}
       </h2>
       <p className="t-sub text-neutral-500 mt-0.5">
         {ko
-          ? '코어팀 공식 블로그·서밋 페이지 원문과 1:1로 대조한 결과입니다.'
-          : 'Checked line by line against the Core Team’s official blog and Summit page.'}
+          ? '코어팀 공식 블로그(11.18) 원문과 1:1로 대조한 발표 내용입니다.'
+          : 'Taken line by line from the Core Team’s official blog (Nov 18).'}
       </p>
 
       <div className="mt-2 space-y-1.5">
@@ -376,12 +359,6 @@ const SummitFactCheck = ({ ko }: { ko: boolean }) => (
               <span translate="no" className="notranslate font-mono t-tag text-neutral-400 shrink-0 pt-0.5">{f.key}</span>
               <span className="min-w-0">{ko ? f.head : f.headEn}</span>
             </p>
-            {(ko ? f.rumor : f.rumorEn) && (
-              <p className="t-sub text-neutral-500 mt-0.5 flex items-start gap-1.5">
-                <span className="shrink-0 px-1.5 rounded bg-neutral-100 text-neutral-500 t-tag">{ko ? '루머' : 'Rumor'}</span>
-                <span className="min-w-0">{ko ? f.rumor : f.rumorEn}</span>
-              </p>
-            )}
             <p className="t-sub text-black mt-0.5 flex items-start gap-1.5">
               <span className="shrink-0 px-1.5 rounded bg-black text-white t-tag">{ko ? '✅ 팩트' : '✅ Fact'}</span>
               <span className="min-w-0">{ko ? f.fact : f.factEn}</span>
@@ -409,100 +386,131 @@ const SummitFactCheck = ({ ko }: { ko: boolean }) => (
   </section>
 );
 
-/** 런던 대정전·11월 19일 시스템 붕괴 음모론 — 가짜뉴스 박제 (2026-11-16~17 확인) */
-const BLACKOUT_FACTS = [
+interface ArchivedFake {
+  key: string;
+  tag: string;
+  tagEn: string;
+  verdict: string;
+  verdictEn: string;
+  head: string;
+  headEn: string;
+  lede: string;
+  ledeEn: string;
+  rumor: string;
+  rumorEn: string;
+  fact: string;
+  factEn: string;
+  sources: { label: string; labelEn: string; url: string }[];
+}
+
+/**
+ * 오늘의 가짜뉴스 박제 (2026-11-19)
+ *  01. 11월 17일 전 세계 대정전·금융 붕괴 음모론 — FEMA 경보 테스트 왜곡 (결말: 아무 일도 없었다)
+ *  02. 파이 서밋 기간 ‘0.000314 Pi · $314,159’ 더스팅 피싱 & 가짜 에어드랍
+ */
+const FAKE_ARCHIVES: ArchivedFake[] = [
   {
     key: '01',
-    head: 'National Grid 공식 부인',
-    headEn: 'National Grid denies it',
-    fact: '“11월 19일 전국 정전을 예고하는 게시물은 거짓(false)” 공식 채널 성명(2026.11.16) · 전국 정전 예정 없음',
-    factEn: '“A false social media post… There is no outage expected” — official statement, 16 Nov 2026'
+    tag: '대정전 음모론',
+    tagEn: 'Blackout hoax',
+    verdict: '❌ 거짓 — 정기 경보 테스트 왜곡',
+    verdictEn: '❌ FALSE — a routine alert test distorted',
+    head: '“11월 17일 전 세계 대정전·금융 붕괴” — FEMA 경보 테스트에 심슨 가족을 짜깁기',
+    headEn: '“Worldwide blackout and banking collapse on Nov 17” — a routine FEMA alert test spliced with The Simpsons',
+    lede: '조회수 1,000만 회를 넘긴 게시물이 돌았지만, 11월 17·18일 전 세계 정전도 금융 마비도 없었습니다. 공포로 특정 코인·계좌에 돈을 옮기게 만드는 사기 수법입니다.',
+    ledeEn: 'Posts passing 10 million views spread the claim, yet 17–18 November passed without a global outage or a banking freeze. The play is to scare people into moving money into a specific coin or account.',
+    rumor: '“11월 17일 FEMA 라디오·TV 경보는 전 세계 정전과 금융 붕괴의 신호다”',
+    rumorEn: '“The FEMA radio and TV alert on 17 November is the signal for a worldwide blackout and banking collapse.”',
+    fact: 'FEMA·FCC의 법정 정기 테스트(11월 17일 2:20 PM ET, TV·라디오 1분, 휴대폰 미발송)일 뿐입니다. 실제 11월 17·18일 전 세계 정전·금융 마비 없이 무사히 지나갔고, FEMA도 “정전도 비상사태도 없다”고 공식 부인했습니다.',
+    factEn: 'It was the legally mandated FEMA–FCC EAS test (2:20 PM ET on 17 November, one minute on TV and radio, no mobile alerts). 17–18 November passed with no global outage or banking freeze, and FEMA publicly denied it: “No blackouts, no secret emergencies.”',
+    sources: [
+      { label: 'PBS · PolitiFact', labelEn: 'PBS · PolitiFact', url: 'https://www.pbs.org/newshour/nation/debunking-social-media-posts-that-claim-a-90-day-blackout-will-start-nov-17' },
+      { label: 'Snopes 팩트체크', labelEn: 'Snopes check', url: 'https://www.snopes.com/news/2026/11/16/nationwide-90-day-blackout/' },
+      { label: 'France 24', labelEn: 'France 24', url: 'https://www.france24.com/en/tv-shows/truth-or-fake/20261116-november-17-blackout-hoax-how-a-conspiracy-theory-went-viral-around-the-world' }
+    ]
   },
   {
     key: '02',
-    head: '영국 전력망 예비율 정상',
-    headEn: 'GB margin is normal',
-    fact: 'NESO 겨울 전망 2026/27 · 예비 마진 5.9GW(9.5%), 신뢰도 기준(LOLE 3시간/년) 이내',
-    factEn: 'NESO Winter Outlook 2026/27 · 5.9 GW (9.5%) de-rated margin, within the Reliability Standard'
-  },
-  {
-    key: '03',
-    head: '국지 사고를 대정전으로 과장',
-    headEn: 'A local fault sold as a blackout',
-    fact: '실제 런던 국지 정전은 가구 단위 — 보우(Bow) 수도관 파열(2026.7.9) 때 UK Power Networks가 159가구 정전, 약 3시간 내 대부분 복구',
-    factEn: 'Real London cuts are house-sized — after the Bow water-main burst (9 Jul 2026) UK Power Networks isolated 159 customers, nearly all restored within about three hours'
+    tag: '더스팅 피싱',
+    tagEn: 'Dusting phishing',
+    verdict: '❌ 거짓 — 가짜 가격 메모',
+    verdictEn: '❌ FALSE — a fake price memo',
+    head: '서밋 기념 ‘0.000314 Pi · $314,159’ 더스팅 — 24단어 비밀구절을 노린다',
+    headEn: 'Summit “0.000314 Pi · $314,159” dusting — after your 24-word passphrase',
+    lede: '파이 서밋 기간을 노려 지갑에 극소량(0.000314 Pi)을 보내며 가짜 가격 메모와 링크를 띄우거나, “서밋 2배 지급·클레임”을 사칭하는 피싱이 급증했습니다.',
+    ledeEn: 'Around the Summit, wallets received dust transfers of 0.000314 Pi carrying fake price memos and links, alongside phishing that impersonates a “Summit 2x payout” or claim page.',
+    rumor: '“0.000314 Pi가 들어왔다는 건 1 Pi = $314,159 가격이 확정된 것 — 서밋 기념 2배 지급·클레임 링크도 열렸다”',
+    rumorEn: '“The 0.000314 Pi in your wallet proves 1 Pi = $314,159 — the Summit 2x payout and claim link are live.”',
+    fact: '코어팀은 공식 가격도, 에어드랍 클레임 링크도 발표한 적이 없습니다. 메모 속 링크는 24단어 비밀구절을 입력하게 만드는 피싱 페이지이며, 파이 지갑은 비수탁형이라 한 번 노출되면 되돌릴 수 없습니다.',
+    factEn: 'The Core Team has never announced an official price or an airdrop claim link. Links in those memos lead to phishing pages that ask for your 24-word passphrase — and since Pi wallets are non-custodial, one exposure cannot be undone.',
+    sources: [
+      { label: 'BSCN 보도', labelEn: 'BSCN report', url: 'https://bsc.news/news/pi-network-dust-transfer-scam-wallets' },
+      { label: 'Bitrue 분석', labelEn: 'Bitrue analysis', url: 'https://www.bitrue.com/blog/pi-network-wallet-scam-fake-price-memos' }
+    ]
   }
 ];
 
-const BLACKOUT_SOURCES = [
-  { label: 'National Grid UK 공식', labelEn: 'National Grid UK', url: 'https://x.com/nationalgriduk' },
-  { label: 'Full Fact 팩트체크', labelEn: 'Full Fact check', url: 'https://fullfact.org/hoaxes/national-grid-warning-major-UK-blackout-outage-fake/' },
-  { label: 'NESO 겨울 전망', labelEn: 'NESO Winter Outlook', url: 'https://www.neso.energy/document/388726/download' },
-  { label: 'UKPN 보우 현장', labelEn: 'UKPN Bow incident', url: 'https://www.standard.co.uk/news/london/bow-flooding-homes-old-ford-road-thames-water-power-heatwave-b1289370.html' }
-];
-
-/** 피처드 2 — 가짜뉴스 박제 카드 */
+/** 피처드 2 — 오늘의 가짜뉴스 박제 카드 (2건) */
 const FakeNewsArchive = ({ ko }: { ko: boolean }) => (
   <section className="bg-white border border-[#E5E7EB] rounded-2xl shadow-[var(--card-shadow)] overflow-hidden text-left">
     <div className="flex items-center justify-between gap-2 bg-neutral-50 border-b border-[#E5E7EB] px-3 py-1.5">
       <span className="flex items-center gap-1.5 t-tag font-bold uppercase text-[#dc2626]">
         <span className="w-1.5 h-1.5 rounded-full bg-[#dc2626] inline-block shrink-0" />
-        {ko ? '가짜뉴스 박제' : 'Fake news archived'}
+        {ko ? '가짜뉴스 박제 · 오늘' : 'Fake news archived · today'}
       </span>
       <span translate="no" className="notranslate t-tag text-neutral-500 whitespace-nowrap">
-        2026.11.19 · UK
+        2026.11.19
       </span>
     </div>
 
-    <div className="px-3 py-3 md:p-4">
+    <div className="px-3 py-2.5 md:p-4">
       <h2 className="t-section text-black">
-        {ko ? '런던 대정전 · 11월 19일 시스템 붕괴 음모론' : 'London blackout · the “19 November grid collapse” conspiracy'}
+        {ko ? '오늘의 가짜뉴스 — 대정전 음모론의 결말 · 서밋 더스팅 피싱' : 'Today’s fake news — the blackout hoax ends, Summit dusting phish'}
       </h2>
+      <p className="t-sub text-neutral-500 mt-0.5">
+        {ko
+          ? '공식 부인과 실측 기록에 대조했습니다. 퍼진 규모와 상관없이 두 건 모두 거짓입니다.'
+          : 'Checked against official denials and measured records. Both spread widely; neither is true.'}
+      </p>
 
-      <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-1.5">
-        <span className="inline-flex items-center rounded-full border border-[#dc2626]/30 bg-[#dc2626]/5 px-2 py-0.5 t-tag font-bold text-[#dc2626]">
-          {ko ? '❌ 거짓 — 조작 이미지 + 국지 사고 과장' : '❌ FALSE — forged image, local faults inflated'}
-        </span>
-        <span className="t-tag font-normal text-neutral-500">
-          {ko ? '영국 전력망 공식 채널·실측 현황과 대조' : 'Checked against National Grid and UK Power Networks'}
-        </span>
-      </div>
+      <div className="mt-2 space-y-2.5">
+        {FAKE_ARCHIVES.map((f, i) => (
+          <div key={f.key} className={i === 0 ? '' : 'border-t border-neutral-200 pt-2.5'}>
+            <div className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
+              <span translate="no" className="notranslate font-mono t-tag text-neutral-400">{f.key}</span>
+              <span className="t-tag font-bold text-neutral-500">{ko ? f.tag : f.tagEn}</span>
+              <span className="inline-flex items-center rounded-full border border-[#dc2626]/30 bg-[#dc2626]/5 px-1.5 t-tag font-bold text-[#dc2626]">
+                {ko ? f.verdict : f.verdictEn}
+              </span>
+            </div>
 
-      <div className="mt-2 rounded-lg bg-neutral-50 border border-neutral-200 px-2.5 py-2">
-        <p className="t-tag font-bold text-neutral-500 uppercase">{ko ? '유포된 루머' : 'What was spread'}</p>
-        <p className="t-sub text-neutral-700 mt-0.5">
-          {ko
-            ? '“11월 19일 오후 4시, 영국 전국 대정전이 시작된다” — National Grid 공문으로 위장한 조작 이미지와 어두운 거리 영상이 함께 돌았습니다.'
-            : '“A nationwide UK blackout starts at 4pm on 19 November” — a forged National Grid notice spread together with dark street footage.'}
-        </p>
-      </div>
+            <h3 className="t-card text-black mt-1">{ko ? f.head : f.headEn}</h3>
+            <p className="t-sub text-neutral-500 mt-0.5">{ko ? f.lede : f.ledeEn}</p>
 
-      <div className="mt-2.5 space-y-2">
-        {BLACKOUT_FACTS.map(f => (
-          <div key={f.key} className="border-t border-neutral-200 pt-2">
-            <p className="t-card text-black flex items-start gap-1.5">
-              <span translate="no" className="notranslate font-mono t-tag text-neutral-400 shrink-0 pt-0.5">{f.key}</span>
-              <span className="min-w-0">{ko ? f.head : f.headEn}</span>
+            <p className="t-sub text-neutral-500 mt-1 flex items-start gap-1.5">
+              <span className="shrink-0 px-1.5 rounded bg-neutral-100 text-neutral-500 t-tag">{ko ? '루머' : 'Rumor'}</span>
+              <span className="min-w-0">{ko ? f.rumor : f.rumorEn}</span>
             </p>
-            <p className="t-sub text-neutral-700 mt-0.5 pl-0">
-              {ko ? f.fact : f.factEn}
+            <p className="t-sub text-black mt-0.5 flex items-start gap-1.5">
+              <span className="shrink-0 px-1.5 rounded bg-black text-white t-tag">{ko ? '✅ 팩트' : '✅ Fact'}</span>
+              <span className="min-w-0">{ko ? f.fact : f.factEn}</span>
             </p>
+
+            <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
+              <span className="t-tag text-neutral-400">{ko ? '출처' : 'Sources'}</span>
+              {f.sources.map(s => (
+                <a
+                  key={s.url}
+                  href={s.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="t-tag px-2 py-1 rounded-lg bg-neutral-100 text-black hover:bg-black hover:text-white transition-colors"
+                >
+                  🔗 {ko ? s.label : s.labelEn}
+                </a>
+              ))}
+            </div>
           </div>
-        ))}
-      </div>
-
-      <div className="flex flex-wrap items-center gap-1.5 mt-2">
-        <span className="t-tag text-neutral-400">{ko ? '공식 출처' : 'Sources'}</span>
-        {BLACKOUT_SOURCES.map(s => (
-          <a
-            key={s.url}
-            href={s.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="t-tag px-2 py-1 rounded-lg bg-neutral-100 text-black hover:bg-black hover:text-white transition-colors"
-          >
-            🔗 {ko ? s.label : s.labelEn}
-          </a>
         ))}
       </div>
     </div>
@@ -914,7 +922,7 @@ export default function FactFilterPage() {
         {/* TAB 1: AI FACT CHECK */}
         {activeTab === 'CHECK' && (
           <div className="space-y-3">
-            {/* 피처드 — 서밋 Day 1 공식 팩트체크 · 가짜뉴스 박제 · 케드헌 편대 */}
+            {/* 피처드 — 오늘의 진짜뉴스(서밋 Day 2) · 가짜뉴스 박제 · 케드헌 편대 */}
             <SummitFactCheck ko={ko} />
             <FakeNewsArchive ko={ko} />
             <FleetPromo ko={ko} />
