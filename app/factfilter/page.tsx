@@ -465,7 +465,7 @@ const FakeNewsArchive = ({ ko }: { ko: boolean }) => (
 
     <div className="px-3 py-2.5 md:p-4">
       <h2 className="t-section text-black">
-        {ko ? '오늘의 가짜뉴스 — 대정전 음모론의 결말 · 서밋 더스팅 피싱' : 'Today’s fake news — the blackout hoax ends, Summit dusting phish'}
+        {ko ? '오늘의 가짜뉴스 — 대정전 음모론의 결말 · 서밋 더스팅 피싱' : 'Today’s fake news — the blackout hoax · Summit dusting phishing'}
       </h2>
       <p className="t-sub text-neutral-500 mt-0.5">
         {ko
