@@ -280,31 +280,31 @@ interface SummitFact {
 }
 
 /**
- * Pi Ecosystem Summit Day 2 공식 발표 (2026-11-18 발표 · 2026-11-19 게시)
- *  - 1차 출처: minepi.com/blog/pi-ecosystem-summit-2/
- *  - 공식 블로그 원문만 옮긴다. 추측·전망은 넣지 않는다.
+ * Pi Ecosystem Summit Day 3 — Pi Next 해커톤 공식 요강 (2026-11-19 공개 · 2026-11-20 게시)
+ *  - 1차 출처: minepi.com/pi-next/ (코어팀 공식 해커톤 페이지)
+ *  - 공식 원문만 옮긴다. 추측·전망은 넣지 않는다.
  */
 const SUMMIT_FACTS: SummitFact[] = [
   {
     key: '01',
-    head: 'Pi DataLab — 사람 판단이 필요한 AI 작업을 파이오니어에게',
-    headEn: 'Pi DataLab — human-in-the-loop work for Pioneers',
-    fact: 'AI 기업·개발자가 데이터 라벨링·랭킹·평가·피지컬 AI 데이터 같은 과제를 KYC 인증 파이오니어에게 맡기고, 참여자는 Pi 또는 파이 생태계 토큰으로 보상받는 구조. 과제 생성·참여 조건·품질 관리·결과 회수를 한곳에서 처리합니다.',
-    factEn: 'Businesses and AI developers fund tasks — data labeling, ranking, evaluation, physical AI data — and identity-verified Pioneers are paid in Pi or Pi-launched tokens. Project setup, quality controls and result collection run in one place.'
+    head: 'Pi Next — 20만 USDT 상금 + 최대 2,000만 Pi 마케팅 지원',
+    headEn: 'Pi Next — 200,000 USDT in prizes, up to 20M Pi for marketing',
+    fact: '총상금 200,000 USDT는 심사위원상 50,000(1위 25,000·2위 15,000·3위 10,000)와 커뮤니티 참여상 150,000으로 나뉩니다. 커뮤니티 참여상은 최대 2팀에게 실제 사용자 참여·재방문·커뮤니티 확산으로 평가합니다. 별도로 Pi 재단의 App Growth Initiative가 최대 2,000만 Pi를 앱 사용자 유치에 지원합니다.',
+    factEn: 'The 200,000 USDT pool splits into 50,000 for Judges’ Pick (25,000 / 15,000 / 10,000) and 150,000 for Community Engagement Awards, given to up to 2 teams judged on real user engagement, retention and community traction. Separately, the Pi Foundation’s App Growth Initiative puts up to 20 million Pi behind user acquisition for qualifying apps.'
   },
   {
     key: '02',
-    head: 'SoloHost AI 패키징 · CiDi Games Ads SDK',
-    headEn: 'SoloHost AI packaging · CiDi Games Ads SDK',
-    fact: '기존 앱의 Docker 이미지를 AI 에이전트에 넘기면 docker-compose.yml·config_options.yml을 만들어 SoloHost 등록까지 돕습니다 — 42만+ 노드 운영자와 Pi Desktop 사용자에게 배포. CiDi Games는 Pi 로그인·Pi 결제·Pi Ads SDK 통합을 시연했고, Go·FastAPI·Node/Express·Laravel·Ruby 지원과 통합 개발자 문서도 함께 공개됐습니다.',
-    factEn: 'Hand an existing app’s Docker image to an AI agent and it generates docker-compose.yml and config_options.yml for listing through SoloHost, reaching 420,000+ Node operators and Pi Desktop users. CiDi Games demoed Pi authentication, Pi Payments and the Pi Ads SDK, alongside new Go, FastAPI, Node/Express, Laravel and Ruby support and unified developer docs.'
+    head: '등록은 Pi 계정으로 — 팀원 전원이 등록해야 심사 대상입니다',
+    headEn: 'Register with a Pi account — every team member must sign up',
+    fact: 'Pi Browser에서 Developer Web Console을 열고 Hackathon 탭에서 등록합니다. 상금 심사 대상이 되려면 팀원 전원이 각자 등록해야 하고, 앱 제출은 팀원 1명만 합니다. SoloHost 트랙은 Pi Desktop에서 앱을 만들어 SoloHost App ID로 제출합니다. 마감은 2027년 1월 5일 23:59 PST, 한국 시간 2027년 1월 6일 16:59입니다.',
+    factEn: 'Register in the Developer Web Console’s Hackathon tab inside Pi Browser. Every team member must register to be eligible, while only one member submits each app. The SoloHost track builds through Pi Desktop and submits a SoloHost App ID. Deadline: Jan 5, 2027 11:59 PM PST (Jan 6, 2027 07:59 UTC).'
   },
   {
     key: '03',
-    head: 'Day 3 — Pi Next 해커톤, 11월 19일 개막',
-    headEn: 'Day 3 — the Pi Next hackathon opens Nov 19',
-    fact: '미국 시간 11월 19일 공식 개막 · 상금 200,000 USDT · 공동 마케팅 지원 최대 2,000만 Pi. 서밋에서 공개된 도구를 실제 앱으로 옮기는 무대입니다.',
-    factEn: 'Opens officially on Nov 19 (US time) with a 200,000 USDT prize pool and up to 20 million Pi in shared marketing support — where the tools shown at the Summit become real apps.'
+    head: '심사 기준 6가지 — 결국 "메인넷에서 계속 쓰일 앱"인가',
+    headEn: 'Six judging criteria — is this an app Mainnet users keep using?',
+    fact: '① 메인넷 리스팅 가이드라인 부합 ② Pi 유틸리티와 생태계 요구 부합 ③ 기술 완성도·혁신성 ④ UI/UX·접근성·이용 편의 ⑤ 메인넷에서의 장기 유틸리티 ⑥ 독창성·차별적 사용 사례. 제출물은 3분 이내 공개 데모 영상, 영문 앱 이름·로고·설명·미리보기 이미지, PiNet 연동, 개인정보 처리방침을 갖춰야 합니다.',
+    factEn: '① Alignment with the Mainnet listing guidelines ② Pi utility and ecosystem needs ③ technical completeness and innovation ④ UI/UX, accessibility and navigation ⑤ long-term utility on Mainnet ⑥ uniqueness and distinctive use cases. Submissions need a public demo video under 3 minutes, an English name, logo, description and preview images, PiNet integration, and a privacy policy.'
   }
 ];
 
@@ -313,6 +313,16 @@ const SUMMIT_SOURCES = [
     label: '공식 블로그 · Day 2',
     labelEn: 'Official blog · Day 2',
     url: 'https://minepi.com/blog/pi-ecosystem-summit-2/'
+  },
+  {
+    label: 'Pi Next 공식 요강',
+    labelEn: 'Official Pi Next rules',
+    url: 'https://minepi.com/pi-next/'
+  },
+  {
+    label: '메인넷 리스팅 요건',
+    labelEn: 'Mainnet listing requirements',
+    url: 'https://developers.minepi.com/docs/build-first-app/MainnetListing'
   },
   {
     label: '공식 서밋 페이지',
@@ -329,7 +339,7 @@ const FLEET_APPS = [
   { name: 'XAEA12', url: 'https://xaea12.kedheon.com', ko: '기여', en: 'Contribution' }
 ];
 
-/** 상단 피처드 — 오늘의 진짜뉴스(서밋 Day 2 공식 발표) + 케드헌 편대 링크 */
+/** 상단 피처드 — 오늘의 진짜뉴스(서밋 Day 3 · Pi Next 공식 요강) + 케드헌 편대 링크 */
 const SummitFactCheck = ({ ko }: { ko: boolean }) => (
   <section className="bg-white border border-[#E5E7EB] rounded-2xl shadow-[var(--card-shadow)] overflow-hidden text-left">
     <div className="flex items-center justify-between gap-2 bg-neutral-50 border-b border-[#E5E7EB] px-3 py-1.5">
@@ -338,18 +348,18 @@ const SummitFactCheck = ({ ko }: { ko: boolean }) => (
         {ko ? '피처드 · 오늘의 진짜뉴스' : 'Featured · Today’s real news'}
       </span>
       <span translate="no" className="notranslate t-tag text-neutral-500 whitespace-nowrap">
-        2026.11.19 · Day 2
+        2026.11.20 · Day 3
       </span>
     </div>
 
     <div className="px-3 py-2.5 md:p-4">
       <h2 className="t-section text-black">
-        {ko ? 'Pi Ecosystem Summit Day 2 — 공식 발표' : 'Pi Ecosystem Summit Day 2 — Official announcements'}
+        {ko ? 'Pi Ecosystem Summit Day 3 — Pi Next 해커톤 공식 요강' : 'Pi Ecosystem Summit Day 3 — the Pi Next hackathon (official rules)'}
       </h2>
       <p className="t-sub text-neutral-500 mt-0.5">
         {ko
-          ? '코어팀 공식 블로그(11.18) 원문과 1:1로 대조한 발표 내용입니다.'
-          : 'Taken line by line from the Core Team’s official blog (Nov 18).'}
+          ? '코어팀 공식 해커톤 페이지(11.19) 원문과 1:1로 대조한 요강입니다.'
+          : 'Taken line by line from the Core Team’s official hackathon page (Nov 19).'}
       </p>
 
       <div className="mt-2 space-y-1.5">
@@ -404,53 +414,74 @@ interface ArchivedFake {
 }
 
 /**
- * 오늘의 가짜뉴스 박제 (2026-11-19)
- *  01. 11월 17일 전 세계 대정전·금융 붕괴 음모론 — FEMA 경보 테스트 왜곡 (결말: 아무 일도 없었다)
- *  02. 파이 서밋 기간 ‘0.000314 Pi · $314,159’ 더스팅 피싱 & 가짜 에어드랍
+ * 오늘의 가짜뉴스 박제 (2026-11-20)
+ *  01. Fast-Track 지갑 49.7만 개 '대신 열어준다' · 유료 KYC 사칭
+ *  02. 코인원 CoOne 'PC앱 50만 원' 사칭 피싱 · 머스크 딥페이크 2배 송금 사기
+ *  03. GTA 6 비트코인 보상 루머 · DCTY 편승 토큰
  */
 const FAKE_ARCHIVES: ArchivedFake[] = [
   {
     key: '01',
-    tag: '대정전 음모론',
-    tagEn: 'Blackout hoax',
-    verdict: '❌ 거짓 — 정기 경보 테스트 왜곡',
-    verdictEn: '❌ FALSE — a routine alert test distorted',
-    head: '“11월 17일 전 세계 대정전·금융 붕괴” — FEMA 경보 테스트에 심슨 가족을 짜깁기',
-    headEn: '“Worldwide blackout and banking collapse on Nov 17” — a routine FEMA alert test spliced with The Simpsons',
-    lede: '조회수 1,000만 회를 넘긴 게시물이 돌았지만, 11월 17·18일 전 세계 정전도 금융 마비도 없었습니다. 공포로 특정 코인·계좌에 돈을 옮기게 만드는 사기 수법입니다.',
-    ledeEn: 'Posts passing 10 million views spread the claim, yet 17–18 November passed without a global outage or a banking freeze. The play is to scare people into moving money into a specific coin or account.',
-    rumor: '“11월 17일 FEMA 라디오·TV 경보는 전 세계 정전과 금융 붕괴의 신호다”',
-    rumorEn: '“The FEMA radio and TV alert on 17 November is the signal for a worldwide blackout and banking collapse.”',
-    fact: 'FEMA·FCC의 법정 정기 테스트(11월 17일 2:20 PM ET, TV·라디오 1분, 휴대폰 미발송)일 뿐입니다. 실제 11월 17·18일 전 세계 정전·금융 마비 없이 무사히 지나갔고, FEMA도 “정전도 비상사태도 없다”고 공식 부인했습니다.',
-    factEn: 'It was the legally mandated FEMA–FCC EAS test (2:20 PM ET on 17 November, one minute on TV and radio, no mobile alerts). 17–18 November passed with no global outage or banking freeze, and FEMA publicly denied it: “No blackouts, no secret emergencies.”',
+    tag: '지갑·KYC 사칭',
+    tagEn: 'Wallet · KYC impersonation',
+    verdict: '❌ 거짓 — 공식 서비스 아님',
+    verdictEn: '❌ FALSE — not an official service',
+    head: '“Fast-Track 지갑 49.7만 개, 돈 내면 대신 열어준다” — 코어팀은 그런 서비스를 운영하지 않습니다',
+    headEn: '“497,000 Fast-Track wallets — pay us and we open them for you” — the Core Team runs no such service',
+    lede: '가스비가 없어 마이그레이션 잔액을 못 찾는 Fast-Track 지갑 약 49만 7천 개를 미끼로, “대신 클레임해 준다·유료로 KYC를 앞당겨 준다”는 사칭이 돌고 있습니다.',
+    ledeEn: 'About 497,000 Fast-Track wallets sit unable to claim their migrated balance because they hold no Pi to cover the gas fee. Offers to “claim it for you” or to “speed up your KYC for a fee” are built on that gap.',
+    rumor: '“Fast-Track 지갑 49.7만 개 문제를 대신 해결해 준다 / 돈을 내면 KYC·이전을 앞당겨 준다”',
+    rumorEn: '“We fix the 497,000 stuck Fast-Track wallets for you — pay and your KYC and migration are fast-tracked.”',
+    fact: '코어팀은 9월 17일 공지에서 해당 지갑의 잔액 클레임을 풀어주는 업데이트를 “1주 안에 배포”한다고 밝혔고, 11월 18일 기준 배포 완료를 공식 확인한 공지는 없습니다. 클레임은 Pi Browser 안 공식 지갑(wallet.pinet.com)에서 본인만 할 수 있고, 코어팀과 공식 지원은 24단어 비밀구절을 절대 묻지 않습니다.',
+    factEn: 'In its 17 September post the Core Team said an update to unblock those balances would be deployed “within the next week”; as of 18 November no official post confirmed the deployment. Claiming is done only by the wallet’s own owner in the official wallet inside Pi Browser (wallet.pinet.com), and neither the Core Team nor official support ever asks for your 24-word passphrase.',
     sources: [
-      { label: 'PBS · PolitiFact', labelEn: 'PBS · PolitiFact', url: 'https://www.pbs.org/newshour/nation/debunking-social-media-posts-that-claim-a-90-day-blackout-will-start-nov-17' },
-      { label: 'Snopes 팩트체크', labelEn: 'Snopes check', url: 'https://www.snopes.com/news/2026/11/16/nationwide-90-day-blackout/' },
-      { label: 'France 24', labelEn: 'France 24', url: 'https://www.france24.com/en/tv-shows/truth-or-fake/20261116-november-17-blackout-hoax-how-a-conspiracy-theory-went-viral-around-the-world' }
+      { label: '공식 KYC·마이그레이션 공지', labelEn: 'Official KYC & migration post', url: 'https://minepi.com/blog/kyc-mainnet-migration-9-26/' },
+      { label: '배포 확인 경과(11-18 갱신)', labelEn: 'Deployment status (updated Nov 18)', url: 'https://coindcx.com/blog/news/pi-networks-mainnet-launch-date-and-roadmap' }
     ]
   },
   {
     key: '02',
-    tag: '더스팅 피싱',
-    tagEn: 'Dusting phishing',
-    verdict: '❌ 거짓 — 가짜 가격 메모',
-    verdictEn: '❌ FALSE — a fake price memo',
-    head: '서밋 기념 ‘0.000314 Pi · $314,159’ 더스팅 — 24단어 비밀구절을 노린다',
-    headEn: 'Summit “0.000314 Pi · $314,159” dusting — after your 24-word passphrase',
-    lede: '파이 서밋 기간을 노려 지갑에 극소량(0.000314 Pi)을 보내며 가짜 가격 메모와 링크를 띄우거나, “서밋 2배 지급·클레임”을 사칭하는 피싱이 급증했습니다.',
-    ledeEn: 'Around the Summit, wallets received dust transfers of 0.000314 Pi carrying fake price memos and links, alongside phishing that impersonates a “Summit 2x payout” or claim page.',
-    rumor: '“0.000314 Pi가 들어왔다는 건 1 Pi = $314,159 가격이 확정된 것 — 서밋 기념 2배 지급·클레임 링크도 열렸다”',
-    rumorEn: '“The 0.000314 Pi in your wallet proves 1 Pi = $314,159 — the Summit 2x payout and claim link are live.”',
-    fact: '코어팀은 공식 가격도, 에어드랍 클레임 링크도 발표한 적이 없습니다. 메모 속 링크는 24단어 비밀구절을 입력하게 만드는 피싱 페이지이며, 파이 지갑은 비수탁형이라 한 번 노출되면 되돌릴 수 없습니다.',
-    factEn: 'The Core Team has never announced an official price or an airdrop claim link. Links in those memos lead to phishing pages that ask for your 24-word passphrase — and since Pi wallets are non-custodial, one exposure cannot be undone.',
+    tag: '거래소 사칭',
+    tagEn: 'Exchange impersonation',
+    verdict: '❌ 사칭 광고 — 공식 앱 아님',
+    verdictEn: '❌ FAKE AD — not an official app',
+    head: '“코인원 PC앱 깔면 50만 원” CoOne 사칭 — 국내 거래소는 PC 설치형 앱을 배포하지 않습니다',
+    headEn: '“Install the Coinone PC app, get 500,000 won” — the CoOne impostor; Korean exchanges ship no desktop installer',
+    lede: '코인원 로고와 색을 도용하고 계정명을 CoOne으로 만든 페이스북 광고가 PC 설치 파일을 유도했습니다. 바로 그 주에 코인원 상담 외주업체 해킹으로 상담 정보가 유출돼 2차 피싱 위험이 커진 상태였습니다.',
+    ledeEn: 'A Facebook ad copied Coinone’s logo and colours, renamed the account CoOne and pushed a Windows/Mac installer. The same week, a hack of Coinone’s outsourced customer-service vendor leaked consultation records — raising the risk of follow-up phishing.',
+    rumor: '“코인원 데스크톱 앱을 설치하면 최대 50만 원 보너스” + 코인원 공식 도메인처럼 보이는 링크 미리보기',
+    rumorEn: '“Install the Coinone desktop app for up to 500,000 won” — plus a link preview showing what looks like Coinone’s real domain.',
+    fact: '코인원을 포함한 국내 거래소는 PC 설치형 데스크톱 프로그램을 배포하지 않습니다. 링크 미리보기 도메인은 변조된 것이고, 받은 설치 파일은 브라우저에 저장된 비밀번호·로그인 세션은 물론 지갑 시드 구문과 프라이빗 키까지 빼가는 정보탈취형 악성코드입니다. 같은 수법이 해외에선 머스크 딥페이크 생중계로 “보내면 2배”를 약속해 수십만 명을 모았고, 한 거래소의 AI 방어가 2시간 만에 470만 달러(약 91%)를 막아냈습니다.',
+    factEn: 'No Korean exchange, Coinone included, distributes a desktop installer. The domain in the link preview was tampered with, and the file is an infostealer that lifts saved browser passwords and exchange sessions along with wallet seed phrases and private keys. Abroad the same play ran a deepfake Elon Musk livestream promising to double whatever was sent, drawing hundreds of thousands of viewers; one exchange’s AI defence blocked 4.7 million dollars (about 91%) of the attempted transfers within roughly two hours.',
     sources: [
-      { label: 'BSCN 보도', labelEn: 'BSCN report', url: 'https://bsc.news/news/pi-network-dust-transfer-scam-wallets' },
-      { label: 'Bitrue 분석', labelEn: 'Bitrue analysis', url: 'https://www.bitrue.com/blog/pi-network-wallet-scam-fake-price-memos' }
+      { label: '내외경제TV(11-19)', labelEn: 'Naeoe Economy TV (Nov 19)', url: 'https://www.nbntv.co.kr/news/articleView.html?idxno=4027668' },
+      { label: 'The Block(딥페이크 사기 차단)', labelEn: 'The Block (deepfake scam blocked)', url: 'https://www.theblock.co/news/defi/2026-11-17-coinbase-ai-defense-deepfake-elon-musk-442918' },
+      { label: '연합뉴스(코인원 외주 해킹)', labelEn: 'Yonhap (Coinone vendor breach)', url: 'https://www.yna.co.kr/view/AKR20261115020900002' }
+    ]
+  },
+  {
+    key: '03',
+    tag: '게임 편승 루머',
+    tagEn: 'Game hype rumor',
+    verdict: '❌ 거짓 — 게임 머니는 출금 불가',
+    verdictEn: '❌ FALSE — in-game money cannot be withdrawn',
+    head: '“GTA 6 하면 비트코인 준다” — 게임 속 돈은 밖으로 나오지 않습니다',
+    headEn: '“GTA 6 pays you in Bitcoin” — in-game money never leaves the game',
+    lede: '11월 19일 출시와 함께 DCTY(DacityCoin) 같은 이름의 토큰이 쏟아졌습니다. 게임 속 코인은 가상의 소품이고, 실제 코인과는 아무 관계가 없습니다.',
+    ledeEn: 'With the 19 November launch came a flood of tokens named after DCTY (DacityCoin). The coin inside the game is a prop; the tokens have no connection to it.',
+    rumor: '“GTA 6 미션 보상으로 진짜 비트코인을 준다 / 게임 속 코인을 지갑으로 출금할 수 있다”',
+    rumorEn: '“GTA 6 missions pay real Bitcoin — you can withdraw the in-game coin to your wallet.”',
+    fact: '락스타와 테이크투는 암호화폐 기능을 발표한 적이 없고, 게임 속 돈은 락스타 서버에 있는 게임 머니라 출금이 되지 않습니다. 2026년 9월 10일 개정 모드 가이드라인은 모드에서의 암호화폐·NFT 사용과 홍보를 금지합니다. 트레일러에 2초 스친 가상 코인 이름을 딴 솔라나 토큰은 2,900% 급등 뒤 93% 폭락했습니다.',
+    factEn: 'Rockstar and Take-Two have never announced crypto features, and in-game money lives on Rockstar’s servers and cannot be withdrawn. Their mod guidelines, revised on 10 September 2026, prohibit using or promoting cryptocurrency and NFTs in mods. A Solana token named after the coin that flashed for two seconds in the trailer surged roughly 2,900% and then fell 93%.',
+    sources: [
+      { label: 'Crypto Times', labelEn: 'Crypto Times', url: 'https://www.cryptotimes.io/2026/11/17/no-bitcoin-or-crypto-integration-in-gta-6-here-are-rumours-and-truths-ahead-of-game-launch/' },
+      { label: 'Altcoin Buzz', labelEn: 'Altcoin Buzz', url: 'https://www.altcoinbuzz.io/gta-6-crypto-rumors-bitcoin-solana-integration' },
+      { label: 'BeInCrypto(11-19)', labelEn: 'BeInCrypto (Nov 19)', url: 'https://ru.beincrypto.com/rockstar-spryatala-v-gta-6-memkoin/' }
     ]
   }
 ];
 
-/** 피처드 2 — 오늘의 가짜뉴스 박제 카드 (2건) */
+/** 피처드 2 — 오늘의 가짜뉴스 박제 카드 (3건) */
 const FakeNewsArchive = ({ ko }: { ko: boolean }) => (
   <section className="bg-white border border-[#E5E7EB] rounded-2xl shadow-[var(--card-shadow)] overflow-hidden text-left">
     <div className="flex items-center justify-between gap-2 bg-neutral-50 border-b border-[#E5E7EB] px-3 py-1.5">
@@ -459,18 +490,18 @@ const FakeNewsArchive = ({ ko }: { ko: boolean }) => (
         {ko ? '가짜뉴스 박제 · 오늘' : 'Fake news archived · today'}
       </span>
       <span translate="no" className="notranslate t-tag text-neutral-500 whitespace-nowrap">
-        2026.11.19
+        2026.11.20
       </span>
     </div>
 
     <div className="px-3 py-2.5 md:p-4">
       <h2 className="t-section text-black">
-        {ko ? '오늘의 가짜뉴스 — 대정전 음모론의 결말 · 서밋 더스팅 피싱' : 'Today’s fake news — the blackout hoax · Summit dusting phishing'}
+        {ko ? '오늘의 가짜뉴스 — 파이 지갑 사칭 · 거래소 사칭 · 게임 편승 루머' : 'Today’s fake news — Pi wallet impersonation · exchange impersonation · game hype'}
       </h2>
       <p className="t-sub text-neutral-500 mt-0.5">
         {ko
-          ? '공식 부인과 실측 기록에 대조했습니다. 퍼진 규모와 상관없이 두 건 모두 거짓입니다.'
-          : 'Checked against official denials and measured records. Both spread widely; neither is true.'}
+          ? '공식 공지·업계 확인과 대조했습니다. 세 건 모두 돈을 먼저 보내게 만드는 구조입니다.'
+          : 'Checked against official posts and industry reporting. All three exist to make you send money first.'}
       </p>
 
       <div className="mt-2 space-y-2.5">
@@ -922,7 +953,7 @@ export default function FactFilterPage() {
         {/* TAB 1: AI FACT CHECK */}
         {activeTab === 'CHECK' && (
           <div className="space-y-3">
-            {/* 피처드 — 오늘의 진짜뉴스(서밋 Day 2) · 가짜뉴스 박제 · 케드헌 편대 */}
+            {/* 피처드 — 오늘의 진짜뉴스(서밋 Day 3) · 가짜뉴스 박제 · 케드헌 편대 */}
             <SummitFactCheck ko={ko} />
             <FakeNewsArchive ko={ko} />
             <FleetPromo ko={ko} />
