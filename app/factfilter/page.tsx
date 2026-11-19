@@ -556,8 +556,8 @@ const FleetPromo = ({ ko }: { ko: boolean }) => (
     </p>
     <p className="t-sub text-neutral-500 mt-0.5">
       {ko
-        ? '진실(FactFilter)과 함께 움직이는 네 개의 자리'
-        : 'Four pillars connected alongside Truth (FactFilter)'}
+        ? 'Kedheon.pi 연계 앱 — 진실(FactFilter)과 함께 움직이는 네 개의 자리'
+        : 'Kedheon.pi-linked apps — four pillars moving alongside Truth (FactFilter)'}
     </p>
     <div className="grid grid-cols-2 gap-1.5 mt-1.5">
       {FLEET_APPS.map(a => (
