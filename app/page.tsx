@@ -7,6 +7,7 @@ import PiReadOnlyBanner from './components/PiReadOnlyBanner';
 import AppDock from './components/AppDock';
 import AppHeader from './components/AppHeader';
 import LangSelect from './components/LangSelect';
+import { trackEvent } from './components/analytics';
 
 /** * [KEDHEON MASTER V271.0 - FINANCE CORE / TURBOPACK OPTIMIZATION PATCH]
  * -----------------------------------------------------------
@@ -631,11 +632,27 @@ export default function KedheonDesignSystemFinal() {
     if (typeof window !== 'undefined' && url) window.open(url, '_blank');
   }, []);
 
+  // Web2(YouTube·X·인스타·검색) → Web3(Pi 가입) 전환 퍼널 측정
+  //  · pi_signup_click : ROOKIE 가이드 01번의 minepi.com 가입 이동 버튼(Android / iPhone)
+  //  · invite_reveal   : 초대코드 박스를 처음 눌러 코드를 확인한 순간
+  //  · invite_copy     : 초대코드가 클립보드로 복사된 순간
+  //  분석이 꺼져 있어도(미활성·Hobby 플랜) 예외 없이 화면 동작은 그대로다.
+  const handlePiSignup = useCallback((url: string | undefined, platform: 'android' | 'ios') => {
+    trackEvent('pi_signup_click', { platform, page: 'rookie_guide' });
+    handleDownload(url);
+  }, [handleDownload]);
+
   const handleCopy = useCallback(() => {
-    if (typeof window !== 'undefined') {
-      navigator.clipboard.writeText(PI_INVITE_CODE);
-      alert(L.copiedAlert);
+    if (typeof window === 'undefined') return;
+    try {
+      // Pi Browser(WebView) 일부 버전은 클립보드 권한을 거부할 수 있다 — 거부되어도 안내는 그대로 준다.
+      const copying = navigator.clipboard?.writeText(PI_INVITE_CODE);
+      if (copying && typeof copying.catch === 'function') copying.catch(() => undefined);
+    } catch {
+      // 클립보드 API 자체가 없는 구형 WebView — 아래 복사 안내는 유지
     }
+    trackEvent('invite_copy', { trigger: 'invite_box' });
+    alert(L.copiedAlert);
   }, [L.copiedAlert]);
 
   const handleFinanceConversion = useCallback(() => {
@@ -706,8 +723,8 @@ export default function KedheonDesignSystemFinal() {
                   </div>
                   {s.links && (
                     <div className="grid grid-cols-2 gap-2">
-                      <button onClick={() => handleDownload(s.links?.AOS)} className="bg-black text-white py-1.5 rounded-lg t-tag uppercase whitespace-nowrap hover:bg-[#dc2626] transition-all">Android</button>
-                      <button onClick={() => handleDownload(s.links?.iOS)} className="bg-black text-white py-1.5 rounded-lg t-tag uppercase whitespace-nowrap hover:bg-[#dc2626] transition-all">iPhone</button>
+                      <button onClick={() => handlePiSignup(s.links?.AOS, 'android')} className="bg-black text-white py-1.5 rounded-lg t-tag uppercase whitespace-nowrap hover:bg-[#dc2626] transition-all">Android</button>
+                      <button onClick={() => handlePiSignup(s.links?.iOS, 'ios')} className="bg-black text-white py-1.5 rounded-lg t-tag uppercase whitespace-nowrap hover:bg-[#dc2626] transition-all">iPhone</button>
                     </div>
                   )}
                 </div>
@@ -729,7 +746,7 @@ export default function KedheonDesignSystemFinal() {
                 </button>
             </div>
 
-            <div className="p-6 bg-black text-white rounded-2xl text-center cursor-pointer active:scale-95 mt-2" onClick={() => { setShowInviteCode(true); handleCopy(); }}>
+            <div className="p-6 bg-black text-white rounded-2xl text-center cursor-pointer active:scale-95 mt-2" onClick={() => { if (!showInviteCode) trackEvent('invite_reveal', { lang }); setShowInviteCode(true); handleCopy(); }}>
                <p className="t-sub text-gray-500 mb-1">{showInviteCode ? L.copyPrompt : L.inviteReveal}</p>
                <div translate="no" className="notranslate t-code text-white">{showInviteCode ? PI_INVITE_CODE : '••••••••'}</div>
             </div>

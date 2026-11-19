@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import PiProvider from "./components/PiProvider";
@@ -60,6 +61,12 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <PiProvider>{children}</PiProvider>
+        {/*
+          Vercel Web Analytics — 6개 앱(kedheon.com · civil · factfilter · hangang · xaea12 · vendor) 공통
+          · 국가별 방문자, 유입 경로(YouTube·X·인스타·검색), 페이지뷰를 Vercel 대시보드에 자동 집계한다.
+          · 데이터는 Vercel 프로젝트의 Analytics 탭에서 [Enable] 을 눌러야 실제로 수집된다(미사용 시 404 → 무해).
+        */}
+        <Analytics />
       </body>
     </html>
   );
