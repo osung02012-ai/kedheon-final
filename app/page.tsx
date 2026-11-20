@@ -598,12 +598,32 @@ const SectionHeader = ({ title, desc }: { title: string; desc: string; }) => (
   </div>
 );
 
+/** 체험 시작 잔액. 로그인(Pi KYC) 후에는 여기에 서버(pi_users.beom_total) 누적분이 더해진다. */
+const BEOM_DEMO_BASE = 7891.88;
+
+/** BEOM 서버 호출 공통 (Authorization: Bearer accessToken) */
+async function beomFetch(action: 'GET' | 'POST', token: string, body?: Record<string, unknown>) {
+  const res = await fetch('/api/beom', {
+    method: action,
+    headers: {
+      Authorization: `Bearer ${token}`,
+      ...(body ? { 'Content-Type': 'application/json' } : {})
+    },
+    ...(body ? { body: JSON.stringify(body) } : {}),
+    cache: 'no-store'
+  });
+  const data = (await res.json().catch(() => null)) as
+    | { ok?: boolean; beomTotal?: number; recorded?: boolean; already?: boolean; delta?: number }
+    | null;
+  return { ok: res.ok, data };
+}
+
 export default function KedheonDesignSystemFinal() {
-  const { requireAuth, authenticated, setGateLang } = usePi();
+  const { requireAuth, authenticated, setGateLang, accessToken } = usePi();
   const [hasMounted, setHasMounted] = useState(false);
   const [lang, setLang] = useState<Lang>('KR');
   const [tab, setTab] = useState<'ROOKIE' | 'PIONEER'>('ROOKIE');
-  const [beomToken, setBeomToken] = useState(7891.88);
+  const [beomToken, setBeomToken] = useState(BEOM_DEMO_BASE);
   const [piBalance, setPiBalance] = useState(124.55);
   const [hubTab, setHubTab] = useState<'HUB' | 'SPIRIT'>('HUB');
   const [category, setCategory] = useState('CCM');
@@ -625,6 +645,23 @@ export default function KedheonDesignSystemFinal() {
   useEffect(() => {
     setGateLang(lang);
   }, [lang, setGateLang]);
+
+  // 로그인(Pi KYC) 후에는 서버 원장(beom_logs)의 누적분을 BEOM 잔액에 반영한다.
+  // DB가 아직 없거나 실패하면 조용히 체험 잔액만 유지한다(localStorage 동작 보존).
+  useEffect(() => {
+    if (!accessToken) return;
+    let alive = true;
+    beomFetch('GET', accessToken)
+      .then(({ ok, data }) => {
+        if (!alive || !ok || !data?.ok) return;
+        const total = Number(data.beomTotal ?? 0);
+        if (Number.isFinite(total)) setBeomToken(BEOM_DEMO_BASE + total);
+      })
+      .catch(() => undefined);
+    return () => {
+      alive = false;
+    };
+  }, [accessToken]);
 
   const L = DICT[lang];
   const displayGoods = [...userGoods, ...L.goodsMock];
@@ -656,12 +693,32 @@ export default function KedheonDesignSystemFinal() {
     alert(L.copiedAlert);
   }, [L.copiedAlert]);
 
-  const handleFinanceConversion = useCallback(() => {
+  const handleFinanceConversion = useCallback(async () => {
     // Daily attendance & contribution reward (+50 BEOM) — 실행 권한 게이트
     if (!requireAuth(L.convertBtn)) return;
+
+    // 로그인 사용자는 서버 원장에 기록한다(하루 1회). 실패하면 기존 로컬 적립으로 이어 간다.
+    if (accessToken) {
+      try {
+        const { ok, data } = await beomFetch('POST', accessToken, { app: 'kedheon', action: 'attendance' });
+        if (ok && data?.ok && data.recorded) {
+          setBeomToken(BEOM_DEMO_BASE + (Number(data.beomTotal) || 0));
+          alert("출석 및 생태계 기여 리워드 +50 BEOM 적립 완료!");
+          return;
+        }
+        if (ok && data?.ok && data.already) {
+          setBeomToken(BEOM_DEMO_BASE + (Number(data.beomTotal) || 0));
+          alert("오늘 출석·기여 리워드는 이미 적립되었습니다. 내일 다시 오세요!");
+          return;
+        }
+      } catch {
+        /* 네트워크 실패 → 로컬 적립으로 폴백 */
+      }
+    }
+
     setBeomToken(p => p + 50);
     alert("출석 및 생태계 기여 리워드 +50 BEOM 적립 완료!");
-  }, [requireAuth, L.convertBtn]);
+  }, [requireAuth, L.convertBtn, accessToken]);
 
   if (!hasMounted) return <div className="bg-white min-h-screen" />;
 

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PiBadge from '../components/PiBadge';
 import PiPayButton from '../components/PiPayButton';
 import { usePi } from '../components/PiProvider';
@@ -40,12 +40,15 @@ const PICK_LABEL_KEY: Record<PickKey, UIKey> = {
   stay: 'pickStay', culture: 'pickCulture', food: 'pickFood', transit: 'pickTransit'
 };
 
+/** 장소·패스 북마크 보관 키. 비로그인 방문자는 이 브라우저(localStorage)에만 저장된다. */
+const BOOKMARK_KEY = 'hangang.bookmarks';
+
 function fmtPi(n: number) {
   return Number.isInteger(n) ? n.toString() : n.toFixed(2);
 }
 
 export default function HangangPage() {
-  const { requireAuth, authenticated, setGateLang } = usePi();
+  const { requireAuth, authenticated, setGateLang, accessToken } = usePi();
   const [lang, setLang] = useState<Lang>('KR');
   const [mounted, setMounted] = useState(false);
   const [zoneKey, setZoneKey] = useState('SEOUL');
@@ -57,6 +60,8 @@ export default function HangangPage() {
   const [reqZone, setReqZone] = useState('SEOUL');
   const [reqNote, setReqNote] = useState('');
   const [requests, setRequests] = useState<{ id: string; type: string; zone: string; note: string }[]>([]);
+  /** 저장한 장소·패스(권역 키). 로그인 시 서버 hangang_bookmarks, 비로그인 시 localStorage. */
+  const [spots, setSpots] = useState<string[]>([]);
   // 06 굿즈·응급 — 1줄 클릭형 아코디언(누른 항목만 안쪽이 열린다)
   const goodsAcc = useAccordion();
 
@@ -67,6 +72,65 @@ export default function HangangPage() {
     setLang(detectLang());
     setMounted(true);
   }, []);
+
+  /** localStorage와 화면 상태를 함께 갱신한다(서버 저장 실패 시의 폴백). */
+  const applySpots = useCallback((next: string[]) => {
+    setSpots(next);
+    try {
+      window.localStorage.setItem(BOOKMARK_KEY, JSON.stringify(next));
+    } catch {
+      /* 저장소가 막힌 브라우저 — 화면 상태만 유지 */
+    }
+  }, []);
+
+  // 장소 북마크: 먼저 이 브라우저에 남은 목록을 그리고, 로그인하면 서버 원장으로 맞춘다.
+  useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem(BOOKMARK_KEY);
+      const parsed: unknown = raw ? JSON.parse(raw) : [];
+      if (Array.isArray(parsed)) setSpots(parsed.filter((v): v is string => typeof v === 'string'));
+    } catch {
+      /* 손상된 값은 무시 */
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!accessToken) return;
+    let alive = true;
+    fetch('/api/hangang/bookmark', {
+      headers: { Authorization: `Bearer ${accessToken}` },
+      cache: 'no-store'
+    })
+      .then(r => r.json())
+      .then((data: { ok?: boolean; spotIds?: string[] } | null) => {
+        if (!alive || !data?.ok || !Array.isArray(data.spotIds)) return;
+        applySpots(data.spotIds);
+      })
+      .catch(() => undefined);
+    return () => {
+      alive = false;
+    };
+  }, [accessToken, applySpots]);
+
+  const toggleSpot = async (spotId: string) => {
+    if (accessToken) {
+      try {
+        const res = await fetch('/api/hangang/bookmark', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` },
+          body: JSON.stringify({ spotId })
+        });
+        const data = (await res.json().catch(() => null)) as { ok?: boolean; spotIds?: string[] } | null;
+        if (res.ok && data?.ok && Array.isArray(data.spotIds)) {
+          applySpots(data.spotIds);
+          return;
+        }
+      } catch {
+        /* 네트워크 실패 → 로컬 저장으로 폴백 */
+      }
+    }
+    applySpots(spots.includes(spotId) ? spots.filter(s => s !== spotId) : [...spots, spotId]);
+  };
 
   useEffect(() => {
     document.documentElement.lang = LANG_TAG[lang] || 'en';
@@ -445,6 +509,27 @@ export default function HangangPage() {
           ))}
         </div>
 
+        {/* 저장한 권역 — 로그인 시 서버 원장, 비로그인 시 이 브라우저(localStorage) */}
+        {spots.length > 0 && (
+          <div className="mt-1.5 flex flex-wrap items-center gap-1">
+            <span className="t-tag uppercase text-gray-400 mr-0.5">{T('savedSpots')}</span>
+            {spots.map(key => {
+              const z = ZONES.find(x => x.key === key);
+              if (!z) return null;
+              return (
+                <button
+                  key={key}
+                  translate="no"
+                  onClick={() => selectZone(key)}
+                  className={`notranslate t-tag rounded-full px-2 py-0.5 border transition-colors ${key === zone.key ? 'bg-black text-white border-black' : 'bg-white text-neutral-600 border-neutral-200 hover:border-neutral-400'}`}
+                >
+                  {z.code}
+                </button>
+              );
+            })}
+          </div>
+        )}
+
         {/* 권역 실속 팁 */}
         <div className="mt-2 bg-neutral-50 border border-neutral-200 rounded-2xl px-3 py-2.5 md:px-4">
           <p className="t-tag uppercase text-[#dc2626] mb-1.5">
@@ -466,9 +551,18 @@ export default function HangangPage() {
               <p className="text-black t-card">{L(zone.venues)}</p>
               <p className="text-neutral-500 t-sub mt-1">{T('zoneOptionsDesc')}</p>
             </div>
-            <span className="t-tag bg-neutral-100 px-2 py-1 rounded-full text-neutral-600">
-              {T('kycBadge')}
-            </span>
+            <div className="flex flex-wrap items-center justify-end gap-1.5">
+              <button
+                onClick={() => toggleSpot(zone.key)}
+                aria-pressed={spots.includes(zone.key)}
+                className={`t-tag rounded-full px-2 py-1 border transition-colors ${spots.includes(zone.key) ? 'bg-[#dc2626] text-white border-[#dc2626]' : 'bg-white text-neutral-600 border-neutral-200 hover:border-neutral-400'}`}
+              >
+                🔖 {spots.includes(zone.key) ? T('savedSpot') : T('saveSpot')}
+              </button>
+              <span className="t-tag bg-neutral-100 px-2 py-1 rounded-full text-neutral-600">
+                {T('kycBadge')}
+              </span>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 mt-3">

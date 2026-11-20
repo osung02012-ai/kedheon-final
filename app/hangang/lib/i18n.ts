@@ -191,6 +191,21 @@ export const UI = {
     'KYC 1 reserva por persona', 'KYC 1 người 1 đơn', 'KYC 1 réservation par personne',
     'KYC 1 reserva por pessoa', 'KYC 1 бронь на человека', 'KYC 1 orang 1 pesanan'
   ],
+  saveSpot: [
+    '이 권역 저장', 'Save this region', '收藏此区域', 'この地域を保存',
+    'Guardar esta región', 'Lưu khu vực này', 'Enregistrer cette région',
+    'Salvar esta região', 'Сохранить регион', 'Simpan wilayah ini'
+  ],
+  savedSpot: [
+    '저장됨', 'Saved', '已收藏', '保存済み',
+    'Guardado', 'Đã lưu', 'Enregistré',
+    'Salvo', 'Сохранено', 'Tersimpan'
+  ],
+  savedSpots: [
+    '저장한 권역', 'Saved regions', '已收藏区域', '保存した地域',
+    'Regiones guardadas', 'Khu vực đã lưu', 'Régions enregistrées',
+    'Regiões salvas', 'Сохранённые регионы', 'Wilayah tersimpan'
+  ],
   totalLabel: [
     '패키지 합계 · 부가 수수료 0%', 'Package total · 0% added fee', '套餐合计 · 附加费 0%', '合計 · 追加手数料 0%',
     'Total del paquete · 0% de recargo', 'Tổng gói · phụ phí 0%', 'Total du forfait · 0 % de frais',

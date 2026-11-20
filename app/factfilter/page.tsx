@@ -673,10 +673,14 @@ const CountryPicker = ({
 };
 
 export default function FactFilterPage() {
-  const { requireAuth, authenticated, setGateLang } = usePi();
+  const { requireAuth, authenticated, setGateLang, accessToken } = usePi();
   const [lang, setLang] = useState<'KO' | 'EN'>('KO');
   const [activeTab, setActiveTab] = useState<'CHECK' | 'REPORT' | 'LEDGER' | 'VAULT'>('CHECK');
   const [points, setPoints] = useState(847);
+
+  // 서버 원장(fact_votes) 집계 — 로그인 전에도 공개 집계를 읽는다.
+  const [serverVotes, setServerVotes] = useState<Record<string, number>>({});
+  const [myVotes, setMyVotes] = useState<Record<string, string>>({});
 
   // 국가 축 — 조회 국가(원장·검증 사례) / 제보 국가
   const [viewCountry, setViewCountry] = useState('KR');
@@ -697,6 +701,25 @@ export default function FactFilterPage() {
 
   // 필터 국가를 바꾸면 제보 폼의 국가도 따라간다.
   useEffect(() => { setReportCountry(viewCountry); }, [viewCountry]);
+
+  // 팩트체크 투표 집계를 서버 원장에서 불러온다(실패해도 기존 화면 숫자 그대로).
+  useEffect(() => {
+    let alive = true;
+    const headers: Record<string, string> = accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
+    fetch('/api/fact/vote', { headers, cache: 'no-store' })
+      .then(r => r.json())
+      .then((data: { ok?: boolean; counts?: Record<string, { total?: number }>; mine?: Record<string, string> } | null) => {
+        if (!alive || !data?.ok) return;
+        const counts: Record<string, number> = {};
+        Object.entries(data.counts || {}).forEach(([id, v]) => {
+          counts[id] = Number(v?.total ?? 0) || 0;
+        });
+        setServerVotes(counts);
+        setMyVotes(data.mine || {});
+      })
+      .catch(() => undefined);
+    return () => { alive = false; };
+  }, [accessToken]);
 
   // 238개국에서 고른 국가가 칩 목록 밖에 있어도 보이도록 가로 스크롤을 맞춘다.
   useEffect(() => {
@@ -817,8 +840,29 @@ export default function FactFilterPage() {
 
   const endorse = (id: string) => {
     if (!requireAuth(ko ? '검증 지지 투표' : 'Endorse Proof')) return;
-    setReportedList(prev => prev.map(r => (r.id === id ? { ...r, votes: r.votes + 1 } : r)));
     setPoints(p => p + 1);
+
+    // 로그인 사용자: 서버 원장에 저장하고 서버 집계로 숫자를 맞춘다.
+    if (accessToken) {
+      fetch('/api/fact/vote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` },
+        body: JSON.stringify({ itemId: id, verdict: 'endorse' })
+      })
+        .then(r => r.json())
+        .then((data: { ok?: boolean; recorded?: boolean; count?: number } | null) => {
+          if (data?.ok && data.recorded && typeof data.count === 'number') {
+            setServerVotes(prev => ({ ...prev, [id]: data.count as number }));
+            setMyVotes(prev => ({ ...prev, [id]: 'endorse' }));
+          } else {
+            setReportedList(prev => prev.map(r => (r.id === id ? { ...r, votes: r.votes + 1 } : r)));
+          }
+        })
+        .catch(() => setReportedList(prev => prev.map(r => (r.id === id ? { ...r, votes: r.votes + 1 } : r))));
+    } else {
+      setReportedList(prev => prev.map(r => (r.id === id ? { ...r, votes: r.votes + 1 } : r)));
+    }
+
     alert(ko ? '검증 지지 투표가 완료되었습니다 (+1 BEOM)' : 'Verification vote cast (+1 BEOM)');
   };
 
@@ -1253,12 +1297,14 @@ export default function FactFilterPage() {
                     </div>
 
                     <div className="flex justify-between items-center pt-1 t-sub text-neutral-500">
-                      <span>👥 {item.votes} {ko ? '시민 검증 참여' : 'Pioneers Verified'}</span>
+                      <span>👥 {item.votes + (serverVotes[item.id] || 0)} {ko ? '시민 검증 참여' : 'Pioneers Verified'}</span>
                       <button
                         onClick={() => endorse(item.id)}
                         className="t-btn text-[#dc2626] hover:text-black cursor-pointer"
                       >
-                        {ko ? '👍 검증 지지 투표' : '👍 Endorse Proof'}{!authenticated && ' 🔒'}
+                        {myVotes[item.id] === 'endorse'
+                          ? (ko ? '👍 지지함' : '👍 Endorsed')
+                          : (ko ? '👍 검증 지지 투표' : '👍 Endorse Proof')}{!authenticated && ' 🔒'}
                       </button>
                     </div>
                   </div>

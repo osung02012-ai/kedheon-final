@@ -42,6 +42,10 @@ export interface PiPaymentResult {
 export interface PiContextValue {
   status: PiStatus;
   username: string | null;
+  /** Pi가 발급한 사용자 uid (Pi.authenticate 결과). 서버 DB(pi_users)의 주 키와 같다. */
+  uid: string | null;
+  /** Pi accessToken — 서버(/api/pi/verify · /api/beom · /api/fact/vote · /api/hangang/bookmark)가 본인 확인에 쓴다. */
+  accessToken: string | null;
   inPiBrowser: boolean;
   /** Pi.authenticate로 KYC 실명이 붙은 상태인가 (= 실행 권한 보유) */
   authenticated: boolean;
@@ -68,6 +72,8 @@ export interface PiContextValue {
 const PiContext = createContext<PiContextValue>({
   status: 'detecting',
   username: null,
+  uid: null,
+  accessToken: null,
   inPiBrowser: false,
   authenticated: false,
   connect: () => {},
@@ -92,7 +98,10 @@ const PI_SANDBOX = (process.env.NEXT_PUBLIC_PI_SANDBOX || '').toLowerCase() === 
 
 type PiSdk = {
   init: (config: { version: string; sandbox?: boolean }) => void;
-  authenticate: (scopes: string[], onIncompletePaymentFound?: (payment: unknown) => void) => Promise<{ user?: { username?: string } }>;
+  authenticate: (
+    scopes: string[],
+    onIncompletePaymentFound?: (payment: unknown) => void
+  ) => Promise<{ accessToken?: string; user?: { uid?: string; username?: string } }>;
   createPayment: (
     data: { amount: number; memo: string; metadata?: Record<string, unknown> },
     callbacks: {
@@ -132,6 +141,8 @@ async function postPiServer(url: string, payload: Record<string, unknown>) {
 export default function PiProvider({ children }: { children: React.ReactNode }) {
   const [status, setStatus] = useState<PiStatus>('detecting');
   const [username, setUsername] = useState<string | null>(null);
+  const [uid, setUid] = useState<string | null>(null);
+  const [accessToken, setAccessToken] = useState<string | null>(null);
   const [inPiBrowser, setInPiBrowser] = useState(false);
   const [lastPayment, setLastPayment] = useState<PiPaymentResult | null>(null);
   const [paying, setPaying] = useState(false);
@@ -193,8 +204,17 @@ export default function PiProvider({ children }: { children: React.ReactNode }) 
       ensureInit(Pi);
       const result = await Pi.authenticate(['username'], clearIncomplete);
       const name: string | null = result?.user?.username || null;
+      const token: string | null = result?.accessToken || null;
       setUsername(name);
+      setUid(result?.user?.uid || null);
+      setAccessToken(token);
       setStatus(name ? 'connected' : 'sdk-ready');
+
+      // 실DB 동기화: 서버가 Pi /v2/me 로 accessToken을 다시 검증하고 pi_users에 기록한다.
+      // (실패해도 로그인·화면 동작은 그대로 — 각 앱은 localStorage로 계속 동작한다.)
+      if (token) {
+        void postPiServer('/api/pi/verify', { accessToken: token }).catch(() => undefined);
+      }
     } catch (err) {
       // 사용자가 취소했거나, 앱이 아직 콘솔에서 도메인 승인 전인 경우 — 화면을 막지 않는다.
       console.warn('[Pi] authenticate skipped:', err);
@@ -381,6 +401,8 @@ export default function PiProvider({ children }: { children: React.ReactNode }) 
       value={{
         status,
         username,
+        uid,
+        accessToken,
         inPiBrowser,
         authenticated,
         connect,
