@@ -440,8 +440,8 @@ export default function PrivacyDoc() {
           </p>
           <p className="text-neutral-600 t-body mt-1">
             {ko
-              ? '앱은 Pi 인증의 공개 아이디와 결제 트랜잭션 ID, 익명 접속 통계만 다룹니다. 실명·비밀번호·Pi 24단어 비밀구절은 받지 않고, 개인정보를 팔거나 제3자에게 넘기지 않습니다.'
-              : 'The apps handle only your public Pi ID, payment transaction IDs and anonymous usage statistics. We never receive your legal name, password or 24-word Pi passphrase, and we do not sell or share your data.'}
+              ? '앱은 Pi 인증의 공개 아이디와 결제 트랜잭션 ID, 익명 접속 통계를 다룹니다. Pi로 로그인하면 BEOM 포인트·팩트체크 투표·한강 북마크가 Pi uid 기준으로 당사 서버 DB(서울 리전 Supabase)에 저장됩니다. 실명·비밀번호·Pi 24단어 비밀구절은 받지 않고, 개인정보를 팔거나 제3자에게 넘기지 않습니다.'
+              : 'The apps handle your public Pi ID, payment transaction IDs and anonymous usage statistics. When you sign in with Pi, your BEOM points, FactFilter votes and Hangang bookmarks are stored in our server database (Supabase, Seoul region) keyed by your Pi uid. We never receive your legal name, password or 24-word Pi passphrase, and we do not sell or share your data.'}
           </p>
         </section>
 
