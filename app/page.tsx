@@ -5,7 +5,7 @@ import PiBadge from './components/PiBadge';
 import { usePi } from './components/PiProvider';
 import PiReadOnlyBanner from './components/PiReadOnlyBanner';
 import AppDock from './components/AppDock';
-import PrivacyLink from './components/PrivacyLink';
+import LegalLinks from './components/LegalLinks';
 import AppHeader from './components/AppHeader';
 import LangSelect from './components/LangSelect';
 import { trackEvent } from './components/analytics';
@@ -946,7 +946,7 @@ export default function KedheonDesignSystemFinal() {
             </div>
           </div>
         )}
-        <PrivacyLink className="mt-4 mb-2" />
+        <LegalLinks className="mt-4 mb-2" />
       </main>
 
       <AppDock active="KEDHEON" soonMessage=" 서비스 연동 준비 중입니다." />

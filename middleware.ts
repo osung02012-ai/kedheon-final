@@ -19,12 +19,13 @@ const HOST_PREFIX: Record<string, string> = {
 /**
  * 어느 호스트에서든 그대로 서빙해야 하는 공통 경로.
  *  - /privacy        : 개인정보 처리방침(6개 앱 공통 · Pi Next/메인넷 리스팅 요건)
+ *  - /terms          : 이용약관(6개 앱 공통 · Pi 메인넷 리스팅 terms_of_service_url)
  *  - /api/*          : Pi 결제 승인·완료 서버 라우트
  *  - /_next/*        : 빌드 자산
  *  - /validation-key, /robots.txt, /sitemap.xml : 도메인·검색 검증 파일
  * 이 경로들은 서브도메인에서 앱 접두어(/civil 등)를 붙이면 404가 되므로 절대 리라이트하지 않는다.
  */
-const COMMON_PREFIXES = ['/_next', '/api', '/privacy'];
+const COMMON_PREFIXES = ['/_next', '/api', '/privacy', '/terms'];
 const COMMON_EXACT = new Set([
   '/validation-key.txt',
   '/robots.txt',
@@ -66,7 +67,7 @@ export function middleware(req: NextRequest) {
   const prefix = HOST_PREFIX[host];
   const { pathname } = req.nextUrl;
 
-  // 정적 자산, API 라우트, 공통 문서(/privacy), 이미 앱 경로인 요청, 도메인 검증 파일은 그대로 통과.
+  // 정적 자산, API 라우트, 공통 문서(/privacy·/terms), 이미 앱 경로인 요청, 도메인 검증 파일은 그대로 통과.
   //  - /api/* 는 서브도메인에서도 그대로 살아 있어야 Pi 결제 서버 승인/완료가 동작한다.
   if (
     COMMON_PREFIXES.some(p => pathname === p || pathname.startsWith(`${p}/`)) ||

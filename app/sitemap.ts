@@ -45,5 +45,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'yearly',
       priority: 0.5,
     },
+    {
+      // 이용약관 — Pi 메인넷 리스팅 terms_of_service_url(6개 앱 공통)
+      url: 'https://kedheon.com/terms',
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.5,
+    },
   ];
 }
