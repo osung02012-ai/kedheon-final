@@ -582,7 +582,7 @@ const FleetPromo = ({ ko }: { ko: boolean }) => (
 
 /* ─────────────────────────────────────────────────────────────
  * 특별 안건 — 진짜·가짜 단정 없이 함께 검증하는 토론형 카드
- *  · 제시 팩트만 나란히 놓고, 판단(지지 / 반대 / 보류)은 방문자가 남긴다.
+ *  · 제시 팩트만 나란히 놓고, 판단(흐름이다 / 우연이다 / 보류)은 방문자가 남긴다.
  *  · 집계는 기존 Supabase 원장(/api/fact/vote)을 그대로 쓴다.
  * ───────────────────────────────────────────────────────────── */
 const SPECIAL_AGENDA_ID = 'special-anthropic-pi-20261120';
@@ -596,6 +596,7 @@ interface SpecialFact {
   fact: string;
   factEn: string;
   source: { label: string; labelEn: string; url: string };
+  source2?: { label: string; labelEn: string; url: string };
 }
 
 const SPECIAL_FACTS: SpecialFact[] = [
@@ -627,12 +628,17 @@ const SPECIAL_FACTS: SpecialFact[] = [
     key: '03',
     tag: 'MCP 표준 & 일정 중첩',
     tagEn: 'MCP adoption, overlapping dates',
-    fact: '11월 17~19일 파이 생태계 서밋이 끝나던 11월 19일, 파이는 새 개발자 웹 콘솔과 SoloHost에 앤트로픽발 MCP(Model Context Protocol) 표준을 채택했습니다. 콘솔은 MCP 기반으로 열렸고, 공식 개발자 안내는 Cursor·Claude Code 같은 MCP 클라이언트 연결을 지원합니다. 파이 서밋 종료와 나스닥 상장이 같은 날 맞물렸습니다.',
-    factEn: 'As the Pi Ecosystem Summit of Nov 17–19 closed on Nov 19, Pi had adopted the Anthropic-originated MCP (Model Context Protocol) standard for its new Developer Web Console and SoloHost. The console is built on MCP, and the official developer guide supports connecting MCP clients such as Cursor and Claude Code. The summit’s close and the Nasdaq listing landed on the same day.',
+    fact: '11월 17~19일 파이 생태계 서밋이 끝나던 11월 19일, 파이는 새 개발자 웹 콘솔과 SoloHost에 앤트로픽발 MCP(Model Context Protocol) 표준을 채택했습니다. 콘솔은 MCP 기반으로 열렸고, 공식 개발자 안내는 Cursor·Claude Code 같은 MCP 클라이언트 연결을 지원합니다. 이 연결은 갑자기 생긴 것이 아닙니다 — 파이 생태계에는 이미 2026년 8월 Pi Desktop SoloHost(OpenClaw·Atlassian MCP Server) 때부터 앤트로픽이 만든 MCP 표준과 Claude Code·Claude Desktop 연동이 내부 개발 도구로 자리 잡고 있었습니다. 이어 11월 19일 서밋에서는 새 개발자 웹 콘솔까지 그 MCP 표준 위에 올렸고, 같은 날 앤트로픽이 나스닥에 상장했습니다.',
+    factEn: 'As the Pi Ecosystem Summit of Nov 17–19 closed on Nov 19, Pi had adopted the Anthropic-originated MCP (Model Context Protocol) standard for its new Developer Web Console and SoloHost. The console is built on MCP, and the official developer guide supports connecting MCP clients such as Cursor and Claude Code. This did not come out of nowhere: since August 2026, when Pi Desktop’s SoloHost featured OpenClaw and the Atlassian MCP Server, the Anthropic-led MCP standard and Claude Code / Claude Desktop connections were already in place as internal developer tools. Then on Nov 19 the new Developer Web Console was built on that same MCP standard, and Anthropic listed on Nasdaq the same day.',
     source: {
       label: 'Pi 개발자 문서',
       labelEn: 'Pi developer docs',
       url: 'https://developers.minepi.com/agents'
+    },
+    source2: {
+      label: '파이 블로그 · SoloHost',
+      labelEn: 'Pi blog · SoloHost',
+      url: 'https://minepi.com/blog/new-solohost-apps/'
     }
   },
   {
@@ -658,9 +664,9 @@ const SpecialAgenda = ({
   onVote: (verdict: SpecialVerdict) => void;
 }) => {
   const options: { key: SpecialVerdict; label: string; labelEn: string }[] = [
-    { key: 'endorse', label: '지지 · 하나의 흐름', labelEn: 'Agree · one current' },
-    { key: 'dispute', label: '반대 · 단순 우연', labelEn: 'Disagree · coincidence' },
-    { key: 'unsure', label: '보류 · 더 지켜봐야', labelEn: 'Unsure · watch longer' }
+    { key: 'endorse', label: '흐름이다', labelEn: 'One Current' },
+    { key: 'dispute', label: '우연이다', labelEn: 'Coincidence' },
+    { key: 'unsure', label: '보류', labelEn: 'Hold' }
   ];
   const total = options.reduce((sum, o) => sum + (counts[o.key] || 0), 0);
 
@@ -694,14 +700,17 @@ const SpecialAgenda = ({
               <p className="t-card text-black flex flex-wrap items-center gap-x-1.5 gap-y-1">
                 <span translate="no" className="notranslate font-mono t-tag text-neutral-400 shrink-0">{f.key}</span>
                 <span className="min-w-0 flex-1">{ko ? f.tag : f.tagEn}</span>
-                <a
-                  href={f.source.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="shrink-0 t-tag px-1.5 py-0.5 rounded bg-neutral-100 text-neutral-500 hover:bg-black hover:text-white transition-colors whitespace-nowrap"
-                >
-                  🔗 {ko ? f.source.label : f.source.labelEn}
-                </a>
+                {[f.source, ...(f.source2 ? [f.source2] : [])].map(src => (
+                  <a
+                    key={src.url}
+                    href={src.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="shrink-0 t-tag px-1.5 py-0.5 rounded bg-neutral-100 text-neutral-500 hover:bg-black hover:text-white transition-colors whitespace-nowrap"
+                  >
+                    🔗 {ko ? src.label : src.labelEn}
+                  </a>
+                ))}
               </p>
               <p className="t-sub text-neutral-700 mt-0.5">{ko ? f.fact : f.factEn}</p>
             </div>
@@ -711,8 +720,8 @@ const SpecialAgenda = ({
         <div className="mt-2 rounded-xl bg-neutral-50 border border-neutral-200 px-2.5 py-2">
           <p className="t-card text-black">
             {ko
-              ? '“단순한 시장 일정 우연일까요, 아니면 AI 에이전트·MCP 생태계의 큰 흐름이 맞물린 걸까요? 여러분의 판단(지지/반대/보류)을 남겨 주세요.”'
-              : '“A quirk of the market calendar, or a bigger shift in AI agents and the MCP ecosystem? Leave your call — agree, disagree, or unsure.”'}
+              ? '“단순한 시장 일정 우연일까요, 아니면 AI 에이전트·MCP 생태계의 큰 흐름이 맞물린 걸까요? 여러분의 판단(흐름이다 / 우연이다 / 보류)을 남겨 주세요.”'
+              : '“A quirk of the market calendar, or a bigger shift in AI agents and the MCP ecosystem? Leave your call (One Current / Coincidence / Hold).”'}
           </p>
         </div>
 
@@ -1020,7 +1029,7 @@ export default function FactFilterPage() {
       : 'Evidence sealed with immutable timestamp! (+5 BEOM)');
   };
 
-  /** 특별 안건 — 지지(endorse) · 반대(dispute) · 보류(unsure)를 서버 원장에 기록 */
+  /** 특별 안건 — 흐름이다(endorse) · 우연이다(dispute) · 보류(unsure)를 서버 원장에 기록 */
   const castSpecialVote = (verdict: SpecialVerdict) => {
     if (!requireAuth(ko ? '함께 팩트체크 참여' : 'Join the fact-check')) return;
     const id = SPECIAL_AGENDA_ID;
