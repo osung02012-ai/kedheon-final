@@ -38,6 +38,7 @@ const KEYS: Record<string, string> = {
   'hangang.kedheon.com': MAINNET_HANGANG_KEY,
   'civil.kedheon.com': CIVIL_KEY,
   'xaea12.kedheon.com': XAEA12_KEY,
+  'kedheon-final.vercel.app': MAINNET_KEDHEON_KEY,
   'test.kedheon.com': KEDHEON_TESTNET_KEY,
   'test-factfilter.kedheon.com': FACTFILTER_TESTNET_KEY,
   'test-hangang.kedheon.com': HANGANG_TESTNET_KEY
