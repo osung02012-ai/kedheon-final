@@ -580,6 +580,180 @@ const FleetPromo = ({ ko }: { ko: boolean }) => (
   </section>
 );
 
+/* ─────────────────────────────────────────────────────────────
+ * 특별 안건 — 진짜·가짜 단정 없이 함께 검증하는 토론형 카드
+ *  · 제시 팩트만 나란히 놓고, 판단(지지 / 반대 / 보류)은 방문자가 남긴다.
+ *  · 집계는 기존 Supabase 원장(/api/fact/vote)을 그대로 쓴다.
+ * ───────────────────────────────────────────────────────────── */
+const SPECIAL_AGENDA_ID = 'special-anthropic-pi-20261120';
+
+type SpecialVerdict = 'endorse' | 'dispute' | 'unsure';
+
+interface SpecialFact {
+  key: string;
+  tag: string;
+  tagEn: string;
+  fact: string;
+  factEn: string;
+  source: { label: string; labelEn: string; url: string };
+}
+
+const SPECIAL_FACTS: SpecialFact[] = [
+  {
+    key: '01',
+    tag: '자금 블랙홀 & 증시 급락',
+    tagEn: 'Liquidity sink & market slide',
+    fact: '11월 19일(미국 시간) 앤트로픽이 나스닥에 상장해 1,073억 달러를 조달했습니다 — 지난 6월 스페이스X를 넘는 역대 최대 규모입니다. 상장 첫날 공모가(83달러) 대비 17% 오른 97.17달러에 마감했고, 같은 날 뉴욕 3대 지수는 2%대 하락했습니다. 11월 20일 한국은 코스피(11:54)와 코스닥(13:28)에 나란히 매도 사이드카가 발동했고 삼성전자·SK하이닉스는 6~7%대 빠졌습니다. 시장에서는 신규 상장주로 자금이 쏠리며 기존 AI·반도체주에서 매물이 나왔다는 해석이 나옵니다.',
+    factEn: 'Anthropic listed on Nasdaq on Nov 19 (US time), raising $107.3 billion — the largest IPO on record, ahead of SpaceX in June. It closed its first day at $97.17, 17% above the $83 offer price, while all three main New York indexes fell about 2%. On Nov 20 Korea’s KOSPI (11:54) and KOSDAQ (13:28) both triggered sell-side sidecars, with Samsung Electronics and SK hynix down 6–7%. Analysts describe money crowding into the new listing and out of existing AI and semiconductor names.',
+    source: {
+      label: '연합뉴스',
+      labelEn: 'Yonhap',
+      url: 'https://www.yna.co.kr/view/AKR20261120075600008'
+    }
+  },
+  {
+    key: '02',
+    tag: '같은 시점 구글 AI 503 장애',
+    tagEn: 'Same window: Google AI 503s',
+    fact: '같은 시점 구글 AI(AI Studio·Gemini API)에서 503(서비스 불가) 오류와 일부 기능 제한이 보고되었습니다. 일반 Gemini 웹보다 개발·에이전트용 API 쪽에 집중되었고, 응답 멈춤·무한 대기 현상이 함께 나타났습니다. 증시·코인과는 다른 시스템에서 생긴 별개의 장애입니다.',
+    factEn: 'Around the same time, Google AI (AI Studio · Gemini API) returned 503 service-unavailable errors and some features were limited, hitting developer and agent APIs harder than the consumer Gemini web app, with stalls and endless waits reported. It is a separate system from the markets and crypto.',
+    source: {
+      label: 'Google 상태',
+      labelEn: 'Google status',
+      url: 'https://status.cloud.google.com/'
+    }
+  },
+  {
+    key: '03',
+    tag: 'MCP 표준 & 일정 중첩',
+    tagEn: 'MCP adoption, overlapping dates',
+    fact: '11월 17~19일 파이 생태계 서밋이 끝나던 11월 19일, 파이는 새 개발자 웹 콘솔과 SoloHost에 앤트로픽발 MCP(Model Context Protocol) 표준을 채택했습니다. 콘솔은 MCP 기반으로 열렸고, 공식 개발자 안내는 Cursor·Claude Code 같은 MCP 클라이언트 연결을 지원합니다. 파이 서밋 종료와 나스닥 상장이 같은 날 맞물렸습니다.',
+    factEn: 'As the Pi Ecosystem Summit of Nov 17–19 closed on Nov 19, Pi had adopted the Anthropic-originated MCP (Model Context Protocol) standard for its new Developer Web Console and SoloHost. The console is built on MCP, and the official developer guide supports connecting MCP clients such as Cursor and Claude Code. The summit’s close and the Nasdaq listing landed on the same day.',
+    source: {
+      label: 'Pi 개발자 문서',
+      labelEn: 'Pi developer docs',
+      url: 'https://developers.minepi.com/agents'
+    }
+  },
+  {
+    key: '04',
+    tag: '공식 제휴 없음',
+    tagEn: 'No official tie-up',
+    fact: '단, 앤트로픽과 파이 네트워크 사이의 공식 사업 제휴나 자본 연계는 확인되지 않습니다. 양쪽 어디에서도 그런 발표는 나오지 않았습니다. MCP가 개방형 표준이라 같은 기술을 쓰는 것과 회사 간 관계는 별개입니다.',
+    factEn: 'But no official business partnership or capital link between Anthropic and Pi Network has been confirmed, and neither side has announced one. MCP is an open standard, so sharing the same technology is not the same as a relationship between the companies.',
+    source: {
+      label: '파이 공식 블로그',
+      labelEn: 'Pi blog',
+      url: 'https://minepi.com/blog/ecosystem-summit-begins/'
+    }
+  }
+];
+
+const SpecialAgenda = ({
+  ko, counts, mine, onVote
+}: {
+  ko: boolean;
+  counts: Record<string, number>;
+  mine?: string;
+  onVote: (verdict: SpecialVerdict) => void;
+}) => {
+  const options: { key: SpecialVerdict; label: string; labelEn: string }[] = [
+    { key: 'endorse', label: '지지 · 하나의 흐름', labelEn: 'Agree · one current' },
+    { key: 'dispute', label: '반대 · 단순 우연', labelEn: 'Disagree · coincidence' },
+    { key: 'unsure', label: '보류 · 더 지켜봐야', labelEn: 'Unsure · watch longer' }
+  ];
+  const total = options.reduce((sum, o) => sum + (counts[o.key] || 0), 0);
+
+  return (
+    <section className="bg-white border border-[#E5E7EB] rounded-2xl shadow-[var(--card-shadow)] overflow-hidden text-left">
+      <div className="flex items-center justify-between gap-2 bg-black px-3 py-1.5">
+        <span className="flex items-center gap-1.5 t-tag font-bold uppercase text-white">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#dc2626] inline-block shrink-0" />
+          {ko ? '특별 안건 · 함께 팩트체크' : 'Special agenda · fact-check together'}
+        </span>
+        <span translate="no" className="notranslate t-tag text-white/60 whitespace-nowrap">
+          2026.11.20
+        </span>
+      </div>
+
+      <div className="px-3 py-2.5 md:p-4">
+        <h2 className="t-section text-black">
+          {ko
+            ? '앤트로픽 역대 최대 IPO(자금 블랙홀·증시 급락) × 구글 AI 503 장애 × 파이 서밋 MCP — 단순 우연일까, 하나의 흐름일까?'
+            : 'Anthropic’s record IPO (a liquidity sink, a market slide) × the Google AI 503 outage × the Pi Summit’s MCP — coincidence, or one current?'}
+        </h2>
+        <p className="t-sub text-neutral-500 mt-0.5">
+          {ko
+            ? '진짜·가짜를 단정하지 않습니다. 확인된 팩트 4개를 나란히 놓고, 판단은 함께 남깁니다.'
+            : 'We do not rule it true or false. Four confirmed facts, laid side by side, with the judgement left to you.'}
+        </p>
+
+        <div className="mt-2 space-y-1.5">
+          {SPECIAL_FACTS.map(f => (
+            <div key={f.key} className="border-t border-neutral-200 pt-1.5">
+              <p className="t-card text-black flex flex-wrap items-center gap-x-1.5 gap-y-1">
+                <span translate="no" className="notranslate font-mono t-tag text-neutral-400 shrink-0">{f.key}</span>
+                <span className="min-w-0 flex-1">{ko ? f.tag : f.tagEn}</span>
+                <a
+                  href={f.source.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="shrink-0 t-tag px-1.5 py-0.5 rounded bg-neutral-100 text-neutral-500 hover:bg-black hover:text-white transition-colors whitespace-nowrap"
+                >
+                  🔗 {ko ? f.source.label : f.source.labelEn}
+                </a>
+              </p>
+              <p className="t-sub text-neutral-700 mt-0.5">{ko ? f.fact : f.factEn}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-2 rounded-xl bg-neutral-50 border border-neutral-200 px-2.5 py-2">
+          <p className="t-card text-black">
+            {ko
+              ? '“단순한 시장 일정 우연일까요, 아니면 AI 에이전트·MCP 생태계의 큰 흐름이 맞물린 걸까요? 여러분의 판단(지지/반대/보류)을 남겨 주세요.”'
+              : '“A quirk of the market calendar, or a bigger shift in AI agents and the MCP ecosystem? Leave your call — agree, disagree, or unsure.”'}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-3 gap-1.5 mt-2">
+          {options.map(o => {
+            const n = counts[o.key] || 0;
+            const pct = total > 0 ? Math.round((n / total) * 100) : 0;
+            const picked = mine === o.key;
+            return (
+              <button
+                key={o.key}
+                onClick={() => onVote(o.key)}
+                className={`rounded-xl border px-1.5 py-2 text-center transition-all cursor-pointer active:scale-95 ${
+                  picked ? 'bg-black text-white border-black' : 'bg-white text-black border-neutral-300 hover:border-black'
+                }`}
+              >
+                <span className={`block t-tag leading-tight ${picked ? 'text-white' : 'text-neutral-600'}`}>
+                  {ko ? o.label : o.labelEn}
+                </span>
+                <span translate="no" className="notranslate block t-card mt-0.5">{n}</span>
+                <span className={`block t-tag ${picked ? 'text-white/60' : 'text-neutral-400'}`}>{pct}%</span>
+              </button>
+            );
+          })}
+        </div>
+
+        <p className="t-tag text-neutral-500 mt-1.5 flex flex-wrap items-center gap-x-1.5 gap-y-0.5">
+          <span translate="no" className="notranslate font-bold text-black">
+            {ko ? `👥 ${total}명 참여` : `👥 ${total} joined`}
+          </span>
+          <span>{ko ? '· 실시간 원장 집계' : '· live ledger count'}</span>
+          <span className="text-neutral-400">
+            {ko ? '· KYC 파이오니어 1인 1표(변경 가능)' : '· one vote per KYC Pioneer (changeable)'}
+          </span>
+          {mine && <span className="text-[#dc2626] font-bold">{ko ? '· 내 판단 기록됨' : '· your call is on the ledger'}</span>}
+        </p>
+      </div>
+    </section>
+  );
+};
+
 const SectionTitle = ({ title, desc }: { title: string; desc: string }) => (
   <div className="w-full border-t border-[#dc2626] pt-2.5 mt-1 mb-1.5 text-left">
     <h2 className="t-section text-neutral-900 uppercase border-l-[3px] border-neutral-900 pl-2">{title}</h2>
@@ -680,6 +854,7 @@ export default function FactFilterPage() {
 
   // 서버 원장(fact_votes) 집계 — 로그인 전에도 공개 집계를 읽는다.
   const [serverVotes, setServerVotes] = useState<Record<string, number>>({});
+  const [serverVerdicts, setServerVerdicts] = useState<Record<string, Record<string, number>>>({});
   const [myVotes, setMyVotes] = useState<Record<string, string>>({});
 
   // 국가 축 — 조회 국가(원장·검증 사례) / 제보 국가
@@ -708,13 +883,20 @@ export default function FactFilterPage() {
     const headers: Record<string, string> = accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
     fetch('/api/fact/vote', { headers, cache: 'no-store' })
       .then(r => r.json())
-      .then((data: { ok?: boolean; counts?: Record<string, { total?: number }>; mine?: Record<string, string> } | null) => {
+      .then((data: {
+        ok?: boolean;
+        counts?: Record<string, { total?: number; verdicts?: Record<string, number> }>;
+        mine?: Record<string, string>;
+      } | null) => {
         if (!alive || !data?.ok) return;
         const counts: Record<string, number> = {};
+        const verdicts: Record<string, Record<string, number>> = {};
         Object.entries(data.counts || {}).forEach(([id, v]) => {
           counts[id] = Number(v?.total ?? 0) || 0;
+          if (v?.verdicts) verdicts[id] = v.verdicts;
         });
         setServerVotes(counts);
+        setServerVerdicts(verdicts);
         setMyVotes(data.mine || {});
       })
       .catch(() => undefined);
@@ -836,6 +1018,47 @@ export default function FactFilterPage() {
     alert(ko
       ? '증거 지문이 위변조 불가 타임스탬프로 영구 봉인되었습니다! (+5 BEOM)'
       : 'Evidence sealed with immutable timestamp! (+5 BEOM)');
+  };
+
+  /** 특별 안건 — 지지(endorse) · 반대(dispute) · 보류(unsure)를 서버 원장에 기록 */
+  const castSpecialVote = (verdict: SpecialVerdict) => {
+    if (!requireAuth(ko ? '함께 팩트체크 참여' : 'Join the fact-check')) return;
+    const id = SPECIAL_AGENDA_ID;
+    setPoints(p => p + 1);
+    setMyVotes(prev => ({ ...prev, [id]: verdict }));
+
+    // 비로그인 폴백은 없앤다 — 판단은 KYC uid와 함께 원장에 남아야 한다.
+    if (!accessToken) return;
+
+    fetch('/api/fact/vote', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` },
+      body: JSON.stringify({ itemId: id, verdict })
+    })
+      .then(r => r.json())
+      .then((data: { ok?: boolean; recorded?: boolean; count?: number; verdicts?: Record<string, number> } | null) => {
+        if (!data?.ok) throw new Error('vote failed');
+        if (data.recorded) {
+          if (typeof data.count === 'number') setServerVotes(prev => ({ ...prev, [id]: data.count as number }));
+          if (data.verdicts) setServerVerdicts(prev => ({ ...prev, [id]: data.verdicts || {} }));
+        } else {
+          // DB 미설정 서버에서도 화면 집계가 멈추지 않게 한다.
+          setServerVotes(prev => ({ ...prev, [id]: (prev[id] || 0) + 1 }));
+          setServerVerdicts(prev => {
+            const cur = prev[id] || {};
+            return { ...prev, [id]: { ...cur, [verdict]: (cur[verdict] || 0) + 1 } };
+          });
+        }
+        alert(ko ? '판단을 원장에 기록했습니다 (+1 BEOM)' : 'Your call is on the ledger (+1 BEOM)');
+      })
+      .catch(() => {
+        setMyVotes(prev => {
+          const next = { ...prev };
+          delete next[id];
+          return next;
+        });
+        alert(ko ? '투표가 저장되지 않았습니다. 잠시 후 다시 시도해 주세요.' : 'Your vote was not saved. Please try again.');
+      });
   };
 
   const endorse = (id: string) => {
@@ -998,7 +1221,13 @@ export default function FactFilterPage() {
         {/* TAB 1: AI FACT CHECK */}
         {activeTab === 'CHECK' && (
           <div className="space-y-3">
-            {/* 피처드 — 오늘의 진짜뉴스(서밋 Day 3) · 가짜뉴스 박제 · 케드헌 편대 */}
+            {/* 최상단 — 특별 안건(토론형) · 오늘의 진짜뉴스(서밋 Day 3) · 가짜뉴스 박제 */}
+            <SpecialAgenda
+              ko={ko}
+              counts={serverVerdicts[SPECIAL_AGENDA_ID] || {}}
+              mine={myVotes[SPECIAL_AGENDA_ID]}
+              onVote={castSpecialVote}
+            />
             <SummitFactCheck ko={ko} />
             <FakeNewsArchive ko={ko} />
             <FleetPromo ko={ko} />
