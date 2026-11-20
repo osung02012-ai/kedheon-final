@@ -5,6 +5,7 @@ import PiBadge from '../components/PiBadge';
 import { usePi } from '../components/PiProvider';
 import PiReadOnlyBanner from '../components/PiReadOnlyBanner';
 import AppDock from '../components/AppDock';
+import PrivacyLink from '../components/PrivacyLink';
 import AppHeader from '../components/AppHeader';
 import LangSelect from '../components/LangSelect';
 import {
@@ -908,6 +909,7 @@ export default function Xaea12Page() {
         <p className="text-center text-gray-300 t-tag mt-6 mb-2">
           <span translate="no" className="notranslate">XAEA12</span> · <span translate="no" className="notranslate">xaea12.pi</span> · {T('footerTag')}
         </p>
+        <PrivacyLink className="mt-1 mb-2" />
       </main>
 
       {/* ── 토스트 (하단 독 위) ───────────────────────────────── */}

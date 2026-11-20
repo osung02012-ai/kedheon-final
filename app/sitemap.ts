@@ -38,5 +38,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'daily',
       priority: 0.9,
     },
+    {
+      // 개인정보 처리방침 — Pi Next/메인넷 리스팅 요건 문서(6개 앱 공통)
+      url: 'https://kedheon.com/privacy',
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.5,
+    },
   ];
 }

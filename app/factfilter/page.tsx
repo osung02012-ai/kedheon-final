@@ -7,6 +7,7 @@ import PiPayButton from '../components/PiPayButton';
 import { usePi } from '../components/PiProvider';
 import PiReadOnlyBanner from '../components/PiReadOnlyBanner';
 import AppDock from '../components/AppDock';
+import PrivacyLink from '../components/PrivacyLink';
 import AppHeader from '../components/AppHeader';
 
 /**
@@ -1357,6 +1358,7 @@ export default function FactFilterPage() {
             )}
           </div>
         )}
+        <PrivacyLink className="mt-4 mb-2" />
       </main>
 
       {/* Footer — Kedheon 규격 */}

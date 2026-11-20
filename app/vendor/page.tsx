@@ -5,6 +5,7 @@ import PiBadge from '../components/PiBadge';
 import { usePi } from '../components/PiProvider';
 import PiReadOnlyBanner from '../components/PiReadOnlyBanner';
 import AppDock from '../components/AppDock';
+import PrivacyLink from '../components/PrivacyLink';
 import AppHeader from '../components/AppHeader';
 import LangSelect from '../components/LangSelect';
 import AccRow, { useAccordion } from './components/Accordion';
@@ -1273,6 +1274,7 @@ export default function VendorPage() {
         <p className="text-center text-gray-300 t-tag mt-6 mb-2">
           <span translate="no" className="notranslate">Vendor</span> · <span translate="no" className="notranslate">vendor.kedheon.com</span> · {T('footerTag')}
         </p>
+        <PrivacyLink className="mt-1 mb-2" />
       </main>
 
       {/* ── 생활권 시트 (위치 추적 없음 · 내가 고른다) ─────────────── */}

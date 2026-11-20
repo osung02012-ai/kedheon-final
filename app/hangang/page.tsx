@@ -6,6 +6,7 @@ import PiPayButton from '../components/PiPayButton';
 import { usePi } from '../components/PiProvider';
 import PiReadOnlyBanner from '../components/PiReadOnlyBanner';
 import AppDock from '../components/AppDock';
+import PrivacyLink from '../components/PrivacyLink';
 import AppHeader from '../components/AppHeader';
 import HanbokIcon from '../components/HanbokIcon';
 import LangSelect from '../components/LangSelect';
@@ -557,6 +558,7 @@ export default function HangangPage() {
         <p className="text-center text-gray-300 t-tag mt-6 mb-2">
           <span translate="no" className="notranslate">Hangang</span> · <span translate="no" className="notranslate">hangang.pi</span> · {T('footerTag')}
         </p>
+        <PrivacyLink className="mt-1 mb-2" />
       </main>
 
       {/* ── 예약·문의 모달 ───────────────────────────────────────── */}
