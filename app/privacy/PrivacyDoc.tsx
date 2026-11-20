@@ -138,6 +138,10 @@ const KO_SECTIONS: Section[] = [
       },
       {
         type: 'li',
+        text: 'Supabase(서울 리전) — BEOM 포인트·투표·북마크 등 앱 데이터의 저장과 Pi 인증 연동. 데이터는 서울 리전에 보관합니다.',
+      },
+      {
+        type: 'li',
         text: 'Vercel Inc. — 웹 호스팅과 쿠키 없는 익명 접속 통계.',
       },
       {
@@ -291,6 +295,10 @@ const EN_SECTIONS: Section[] = [
         text: 'We do not sell or share your personal information with third parties.',
       },
       { type: 'li', text: 'Pi Network — authentication and payment processing.' },
+      {
+        type: 'li',
+        text: 'Supabase (Seoul region) — storage of app data such as BEOM points, votes and bookmarks, and Pi sign-in integration. Data is kept in the Seoul region.',
+      },
       { type: 'li', text: 'Vercel Inc. — web hosting and cookie-free anonymous analytics.' },
       { type: 'li', text: 'GitHub — source repository hosting (contains no user personal data).' },
       {
