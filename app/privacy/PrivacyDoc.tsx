@@ -79,7 +79,7 @@ const KO_SECTIONS: Section[] = [
       },
       {
         type: 'li',
-        text: '브라우저 로컬 저장소(localStorage) — 선택한 언어, BEOM 포인트·투표·기록 등 화면 상태. 사용자의 기기 브라우저에만 저장되며 서버로 전송되지 않습니다.',
+        text: '브라우저 로컬 저장소(localStorage) — 선택한 언어, 화면 상태, 비로그인 상태의 BEOM 포인트·투표·북마크. Pi로 로그인한 경우 BEOM 포인트·팩트체크 투표·한강 북마크는 Pi uid 기준으로 당사 서버 DB(서울 리전 Supabase)에 저장되며, 비로그인 상태의 값만 사용자의 브라우저(localStorage)에 저장됩니다.',
       },
       {
         type: 'li',
@@ -117,7 +117,7 @@ const KO_SECTIONS: Section[] = [
       },
       {
         type: 'li',
-        text: '브라우저 localStorage 값은 브라우저 저장소를 지우거나 앱 데이터를 초기화하면 즉시 사라지며 서버에 남지 않습니다.',
+        text: '브라우저 localStorage 값은 브라우저 저장소를 지우거나 앱 데이터를 초기화하면 즉시 사라집니다. 서버에 저장된 BEOM 포인트·투표·북마크 기록은 로그아웃 후에도 유지되며, 문의처로 삭제를 요청하면 지체 없이 파기합니다.',
       },
       {
         type: 'li',
@@ -159,7 +159,7 @@ const KO_SECTIONS: Section[] = [
       },
       {
         type: 'p',
-        text: '브라우저 설정에서 localStorage를 지우거나 Pi Browser의 앱 데이터를 초기화하면 기기에 저장된 기록을 직접 삭제할 수 있습니다.',
+        text: '브라우저 설정에서 localStorage를 지우거나 Pi Browser의 앱 데이터를 초기화하면 기기에 저장된 기록을 직접 삭제할 수 있습니다. 서버에 저장된 기록의 삭제는 아래 문의처로 요청해 주시면 확인 후 30일 이내에 처리합니다.',
       },
     ],
   },
@@ -168,7 +168,7 @@ const KO_SECTIONS: Section[] = [
     blocks: [
       {
         type: 'p',
-        text: '앱은 광고·추적 쿠키를 사용하지 않습니다. 접속 통계는 쿠키 없는 익명 집계이며, 화면 상태 유지를 위해 localStorage만 사용합니다.',
+        text: '앱은 광고·추적 쿠키를 사용하지 않습니다. 접속 통계는 쿠키 없는 익명 집계이며, localStorage는 화면 상태 유지에만 사용합니다. 로그인 상태에서 남긴 BEOM 포인트·투표·북마크는 쿠키가 아니라 서버 DB에 저장됩니다.',
       },
     ],
   },
@@ -237,7 +237,7 @@ const EN_SECTIONS: Section[] = [
       },
       {
         type: 'li',
-        text: 'Browser local storage (localStorage) — your language choice, BEOM points, votes and screen state. These values stay in your own browser and are not sent to our servers.',
+        text: 'Browser local storage (localStorage) — your language choice, screen state, and BEOM points, votes and bookmarks while you are signed out. For signed-in Pi users, BEOM points, FactFilter votes and Hangang bookmarks are stored in our server database (Supabase, Seoul region) keyed by your Pi uid; only unauthenticated state stays in your browser’s localStorage.',
       },
       {
         type: 'li',
@@ -275,7 +275,7 @@ const EN_SECTIONS: Section[] = [
       },
       {
         type: 'li',
-        text: 'Values in localStorage disappear as soon as you clear your browser storage or reset the app data, and are never kept on our servers.',
+        text: 'Values in localStorage disappear as soon as you clear your browser storage or reset the app data. Records stored on our servers — BEOM points, votes and bookmarks — persist across sign-out and are deleted without delay once you request deletion through the contact address below.',
       },
       {
         type: 'li',
@@ -308,7 +308,7 @@ const EN_SECTIONS: Section[] = [
       },
       {
         type: 'p',
-        text: 'You can also delete the records kept on your device yourself by clearing localStorage in your browser settings or resetting the app data in Pi Browser.',
+        text: 'You can also delete the records kept on your device yourself by clearing localStorage in your browser settings or resetting the app data in Pi Browser. To delete records stored on our servers, contact us at the address below and we will handle it within 30 days.',
       },
     ],
   },
@@ -317,7 +317,7 @@ const EN_SECTIONS: Section[] = [
     blocks: [
       {
         type: 'p',
-        text: 'The apps use no advertising or tracking cookies. Usage statistics are cookie-free and anonymous, and localStorage is used only to keep your screen state.',
+        text: 'The apps use no advertising or tracking cookies. Usage statistics are cookie-free and anonymous, and localStorage is used only to keep your screen state. When you are signed in, BEOM points, votes and bookmarks are stored in our server database, not in cookies.',
       },
     ],
   },
