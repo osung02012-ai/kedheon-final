@@ -205,7 +205,7 @@ export default function PassSheet({
         <div className="border border-neutral-200 rounded-xl p-3 space-y-2">
           <div className="flex items-baseline justify-between gap-2">
             <p translate="no" className="notranslate t-card text-black">
-              {tier === 'genesis' ? t('priceFree') : t('price', { p: price })}
+              {tier === 'genesis' || tier === 'pending' ? t('priceFree') : t('price', { p: price })}
             </p>
             <span className="t-tag text-gray-400">{PASS_PRODUCT.days} days</span>
           </div>
