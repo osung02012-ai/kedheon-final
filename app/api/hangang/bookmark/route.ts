@@ -1,20 +1,33 @@
 import { NextResponse } from 'next/server';
 import { bearerToken, readJson, verifyPiAccessToken } from '../../../lib/piServerAuth';
+import { appIdFromRequest } from '../../../lib/piAppContext';
 import { sbDelete, sbSelect, sbUpsert, supabaseConfigured } from '../../../lib/supabaseAdmin';
+import { lookupAccount, passEnabled } from '../../../lib/passServer';
+import { summarizeAccount, FREE_BOOKMARK_LIMIT } from '../../../lib/passPlan';
 
 /**
  * /api/hangang/bookmark — Hangang 장소·패스 북마크
  *
- *  GET    : 내가 저장한 spot_id 목록
+ *  GET    : 내가 저장한 spot_id 목록 + 저장 상한 정보
  *  POST   : { spotId } 토글 — 없으면 저장, 있으면 해제. 결과 목록을 그대로 돌려준다.
  *  DELETE : ?spotId=... (또는 body { spotId }) 해제
  *  - Pi accessToken으로 확인한 uid만 저장한다. (uid, spot_id) 유니크.
+ *  - 무료 사용자는 3곳까지, Kedheon.pi Pass 사용자는 무제한(서버 판정).
+ *    이미 3곳을 넘게 저장한 사용자(과거 데이터)는 기존 목록을 그대로 보되 새 저장만 막힌다.
  */
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 const SPOT_RE = /^[A-Za-z0-9_.:-]{1,64}$/;
+
+/** 이 uid가 살아 있는 패스를 가지고 있는가 */
+async function hasActivePass(app: ReturnType<typeof appIdFromRequest>, uid: string, username: string): Promise<boolean> {
+  if (!passEnabled()) return false;
+  const lookup = await lookupAccount(app, uid, username, false);
+  if (!lookup.available) return false;
+  return summarizeAccount(lookup.account).active;
+}
 
 interface BookmarkRow {
   spot_id: string;
@@ -44,13 +57,25 @@ export async function GET(req: Request) {
   if (!verified.ok) return NextResponse.json({ ok: false, error: verified.error }, { status: verified.status });
 
   const { uid } = verified.user;
-  if (!supabaseConfigured()) return NextResponse.json({ ok: true, db: 'unconfigured', uid, spotIds: [] });
+  if (!supabaseConfigured()) {
+    return NextResponse.json({ ok: true, db: 'unconfigured', uid, spotIds: [], limit: FREE_BOOKMARK_LIMIT, unlimited: false });
+  }
 
-  const list = await listSpots(uid);
+  const [list, unlimited] = await Promise.all([
+    listSpots(uid),
+    hasActivePass(appIdFromRequest(req), uid, verified.user.username)
+  ]);
   if (!list.ok) {
     return NextResponse.json({ ok: false, db: 'error', dbStatus: list.status, error: list.error }, { status: 200 });
   }
-  return NextResponse.json({ ok: true, db: 'ready', uid, spotIds: list.spotIds });
+  return NextResponse.json({
+    ok: true,
+    db: 'ready',
+    uid,
+    spotIds: list.spotIds,
+    limit: unlimited ? null : FREE_BOOKMARK_LIMIT,
+    unlimited
+  });
 }
 
 export async function POST(req: Request) {
@@ -87,13 +112,35 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: false, db: 'error', dbStatus: removed.status, error: removed.error }, { status: 200 });
     }
   } else {
+    // 무료 상한 검사 — 패스 사용자만 무제한
+    const [current, unlimited] = await Promise.all([
+      listSpots(uid),
+      hasActivePass(appIdFromRequest(req), uid, username)
+    ]);
+    if (!unlimited && current.ok && current.spotIds.length >= FREE_BOOKMARK_LIMIT) {
+      return NextResponse.json({
+        ok: true,
+        recorded: false,
+        db: 'ready',
+        uid,
+        spotId,
+        added: false,
+        limited: true,
+        limit: FREE_BOOKMARK_LIMIT,
+        unlimited: false,
+        spotIds: current.spotIds
+      });
+    }
     const added = await sbUpsert<BookmarkRow>('hangang_bookmarks', { uid, spot_id: spotId }, 'uid,spot_id');
     if (!added.ok) {
       return NextResponse.json({ ok: false, db: 'error', dbStatus: added.status, error: added.error }, { status: 200 });
     }
   }
 
-  const list = await listSpots(uid);
+  const [list, unlimited] = await Promise.all([
+    listSpots(uid),
+    hasActivePass(appIdFromRequest(req), uid, username)
+  ]);
   return NextResponse.json({
     ok: true,
     recorded: true,
@@ -101,6 +148,9 @@ export async function POST(req: Request) {
     uid,
     spotId,
     added: !has,
+    limited: false,
+    limit: unlimited ? null : FREE_BOOKMARK_LIMIT,
+    unlimited,
     spotIds: list.ok ? list.spotIds : []
   });
 }

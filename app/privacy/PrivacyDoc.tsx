@@ -22,7 +22,7 @@ type Block =
 
 type Section = { title: string; blocks: Block[] };
 
-const UPDATED = '2026-11-20';
+const UPDATED = '2026-11-23';
 
 const KO_SECTIONS: Section[] = [
   {
@@ -75,6 +75,10 @@ const KO_SECTIONS: Section[] = [
       },
       {
         type: 'li',
+        text: 'Kedheon.pi Pass 정보 — Pi 사용자 이름(username), 앱별 Pi uid, 회원번호·등급(창립·얼리·멤버·배지), 이용권 만료일과 부여 경로, 견적·결제 식별자(paymentId)·트랜잭션 ID(txid)·금액·상태·결제한 앱. 이 값은 이용권 부여·갱신·만료 판정과 중복 결제 방지, 분쟁 대응에만 씁니다. KYC 결과나 실명을 당사가 별도로 받거나 다시 검증하지 않습니다.',
+      },
+      {
+        type: 'li',
         text: '접속 통계 — 페이지 방문 수, 유입 경로, 국가·기기·브라우저 종류 등 개인을 식별하지 않는 집계값(Vercel Web Analytics, 쿠키 미사용).',
       },
       {
@@ -122,6 +126,10 @@ const KO_SECTIONS: Section[] = [
       {
         type: 'li',
         text: '접속 통계는 개별 식별이 불가능한 집계 형태로만 보관하고, 전자적 파일은 복구할 수 없는 방법으로 삭제합니다.',
+      },
+      {
+        type: 'li',
+        text: '이용권 정보는 만료 후에도 부여·환불·분쟁 대응이 가능한 기간 동안 보관하며, 회계·전자상거래 법령상 보존 의무가 있는 결제 기록은 해당 기간 동안 최소한으로 분리 보관합니다. 이용자가 삭제를 요청하면 보존 의무가 있는 기록을 제외하고 파기합니다.',
       },
     ],
   },
@@ -237,6 +245,10 @@ const EN_SECTIONS: Section[] = [
       },
       {
         type: 'li',
+        text: 'Kedheon.pi Pass data — your Pi username, the per-app Pi uid, member number and tier (Genesis, Early, Member, badge), pass expiry and how it was granted, plus quote and payment identifiers (paymentId), transaction ID (txid), amount, status and the app that paid. We use these only to grant, renew and expire your pass, prevent duplicate payments and handle disputes. We do not receive or re-verify KYC results or legal names.',
+      },
+      {
+        type: 'li',
         text: 'Usage statistics — page views, referral sources, country, device and browser type, in anonymous aggregate form (Vercel Web Analytics, no cookies).',
       },
       {
@@ -284,6 +296,10 @@ const EN_SECTIONS: Section[] = [
       {
         type: 'li',
         text: 'Usage statistics are kept only in aggregate form that cannot identify an individual, and electronic files are erased in a way that cannot be recovered.',
+      },
+      {
+        type: 'li',
+        text: 'Pass records are kept while they are needed for granting, refunds and dispute handling, and payment records subject to accounting or e-commerce retention duties are kept separately for the minimum required period. If you request deletion, we delete everything except records we must retain by law.',
       },
     ],
   },

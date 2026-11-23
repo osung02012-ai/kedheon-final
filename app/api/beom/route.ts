@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { bearerToken, readJson, startOfSeoulDay, verifyPiAccessToken } from '../../lib/piServerAuth';
+import { appIdFromRequest } from '../../lib/piAppContext';
 import { sbSelect, sbSum, sbUpdate, sbUpsert, supabaseConfigured } from '../../lib/supabaseAdmin';
+import { lookupAccount, passEnabled } from '../../lib/passServer';
+import { summarizeAccount } from '../../lib/passPlan';
 
 /**
  * /api/beom — BEOM(발자국) 원장
@@ -10,6 +13,7 @@ import { sbSelect, sbSum, sbUpdate, sbUpsert, supabaseConfigured } from '../../l
  *         하루 한 번인 출석은 같은 날 재요청 시 already:true, delta:0으로 끝낸다.
  *         같은 행동의 하루 상한(cap)을 넘으면 역시 기록하지 않는다.
  *  - 적립액은 클라이언트 조작을 막기 위해 아래 ACTIONS 표가 유일한 출처다.
+ *  - Kedheon.pi Pass 사용자는 적립이 ×1.5 (출석 50→75, 다른 적립도 반올림). 배율은 서버가 판정한다.
  */
 
 export const runtime = 'nodejs';
@@ -32,6 +36,23 @@ const ACTIONS: Record<string, ActionRule> = {
   'hangang:booking': { delta: 5, cap: 10 },
   'hangang:request': { delta: 2, cap: 10 }
 };
+
+/** Kedheon.pi Pass 사용자의 BEOM 배율 */
+const PASS_MULTIPLIER = 1.5;
+
+/** 배율 적용 — 정수로 반올림(출석 50 → 75). 원장에는 적용된 값만 남는다. */
+function boosted(delta: number, multiplier: number): number {
+  if (multiplier === 1) return delta;
+  return Math.round(delta * multiplier);
+}
+
+/** 이 앱의 uid가 살아 있는 패스를 가지고 있는가 (서버 판정 — 클라 조작 불가) */
+async function passMultiplier(app: ReturnType<typeof appIdFromRequest>, uid: string, username: string): Promise<number> {
+  if (!passEnabled()) return 1;
+  const lookup = await lookupAccount(app, uid, username, false);
+  if (!lookup.available) return 1;
+  return summarizeAccount(lookup.account).active ? PASS_MULTIPLIER : 1;
+}
 
 const NAME_RE = /^[a-z0-9_-]{2,32}$/;
 
@@ -153,7 +174,10 @@ export async function POST(req: Request) {
     });
   }
 
-  const inserted = await sbUpsert<BeomLogRow>('beom_logs', { uid, app, action, delta: rule.delta }, undefined, true);
+  const multiplier = await passMultiplier(appIdFromRequest(req), uid, username);
+  const delta = boosted(rule.delta, multiplier);
+
+  const inserted = await sbUpsert<BeomLogRow>('beom_logs', { uid, app, action, delta }, undefined, true);
   if (!inserted.ok) {
     return NextResponse.json(
       { ok: false, recorded: false, db: 'error', dbStatus: inserted.status, error: inserted.error },
@@ -163,7 +187,7 @@ export async function POST(req: Request) {
 
   // 정확한 집계: 원장 합계를 그대로 beom_total에 반영한다(증분 누적 오차 없음).
   const sum = await sbSum('beom_logs', 'delta', `uid=eq.${encodeURIComponent(uid)}`);
-  const total = sum.ok ? sum.sum : (await currentTotal(uid)) + rule.delta;
+  const total = sum.ok ? sum.sum : (await currentTotal(uid)) + delta;
 
   await sbUpdate('pi_users', `uid=eq.${encodeURIComponent(uid)}`, {
     beom_total: total,
@@ -181,7 +205,8 @@ export async function POST(req: Request) {
     uid,
     app,
     action,
-    delta: rule.delta,
+    delta,
+    multiplier,
     beomTotal: total,
     logId: log?.id ?? null,
     createdAt: log?.created_at ?? new Date().toISOString()

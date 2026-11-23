@@ -143,6 +143,19 @@ export async function sbDelete<T>(table: string, query: string): Promise<SbResul
   return sbFetch<T[]>(`${table}?${query}`, { method: 'DELETE', prefer: 'return=representation' });
 }
 
+/**
+ * RPC(Postgres 함수) 호출 — `/rest/v1/rpc/{fn}`.
+ *  - 패스 회원번호 발급(pass_touch)·이용권 부여(pass_redeem)는 행 잠금이 필요한 트랜잭션이라
+ *    테이블 CRUD로는 안전하지 않다. 서버(service key)만 실행할 수 있게 RLS·권한을 막아 둔다.
+ *  - 함수가 아직 없으면(마이그레이션 전) 404/PGRST202로 실패하고, 호출부는 available:false로 처리한다.
+ */
+export async function sbRpc<T>(
+  fn: string,
+  args: Record<string, unknown> = {}
+): Promise<SbResult<T>> {
+  return sbFetch<T>(`rpc/${fn}`, { method: 'POST', body: args });
+}
+
 /** 숫자 합계. PostgREST 집계(`select=delta.sum()`)를 쓰고, 막히면 행 합산으로 대체한다. */
 export async function sbSum(table: string, column: string, query: string): Promise<{ ok: boolean; sum: number }> {
   const agg = await sbFetch<Record<string, unknown>[]>(`${table}?${query}&select=${column}.sum()`);

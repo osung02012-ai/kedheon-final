@@ -121,12 +121,15 @@ const getPi = (): PiSdk | null => {
 
 let piInited = false;
 
-/** 서버 라우트 호출 공용 (approve · complete · incomplete) */
-async function postPiServer(url: string, payload: Record<string, unknown>) {
+/** 서버 라우트 호출 공용 (approve · complete · incomplete) — 서버가 사용자 신원을 확인하도록 토큰을 함께 보낸다. */
+async function postPiServer(url: string, payload: Record<string, unknown>, token?: string | null) {
   try {
     const res = await fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
+      },
       body: JSON.stringify(payload)
     });
     const data = (await res.json().catch(() => null)) as
@@ -151,6 +154,8 @@ export default function PiProvider({ children }: { children: React.ReactNode }) 
   const [gateLang, setGateLangState] = useState<GateLang>('KR');
   const busy = useRef(false);
   const payingRef = useRef(false);
+  /** 최신 accessToken — pay() 콜백이 오래된 state를 잡지 않도록 ref로도 보관한다. */
+  const tokenRef = useRef<string | null>(null);
 
   /** 실행 권한: Pi.authenticate로 KYC user가 붙은 상태만 통과 */
   const authenticated = status === 'connected' && !!username;
@@ -174,11 +179,11 @@ export default function PiProvider({ children }: { children: React.ReactNode }) 
     setGateLangState(lang);
   }, []);
 
-  /** Pi.init 은 세션당 한 번. 인증·결제가 같은 설정을 공유한다. */
-  const ensureInit = useCallback((Pi: PiSdk) => {
+  /** Pi.init 은 세션당 한 번. SDK 2.0은 Promise를 돌려주므로 기다린 뒤 인증·결제를 시작한다. */
+  const ensureInit = useCallback(async (Pi: PiSdk) => {
     if (piInited) return;
     try {
-      Pi.init({ version: '2.0', sandbox: PI_SANDBOX });
+      await Promise.resolve(Pi.init({ version: '2.0', sandbox: PI_SANDBOX }));
       piInited = true;
     } catch (err) {
       console.warn('[Pi] init skipped:', err);
@@ -189,7 +194,7 @@ export default function PiProvider({ children }: { children: React.ReactNode }) 
   const clearIncomplete = useCallback(async (payment: unknown) => {
     const id = (payment as { identifier?: string } | null)?.identifier;
     if (typeof id !== 'string' || !id) return;
-    await postPiServer('/api/pi/incomplete', { paymentId: id });
+    await postPiServer('/api/pi/incomplete', { paymentId: id }, tokenRef.current);
   }, []);
 
   const authenticate = useCallback(async () => {
@@ -201,10 +206,13 @@ export default function PiProvider({ children }: { children: React.ReactNode }) 
     busy.current = true;
     setStatus('connecting');
     try {
-      ensureInit(Pi);
-      const result = await Pi.authenticate(['username'], clearIncomplete);
+      // Pi.init은 Promise를 반환한다 — 인증 전에 반드시 완료를 기다린다.
+      await ensureInit(Pi);
+      // payments 스코프가 있어야 createPayment가 허용된다(공식 SDK 2.0 요건).
+      const result = await Pi.authenticate(['username', 'payments'], clearIncomplete);
       const name: string | null = result?.user?.username || null;
       const token: string | null = result?.accessToken || null;
+      tokenRef.current = token;
       setUsername(name);
       setUid(result?.user?.uid || null);
       setAccessToken(token);
@@ -281,9 +289,10 @@ export default function PiProvider({ children }: { children: React.ReactNode }) 
         };
       }
 
-      ensureInit(Pi);
+      ensureInit(Pi).then(() => undefined);
       payingRef.current = true;
       setPaying(true);
+      const authToken = tokenRef.current;
 
       const result = await new Promise<PiPaymentResult>((resolve) => {
         let settled = false;
@@ -306,7 +315,7 @@ export default function PiProvider({ children }: { children: React.ReactNode }) 
             {
               onReadyForServerApproval: async (paymentId: string) => {
                 currentId = paymentId;
-                const res = await postPiServer('/api/pi/approve', { paymentId });
+                const res = await postPiServer('/api/pi/approve', { paymentId }, authToken);
                 if (res.mode === 'sandbox-ready') sandboxReady = true;
                 if (!res.ok) {
                   finish({
@@ -320,7 +329,7 @@ export default function PiProvider({ children }: { children: React.ReactNode }) 
               },
               onReadyForServerCompletion: async (paymentId: string, txid: string) => {
                 currentId = paymentId;
-                const res = await postPiServer('/api/pi/complete', { paymentId, txid });
+                const res = await postPiServer('/api/pi/complete', { paymentId, txid }, authToken);
                 if (res.mode === 'sandbox-ready') sandboxReady = true;
                 finish({
                   ok: res.ok,

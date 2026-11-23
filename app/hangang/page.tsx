@@ -2,6 +2,13 @@
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PiBadge from '../components/PiBadge';
+import PassBadge from '../components/PassBadge';
+import PassStrip from '../components/PassStrip';
+import PassSheet from '../components/PassSheet';
+import PremiumCourseSection from './components/PremiumCourseSection';
+import { passT } from '../components/pass-i18n';
+import { usePass } from '../components/passStore';
+import { buildSelectionIcs } from './lib/premiumCourses';
 import PiPayButton from '../components/PiPayButton';
 import { usePi } from '../components/PiProvider';
 import PiReadOnlyBanner from '../components/PiReadOnlyBanner';
@@ -17,7 +24,7 @@ import JourneySection, { BypassNote } from './components/JourneySection';
 import TicketsSection from './components/TicketsSection';
 import FoodMapSection from './components/FoodMapSection';
 import {
-  LANGS, LANG_TAG, detectLang, tr, ui,
+  LANGS, LANG_TAG, LANG_INDEX, detectLang, tr, ui,
   type Lang, type L10, type UIKey
 } from './lib/i18n';
 import { ZONES, PICK_ORDER, type PickKey } from './lib/zones';
@@ -49,6 +56,8 @@ function fmtPi(n: number) {
 
 export default function HangangPage() {
   const { requireAuth, authenticated, setGateLang, accessToken } = usePi();
+  const passSnap = usePass();
+  const [passOpen, setPassOpen] = useState(false);
   const [lang, setLang] = useState<Lang>('KR');
   const [mounted, setMounted] = useState(false);
   const [zoneKey, setZoneKey] = useState('SEOUL');
@@ -120,9 +129,13 @@ export default function HangangPage() {
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` },
           body: JSON.stringify({ spotId })
         });
-        const data = (await res.json().catch(() => null)) as { ok?: boolean; spotIds?: string[] } | null;
+        const data = (await res.json().catch(() => null)) as
+          | { ok?: boolean; spotIds?: string[]; limited?: boolean; unlimited?: boolean }
+          | null;
         if (res.ok && data?.ok && Array.isArray(data.spotIds)) {
           applySpots(data.spotIds);
+          // 무료 상한(3곳)에 걸렸다 — 저장은 그대로 두고 패스 시트를 연다.
+          if (data.limited) setPassOpen(true);
           return;
         }
       } catch {
@@ -191,6 +204,7 @@ export default function HangangPage() {
           </div>
         }
       >
+          <PassBadge lang={lang} app="hangang" />
           <PiBadge en={lang !== 'KR'} />
           <LangSelect
             value={lang}
@@ -202,6 +216,7 @@ export default function HangangPage() {
       <main className="w-full max-w-5xl px-4 py-3">
 
         <PiReadOnlyBanner className="mb-3" />
+        <PassStrip app="hangang" lang={lang} className="mb-2" />
         {/* ── 1. 히어로 ─────────────────────────────────────────── */}
         {/* 첫 화면(390×844)에서 히어로 + '01 전국 7대 권역' 머리까지 같이 보이도록,
             대표이미지는 모바일 158px 카드로 묶었다(BNPi 기준). 큰 글씨 설정에서
@@ -269,6 +284,16 @@ export default function HangangPage() {
 
         {/* ── 여정 스텝 레일 + 인증 뱃지 범례 ───────────────────── */}
         <JourneyRail lang={lang} />
+
+        {/* ── 패스 전용: 프리미엄 3일 코스 ─────────────────── */}
+        {passSnap.available && (
+          <PremiumCourseSection
+            zoneKey={zone.key}
+            lang={lang}
+            passActive={Boolean(passSnap.pass?.active)}
+            onNeedPass={() => setPassOpen(true)}
+          />
+        )}
 
         {/* ── 01 입국·공항 ─────────────────────────────────────── */}
         <JourneySection
@@ -562,6 +587,12 @@ export default function HangangPage() {
               <span className="t-tag bg-neutral-100 px-2 py-1 rounded-full text-neutral-600">
                 {T('kycBadge')}
               </span>
+              <button
+                onClick={() => setPassOpen(true)}
+                className="t-tag bg-neutral-50 px-2 py-1 rounded-full text-neutral-500 border border-neutral-200 hover:border-[#dc2626] hover:text-[#dc2626] transition-colors"
+              >
+                🔖 {passSnap.pass?.active ? '∞' : '3'} · {passT(lang, 'passOnly')}
+              </button>
             </div>
           </div>
 
@@ -692,6 +723,35 @@ export default function HangangPage() {
               <p translate="no" className="notranslate text-white t-card">{fmtPi(total)} Pi <span className="text-[#dc2626] t-tag ml-1">+ 🐾 5</span></p>
             </div>
 
+            {/* 패스 혜택 — 선택한 조합을 내 달력(.ics)으로 */}
+            {passSnap.available && (
+              <button
+                onClick={() => {
+                  if (!passSnap.pass?.active) {
+                    setPassOpen(true);
+                    return;
+                  }
+                  try {
+                    const ics = buildSelectionIcs(zone, pick, LANG_INDEX[lang]);
+                    const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `hangang-${zone.key.toLowerCase()}.ics`;
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    setTimeout(() => URL.revokeObjectURL(url), 4000);
+                  } catch {
+                    /* 브라우저가 Blob을 막으면 조용히 넘어간다 */
+                  }
+                }}
+                className="w-full border border-neutral-200 rounded-lg py-2 t-tag text-neutral-600 hover:border-[#dc2626] hover:text-[#dc2626] transition-colors"
+              >
+                📅 {passT(lang, 'icsBtn')} {!passSnap.pass?.active && `· ${passT(lang, 'passOnly')}`}
+              </button>
+            )}
+
             <button onClick={confirmBooking} className="w-full bg-[#dc2626] hover:bg-black text-white t-btn py-3 rounded-xl transition-all active:scale-95">
               {T('modalConfirm')}{!authenticated && ' 🔒'}
             </button>
@@ -711,6 +771,7 @@ export default function HangangPage() {
 
       {/* ── 하단 고정 푸터 (6개 앱) ──────────────────────────── */}
       <AppDock active="HANGANG" soonMessage={T('alertSoon')} />
+      <PassSheet open={passOpen} onClose={() => setPassOpen(false)} lang={lang} app="hangang" />
     </div>
   );
 }

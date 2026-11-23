@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import PiBadge from './components/PiBadge';
+import PassBadge from './components/PassBadge';
+import PassCard from './components/PassCard';
 import { usePi } from './components/PiProvider';
 import PiReadOnlyBanner from './components/PiReadOnlyBanner';
 import AppDock from './components/AppDock';
@@ -736,6 +738,7 @@ export default function KedheonDesignSystemFinal() {
           </>
         }
       >
+          <PassBadge lang={lang} app="kedheon" />
           <PiBadge en={lang !== 'KR'} />
           <LangSelect
             value={lang}
@@ -831,6 +834,9 @@ export default function KedheonDesignSystemFinal() {
                    <img src="/beom-token.png" className="w-[56px] h-[56px] md:w-44 md:h-48 object-contain drop-shadow-2xl" alt="Beom" />
                 </div>
             </div>
+
+            {/* Kedheon.pi Pass — 보유 자산 바로 아래(만료일·D-day·3앱 사용 현황·갱신) */}
+            <PassCard lang={lang} />
 
             <div className="w-full bg-neutral-900 py-1.5 px-4 rounded-lg flex items-center justify-center gap-2">
                <span className="w-1.5 h-1.5 bg-red-600 rounded-full animate-ping"></span>

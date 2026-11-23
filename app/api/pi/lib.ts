@@ -3,13 +3,20 @@
  *
  *  - Pi SDK 2.0의 서버 승인/완료 규격: 결제가 생성되면 클라이언트가 아니라
  *    우리 서버가 Pi Platform API(https://api.minepi.com/v2)에 approve → complete를 보낸다.
- *  - 서버 키는 Pi 콘솔 안내문 기준 이름이 PI_NETWORK_API_KEY이고, 기존 Vercel 설정은 PI_API_KEY다.
- *    두 이름을 모두 읽어 어느 쪽으로 넣어도 실결제로 전환되게 한다.
+ *  - 서버 키는 **앱마다 다르다**(piAppContext.ts). 결제 라우트는 요청 호스트로 앱을 판정한 뒤
+ *    그 앱의 키로 Pi Platform을 호출해야 한다. 앱 전용 키가 없으면 예전 공용 이름
+ *    (PI_NETWORK_API_KEY / PI_API_KEY)으로 대체한다.
  *  - 키가 없으면(아직 Vercel 환경변수 미등록) 빌드/런타임을 깨뜨리지 않고
  *    'sandbox-ready' 상태 JSON만 돌려준다. 키를 넣는 순간 같은 코드가 실결제로 전환된다.
  */
 
+import { appIdFromRequest, piApiKeyFor } from '../../lib/piAppContext';
+import type { PassAppId } from '../../lib/passPlan';
+
 export const PI_API_BASE = 'https://api.minepi.com/v2';
+
+/** @deprecated 앱 판정이 필요한 곳은 piAppContext를 쓴다. 호환용으로 남긴다. */
+export const PI_API_KEY_ENVS = ['PI_API_KEY_KEDHEON', 'PI_API_KEY_FACTFILTER', 'PI_API_KEY_HANGANG', 'PI_NETWORK_API_KEY', 'PI_API_KEY'] as const;
 
 export type PiMode = 'live' | 'sandbox-ready';
 
@@ -20,17 +27,18 @@ export interface PiApiResult {
   error?: string;
 }
 
-/** Pi 서버 API 키로 인정하는 환경변수 이름 (콘솔 안내문 기준 이름을 우선) */
-export const PI_API_KEY_ENVS = ['PI_NETWORK_API_KEY', 'PI_API_KEY'] as const;
-
-/** 환경변수에서 Pi 서버 API 키를 읽는다. 두 이름 중 먼저 채워진 값을 쓴다. (값은 절대 응답에 담지 않는다) */
-export function piApiKey(): string {
-  const raw = process.env.PI_NETWORK_API_KEY || process.env.PI_API_KEY || '';
-  return raw.trim();
+/** 요청이 들어온 앱(Kedheon·FactFilter·Hangang) */
+export function requestAppId(req: Request): PassAppId {
+  return appIdFromRequest(req);
 }
 
-export function hasPiApiKey(): boolean {
-  return piApiKey().length > 0;
+/** 앱의 Pi 서버 키 (값은 절대 응답에 담지 않는다) */
+export function piApiKey(app: PassAppId = 'kedheon'): string {
+  return piApiKeyFor(app);
+}
+
+export function hasPiApiKey(app: PassAppId = 'kedheon'): boolean {
+  return piApiKey(app).length > 0;
 }
 
 /** Pi 서버 API 키 미등록 상태의 안전한 JSON. 결제를 만들지 않고 준비 상태만 알린다. */
@@ -38,10 +46,9 @@ export function sandboxPayload(action: string, extra: Record<string, unknown> = 
   return {
     ok: true,
     mode: 'sandbox-ready' as PiMode,
-    missingEnv: 'PI_NETWORK_API_KEY',
-    acceptedEnv: [...PI_API_KEY_ENVS],
+    missingEnv: 'PI_API_KEY_<APP> (PI_NETWORK_API_KEY fallback)',
     action,
-    note: 'Pi server API key not set (PI_NETWORK_API_KEY or PI_API_KEY). Server approval/completion is prepared but not sent to Pi Platform.',
+    note: 'Pi server API key not set for this app. Server approval/completion is prepared but not sent to Pi Platform.',
     checkedAt: new Date().toISOString(),
     ...extra
   };
@@ -56,19 +63,30 @@ export function isValidTxid(id: unknown): id is string {
   return typeof id === 'string' && /^[A-Za-z0-9+/=_-]{6,200}$/.test(id);
 }
 
-/** 서버→서버 POST. 12초 타임아웃, 실패해도 예외 대신 구조화된 결과를 돌려준다. */
-export async function piRequest(path: string, body: Record<string, unknown> = {}): Promise<PiApiResult> {
+/**
+ * 서버→서버 호출. 12초 타임아웃, 실패해도 예외 대신 구조화된 결과를 돌려준다.
+ * `method`는 Pi Platform이 GET을 요구하는 결제 조회에 쓴다.
+ */
+export async function piRequest(
+  path: string,
+  body: Record<string, unknown> = {},
+  options: { method?: 'GET' | 'POST'; app?: PassAppId } = {}
+): Promise<PiApiResult> {
+  const method = options.method ?? 'POST';
+  const key = piApiKey(options.app ?? 'kedheon');
+  if (!key) return { ok: false, status: 0, data: null, error: 'Pi server key not set' };
+
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 12000);
   try {
     const res = await fetch(`${PI_API_BASE}${path}`, {
-      method: 'POST',
+      method,
       headers: {
-        Authorization: `Key ${piApiKey()}`,
+        Authorization: `Key ${key}`,
         'Content-Type': 'application/json',
         Accept: 'application/json'
       },
-      body: JSON.stringify(body),
+      ...(method === 'GET' ? {} : { body: JSON.stringify(body) }),
       signal: controller.signal,
       cache: 'no-store'
     });

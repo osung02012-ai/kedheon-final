@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { bearerToken, readJson, verifyPiAccessToken } from '../../../lib/piServerAuth';
+import { appIdFromRequest } from '../../../lib/piAppContext';
 import { sbSelect, sbUpsert, supabaseConfigured } from '../../../lib/supabaseAdmin';
+import { loadCounter, lookupAccount, passPayload } from '../../../lib/passServer';
 
 /**
  * POST /api/pi/verify
@@ -8,6 +10,8 @@ import { sbSelect, sbUpsert, supabaseConfigured } from '../../../lib/supabaseAdm
  *  - 서버가 Pi Platform API /v2/me 로 실제 uid·username을 확인한다.
  *  - 성공 시 pi_users에 upsert(최초 방문 기록 + last_seen_at 갱신)하고
  *    현재 beom_total과 최근 beom_logs 10건을 돌려준다.
+ *  - 로그인 응답에 Kedheon.pi Pass 상태(회원번호·등급·만료일·창립 잔여 자리)를 함께 담는다.
+ *    pass_touch가 (app_id, uid) 링크·전역 username 계정·번호 발급·Genesis 첫 30일 무료를 처리한다.
  *  - DB가 아직 연결되지 않았으면(환경변수 없음) 검증 결과만 돌려주고 화면은 localStorage로 동작한다.
  *
  * GET /api/pi/verify — 비밀값 없는 상태 점검(DB 연결 여부)
@@ -82,6 +86,7 @@ export async function POST(req: Request) {
   }
 
   const now = new Date().toISOString();
+  const app = appIdFromRequest(req);
   const upsert = await sbUpsert<PiUserRow>('pi_users', { uid, username, last_seen_at: now }, 'uid');
 
   if (!upsert.ok) {
@@ -105,15 +110,29 @@ export async function POST(req: Request) {
     `select=app,action,delta,created_at&uid=eq.${encodeURIComponent(uid)}&order=created_at.desc&limit=10`
   );
 
+  // 패스 계정 확보(번호 발급 + Genesis 첫 30일 무료). 실패해도 로그인은 그대로 성공한다.
+  const [passLookup, counter] = await Promise.all([
+    lookupAccount(app, uid, username, true),
+    loadCounter()
+  ]);
+  const pass = passPayload(app, passLookup.account, counter.counter, passLookup.error, passLookup.available);
+
   return NextResponse.json({
     ok: true,
     verified: true,
     db: 'ready',
+    app,
     uid,
     username,
     firstSeenAt: row?.first_seen_at ?? null,
     lastSeenAt: row?.last_seen_at ?? now,
     beomTotal: Number(row?.beom_total ?? 0) || 0,
-    logs: logs.ok && Array.isArray(logs.data) ? logs.data : []
+    logs: logs.ok && Array.isArray(logs.data) ? logs.data : [],
+    pass: pass.pass,
+    passEnabled: pass.enabled,
+    passAvailable: pass.available,
+    counter: pass.counter,
+    priceNextPi: pass.priceNextPi,
+    paymentsReady: pass.paymentsReady
   });
 }

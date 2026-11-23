@@ -3,6 +3,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { COUNTRIES, COUNTRY_MAP, GLOBAL_COUNTRY, type Country } from '../civil/countries';
 import PiBadge from '../components/PiBadge';
+import PassBadge from '../components/PassBadge';
+import PassStrip from '../components/PassStrip';
+import PassSheet from '../components/PassSheet';
+import { passLangOf, passT } from '../components/pass-i18n';
+import { usePass } from '../components/passStore';
 import PiPayButton from '../components/PiPayButton';
 import { usePi } from '../components/PiProvider';
 import PiReadOnlyBanner from '../components/PiReadOnlyBanner';
@@ -857,6 +862,7 @@ const CountryPicker = ({
 
 export default function FactFilterPage() {
   const { requireAuth, authenticated, setGateLang, accessToken } = usePi();
+  const passSnap = usePass();
   const [lang, setLang] = useState<'KO' | 'EN'>('KO');
   const [activeTab, setActiveTab] = useState<'CHECK' | 'REPORT' | 'LEDGER' | 'VAULT'>('CHECK');
   const [points, setPoints] = useState(847);
@@ -926,6 +932,13 @@ export default function FactFilterPage() {
   const [query, setQuery] = useState('');
   const [checking, setChecking] = useState(false);
   const [checkResult, setCheckResult] = useState<any | null>(null);
+  /** 패스 혜택 — 우선 검증 큐 접수 여부 */
+  const [priorityRequest, setPriorityRequest] = useState(false);
+  const [priorityMsg, setPriorityMsg] = useState<string | null>(null);
+  /** 패스 시트(원장 필터·CSV·우선 검증 게이트) */
+  const [passOpen, setPassOpen] = useState(false);
+  /** 원장 필터(패스) — 상태 */
+  const [ledgerStatus, setLedgerStatus] = useState<'ALL' | 'VERIFIED' | 'PENDING'>('ALL');
 
   // Report Tab State
   const [reportType, setReportType] = useState<'CHANNEL' | 'REPORTER' | 'OUTLET'>('REPORTER');
@@ -955,6 +968,16 @@ export default function FactFilterPage() {
   const ledgerItems = reportedList.filter(r => r.country === viewCountry);
   const cases = VERIFIED_CASES.filter(c => c.country === viewCountry);
 
+  const pt = (key: Parameters<typeof passT>[1]) => passT(passLangOf(ko), key);
+  const passActive = Boolean(passSnap.pass?.active);
+  const isVerifiedItem = (item: ReportItem) =>
+    /검증 완료|Verified/i.test(`${item.status} ${item.statusEn || ''}`);
+  const filteredLedgerItems = ledgerItems.filter(item => {
+    if (ledgerStatus === 'ALL') return true;
+    const verified = isVerifiedItem(item);
+    return ledgerStatus === 'VERIFIED' ? verified : !verified;
+  });
+
   const runFactCheck = () => {
     if (!requireAuth(ko ? '팩트체크 가동' : 'Verify Claim')) return;
     if (!query.trim()) return alert(ko ? '검증할 뉴스 URL이나 의심 문장을 입력해주세요.' : 'Please enter a news URL or statement.');
@@ -978,7 +1001,59 @@ export default function FactFilterPage() {
         ]
       });
       setPoints(p => p + 2);
+      // 패스 혜택 — 우선 검증 큐에도 같은 입력을 접수한다(검증 자체는 기존 목업 그대로).
+      if (priorityRequest) void sendPriorityRequest(query.trim());
     }, 1200);
+  };
+
+  /** 우선 검증 요청 큐 접수 — 패스면 priority 1, 아니면 0(무료 접수) */
+  const sendPriorityRequest = async (text: string) => {
+    if (!accessToken) {
+      setPriorityMsg(passT(passLangOf(ko), 'loginFirst'));
+      return;
+    }
+    try {
+      const res = await fetch('/api/fact/request', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` },
+        body: JSON.stringify({ query: text, country: viewCountry })
+      });
+      const data = (await res.json().catch(() => null)) as { ok?: boolean; queue?: number | null; error?: string } | null;
+      if (res.ok && data?.ok) {
+        setPriorityMsg(passT(passLangOf(ko), 'priorityDone', { q: data.queue ?? 1 }));
+      } else {
+        setPriorityMsg(data?.error || passT(passLangOf(ko), 'buyFail'));
+      }
+    } catch {
+      setPriorityMsg(passT(passLangOf(ko), 'buyFail'));
+    }
+  };
+
+  /** 패스 혜택 — 원장 기록 CSV 내보내기(분당 3회, 서버에서 패스 확인) */
+  const downloadPassCsv = async () => {
+    if (!passActive) {
+      setPassOpen(true);
+      return;
+    }
+    if (!accessToken) return;
+    try {
+      const res = await fetch('/api/pass/export', { headers: { Authorization: `Bearer ${accessToken}` }, cache: 'no-store' });
+      if (!res.ok) {
+        setPassOpen(true);
+        return;
+      }
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `kedheon-pass-${new Date().toISOString().slice(0, 10)}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 4000);
+    } catch {
+      /* 네트워크 실패는 다음 시도 */
+    }
   };
 
   const handleReportSubmit = (e: React.FormEvent) => {
@@ -1115,6 +1190,7 @@ export default function FactFilterPage() {
           </div>
         }
       >
+          <PassBadge lang={passLangOf(ko)} app="factfilter" />
           <PiBadge en={!ko} />
           <button
             onClick={() => setLang(l => (l === 'KO' ? 'EN' : 'KO'))}
@@ -1136,6 +1212,7 @@ export default function FactFilterPage() {
       <main className="w-full max-w-5xl px-4 py-3 space-y-3">
 
         <PiReadOnlyBanner />
+        <PassStrip app="factfilter" lang={passLangOf(ko)} className="mb-2" />
         {/* Hero */}
         <div className="bg-white rounded-2xl border border-[#E5E7EB] shadow-[var(--card-shadow)] px-3 py-2.5 md:p-5 relative overflow-hidden text-left">
           <div className="absolute top-0 left-0 w-full h-1 bg-[#dc2626]"></div>
@@ -1266,6 +1343,34 @@ export default function FactFilterPage() {
                   {checking ? (ko ? 'AI 교차 검증 중...' : 'Verifying...') : (ko ? '팩트체크 가동' : 'Verify Claim')}{!authenticated && ' 🔒'}
                 </button>
               </div>
+
+              {/* 패스 혜택 — 우선 검증 요청 (무료도 접수, 패스는 순번 우선) */}
+              {passSnap.available && (
+                <div className="flex flex-wrap items-center justify-between gap-2 border border-neutral-200 rounded-lg px-2.5 py-2">
+                  <button
+                    onClick={() => {
+                      if (!passActive) {
+                        setPassOpen(true);
+                        return;
+                      }
+                      setPriorityRequest(v => !v);
+                      setPriorityMsg(null);
+                    }}
+                    aria-pressed={priorityRequest && passActive}
+                    className={`t-tag rounded-full px-2.5 py-1 border transition-colors ${
+                      priorityRequest && passActive
+                        ? 'bg-[#dc2626] text-white border-[#dc2626]'
+                        : 'bg-white text-neutral-700 border-neutral-300 hover:border-neutral-500'
+                    }`}
+                  >
+                    ⚡ {pt('priorityLabel')} {passActive ? (priorityRequest ? 'ON' : 'OFF') : `· ${pt('passOnly')}`}
+                  </button>
+                  <p className="t-tag text-gray-400 min-w-0 flex-1 text-right">
+                    {passActive ? pt('priorityHintPass') : pt('priorityHintFree')}
+                  </p>
+                </div>
+              )}
+              {priorityMsg && <p className="t-tag text-[#dc2626]">{priorityMsg}</p>}
 
               {checkResult && (
                 <div className="p-4 rounded-xl bg-red-50 border border-[#dc2626]/40 space-y-2">
@@ -1498,8 +1603,8 @@ export default function FactFilterPage() {
                   </p>
                   <p className="text-neutral-500 t-sub">
                     {ko
-                      ? `${ledgerItems.length}건 등재`
-                      : `${ledgerItems.length} ${ledgerItems.length === 1 ? 'entry' : 'entries'}`}
+                      ? `${filteredLedgerItems.length}건 등재`
+                      : `${filteredLedgerItems.length} ${filteredLedgerItems.length === 1 ? 'entry' : 'entries'}`}
                   </p>
                 </div>
               </div>
@@ -1511,8 +1616,43 @@ export default function FactFilterPage() {
               </button>
             </div>
 
+            {/* 패스 혜택 — 원장 필터 확장 + CSV (무료는 국가 축만) */}
+            {passSnap.available && (
+              <div className="flex flex-wrap items-center gap-1.5 mb-2">
+                <span className="t-tag text-gray-400 mr-0.5">
+                  {pt('ledgerFilter')} {passActive ? '' : `· ${pt('passOnly')}`}
+                </span>
+                {(['ALL', 'VERIFIED', 'PENDING'] as const).map(s => (
+                  <button
+                    key={s}
+                    onClick={() => {
+                      if (!passActive) {
+                        setPassOpen(true);
+                        return;
+                      }
+                      setLedgerStatus(s);
+                    }}
+                    aria-pressed={ledgerStatus === s}
+                    className={`t-tag rounded-full px-2.5 py-1 border transition-colors ${
+                      ledgerStatus === s && passActive
+                        ? 'bg-black text-white border-black'
+                        : 'bg-white text-neutral-600 border-neutral-300 hover:border-neutral-500'
+                    }`}
+                  >
+                    {s === 'ALL' ? pt('filterAll') : s === 'VERIFIED' ? pt('filterVerified') : pt('filterPending')}
+                  </button>
+                ))}
+                <button
+                  onClick={downloadPassCsv}
+                  className="t-tag rounded-full px-2.5 py-1 border border-neutral-300 text-neutral-700 hover:border-[#dc2626] hover:text-[#dc2626] transition-colors"
+                >
+                  ⬇ {pt('csvBtn')}
+                </button>
+              </div>
+            )}
+
             <div className="space-y-2">
-              {ledgerItems.map(item => {
+              {filteredLedgerItems.map(item => {
                 const info = countryOf(item.country);
                 return (
                   <div key={item.id} className="bg-white border border-neutral-200 rounded-2xl p-4 md:p-5 space-y-2 hover:border-neutral-400 transition-all">
@@ -1643,6 +1783,7 @@ export default function FactFilterPage() {
           </div>
         )}
         <LegalLinks className="mt-4 mb-2" />
+        <PassSheet open={passOpen} onClose={() => setPassOpen(false)} lang={passLangOf(ko)} app="factfilter" />
       </main>
 
       {/* Footer — Kedheon 규격 */}

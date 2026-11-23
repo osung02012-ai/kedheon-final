@@ -24,7 +24,7 @@ type Block =
 
 type Section = { title: string; blocks: Block[] };
 
-const UPDATED = '2026-11-20';
+const UPDATED = '2026-11-23';
 
 const KO_SECTIONS: Section[] = [
   {
@@ -214,7 +214,24 @@ const KO_SECTIONS: Section[] = [
     ],
   },
   {
-    title: '8. 서비스의 변경과 중단',
+    title: '8. Kedheon.pi Pass (30일 이용권)',
+    blocks: [
+      {
+        type: 'p',
+        text: 'Kedheon.pi Pass는 Kedheon · FactFilter · Hangang에 함께 적용되는 30일 이용권입니다. 한 번 결제하면 만료일까지 이 세 앱의 패스 전용 기능을 쓸 수 있고, Pi 아이디 하나에 회원번호 하나가 발급됩니다.',
+      },
+      { type: 'li', text: '적용 범위 — Kedheon의 BEOM 적립 배율과 통합 패스 관리, FactFilter의 우선 검증 요청·원장 필터·기록 내보내기, Hangang의 무제한 저장과 프리미엄 3일 코스입니다. 기본 열람·기본 팩트체크·기본 여행 정보는 패스 없이도 무료입니다.' },
+      { type: 'li', text: '가격 — 회원번호 순번에 따라 30일 기준 Genesis 0.5 Pi, Early 0.7 Pi, Member 1 Pi입니다. 화면에 표시되는 가격은 결제 직전 서버가 확정한 견적 금액이며, 견적은 15분간 유효합니다.' },
+      { type: 'li', text: '창립 이벤트 — 회원번호 1번부터 3,141번까지는 첫 30일 이용권이 무료로 부여됩니다. 이벤트의 조건·기간·잔여 수량은 운영자가 변경할 수 있으며, 변경 시 앱 화면에 공지합니다.' },
+      { type: 'li', text: '만료와 연장 — 이용권은 결제일로부터 30일입니다. 만료 후에도 자동으로 결제되지 않으며, 이용자가 직접 다시 결제해야 연장됩니다. 연장 시에는 남은 기간과 지금 중 늦은 시점부터 30일이 더해집니다(중복 결제 시 누적).' },
+      { type: 'li', text: '자동결제 없음 — 현재 서비스는 정기결제·자동갱신을 제공하지 않습니다. Pi Network의 온체인 구독 기능이 도입되면 별도 동의를 받은 뒤에만 적용합니다.' },
+      { type: 'li', text: '환불 — 디지털 이용권의 특성상 이용이 시작되면 환불되지 않습니다. 다만 결제 오류·중복 결제·서비스 장애로 이용권이 부여되지 않은 경우에는 결제일로부터 24시간 이내 1회에 한해 Pi Network 절차로 환불을 처리하며, 이때 이용권은 회수됩니다.' },
+      { type: 'li', text: '등급·회원번호·배지는 특정인에게 부여되는 것으로 양도·매매할 수 없습니다. 중복 계정·자동화 등으로 회원번호를 부정 취득한 경우 회수될 수 있습니다.' },
+      { type: 'li', text: '이용권은 서비스의 기능과 우선순위를 제공하는 것이며, 투표 결과·검증 판정·여행 정보의 정확성을 보증하거나 특정 수익을 약속하지 않습니다.' },
+    ],
+  },
+  {
+    title: '9. 서비스의 변경과 중단',
     blocks: [
       {
         type: 'p',
@@ -231,7 +248,7 @@ const KO_SECTIONS: Section[] = [
     ],
   },
   {
-    title: '9. 보증의 한계와 면책',
+    title: '10. 보증의 한계와 면책',
     blocks: [
       {
         type: 'p',
@@ -256,7 +273,7 @@ const KO_SECTIONS: Section[] = [
     ],
   },
   {
-    title: '10. 약관의 변경',
+    title: '11. 약관의 변경',
     blocks: [
       {
         type: 'p',
@@ -269,7 +286,7 @@ const KO_SECTIONS: Section[] = [
     ],
   },
   {
-    title: '11. 준거법 및 분쟁 해결',
+    title: '12. 준거법 및 분쟁 해결',
     blocks: [
       {
         type: 'p',
@@ -286,7 +303,7 @@ const KO_SECTIONS: Section[] = [
     ],
   },
   {
-    title: '12. 문의처',
+    title: '13. 문의처',
     blocks: [
       { type: 'li', text: '운영 — Kedheon' },
       { type: 'li', text: '이메일 — osung02012@gmail.com' },
@@ -484,7 +501,45 @@ const EN_SECTIONS: Section[] = [
     ],
   },
   {
-    title: '8. Changes and suspension',
+    title: '8. Kedheon.pi Pass (30-day access pass)',
+    blocks: [
+      {
+        type: 'p',
+        text: 'Kedheon.pi Pass is a 30-day access pass shared by Kedheon, FactFilter and Hangang. One payment unlocks the pass features of all three apps until it expires, and one member number is issued per Pi username.',
+      },
+      {
+        type: 'li',
+        text: 'What it covers — Kedheon BEOM earning multiplier and unified pass control, FactFilter priority verification requests, ledger filters and record export, and Hangang unlimited saves and premium 3-day courses. Basic reading, basic fact checking and basic travel information stay free without a pass.',
+      },
+      {
+        type: 'li',
+        text: 'Price — 0.5 Pi (Genesis), 0.7 Pi (Early) or 1 Pi (Member) per 30 days, by member number. The price shown at checkout is the quote our server fixes immediately before payment, and a quote is valid for 15 minutes.',
+      },
+      {
+        type: 'li',
+        text: 'Founding event — member numbers 1 to 3,141 receive their first 30 days free. We may change the conditions, period and remaining quantity of the event, and announce changes in the apps.',
+      },
+      { type: 'li', text: 'Expiry and renewal — a pass lasts 30 days from payment. Nothing is charged automatically; you renew yourself. A renewal adds 30 days from whichever is later: the current expiry date or now (so overlapping payments accumulate).' },
+      {
+        type: 'li',
+        text: 'No auto-renewal — we do not offer recurring billing or automatic renewal today. If Pi Network’s on-chain subscription becomes available, it will apply only after a separate consent.',
+      },
+      {
+        type: 'li',
+        text: 'Refunds — as a digital access pass, it is not refundable once use begins. If a payment error, duplicate payment or service failure meant no pass was granted, we process one refund within 24 hours of payment through Pi Network’s procedure, and the pass is withdrawn.',
+      },
+      {
+        type: 'li',
+        text: 'Tier, member number and badge are personal and cannot be transferred or sold. Numbers obtained through duplicate accounts or automation may be withdrawn.',
+      },
+      {
+        type: 'li',
+        text: 'A pass provides features and priority. It does not guarantee vote outcomes, verification verdicts, the accuracy of travel information, or any income.',
+      },
+    ],
+  },
+  {
+    title: '9. Changes and suspension',
     blocks: [
       {
         type: 'p',
@@ -501,7 +556,7 @@ const EN_SECTIONS: Section[] = [
     ],
   },
   {
-    title: '9. Limits of warranty and disclaimer',
+    title: '10. Limits of warranty and disclaimer',
     blocks: [
       {
         type: 'p',
@@ -526,7 +581,7 @@ const EN_SECTIONS: Section[] = [
     ],
   },
   {
-    title: '10. Changes to these terms',
+    title: '11. Changes to these terms',
     blocks: [
       {
         type: 'p',
@@ -539,7 +594,7 @@ const EN_SECTIONS: Section[] = [
     ],
   },
   {
-    title: '11. Governing law and disputes',
+    title: '12. Governing law and disputes',
     blocks: [
       {
         type: 'p',
@@ -556,7 +611,7 @@ const EN_SECTIONS: Section[] = [
     ],
   },
   {
-    title: '12. Contact',
+    title: '13. Contact',
     blocks: [
       { type: 'li', text: 'Operator — Kedheon' },
       { type: 'li', text: 'Email — osung02012@gmail.com' },
