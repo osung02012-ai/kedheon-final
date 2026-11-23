@@ -65,7 +65,10 @@ export default function PremiumCourseSection({
             <span translate="no" className="notranslate text-[#7d4698] mr-1">π</span>
             {course.code} · {course.days.length} days
           </p>
-          <p className="t-sub text-gray-500">{t('premiumDesc')}</p>
+          <p className="t-sub text-gray-500">
+            Day 1–{course.days.length} · {t('budget')}{' '}
+            <span translate="no" className="notranslate text-black font-black">{course.total} Pi</span>
+          </p>
           <button
             onClick={onNeedPass}
             className="t-tag bg-black text-white rounded-lg px-3 py-2 hover:bg-[#dc2626] transition-colors active:scale-95"
