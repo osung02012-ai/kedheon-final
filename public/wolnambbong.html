@@ -3169,7 +3169,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
         bet: s.bet, betKind: s.betKind,
         board: s.board.map(function (c) { return { month: c.month, variant: c.variant }; }),
         third: (s.phase === 'result' && s.third) ? { month: s.third.month, variant: s.third.variant } : null,
-        oddsPct: s.phase === 'bet' ? W.odds(s).pct : 0,
+        oddsPct: W.odds(s).pct,
         players: s.players.map(function (p, i) {
           var r = st.roster[i];
           return { cid: r ? r.cid : '', name: p.name, av: p.avatar || '\uD83D\uDE4B', chips: p.chips, bankrupt: !!p.bankrupt };
@@ -3346,8 +3346,15 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     function hostAct(m) {
       if (!S || S.phase !== 'bet' || cidOf(S.turn) !== m.cid) return;
       var r;
-      if (m.kind === 'pass') r = W.fold(S);
-      else if (m.kind === 'nogap') r = W.placeNoGapBet(S);
+      if (m.kind === 'pass') {
+        r = W.fold(S);
+        if (!r || !r.ok) return;
+        var fsn = snapOf();
+        broadcast('done', { rid: st.rid, snap: fsn, result: S.result, by: m.cid });
+        doneApply(fsn, S.result);
+        return;
+      }
+      if (m.kind === 'nogap') r = W.placeNoGapBet(S);
       else r = W.placeBet(S, m.amount);
       if (!r || !r.ok) return;
       st.third = S.third ? { month: S.third.month, variant: S.third.variant } : null;
@@ -3402,24 +3409,27 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
 
     /* ---------------- 공개 연출(모든 화면 공통) ---------------- */
     function revealFx(res) {
+      var isFold = res.type === 'fold';
       var cover = $('#thirdCover'), wrap = $('#thirdWrap');
-      cover.style.clipPath = '';
-      cover.style.transform = '';
-      cover.style.transition = '';
-      cover.classList.add('off');
-      cover.innerHTML = '';
-      wrap.classList.remove('shake');
-      wrap.classList.add('pop');
       $('#peekHint').style.display = 'none';
       SFX.dragStop(0.03);
-      SFX.snap(1);
+      if (!isFold) {
+        cover.style.clipPath = '';
+        cover.style.transform = '';
+        cover.style.transition = '';
+        cover.classList.add('off');
+        cover.innerHTML = '';
+        wrap.classList.remove('shake');
+        wrap.classList.add('pop');
+        SFX.snap(1);
+      }
       var win = (res.type === 'win' || res.type === 'ppongWin');
       if (win) { confetti(); vibrate([30, 40, 70]); }
-      else if (res.type === 'lose' || res.type === 'ppong' || res.type === 'ppongLose') vibrate([20, 60, 20]);
+      else if (!isFold && (res.type === 'lose' || res.type === 'ppong' || res.type === 'ppongLose')) vibrate([20, 60, 20]);
       renderStatus();
       renderPlayers();
       setTimeout(function () {
-        if (win) SFX.win(); else SFX.lose();
+        if (!isFold) { if (win) SFX.win(); else SFX.lose(); }
         var p = S.players[res.turn] || S.players[0];
         var nm = (p.avatar || '') + ' ' + pName(p);
         var react = '';
