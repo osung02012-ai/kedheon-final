@@ -443,6 +443,48 @@ export default function Xaea12Page() {
           <p className="t-body text-gray-600 mt-1">{T('complianceBody')}</p>
         </div>
 
+        {/* ── 2.5 K-화토 게임 진입 (월남뽕 · K-Hwatu Between) ─────── */}
+        <SectionHead no="PLAY" title={`🎴 ${T('gameSecTitle')}`} desc={T('gameSecDesc')} />
+
+        <section className="relative bg-white rounded-2xl border border-[#E5E7EB] shadow-[var(--card-shadow)] overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-1 bg-[#dc2626]" />
+          <div className="relative p-3 md:p-4 text-left flex items-start gap-3">
+            <div className="min-w-0 flex-1">
+              <p className="t-tag uppercase text-[#dc2626]">{T('gameBadge')}</p>
+              <h3 translate="no" className="notranslate text-black t-card mt-1">
+                {T('gameName')}
+              </h3>
+              <p className="text-neutral-600 t-body mt-1">{T('gameLine')}</p>
+            </div>
+            {/* 숫자 화토 3장 팬 — 이미지 없이 디자인 시스템(1px 검정 테두리)만으로 */}
+            <div className="shrink-0 flex items-end pt-1" aria-hidden="true">
+              {[
+                { n: '2', cls: '-rotate-12 mt-3' },
+                { n: '7', cls: '' },
+                { n: '10', cls: 'rotate-12 mt-3' }
+              ].map(c => (
+                <span
+                  key={c.n}
+                  className={`w-7 h-11 md:w-8 md:h-12 rounded-md border border-neutral-900 bg-white flex items-center justify-center -mx-1 shadow-sm ${c.cls}`}
+                >
+                  <span translate="no" className="notranslate text-[13px] font-black text-[#dc2626]">
+                    {c.n}
+                  </span>
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className="relative px-3 md:px-4 pb-3 md:pb-4 text-left">
+            <a
+              href="/wolnambbong.html"
+              className="inline-flex w-full md:w-auto items-center justify-center bg-[#dc2626] hover:bg-black text-white t-btn px-4 py-2.5 rounded-lg transition-all active:scale-95"
+            >
+              <span translate="no" className="notranslate">🎴 {T('gamePlay')}</span>
+            </a>
+            <p className="text-neutral-500 t-sub mt-1.5">{T('gameNote')}</p>
+          </div>
+        </section>
+
         {/* ── 3. 1단계 · 2단계 시나리오 ─────────────────────────── */}
         <SectionHead no="01" title={T('secStageTitle')} desc={T('secStageDesc')} />
 
