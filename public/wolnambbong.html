@@ -2074,6 +2074,16 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
   var ui = { lang: 'kr', mode: 'solo', count: 3, aiCount: 3, names: [], ante: 10, ppong: false, sel: 0 };
   var S = null, revealed = false, busy = false, aiTimer = null;
 
+  /* 화면 어딘가에서 예외가 나도 조용히 멈추지 않도록 — 상단 띠에만 알린다(게임은 계속). */
+  if (typeof window !== 'undefined' && window && window.addEventListener) {
+    window.addEventListener('error', function (ev) {
+      try {
+        var b = document.getElementById('connBar');
+        if (b && ev && ev.message) { b.style.display = 'block'; b.textContent = '⚠ ' + ev.message; }
+      } catch (e) {}
+    });
+  }
+
   /* ------------------------------------------------------------
      사운드 — Web Audio 합성(외부 오디오 파일 0건 · 오프라인 동작)
      드래그 "스윽~" 마찰 스웰 → 까질 때 "띡!!" 플라스틱 반동 스냅
@@ -2976,7 +2986,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     };
     var AV = ['\uD83D\uDE4B', '\uD83D\uDE3A', '\uD83E\uDD89', '\uD83D\uDC2F', '\uD83D\uDC30', '\uD83D\uDC3C'];
 
-    function $(id) { return document.getElementById(id); }
+    function $(id) { return document.getElementById(String(id).replace(/^#/, '')); }
     function isHost() { return st.role === 'host'; }
     function rand4() { return 1000 + Math.floor(Math.random() * 9000); }
     function ridc() {
