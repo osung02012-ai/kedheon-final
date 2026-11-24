@@ -101,6 +101,28 @@ body{
 }
 .start:active{transform:scale(.985)}
 .rules{font-size:9.5px;line-height:1.55;color:#8fa79b;text-align:center;padding:0 4px}
+/* ---------- online room ---------- */
+.onlinebox{display:flex;flex-direction:column;gap:7px;border-top:1px dashed rgba(230,195,124,.18);padding-top:8px;margin-top:2px}
+.orow{display:flex;align-items:center;gap:8px;font-size:11.5px;color:#dfd8c6}
+.orow span{flex:0 0 auto}
+.onlineInput{flex:1;min-width:0;padding:8px 9px;border-radius:10px;border:1px solid rgba(230,195,124,.25);background:rgba(255,255,255,.05);color:#fff8e6;font-size:12px;font-family:inherit}
+.onlineInput:focus{outline:none;border-color:var(--gold)}
+.orline{display:flex;align-items:center;gap:8px;color:#7f9488;font-size:9.5px;text-align:center}
+.orline::before,.orline::after{content:"";flex:1;height:1px;background:rgba(230,195,124,.16)}
+.codrow{display:flex;gap:6px}
+.codrow input{flex:1;min-width:0;padding:8px;border-radius:10px;border:1px solid rgba(230,195,124,.28);background:rgba(255,255,255,.05);color:#fff8e6;font-size:18px;font-weight:900;letter-spacing:7px;text-align:center;font-family:inherit}
+.codrow input:focus{outline:none;border-color:var(--gold)}
+.lhint{font-size:9.5px;line-height:1.5;color:#8fa79b;text-align:center}
+.lobby{display:flex;flex-direction:column;gap:8px;flex:1 1 auto;min-height:0;overflow-y:auto;padding-top:2px}
+.lobby .lk{font-size:9.5px;letter-spacing:2.4px;color:var(--gold-d);font-weight:800;text-align:center}
+.lobby .code{font-size:42px;font-weight:900;letter-spacing:11px;text-align:center;color:#ffeec4;text-shadow:0 2px 14px rgba(230,195,124,.35);font-variant-numeric:tabular-nums;padding-left:11px}
+.lobbyList{display:flex;flex-direction:column;gap:4px;background:rgba(0,0,0,.22);border:1px solid rgba(230,195,124,.14);border-radius:14px;padding:8px;min-height:56px}
+.lp{display:flex;align-items:center;gap:7px;font-size:12px;color:#e9e2cf;padding:5px 7px;border-radius:9px}
+.lp.host{background:rgba(230,195,124,.12);border:1px solid rgba(230,195,124,.3)}
+.lp .av{font-size:13px;line-height:1}
+.lp .tag2{margin-left:auto;font-size:8.5px;color:var(--gold);font-weight:800;letter-spacing:1px}
+.lp .me{font-size:9px;color:#8fd6b4;font-weight:700}
+.connbar{position:absolute;left:0;right:0;top:0;padding:5px 8px;font-size:9.5px;text-align:center;background:rgba(120,24,18,.94);color:#fff;z-index:30;display:none;letter-spacing:.2px}
 /* ---------- game ---------- */
 .statusbar{display:flex;align-items:center;justify-content:space-between;flex:0 0 auto;padding:0 2px}
 .pot{display:flex;align-items:baseline;gap:6px;position:relative}
@@ -272,6 +294,7 @@ body{
 </head>
 <body>
 <div id="app">
+  <div class="connbar" id="connBar"></div>
   <header class="top">
     <div class="brand"><b id="brandTitle">월남뽕</b><span id="brandSub">K-HWATU BETWEEN · 48 HANAFUDA</span></div>
     <div class="tools">
@@ -295,6 +318,7 @@ body{
       <button class="mode on" data-mode="solo"><b data-i18n="solo">혼자 하기</b><span data-i18n="soloSub">빠른 연습 1인</span></button>
       <button class="mode" data-mode="ai"><b data-i18n="aiBattle">AI 배틀</b><span data-i18n="aiSub">2·3·4인전</span></button>
       <button class="mode" data-mode="pass"><b data-i18n="passPlay">오프라인 모임</b><span data-i18n="passSub">2~6인</span></button>
+      <button class="mode" data-mode="online"><b data-i18n="online">🌐 온라인 방</b><span data-i18n="onlineSub">2~6인 · 코드</span></button>
     </div>
 
     <div class="setupbox">
@@ -307,6 +331,13 @@ body{
         <div class="seg" id="aiSeg"></div>
       </div>
       <div class="names" id="nameInputs"></div>
+      <div class="onlinebox" id="onlineBox" style="display:none">
+        <div class="orow"><span data-i18n="nickname">닉네임</span><input class="onlineInput" id="nickInput" maxlength="8" placeholder="예: 파이대장" autocomplete="nickname" /></div>
+        <button class="go wide" id="createBtn">🌐 방 만들기</button>
+        <div class="orline"><span data-i18n="orJoin">또는 4자리 코드로 입장</span></div>
+        <div class="codrow"><input id="codeInput" inputmode="numeric" maxlength="4" placeholder="0000" /><button class="go" id="joinBtn">입장</button></div>
+        <p class="lhint" id="onlineHint" data-i18n="onlineHintTxt">방을 만들면 4자리 코드와 초대 링크가 생깁니다.</p>
+      </div>
       <div class="row">
         <span data-i18n="ante">앤티</span>
         <div class="seg" id="anteSeg"></div>
@@ -326,6 +357,7 @@ body{
     <div class="statusbar">
       <div class="pot" id="potBox"><span>POT</span><b id="potVal">0</b></div>
       <div class="meta">
+        <span class="deckbadge" id="roomBadge" style="display:none">🌐 <b>0000</b></span>
         <span class="deckbadge"><i></i><b id="deckVal">48</b></span>
         <span class="turnbadge" id="turnBadge">P1</span>
       </div>
@@ -351,6 +383,21 @@ body{
     <div class="msg" id="msg"><div class="l1">—</div><div class="l2"></div></div>
 
     <div class="actions" id="actions"></div>
+  </section>
+
+  <!-- ============ LOBBY (online room) ============ -->
+  <section class="screen" id="scr-lobby">
+    <div class="lobby">
+      <p class="lk" data-i18n="roomCode">방 코드</p>
+      <div class="code" id="roomCode">----</div>
+      <div id="shareRow">
+        <button class="ghost wide" id="shareBtn">🔗 <span data-i18n="shareLink">초대 링크</span></button>
+      </div>
+      <div class="lobbyList" id="lobbyList"></div>
+      <p class="lhint" id="lobbyWait" data-i18n="lobbyWaitTxt">방장이 [게임 시작]을 누르면 시작합니다.</p>
+      <button class="start" id="hostStartBtn">게임 시작</button>
+      <button class="ghost" id="leaveBtn">나가기</button>
+    </div>
   </section>
 
   <div class="sheet" id="sheet">
@@ -1957,6 +2004,10 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       solo: '혼자 하기', soloSub: '빠른 연습 1인',
       aiBattle: 'AI 배틀', aiSub: '2·3·4인전',
       passPlay: '오프라인 모임', passSub: '2~6인',
+      online: '🌐 온라인 방', onlineSub: '2~6인 · 코드',
+      nickname: '닉네임', createRoom: '🌐 방 만들기', joinRoom: '입장', orJoin: '또는 4자리 코드로 입장',
+      onlineHintTxt: '방을 만들면 4자리 코드와 초대 링크가 생깁니다.', roomCode: '방 코드',
+      shareLink: '초대 링크', lobbyWaitTxt: '방장이 [게임 시작]을 누르면 시작합니다.', leave: '나가기',
       players: '인원', matchType: '대전 형식', ante: '앤티',
       ppongOpt: '뽕 2배 페널티', lang: '언어', restart: '처음부터 (모드 선택)', close: '닫기',
       start: '시작하기', heroSub: '금박 숫자(1~12) 전통 화투로 30초 만에 즐기는 K-심리 카드 게임 (두 패 사이를 쪼아 맞히는 룰)',
@@ -1987,6 +2038,10 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       solo: 'Solo', soloSub: 'Quick practice',
       aiBattle: 'AI Battle', aiSub: '2 · 3 · 4 players',
       passPlay: 'Offline Table', passSub: '2–6, pass & play',
+      online: '🌐 Online Room', onlineSub: '2–6 players',
+      nickname: 'Nickname', createRoom: '🌐 Create room', joinRoom: 'Join', orJoin: 'or join with a 4-digit code',
+      onlineHintTxt: 'Creating a room gives you a 4-digit code and an invite link.', roomCode: 'ROOM CODE',
+      shareLink: 'Invite link', lobbyWaitTxt: 'The host starts the game.', leave: 'Leave',
       players: 'Players', matchType: 'Match', ante: 'Ante',
       ppongOpt: 'Double penalty on match', lang: 'Language', restart: 'Back to mode select', close: 'Close',
       start: 'START',
@@ -2225,6 +2280,59 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     };
   })();
 
+  /* ------------------------------------------------------------
+     음성 안내 — 패스 / 콜 / 올인 (Web Speech API · 외부 파일 0건)
+     · 상단 🔊/🔇 토글에 함께 묶인다(음소거 시 즉시 중단).
+     · speechSynthesis 없는 환경(헤드리스·QuickJS 테스트)에선 조용히 꺼진다.
+     ------------------------------------------------------------ */
+  var VOICE = (function () {
+    var syn = null, U = null, ready = false, on = true;
+    function api() {
+      if (ready) return syn;
+      ready = true;
+      try {
+        if (typeof window !== 'undefined' && window && window.speechSynthesis &&
+            typeof window.SpeechSynthesisUtterance === 'function') {
+          syn = window.speechSynthesis;
+          U = window.SpeechSynthesisUtterance;
+        }
+      } catch (e) { syn = null; }
+      return syn;
+    }
+    function say(kind) {
+      var s = api();
+      if (!s || !on) return;
+      var en = ui.lang === 'en';
+      var text = kind === 'pass' ? (en ? 'Pass!' : '패스!')
+        : kind === 'allin' ? (en ? 'All in!' : '올인!')
+          : (en ? 'Call!' : '콜!');
+      try {
+        s.cancel();
+        var u = new U(text);
+        u.lang = en ? 'en-US' : 'ko-KR';
+        u.rate = 1.08; u.pitch = 1.02; u.volume = 0.9;
+        try {
+          var vs = s.getVoices ? s.getVoices() : null;
+          if (vs && vs.length) {
+            var want = en ? 'en' : 'ko';
+            for (var i = 0; i < vs.length; i++) {
+              if (String(vs[i].lang || '').toLowerCase().indexOf(want) === 0) { u.voice = vs[i]; break; }
+            }
+          }
+        } catch (e2) {}
+        s.speak(u);
+      } catch (e3) {}
+    }
+    return {
+      pass: function () { say('pass'); },
+      call: function () { say('call'); },
+      allin: function () { say('allin'); },
+      action: function (k) { say(k); },
+      setOn: function (v) { on = !!v; if (!on) { try { api(); if (syn) syn.cancel(); } catch (e) {} } },
+      isOn: function () { return on; }
+    };
+  })();
+
   function t(k) { return (I18N[ui.lang] && I18N[ui.lang][k]) || (I18N.kr[k] || k); }
   function fmt(n) { return (n || 0).toLocaleString('en-US'); }
   function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
@@ -2320,6 +2428,8 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
   function show(which) {
     $('#scr-setup').classList.toggle('on', which === 'setup');
     $('#scr-game').classList.toggle('on', which === 'game');
+    var lb = $('#scr-lobby');
+    if (lb) lb.classList.toggle('on', which === 'lobby');
   }
 
   function applyStatic() {
@@ -2341,6 +2451,12 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     });
     $('#countRow').style.display = ui.mode === 'pass' ? '' : 'none';
     $('#aiRow').style.display = ui.mode === 'ai' ? '' : 'none';
+    var ob = $('#onlineBox'); if (ob) ob.style.display = ui.mode === 'online' ? '' : 'none';
+    var sbt = $('#startBtn'); if (sbt) sbt.style.display = ui.mode === 'online' ? 'none' : '';
+    var cb = $('#createBtn'); if (cb) cb.textContent = t('createRoom');
+    var jb = $('#joinBtn'); if (jb) jb.textContent = t('joinRoom');
+    var lvb = $('#leaveBtn'); if (lvb) lvb.textContent = t('leave');
+    var lwt = $('#lobbyWait'); if (lwt) lwt.textContent = t('lobbyWaitTxt');
     $('#countVal').textContent = ui.count;
     renderNames();
     renderSeg($('#anteSeg'), [5, 10, 20, 50], ui.ante, function (v) { ui.ante = v; applyStatic(); });
@@ -2459,7 +2575,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       $('#probTxt').textContent = t('noGap');
     } else {
       $('#rangeTxt').textContent = a + '–' + b;
-      var o = W.odds(S);
+      var o = (ON.isOn() && ON.state().snap) ? { pct: ON.state().snap.oddsPct || 0 } : W.odds(S);
       $('#probTxt').textContent = o.pct + '%';
     }
   }
@@ -2468,6 +2584,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     revealed = false;
     var cover = $('#thirdCover');
     cover.className = 'cover';
+    cover.innerHTML = '';
     cover.style.clipPath = '';
     cover.style.transform = '';
     cover.style.opacity = '';
@@ -2485,6 +2602,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     var A = $('#actions');
     A.innerHTML = '';
     if (!S) return;
+    if (ON.isOn()) { ON.onlineActions(A); return; }
 
     if (S.over) {
       A.innerHTML = '<button class="go wide" id="againBtn">' + t('restartBtn') + '</button>';
@@ -2556,6 +2674,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
   }
 
   function bindBetUI() {
+    var L = W.betLimits(S);
     var chips = document.querySelectorAll('#actions .chip[data-amt]');
     for (var i = 0; i < chips.length; i++) {
       chips[i].onclick = function () {
@@ -2566,12 +2685,14 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     var pb = $('#passBtn');
     if (pb) pb.onclick = function () {
       if (busy) return;
+      VOICE.pass();
       W.fold(S);
       afterFold();
     };
     var bb = $('#betBtn');
     if (bb) bb.onclick = function () {
       if (busy) return;
+      VOICE.action(ui.sel >= L.max ? 'allin' : 'call');
       var r = W.placeBet(S, ui.sel);
       if (r.ok) {
         showThird(true);
@@ -2582,6 +2703,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     var nb = $('#ngBtn');
     if (nb) nb.onclick = function () {
       if (busy) return;
+      VOICE.call();
       var r = W.placeNoGapBet(S);
       if (r.ok) {
         showThird(true);
@@ -2620,6 +2742,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     $('#thirdFace').innerHTML = W.faceSVG(S.third);
     var cover = $('#thirdCover');
     cover.className = 'cover';
+    cover.innerHTML = W.backSVG();
     cover.style.clipPath = '';
     cover.style.transform = '';
     cover.style.opacity = '';
@@ -2632,10 +2755,13 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     if (!S || S.over || S.phase !== 'bet' || !W.isAiTurn(S)) return;
     var d = W.aiDecide(S);
     if (d.action === 'fold') {
+      VOICE.pass();
       W.fold(S);
       afterFold();
       return;
     }
+    var lim = W.betLimits(S);
+    VOICE.action(d.amount >= lim.max ? 'allin' : 'call');
     var r = W.placeBet(S, d.amount);
     if (!r.ok) { W.fold(S); afterFold(); return; }
     showThird(false);
@@ -2681,6 +2807,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
 
   function backToSetup() {
     clearTimeout(aiTimer);
+    if (ON.isOn()) { ON.leave(true); return; }
     S = null;
     show('setup');
     applyStatic();
@@ -2691,7 +2818,10 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
      ------------------------------------------------------------ */
   var pk = { on: false, p: 0, sx: 0, sy: 0, h: 160, armed: false };
 
-  function canPeek() { return !!(S && S.phase === 'peek' && !revealed && !W.isAiTurn(S) && !busy); }
+  function canPeek() {
+    if (ON.isOn()) return ON.canPeek();
+    return !!(S && S.phase === 'peek' && !revealed && !W.isAiTurn(S) && !busy);
+  }
 
   function applyPeek(p) {
     var cover = $('#thirdCover'), wrap = $('#thirdWrap');
@@ -2721,6 +2851,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     pk.p = p;
     applyPeek(p);
     SFX.dragMove(p);
+    ON.sendPeek(p);
     if (p >= 0.58 && !pk.armed) { pk.armed = true; vibrate(12); SFX.tick(); }
     if (e.cancelable) e.preventDefault();
   }
@@ -2732,6 +2863,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     cover.style.transition = 'clip-path .3s ease, transform .3s ease, opacity .3s';
     wrap.style.transition = 'transform .22s ease';
     if (pk.p >= 0.58) { doReveal(false); return; }
+    ON.sendPeek(0);
     cover.style.clipPath = 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%)';
     cover.style.transform = '';
     wrap.style.transform = '';
@@ -2744,6 +2876,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
      ------------------------------------------------------------ */
   function doReveal(isAi) {
     if (!S || S.phase !== 'peek' || revealed || busy) return;
+    if (ON.isOn()) { ON.requestReveal(); return; }
     busy = true;
     revealed = true;
     var cover = $('#thirdCover'), wrap = $('#thirdWrap');
@@ -2805,6 +2938,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
      초기화
      ------------------------------------------------------------ */
   function startGame() {
+    if (ui.mode === 'online') { if (ON.isOn()) show('lobby'); return; }
     S = W.newGame({
       mode: ui.mode,
       ante: ui.ante,
@@ -2816,6 +2950,823 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     show('game');
     paintTurn();
   }
+
+  /* ============================================================
+     🌐 온라인 방 — Supabase Realtime Broadcast(공개 채널) 위의
+        방장 권한(Host-Authoritative) 프로토콜
+
+        · 4자리 방 코드 = 채널 이름(wnb-4829), 초대 링크 = ?room=4829
+        · 방장(Host)만 덱 셔플·카드 배분·턴·판돈을 계산하고 상태 스냅샷을 방송한다.
+        · 각 참여자의 베팅/쪼기 진행도(peekProgress)는 참여자가 직접 방송해
+          다른 화면에서도 같은 애니메이션(쪼기·띡!!·축포·콧물)이 실시간으로 보인다.
+        · 키는 /api/wolnambbong/config 가 서버 환경변수에서 공개용(anon) 키만 내려준다.
+     ============================================================ */
+  var ON = (function () {
+    var st = {
+      on: false, cfg: null, role: '', code: '', rid: '', rev: 0, cid: '', nick: '',
+      hostCid: '', roster: [], started: false, snap: null, third: null,
+      lastRev: 0, lastDoneRev: 0, stageKey: '', ws: null, ref: 0, joinRef: null,
+      joined: false, closed: true, retry: 0, hbTimer: 0, tickTimer: 0,
+      hostSeen: 0, seen: {}, joinTimer: null, remoteDrag: false,
+      pending: '', lastPeekSent: 0, reconnectAt: 0
+    };
+    var AV = ['\uD83D\uDE4B', '\uD83D\uDE3A', '\uD83E\uDD89', '\uD83D\uDC2F', '\uD83D\uDC30', '\uD83D\uDC3C'];
+
+    function $(id) { return document.getElementById(id); }
+    function isHost() { return st.role === 'host'; }
+    function rand4() { return 1000 + Math.floor(Math.random() * 9000); }
+    function ridc() {
+      var s = '';
+      for (var i = 0; i < 8; i++) s += '0123456789abcdef'[(Math.random() * 16) | 0];
+      return s;
+    }
+    function normNick(v) { return String(v == null ? '' : v).replace(/\s+/g, ' ').trim().slice(0, 8); }
+    function nickKey(v) { return normNick(v).toLowerCase(); }
+    function cidOf(i) { return (st.snap && st.snap.players[i]) ? st.snap.players[i].cid : ''; }
+    function myIdx() {
+      if (!st.snap) return -1;
+      for (var i = 0; i < st.snap.players.length; i++) if (st.snap.players[i].cid === st.cid) return i;
+      return -1;
+    }
+
+    /* ---------------- 상태 문구 ---------------- */
+    function setConn(txt) {
+      var b = $('connBar');
+      if (!b) return;
+      if (!txt) { b.style.display = 'none'; b.textContent = ''; return; }
+      b.style.display = 'block';
+      b.textContent = txt;
+    }
+    function hint(txt, bad) {
+      var h = $('onlineHint');
+      if (!h) return;
+      h.textContent = txt || '';
+      h.style.color = bad ? '#ff9489' : '#8fa79b';
+    }
+
+    /* ---------------- 전송 계층(Phoenix v1.0.0 · WebSocket) ----------------
+       Supabase Realtime 은 Phoenix 채널 프로토콜을 쓴다.
+       vsn=1.0.0 은 맵 형식({topic,event,payload,ref})을 쓰고, 응답은 배열/맵 둘 다 올 수 있어
+       수신부는 두 형식을 모두 처리한다. 외부 라이브러리(supabase-js) 없이 표준 WebSocket 만 사용. */
+    function sendRaw(obj) {
+      if (!st.ws || st.ws.readyState !== 1) return false;
+      try { st.ws.send(JSON.stringify(obj)); return true; } catch (e) { return false; }
+    }
+    function topic() { return 'realtime:wnb-' + st.code; }
+    function broadcast(event, payload) {
+      if (!st.joined) return false;
+      return sendRaw({
+        topic: topic(),
+        event: 'broadcast',
+        payload: { type: 'broadcast', event: event, payload: payload },
+        ref: String(++st.ref)
+      });
+    }
+    function joinChannel() {
+      var jr = String(++st.ref);
+      st.joinRef = jr;
+      sendRaw({
+        topic: topic(),
+        event: 'phx_join',
+        payload: {
+          config: {
+            broadcast: { ack: false, self: true },
+            presence: { key: st.cid },
+            postgres_changes: [],
+            private: false
+          },
+          access_token: st.cfg.key
+        },
+        ref: jr
+      });
+      clearInterval(st.hbTimer);
+      st.hbTimer = setInterval(function () {
+        sendRaw({ topic: 'phoenix', event: 'heartbeat', payload: {}, ref: String(++st.ref) });
+      }, 25000);
+    }
+    function connect() {
+      if (!st.cfg || !st.code) return;
+      if (st.ws && (st.ws.readyState === 0 || st.ws.readyState === 1)) return;
+      var base = String(st.cfg.url || '').replace(/\/+$/, '').replace(/^http/, 'ws');
+      var url = base + '/realtime/v1/websocket?apikey=' + encodeURIComponent(st.cfg.key) + '&vsn=1.0.0';
+      var ws;
+      try { ws = new WebSocket(url); } catch (e) { setConn('온라인 연결을 열 수 없습니다'); return; }
+      st.ws = ws;
+      st.joined = false;
+      setConn('연결 중…');
+      ws.onopen = function () { joinChannel(); };
+      ws.onmessage = function (ev) { onWire(ev.data); };
+      ws.onerror = function () {};
+      ws.onclose = function () {
+        st.joined = false;
+        clearInterval(st.hbTimer);
+        st.ws = null;
+        if (st.closed) return;
+        setConn('연결이 끊겼습니다 — 다시 연결 중…');
+        var wait = Math.min(600 * Math.pow(2, st.retry++), 5000);
+        clearTimeout(st.reconnectAt);
+        st.reconnectAt = setTimeout(connect, wait);
+      };
+    }
+    function onWire(raw) {
+      var m;
+      try { m = JSON.parse(raw); } catch (e) { return; }
+      var event = m.event, payload = m.payload;
+      if (Object.prototype.toString.call(m) === '[object Array]') { event = m[3]; payload = m[4]; }
+      if (event === 'phx_reply') {
+        var status = payload && payload.status;
+        if (status === 'ok') {
+          st.joined = true; st.retry = 0; setConn('');
+          onJoined();
+        } else if (!isHost()) {
+          hint('방에 접속하지 못했습니다. 잠시 후 다시 시도해 주세요.', true);
+        }
+        return;
+      }
+      if (event === 'phx_error' || event === 'phx_close') {
+        st.joined = false;
+        if (!st.closed) setConn('연결이 끊겼습니다 — 다시 연결 중…');
+        return;
+      }
+      if (event === 'broadcast') {
+        var p = payload && payload.payload;
+        if (!p) return;
+        onMsg(payload.event, p);
+      }
+    }
+    function onJoined() {
+      if (isHost()) {
+        broadcast('open', { rid: st.rid, code: st.code, hostCid: st.cid, ts: Date.now() });
+        broadcast('roster', { rid: st.rid, list: rosterPub() });
+        if (st.started && S) broadcast('state', { rid: st.rid, snap: snapOf() });
+      } else {
+        sayHello();
+      }
+    }
+    function sayHello() {
+      broadcast('hello', { rid: st.rid, cid: st.cid, nick: st.nick, ts: Date.now() });
+    }
+
+    /* ---------------- 방장: 로스터/입장 ---------------- */
+    function rosterPub() {
+      return st.roster.map(function (r) { return { cid: r.cid, nick: r.nick, av: r.av }; });
+    }
+    function hostHello(d) {
+      if (!isHost() || !d || !d.cid) return;
+      if (d.rid && d.rid !== st.rid) return;              /* 같은 코드의 다른 방 */
+      var nick = normNick(d.nick), i, who = null;
+      for (i = 0; i < st.roster.length; i++) if (st.roster[i].cid === d.cid) who = st.roster[i];
+      if (who) { who.seen = Date.now(); hostWelcome(d.cid); return; }   /* 재접속 */
+      if (st.started) return deny(d.cid, 'started');
+      if (!nick) return deny(d.cid, 'nick');
+      if (st.roster.length >= 6) return deny(d.cid, 'full');
+      for (i = 0; i < st.roster.length; i++) if (nickKey(st.roster[i].nick) === nickKey(nick)) return deny(d.cid, 'dup');
+      st.roster.push({ cid: d.cid, nick: nick, av: AV[st.roster.length % AV.length], seen: Date.now() });
+      broadcast('roster', { rid: st.rid, list: rosterPub() });
+      hostWelcome(d.cid);
+      renderLobby();
+    }
+    function hostWelcome(cid) {
+      broadcast('welcome', {
+        to: cid, rid: st.rid, code: st.code, hostCid: st.cid, started: st.started,
+        list: rosterPub(), ante: ui.ante, ppong: ui.ppong,
+        snap: (st.started && S) ? snapOf() : null,
+        third: (st.started && S && S.phase === 'peek' && cidOf(S.turn) === cid && st.third) ? st.third : null
+      });
+    }
+    function deny(cid, reason) { broadcast('denied', { to: cid, rid: st.rid, reason: reason }); }
+    function hostBye(d) {
+      if (!isHost() || !d || (d.rid && d.rid !== st.rid)) return;
+      for (var i = 0; i < st.roster.length; i++) {
+        if (st.roster[i].cid === d.cid) { st.roster.splice(i, 1); break; }
+      }
+      broadcast('roster', { rid: st.rid, list: rosterPub() });
+      renderLobby();
+    }
+
+    /* ---------------- 스냅샷 ---------------- */
+    function snapOf() {
+      var s = S;
+      return {
+        rid: st.rid, rev: ++st.rev,
+        phase: s.over ? 'over' : s.phase,
+        turn: s.turn, pot: s.pot, deck: s.deck.length, ante: s.ante,
+        ppong: !!s.ppongDouble, hand: s.hand, pair: !!s.pair, noGap: !!s.noGap,
+        bet: s.bet, betKind: s.betKind,
+        board: s.board.map(function (c) { return { month: c.month, variant: c.variant }; }),
+        third: (s.phase === 'result' && s.third) ? { month: s.third.month, variant: s.third.variant } : null,
+        oddsPct: s.phase === 'bet' ? W.odds(s).pct : 0,
+        players: s.players.map(function (p, i) {
+          var r = st.roster[i];
+          return { cid: r ? r.cid : '', name: p.name, av: p.avatar || '\uD83D\uDE4B', chips: p.chips, bankrupt: !!p.bankrupt };
+        }),
+        result: s.phase === 'result' ? s.result : null,
+        over: !!s.over
+      };
+    }
+
+    /* ---------------- 로컬 상태 재구성(모든 클라이언트 공통) ---------------- */
+    function makeLocal(sn) {
+      var players = sn.players.map(function (p, i) {
+        return {
+          i: i, name: p.name, nameEn: p.name, chips: p.chips, bankrupt: !!p.bankrupt,
+          ai: false, avatar: p.av || '\uD83D\uDE4B', style: 'human', cid: p.cid
+        };
+      });
+      var deck = [], k;
+      for (k = 0; k < (sn.deck || 0); k++) deck.push({ id: 'h' + k, month: 0, variant: 0 });
+      return {
+        mode: 'pass', ante: sn.ante, ppongDouble: !!sn.ppong, players: players,
+        turn: sn.turn, pot: sn.pot, deck: deck, rng: Math.random,
+        board: sn.board.map(function (c) { return { id: c.month + '-' + c.variant, month: c.month, variant: c.variant }; }),
+        third: sn.third ? { id: sn.third.month + '-' + sn.third.variant, month: sn.third.month, variant: sn.third.variant } : null,
+        bet: sn.bet, betKind: sn.betKind || 'normal', pair: !!sn.pair, noGap: !!sn.noGap,
+        phase: sn.phase, result: sn.result || null, over: !!sn.over,
+        hand: sn.hand || 0, reshuffles: 0, log: []
+      };
+    }
+
+    function applySnap(sn) {
+      if (!sn) return;
+      if (sn.rid && st.rid && sn.rid !== st.rid) return;
+      if (typeof sn.rev === 'number' && sn.rev <= st.lastRev) return;
+      st.lastRev = sn.rev;
+      st.snap = sn;
+      if (sn.phase === 'bet') st.third = null;
+      S = makeLocal(sn);
+      busy = false;
+      revealed = (sn.phase === 'result');
+      show('game');
+      var badge = $('roomBadge');
+      if (badge) { badge.style.display = 'inline-flex'; badge.innerHTML = '🌐 <b>' + st.code + '</b>'; }
+      renderStatus();
+      renderPlayers();
+      renderBoard();
+      onlineStage(sn);
+      renderActions();
+      onlineMsg(sn);
+    }
+
+    /* ---------------- 화면: 3번째 패(쪼기) ---------------- */
+    function onlineStage(sn) {
+      var key = sn.rev + '|' + sn.phase + '|' + sn.turn;
+      if (st.stageKey === key) return;
+      st.stageKey = key;
+      var cover = $('#thirdCover'), wrap = $('#thirdWrap');
+      var me = myIdx();
+      if (sn.phase === 'bet' || sn.phase === 'over') { resetThird(); return; }
+      if (sn.phase === 'peek') {
+        cover.className = 'cover';
+        cover.style.clipPath = ''; cover.style.transform = ''; cover.style.opacity = ''; cover.style.transition = '';
+        cover.innerHTML = W.backSVG();
+        var face = (sn.turn === me && st.third) ? st.third : null;
+        $('#thirdFace').innerHTML = face ? W.faceSVG(face) : '';
+        wrap.classList.remove('pop', 'shake');
+        wrap.style.transform = '';
+        $('#peekHint').style.display = (sn.turn === me) ? 'flex' : 'none';
+        return;
+      }
+      if (sn.phase === 'result') {
+        $('#thirdFace').innerHTML = sn.third ? W.faceSVG(sn.third) : '';
+        cover.innerHTML = '';
+        cover.classList.add('off');
+        $('#peekHint').style.display = 'none';
+      }
+    }
+
+    /* ---------------- 화면: 문구/액션 ---------------- */
+    function onlineMsg(sn) {
+      var me = myIdx(), p = sn.players[sn.turn] || sn.players[0];
+      if (sn.over) {
+        var alive = sn.players.filter(function (x) { return !x.bankrupt; });
+        var w = alive[0];
+        if (w) renderMsg('win', '🏆 ' + t('winner') + ': ' + (w.av || '') + ' ' + w.name, fmt(w.chips) + ' ' + t('chipsLeft'));
+        else renderMsg('lose', t('over'), t('gameOverSub'));
+        return;
+      }
+      if (sn.phase === 'bet') {
+        if (sn.turn === me) {
+          var L = W.betLimits(S);
+          renderMsg('', '👆 ' + (ui.lang === 'en' ? 'Your turn — call or pass' : '내 차례 — 걸기 / 패스'),
+            t('ante') + ' ' + sn.ante + ' · ' + t('max') + ' ' + fmt(L.max));
+        } else {
+          renderMsg('ai', (p.av || '') + ' ' + p.name + ' · ' + t('turn'), t('thinking') + '…');
+        }
+        return;
+      }
+      if (sn.phase === 'peek') {
+        if (sn.turn === me) renderMsg('', '👆 ' + t('myPeek'), t('peekHint'));
+        else renderMsg('ai', (p.av || '') + ' ' + p.name + ' — ' + t('peeking') + '…', t('bet') + ' ' + fmt(sn.bet));
+      }
+    }
+
+    function onlineActions(A) {
+      var sn = st.snap;
+      if (!sn) { A.innerHTML = ''; return; }
+      var me = myIdx();
+      if (sn.over) {
+        A.innerHTML = '<button class="go wide" id="againBtn">' + (isHost() ? t('restartBtn') : t('leave')) + '</button>';
+        var ab = $('againBtn');
+        if (ab) ab.onclick = function () { if (isHost()) hostRestart(); else leave(true); };
+        return;
+      }
+      if (sn.phase === 'bet') {
+        if (sn.turn === me) { A.innerHTML = buildBetUI(); bindOnlineBet(); }
+        else {
+          var p = sn.players[sn.turn];
+          A.innerHTML = '<div class="thinking">' + (p.av || '') + ' ' + p.name +
+            ' <span class="dots"><i></i><i></i><i></i></span> ' + t('thinking') + '</div>';
+        }
+        return;
+      }
+      if (sn.phase === 'peek') {
+        if (sn.turn === me) {
+          A.innerHTML = '<button class="mini" id="quickBtn">⚡ ' + t('quick') + '</button>';
+          var qb = $('quickBtn');
+          if (qb) qb.onclick = function () { doReveal(false); };
+        } else {
+          var p2 = sn.players[sn.turn];
+          A.innerHTML = '<div class="thinking">' + (p2.av || '') + ' ' + p2.name +
+            ' <span class="dots"><i></i><i></i><i></i></span> ' + t('peeking') + '</div>';
+        }
+        return;
+      }
+      if (sn.phase === 'result') {
+        if (isHost()) {
+          A.innerHTML = '<button class="go wide" id="nextBtn">' + t('next') + ' →</button>';
+          var nb = $('nextBtn');
+          if (nb) nb.onclick = function () { hostNext(); };
+        } else {
+          A.innerHTML = '<div class="thinking">' + (ui.lang === 'en' ? 'Waiting for the host…' : '방장이 다음 판을 준비 중…') + '</div>';
+        }
+      }
+    }
+
+    function bindOnlineBet() {
+      var chips = document.querySelectorAll('#actions .chip[data-amt]');
+      for (var i = 0; i < chips.length; i++) {
+        chips[i].onclick = function () { ui.sel = +this.getAttribute('data-amt'); renderActions(); };
+      }
+      var L = W.betLimits(S);
+      var pb = $('passBtn');
+      if (pb) pb.onclick = function () { if (busy) return; VOICE.pass(); act('pass', 0); };
+      var bb = $('betBtn');
+      if (bb) bb.onclick = function () {
+        if (busy) return;
+        VOICE.action(ui.sel >= L.max ? 'allin' : 'call');
+        act('bet', ui.sel);
+      };
+      var nb = $('ngBtn');
+      if (nb) nb.onclick = function () { if (busy) return; VOICE.call(); act('nogap', 0); };
+    }
+
+    /* ---------------- 베팅/쪼기/공개 ---------------- */
+    function act(kind, amount) {
+      if (!st.snap || st.snap.phase !== 'bet' || st.snap.turn !== myIdx() || busy) return;
+      busy = true;
+      var m = { rid: st.rid, cid: st.cid, kind: kind, amount: amount || 0, rev: st.snap.rev };
+      renderMsg('', '⏳ ' + (ui.lang === 'en' ? 'Sent…' : '전송 중…'), '');
+      if (isHost()) hostAct(m); else broadcast('act', m);
+      setTimeout(function () { busy = false; }, 2500);
+    }
+    function hostAct(m) {
+      if (!S || S.phase !== 'bet' || cidOf(S.turn) !== m.cid) return;
+      var r;
+      if (m.kind === 'pass') r = W.fold(S);
+      else if (m.kind === 'nogap') r = W.placeNoGapBet(S);
+      else r = W.placeBet(S, m.amount);
+      if (!r || !r.ok) return;
+      st.third = S.third ? { month: S.third.month, variant: S.third.variant } : null;
+      pushState(m.cid);
+    }
+    function pushState(actorCid) {
+      var sn = snapOf();
+      broadcast('state', { rid: st.rid, snap: sn });
+      if (actorCid && st.third && sn.phase === 'peek') {
+        broadcast('third', { rid: st.rid, to: actorCid, card: st.third, rev: sn.rev });
+      }
+      applySnap(sn);
+    }
+    function sendPeek(p) {
+      if (!st.snap || st.snap.phase !== 'peek' || st.snap.turn !== myIdx()) return;
+      var now = Date.now(), end = p <= 0;
+      if (!end && now - st.lastPeekSent < 45) return;
+      st.lastPeekSent = now;
+      broadcast('peek', { rid: st.rid, cid: st.cid, p: end ? 0 : Math.round(p * 100) / 100 });
+    }
+    function requestReveal() {
+      if (!st.snap || st.snap.phase !== 'peek' || st.snap.turn !== myIdx()) return;
+      broadcast('rev', { rid: st.rid, cid: st.cid });
+      if (isHost()) hostReveal({ rid: st.rid, cid: st.cid });
+    }
+    function hostReveal(d) {
+      if (!isHost() || !S || S.phase !== 'peek') return;
+      if (d.rid && d.rid !== st.rid) return;
+      if (cidOf(S.turn) !== d.cid) return;
+      var res = W.reveal(S);
+      if (!res) return;
+      SFX.dragStop(0.03);
+      var sn = snapOf();
+      broadcast('done', { rid: st.rid, snap: sn, result: res, by: d.cid });
+      doneApply(sn, res);
+    }
+    function doneApply(sn, res) {
+      if (st.lastDoneRev === sn.rev) return;
+      st.lastDoneRev = sn.rev;
+      if (sn.rev > st.lastRev) applySnap(sn);
+      revealed = true;
+      revealFx(res);
+    }
+    function hostNext() {
+      if (!isHost() || !S) return;
+      if (S.over) { hostRestart(); return; }
+      var r = W.continueGame(S);
+      if (!r.ok) return;
+      st.third = null;
+      pushState('');
+    }
+
+    /* ---------------- 공개 연출(모든 화면 공통) ---------------- */
+    function revealFx(res) {
+      var cover = $('#thirdCover'), wrap = $('#thirdWrap');
+      cover.style.clipPath = '';
+      cover.style.transform = '';
+      cover.style.transition = '';
+      cover.classList.add('off');
+      cover.innerHTML = '';
+      wrap.classList.remove('shake');
+      wrap.classList.add('pop');
+      $('#peekHint').style.display = 'none';
+      SFX.dragStop(0.03);
+      SFX.snap(1);
+      var win = (res.type === 'win' || res.type === 'ppongWin');
+      if (win) { confetti(); vibrate([30, 40, 70]); }
+      else if (res.type === 'lose' || res.type === 'ppong' || res.type === 'ppongLose') vibrate([20, 60, 20]);
+      renderStatus();
+      renderPlayers();
+      setTimeout(function () {
+        if (win) SFX.win(); else SFX.lose();
+        var p = S.players[res.turn] || S.players[0];
+        var nm = (p.avatar || '') + ' ' + pName(p);
+        var react = '';
+        var nxt = S.players[(res.turn + 1) % S.players.length];
+        if (res.type === 'fold') {
+          renderMsg('', '🙅 ' + nm + ' — ' + t('fold'), t('passHint') + ' · ' + t('pot') + ' ' + fmt(S.pot));
+        } else if (win) {
+          var others = S.players.filter(function (x, i) { return i !== res.turn; })
+            .map(function (x) { return x.avatar + ' ' + pName(x) + ' 🤧'; }).join('  ');
+          if (others) react = '<div class="react"><span>' + t('others') + ': ' + others + ' — ' + t('scooped') + '</span></div>';
+          renderMsg('win', '🎉 ' + t('win') + ' +' + fmt(res.delta),
+            nm + ' · ' + monthLabel(res.m) + ' — ' + (res.type === 'ppongWin' ? t('ppongWin') : t('winSub')) + react);
+        } else if (res.type === 'ppong' || res.type === 'ppongLose') {
+          react = '<div class="react"><span>🔥 ' + t('potUp') + ' · ' + (nxt.avatar || '') + ' ' + pName(nxt) + '</span></div>';
+          renderMsg('ppong', '🤧 ' + t('ppong') + ' −' + fmt(-res.delta),
+            nm + ' · ' + monthLabel(res.m) + ' — ' + t('ppongSub') + ' · ' + t('pot') + ' ' + fmt(S.pot) + react);
+          snot($('#thirdWrap'));
+          potUp();
+        } else {
+          react = '<div class="react"><span>🔥 ' + t('potUp') + ' · ' + (nxt.avatar || '') + ' ' + pName(nxt) + '</span></div>';
+          renderMsg('lose', '🤧 ' + t('lose') + ' −' + fmt(-res.delta),
+            nm + ' · ' + monthLabel(res.m) + ' — ' + t('loseSub') + ' · ' + t('pot') + ' ' + fmt(S.pot) + react);
+          snot($('#thirdWrap'));
+          potUp();
+        }
+        renderStatus();
+        renderPlayers();
+        renderActions();
+      }, 420);
+    }
+
+    /* ---------------- 메시지 라우팅 ---------------- */
+    function onMsg(ev, d) {
+      if (!d) return;
+      if (d.rid && st.rid && d.rid !== st.rid) return;
+      if (d.to && d.to !== st.cid) return;
+      switch (ev) {
+        case 'open':
+          if (!isHost()) { st.hostSeen = Date.now(); if (st.pending === 'join' && !st.rid) sayHello(); }
+          break;
+        case 'hello':
+          hostHello(d);
+          break;
+        case 'welcome':
+          if (!isHost()) guestWelcome(d);
+          break;
+        case 'denied':
+          if (!isHost()) guestDenied(d);
+          break;
+        case 'roster':
+          if (!isHost() && d.list) {
+            st.roster = d.list;
+            if (st.snap) {
+              st.snap.players.forEach(function (p, i) { if (d.list[i]) { p.av = d.list[i].av; p.name = d.list[i].nick; } });
+              if (S && S.players) S.players.forEach(function (p, i) { if (d.list[i]) { p.avatar = d.list[i].av; p.name = d.list[i].nick; } });
+            }
+            renderLobby();
+          }
+          break;
+        case 'state':
+          if (!isHost()) applySnap(d.snap);
+          break;
+        case 'third':
+          if (d.card) {
+            st.third = d.card;
+            if (st.snap && st.snap.phase === 'peek') { st.stageKey = ''; onlineStage(st.snap); }
+          }
+          break;
+        case 'act':
+          if (d.cid === st.cid) break;
+          var lim = (S ? W.betLimits(S).max : 0);
+          VOICE.action(d.kind === 'pass' ? 'pass' : (d.amount >= lim && lim > 0 ? 'allin' : 'call'));
+          if (isHost()) hostAct(d);
+          break;
+        case 'peek':
+          remotePeek(d);
+          break;
+        case 'rev':
+          hostReveal(d);
+          break;
+        case 'done':
+          if (!isHost() && d.snap && d.result) doneApply(d.snap, d.result);
+          break;
+        case 'hb':
+          if (d.cid === st.hostCid || d.host) st.hostSeen = Date.now();
+          st.seen[d.cid] = Date.now();
+          break;
+        case 'bye':
+          hostBye(d);
+          break;
+        case 'reset':
+          if (!isHost()) {
+            st.started = false; st.snap = null; st.lastRev = 0; st.third = null; S = null;
+            show('lobby'); renderLobby();
+          }
+          break;
+        case 'closed':
+          if (!isHost()) guestClosed();
+          break;
+      }
+    }
+
+    function remotePeek(d) {
+      if (!st.snap || st.snap.phase !== 'peek') return;
+      if (!d.cid || d.cid === st.cid) return;
+      if (cidOf(st.snap.turn) !== d.cid) return;
+      if (!d.p) {
+        if (st.remoteDrag) { st.remoteDrag = false; SFX.dragStop(0.04); applyPeek(0); }
+        return;
+      }
+      if (!st.remoteDrag) {
+        st.remoteDrag = true;
+        SFX.dragStart();
+        $('#thirdCover').style.transition = 'none';
+        $('#thirdWrap').style.transition = 'none';
+      }
+      applyPeek(d.p);
+      SFX.dragMove(d.p);
+    }
+
+    /* ---------------- 손님 측 처리 ---------------- */
+    function guestWelcome(d) {
+      if (d.rid) st.rid = d.rid;
+      st.hostCid = d.hostCid || st.hostCid;
+      st.started = !!d.started;
+      if (d.list) st.roster = d.list;
+      clearInterval(st.joinTimer); st.joinTimer = null;
+      setConn('');
+      if (d.ante) ui.ante = d.ante;
+      if (typeof d.ppong === 'boolean') ui.ppong = d.ppong;
+      if (d.third) st.third = d.third;
+      if (d.snap) { applySnap(d.snap); show('game'); }
+      else { show('lobby'); renderLobby(); }
+      st.hostSeen = Date.now();
+    }
+    function guestDenied(d) {
+      var msg = d.reason === 'dup' ? (ui.lang === 'en' ? 'That nickname is taken.' : '이미 사용 중인 닉네임입니다.')
+        : d.reason === 'full' ? (ui.lang === 'en' ? 'Room is full (max 6).' : '방이 가득 찼습니다 (최대 6인).')
+          : d.reason === 'started' ? (ui.lang === 'en' ? 'The game already started.' : '이미 게임이 시작된 방입니다.')
+            : d.reason === 'nick' ? (ui.lang === 'en' ? 'Enter a nickname.' : '닉네임을 입력해 주세요.')
+              : (ui.lang === 'en' ? 'Could not join.' : '입장할 수 없습니다.');
+      leave(false);
+      hint(msg, true);
+    }
+    function guestClosed() {
+      leave(false);
+      hint(ui.lang === 'en' ? 'The host left the room.' : '방장이 방을 닫았습니다.', true);
+    }
+
+    /* ---------------- 대기실 ---------------- */
+    function esc(v) {
+      return String(v == null ? '' : v).replace(/[&<>"']/g, function (c) {
+        return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c];
+      });
+    }
+    function renderLobby() {
+      var list = $('lobbyList'), code = $('roomCode');
+      if (code) code.textContent = st.code || '----';
+      if (!list) return;
+      var rows = '';
+      st.roster.forEach(function (r) {
+        var isH = isHost() ? (r.cid === st.cid) : (r.cid === st.hostCid);
+        rows += '<div class="lp' + (isH ? ' host' : '') + '"><span class="av">' + r.av + '</span><span>' +
+          esc(r.nick) + (r.cid === st.cid ? ' <b class="me">' + (ui.lang === 'en' ? 'you' : '나') + '</b>' : '') +
+          '</span>' + (isH ? '<span class="tag2">' + (ui.lang === 'en' ? 'HOST' : '방장') + '</span>' : '') + '</div>';
+      });
+      list.innerHTML = rows || '<p class="lhint">' + (ui.lang === 'en' ? 'Waiting for players…' : '참가자를 기다리는 중…') + '</p>';
+      var sb = $('hostStartBtn');
+      if (sb) {
+        if (isHost()) {
+          sb.style.display = '';
+          sb.disabled = st.roster.length < 2;
+          sb.textContent = (ui.lang === 'en' ? 'START' : '게임 시작') + ' (' + st.roster.length + '/6)';
+        } else { sb.style.display = 'none'; }
+      }
+      var sh = $('shareRow'); if (sh) sh.style.display = isHost() ? '' : 'none';
+      var w = $('lobbyWait'); if (w) w.style.display = isHost() ? 'none' : '';
+    }
+    function shareLink() {
+      return location.origin + '/wolnambbong.html?room=' + st.code;
+    }
+
+    /* ---------------- 방 만들기 / 입장 / 나가기 ---------------- */
+    function ensureCfg(cb) {
+      if (st.cfg) return cb(true);
+      setConn('온라인 설정 확인 중…');
+      fetch('/api/wolnambbong/config', { cache: 'no-store' })
+        .then(function (r) { return r.json(); })
+        .then(function (j) {
+          if (!j || !j.configured) { setConn(''); hint('온라인 방을 사용할 수 없습니다(서버 설정 없음).', true); cb(false); return; }
+          st.cfg = { url: j.url, key: j.key };
+          setConn('');
+          cb(true);
+        })
+        .catch(function () { setConn(''); hint('온라인 설정을 불러오지 못했습니다.', true); cb(false); });
+    }
+    function nickOrWarn() {
+      var inp = $('nickInput');
+      var v = normNick(inp ? inp.value : '');
+      if (!v) {
+        hint(ui.lang === 'en' ? 'Enter a nickname first.' : '닉네임을 먼저 입력해 주세요.', true);
+        if (inp) inp.focus();
+        return '';
+      }
+      try { localStorage.setItem('wnb.nick', v); } catch (e) {}
+      return v;
+    }
+    function create() {
+      var nick = nickOrWarn(); if (!nick) return;
+      ensureCfg(function (ok) {
+        if (!ok) return;
+        reset(true);
+        st.on = true; st.role = 'host'; st.nick = nick; st.pending = 'create';
+        st.code = String(rand4()); st.rid = ridc();
+        st.roster = [{ cid: st.cid, nick: nick, av: AV[0], seen: Date.now() }];
+        st.started = false; st.closed = false;
+        show('lobby'); renderLobby();
+        connect();
+      });
+    }
+    function join() {
+      var nick = nickOrWarn(); if (!nick) return;
+      var ci = $('codeInput');
+      var code = String(ci ? ci.value : '').replace(/[^0-9]/g, '');
+      if (code.length !== 4) {
+        hint(ui.lang === 'en' ? 'Enter the 4-digit room code.' : '4자리 방 코드를 입력해 주세요.', true);
+        return;
+      }
+      ensureCfg(function (ok) {
+        if (!ok) return;
+        reset(true);
+        st.on = true; st.role = 'guest'; st.nick = nick; st.pending = 'join';
+        st.code = code; st.rid = ''; st.closed = false;
+        show('lobby'); renderLobby();
+        connect();
+        clearInterval(st.joinTimer);
+        var tries = 0;
+        st.joinTimer = setInterval(function () {
+          if (st.joined) sayHello();
+          tries++;
+          if (tries >= 3) {
+            clearInterval(st.joinTimer); st.joinTimer = null;
+            if (!st.rid) {
+              leave(false);
+              hint(ui.lang === 'en' ? 'Room not found — check the code.' : '방을 찾을 수 없습니다 — 코드를 확인해 주세요.', true);
+            }
+          }
+        }, 2200);
+      });
+    }
+    function hostStart() {
+      if (!isHost() || st.roster.length < 2) return;
+      var names = st.roster.map(function (r) { return r.nick; });
+      S = W.newGame({ mode: 'pass', ante: ui.ante, ppongDouble: ui.ppong, count: names.length, names: names, rng: Math.random });
+      st.started = true; st.snap = null; st.lastRev = 0; st.third = null;
+      var sn = snapOf();
+      broadcast('state', { rid: st.rid, snap: sn });
+      applySnap(sn);
+    }
+    function hostRestart() {
+      if (!isHost()) return;
+      st.started = false; S = null; st.snap = null; st.lastRev = 0; st.third = null;
+      broadcast('reset', { rid: st.rid });
+      show('lobby'); renderLobby();
+    }
+    function reset(keepCfg) {
+      try { if (st.ws) st.ws.close(); } catch (e) {}
+      clearInterval(st.hbTimer); clearInterval(st.tickTimer); clearInterval(st.joinTimer);
+      st.on = false; st.ws = null; st.joined = false; st.closed = true;
+      st.code = ''; st.rid = ''; st.role = ''; st.roster = []; st.started = false;
+      st.snap = null; st.third = null; st.lastRev = 0; st.lastDoneRev = 0; st.stageKey = '';
+      st.hostCid = ''; st.retry = 0; st.remoteDrag = false; st.rev = 0;
+      setConn('');
+      if (!keepCfg) st.cfg = null;
+    }
+    function leave(withBye) {
+      if (withBye && st.joined) {
+        if (isHost()) broadcast('closed', { rid: st.rid, reason: 'host-left' });
+        else broadcast('bye', { rid: st.rid, cid: st.cid });
+      }
+      reset(true);
+      st.pending = '';
+      S = null;
+      show('setup');
+      ui.mode = 'online';
+      applyStatic();
+    }
+
+    /* ---------------- 하트비트/감시 ---------------- */
+    function startTicker() {
+      if (st.tickTimer) return;
+      st.tickTimer = setInterval(function () {
+        if (!st.on) return;
+        var now = Date.now();
+        if (st.joined) broadcast('hb', { rid: st.rid, cid: st.cid, host: isHost() });
+        if (isHost() && !st.started) {
+          var changed = false;
+          for (var i = st.roster.length - 1; i >= 0; i--) {
+            if (st.roster[i].cid !== st.cid && now - (st.roster[i].seen || 0) > 20000) { st.roster.splice(i, 1); changed = true; }
+          }
+          if (changed) { broadcast('roster', { rid: st.rid, list: rosterPub() }); renderLobby(); }
+        }
+        if (!isHost() && st.hostSeen && now - st.hostSeen > 16000) {
+          setConn(ui.lang === 'en' ? 'Waiting for the host to reconnect…' : '방장 연결을 기다리는 중…');
+        }
+      }, 5000);
+    }
+
+    /* ---------------- 초기화 ---------------- */
+    function prepare() {
+      if (st.cid) { st.on = true; startTicker(); return; }
+      var cid = '';
+      try { cid = sessionStorage.getItem('wnb.cid') || ''; } catch (e) {}
+      if (!cid) {
+        cid = ridc() + ridc();
+        try { sessionStorage.setItem('wnb.cid', cid); } catch (e) {}
+      }
+      st.cid = cid;
+      var nk = '';
+      try { nk = localStorage.getItem('wnb.nick') || ''; } catch (e) {}
+      if (nk && $('nickInput') && !$('nickInput').value) $('nickInput').value = nk;
+      var q = '';
+      try { q = new URLSearchParams(location.search).get('room') || ''; } catch (e) {}
+      if (/^\d{4}$/.test(q)) {
+        if ($('codeInput')) $('codeInput').value = q;
+        if (!nk && $('nickInput')) $('nickInput').focus();
+        hint(ui.lang === 'en' ? 'Invite link — enter a nickname and press Join.' : '초대 링크로 접속했습니다. 닉네임을 넣고 [입장]을 눌러 주세요.');
+      }
+      st.on = true;
+      startTicker();
+    }
+    function isOn() { return !!(st.on && st.pending); }
+    function canPeek() {
+      return !!(st.snap && st.snap.phase === 'peek' && st.snap.turn === myIdx() && !busy && !revealed);
+    }
+    function share() {
+      var link = shareLink();
+      var done = function () { hint((ui.lang === 'en' ? 'Link copied: ' : '초대 링크 복사됨: ') + link); };
+      try {
+        if (navigator.share) {
+          navigator.share({ title: '월남뽕 · 온라인 방 ' + st.code, text: (ui.lang === 'en' ? 'Join my Wol-nam-bbong room: ' : '월남뽕 온라인 방에 들어와: '), url: link }).catch(function () {});
+          return;
+        }
+      } catch (e) {}
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(link).then(done, function () { hint(link); });
+          return;
+        }
+      } catch (e) {}
+      hint(link);
+    }
+
+    return {
+      prepare: prepare, isOn: isOn, isHost: isHost, canPeek: canPeek,
+      create: create, join: join, leave: leave, hostStart: hostStart, hostRestart: hostRestart,
+      hostNext: hostNext, share: share, sendPeek: sendPeek, requestReveal: requestReveal,
+      renderLobby: renderLobby, onlineActions: onlineActions, revealFx: revealFx,
+      applySnap: applySnap, state: function () { return st; }
+    };
+  })();
 
   function bind() {
     $('#langBtn').onclick = function () {
@@ -2834,7 +3785,13 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       applyStatic();
     };
     document.querySelectorAll('.mode').forEach(function (b) {
-      b.onclick = function () { ui.mode = b.getAttribute('data-mode'); applyStatic(); };
+      b.onclick = function () {
+        var next = b.getAttribute('data-mode');
+        if (ui.mode === 'online' && next !== 'online') ON.leave(false);
+        ui.mode = next;
+        applyStatic();
+        if (next === 'online') ON.prepare();
+      };
     });
     $('#minus').onclick = function () { ui.count = Math.max(2, ui.count - 1); applyStatic(); };
     $('#plus').onclick = function () { ui.count = Math.min(6, ui.count + 1); applyStatic(); };
@@ -2842,6 +3799,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
 
     $('#sfxBtn').onclick = function () {
       SFX.setOn(!SFX.isOn());
+      VOICE.setOn(SFX.isOn());
       var b = $('#sfxBtn');
       b.textContent = SFX.isOn() ? '🔊' : '🔇';
       b.title = SFX.isOn() ? '소리 켜짐' : '소리 꺼짐';
@@ -2859,6 +3817,25 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     w.addEventListener('pointercancel', peekUp);
     w.addEventListener('pointerleave', function (e) { if (pk.on) peekUp(e); });
     w.addEventListener('touchstart', function (e) {}, { passive: true });
+
+    /* ---- 온라인 방 ---- */
+    var cbtn = $('#createBtn');
+    if (cbtn) cbtn.onclick = function () { ON.create(); };
+    var jbtn = $('#joinBtn');
+    if (jbtn) jbtn.onclick = function () { ON.join(); };
+    var sbtn = $('#shareBtn');
+    if (sbtn) sbtn.onclick = function () { ON.share(); };
+    var lbtn = $('#leaveBtn');
+    if (lbtn) lbtn.onclick = function () { ON.leave(true); };
+    var hs = $('#hostStartBtn');
+    if (hs) hs.onclick = function () { ON.hostStart(); };
+    var ci = $('#codeInput');
+    if (ci) {
+      ci.oninput = function () { this.value = String(this.value).replace(/[^0-9]/g, '').slice(0, 4); };
+      ci.onkeydown = function (e) { if (e.key === 'Enter') ON.join(); };
+    }
+    var ni = $('#nickInput');
+    if (ni) ni.onkeydown = function (e) { if (e.key === 'Enter') { if ($('#codeInput') && $('#codeInput').value.length === 4) ON.join(); else ON.create(); } };
   }
 
   fxInit();
