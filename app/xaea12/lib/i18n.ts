@@ -1240,7 +1240,7 @@ export const UI = {
     'Main sekarang →',
   ],
   gameNote: [
-    '혼자 하기 · AI 배토(2~4인) · 오프라인 모임(2~6인). 판 기록은 이 브라우저에만 남습니다.',
+    '혼자 하기 · AI 배틀(2~4인) · 오프라인 모임(2~6인). 판 기록은 이 브라우저에만 남습니다.',
     'Solo · AI battle (2–4) · offline pass-and-play (2–6). Play records stay in this browser.',
     '单人 · AI 对战(2~4人) · 面对面传牌(2~6人)。对局记录仅保存在此浏览器。',
     'ひとり · AI対戦(2〜4人) · 対面パス(2〜6人)。記録はこのブラウザにのみ保存されます。',

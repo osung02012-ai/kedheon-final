@@ -24,23 +24,32 @@ body{
 #app{
   position:relative;width:100%;max-width:430px;height:100vh;height:100dvh;
   display:flex;flex-direction:column;
-  padding:calc(4px + env(safe-area-inset-top)) 12px calc(6px + env(safe-area-inset-bottom));
+  padding:calc(7px + env(safe-area-inset-top)) 12px calc(6px + env(safe-area-inset-bottom));
   background:radial-gradient(120% 70% at 50% 0%,#0f3b2e 0%,#082319 55%,#04120e 100%);
   overflow:hidden;
 }
 /* ---------- top bar ---------- */
-.top{display:flex;align-items:center;justify-content:space-between;padding:2px 2px 4px;flex:0 0 auto}
-.brand{display:flex;flex-direction:column;line-height:1}
+.top{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:2px 2px 4px;flex:0 0 auto}
+.brand{display:flex;flex-direction:column;line-height:1;min-width:0}
+.brand b,.brand span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .brand b{font-size:17px;font-weight:900;letter-spacing:2.5px;color:#f8f1e0}
 .brand span{font-size:8px;letter-spacing:2.2px;color:var(--gold);margin-top:3px;opacity:.85}
-.tools{display:flex;gap:6px}
+.tools{display:flex;gap:6px;flex:0 0 auto}
 .tbtn{
   border:1px solid rgba(230,195,124,.42);background:rgba(255,255,255,.05);color:#f6eeda;
   font-size:11px;font-weight:800;padding:6px 10px;border-radius:999px;letter-spacing:.6px;
   font-family:inherit;cursor:pointer;transition:transform .12s,background .15s;
 }
 .tbtn:active{transform:scale(.94);background:rgba(255,255,255,.12)}
-.tbtn.back{font-size:10px;padding:6px 8px;letter-spacing:0;text-decoration:none;display:inline-flex;align-items:center;opacity:.82}
+.tbtn.back{font-size:10px;padding:6px 8px;letter-spacing:0;text-decoration:none;display:inline-flex;align-items:center;gap:3px;opacity:.82}
+/* 좁은 화면(Pi Browser·360px 대) — 복귀 링크는 ← 기호만, 브랜드 부제는 축소 */
+@media (max-width:400px){
+  .tbtn.back .lbl{display:none}
+  .tbtn.back{padding:6px 7px}
+  .brand b{font-size:15px;letter-spacing:1.8px}
+  .brand span{font-size:7px;letter-spacing:1px}
+  .hero h1{font-size:21px;letter-spacing:4px}
+}
 /* ---------- screens ---------- */
 .screen{display:none;flex:1 1 auto;min-height:0;flex-direction:column;gap:7px}
 .screen.on{display:flex}
@@ -266,7 +275,7 @@ body{
   <header class="top">
     <div class="brand"><b id="brandTitle">월남뽕</b><span id="brandSub">K-HWATU BETWEEN · 48 HANAFUDA</span></div>
     <div class="tools">
-      <a class="tbtn back" href="/xaea12" title="XAEA12">&#8592; XAEA12</a>
+      <a class="tbtn back" href="/xaea12" title="XAEA12" aria-label="XAEA12"><span aria-hidden="true">&#8592;</span><span class="lbl">XAEA12</span></a>
       <button class="tbtn" id="sfxBtn" aria-label="sound" title="소리">🔊</button>
       <button class="tbtn" id="langBtn">EN</button>
       <button class="tbtn" id="gearBtn">&#9881;</button>
