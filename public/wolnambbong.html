@@ -2192,7 +2192,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       rulesText: '두 장 사이(예: 2와 10 사이 3~9)에 세 번째 패가 들어오면 판돈에서 건 만큼 획득. 경계와 같거나 바깥이면 건 만큼 판돈으로. 땡(2·2)이면 업/다운을 골라 걸고, 높은 숫자(업)·낮은 숫자(다운)가 나오면 건 만큼 획득 — 같은 숫자가 나오면 패배. 패스하면 앤티만 잃고, 전원 패스가 두 바퀴 이어지면 모두 앤티를 다시 겁니다.',
       pot: '판돈', deck: '덱', pass: '패스', bet: '걸기', quick: '바로 까기',
       potLabel: '쌓인 머니', potShort: 'POT',
-      chips: '시작 머니', half: '하프', allin: '올인',
+      chips: '시작 머니', half: '하프', allin: '올인', quickBet: '퀵',
       pairTag: '땡', pairMsg: '업 / 다운을 골라 거세요', pairSub: '같은 숫자가 나오면 업·다운 모두 패배',
       up: '업', down: '다운', upHint: '높은 숫자', downHint: '낮은 숫자',
       pairWin: '적중!', pairLose: '빗나감', tie: '같은 숫자',
@@ -2235,7 +2235,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       rulesText: 'If the third card lands between the two (e.g. 2–10 → 3~9) you win your bet from the pot. Same as either edge or outside, your bet goes in. On a PAIR (2·2) pick UP or DOWN, then a higher (UP) or lower (DOWN) card pays your bet — the same number loses. Pass and you only lose the ante; two full passes in a row and everyone re-antes.',
       pot: 'POT', deck: 'DECK', pass: 'PASS', bet: 'BET', quick: 'Reveal',
       potLabel: 'POT', potShort: 'POT',
-      chips: 'START CHIPS', half: 'HALF', allin: 'ALL IN',
+      chips: 'START CHIPS', half: 'HALF', allin: 'ALL IN', quickBet: 'QUICK',
       pairTag: 'PAIR', pairMsg: 'pick UP or DOWN', pairSub: 'the same number loses either way',
       up: 'UP', down: 'DOWN', upHint: 'higher', downHint: 'lower',
       pairWin: 'side hit', pairLose: 'side missed', tie: 'same number',
@@ -2942,13 +2942,15 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     var opts = [];
     function opt(v, lbl) {
       v = Math.max(L.min, Math.min(L.max, Math.round(v / 1000) * 1000));
+      var lab = (v === L.max) ? (L.max === S.pot ? t('ado') : t('allin')) : lbl;
       for (var k = 0; k < opts.length; k++) if (opts[k].v === v) return;
-      opts.push({ v: v, l: lbl });
+      opts.push({ v: v, l: lab });
     }
     opt(L.min, t('min'));
-    opt(5000, '+' + fmt(5000));
-    opt(Math.round((S.pot * 0.5) / 1000) * 1000, t('half'));
-    opt(L.max, L.max === S.pot ? t('ado') : t('allin'));
+    opt(5000, t('quickBet'));
+    opt(round1k(S.pot * 0.5), t('half'));
+    opt(L.max, t('allin'));
+    opts.sort(function (a, b) { return a.v - b.v; });
     ui.sel = clamp(ui.sel || L.min, L.min, Math.max(L.min, L.max));
     var hasSel = false;
     for (var h = 0; h < opts.length; h++) if (opts[h].v === ui.sel) hasSel = true;
