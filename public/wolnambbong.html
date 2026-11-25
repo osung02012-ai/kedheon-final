@@ -3630,8 +3630,8 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
         return;
       }
       if (sn.phase === 'peek') {
-        if (sn.turn === me) renderMsg('', '👆 ' + t('myPeek'), t('peekHint'));
-        else renderMsg('ai', (p.av || '') + ' ' + p.name + ' — ' + t('peeking') + '…', t('bet') + ' ' + fmt(sn.bet));
+        if (sn.turn === me) renderMsg('', '👆 ' + t('myPeek'), (sn.pairDir ? sideLabel(sn.pairDir) + ' · ' : '') + t('peekHint'));
+        else renderMsg('ai', (p.av || '') + ' ' + p.name + ' — ' + t('peeking') + '…', t('bet') + ' ' + fmt(sn.bet) + (sn.pairDir ? ' · ' + sideLabel(sn.pairDir) : ''));
       }
     }
 
