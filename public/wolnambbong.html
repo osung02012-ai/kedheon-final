@@ -127,14 +127,26 @@ body{
 .connbar{position:absolute;left:0;right:0;top:0;padding:5px 8px;font-size:9.5px;text-align:center;background:rgba(120,24,18,.94);color:#fff;z-index:30;display:none;letter-spacing:.2px}
 /* ---------- game ---------- */
 .statusbar{display:flex;align-items:center;justify-content:space-between;flex:0 0 auto;padding:0 2px}
-.pot{display:flex;align-items:baseline;gap:6px;position:relative}
-.pot>span{font-size:9px;letter-spacing:2px;color:var(--gold-d);font-weight:800}
-.pot>b{
-  font-size:22px;font-weight:900;letter-spacing:.5px;
-  background:linear-gradient(180deg,#ffe9b6,#e0b45c);-webkit-background-clip:text;background-clip:text;color:transparent;
-  font-variant-numeric:tabular-nums;
+/* 쌓인 머니(POT) — 한눈에 들어오는 금색 배지 */
+.potbar{
+  display:flex;align-items:center;justify-content:center;gap:8px;flex:0 0 auto;position:relative;
+  padding:6px 16px 7px;border-radius:14px;
+  background:linear-gradient(180deg,rgba(230,195,124,.22),rgba(230,195,124,.05));
+  border:1px solid rgba(230,195,124,.55);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12),inset 0 0 22px rgba(230,195,124,.10),0 6px 18px rgba(0,0,0,.38);
 }
-.pot.up>b{animation:potpop .7s ease}
+.potbar::before{
+  content:"";position:absolute;inset:2px;border-radius:12px;pointer-events:none;
+  background:radial-gradient(120% 140% at 50% -30%,rgba(255,238,190,.18),transparent 62%);
+}
+.potcoin{font-size:19px;line-height:1;filter:drop-shadow(0 2px 3px rgba(0,0,0,.55))}
+.potlbl{font-size:10px;letter-spacing:2.4px;color:#ffe9bd;font-weight:900;text-transform:uppercase}
+.potbar>b{
+  font-size:30px;font-weight:900;letter-spacing:.5px;line-height:1;position:relative;z-index:1;
+  background:linear-gradient(180deg,#fff6d8,#eab955 62%,#c8922f);-webkit-background-clip:text;background-clip:text;color:transparent;
+  font-variant-numeric:tabular-nums;filter:drop-shadow(0 2px 4px rgba(0,0,0,.45));
+}
+.potbar.up>b{animation:potpop .7s ease}
 @keyframes potpop{0%{transform:scale(1)}30%{transform:scale(1.22)}100%{transform:scale(1)}}
 .meta{display:flex;align-items:center;gap:7px}
 .deckbadge{display:flex;align-items:center;gap:4px;font-size:10px;color:#cfe0d8;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);padding:4px 7px;border-radius:8px;font-variant-numeric:tabular-nums}
@@ -177,6 +189,33 @@ body{
 .range span{font-size:9px;color:#8fd6b4;font-weight:800}
 .range.nogap b{color:var(--lose)}
 .range.nogap span{color:var(--lose)}
+/* 깐 패가 두 패 사이 바닥을 딱 때리며 착지 */
+.board{position:relative}
+.board.landed .range{display:none}
+.landwrap{display:none;position:relative}
+.board.landed .landwrap{display:block}
+.landcard{
+  width:min(16.08vw,11.82vh);aspect-ratio:120/186;height:min(24.93vw,18.33vh);position:relative;
+  filter:drop-shadow(0 12px 14px rgba(0,0,0,.55));
+}
+.landwrap.slam .landcard{animation:slamIn .5s cubic-bezier(.22,1.5,.4,1) both}
+@keyframes slamIn{
+  0%{transform:translateY(-92%) scale(1.24) rotate(-7deg);opacity:.12}
+  52%{transform:translateY(5%) scale(1.03) rotate(1.2deg);opacity:1}
+  70%{transform:translateY(-3.5%) scale(1.01) rotate(-.7deg)}
+  86%{transform:translateY(1.5%) scale(1)}
+  100%{transform:translateY(0) scale(1) rotate(0)}
+}
+.landwrap .ring{
+  position:absolute;left:50%;bottom:0;width:16px;height:16px;margin:0 0 -8px -8px;border-radius:50%;
+  border:2px solid rgba(255,238,190,.9);opacity:0;pointer-events:none;
+}
+.landwrap.impact .ring{animation:landimpact .6s ease-out both}
+@keyframes landimpact{0%{opacity:.95;transform:scale(.25)}65%{opacity:.4}100%{opacity:0;transform:scale(5.4)}}
+.table.thump{animation:tblthump .26s ease}
+@keyframes tblthump{0%,100%{transform:translateY(0)}40%{transform:translateY(2px)}}
+.stage.gone{opacity:0;transform:translateY(7px) scale(.95);pointer-events:none;transition:opacity .2s ease,transform .2s ease}
+.holdhint{display:flex;align-items:center;justify-content:center;gap:6px;font-size:11.5px;color:#cfe0d8;letter-spacing:.3px;padding:10px}
 .stage{position:relative;display:flex;flex-direction:column;align-items:center;gap:5px;z-index:2}
 .thirdwrap{
   position:relative;width:min(29.33vw,20.82vh);aspect-ratio:120/186;height:min(45.47vw,32.27vh);touch-action:none;
@@ -237,6 +276,8 @@ body{
   letter-spacing:.8px;font-family:inherit;box-shadow:0 5px 14px rgba(0,0,0,.3);
 }
 .go:active{transform:scale(.985)}
+.go.up{background:linear-gradient(180deg,#f2d99e,#c99a3f)}
+.go.down{background:linear-gradient(180deg,#cfe0ee,#8fa9c0);color:#0b1a24}
 .go.wide{flex:1}
 .ghost{
   flex:1;padding:11px 8px;border-radius:12px;border:1px solid rgba(255,255,255,.18);
@@ -265,6 +306,18 @@ body{
 @keyframes drip{0%{top:6px;opacity:0;transform:scale(.5)}20%{opacity:1}100%{top:64%;opacity:0;transform:scale(1.15)}}
 @keyframes snotwob{0%,100%{transform:translateX(-50%) rotate(-6deg)}50%{transform:translateX(-50%) rotate(6deg)}}
 .potup{position:absolute;left:50%;top:-2px;transform:translateX(-50%);font-size:10px;font-weight:900;color:#ffd166;white-space:nowrap;animation:floatup 1.2s ease-out forwards;pointer-events:none}
+/* 토스트 — 2연속 전원 패스 등 */
+.toast{
+  position:fixed;left:50%;top:calc(58px + env(safe-area-inset-top));z-index:90;
+  transform:translate(-50%,-14px);opacity:0;pointer-events:none;text-align:center;max-width:92vw;
+  display:flex;flex-direction:column;align-items:center;gap:2px;padding:9px 16px;border-radius:14px;
+  background:linear-gradient(180deg,rgba(240,200,120,.97),rgba(191,144,54,.97));color:#2a1b06;
+  box-shadow:0 10px 26px rgba(0,0,0,.55),0 0 0 1px rgba(255,246,216,.3) inset;
+  transition:opacity .2s ease,transform .2s ease;
+}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.toast b{font-size:13px;font-weight:900;letter-spacing:.4px}
+.toast span{font-size:10.5px;font-weight:700;opacity:.82}
 @keyframes floatup{0%{opacity:0;transform:translate(-50%,6px) scale(.8)}25%{opacity:1}100%{opacity:0;transform:translate(-50%,-18px) scale(1.05)}}
 /* ---------- sheet ---------- */
 .sheet{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:flex-end;justify-content:center;z-index:80;backdrop-filter:blur(3px)}
@@ -288,6 +341,8 @@ body{
   .msg{min-height:44px}
   .actions{min-height:80px}
   .thirdwrap{width:min(27.44vw,18.92vh);height:min(42.53vw,29.33vh)}
+  .potbar>b{font-size:26px}
+  .potbar{padding:5px 13px 6px}
 }
 @media (max-height:600px){
   .hero-cards{display:none}
@@ -359,20 +414,26 @@ body{
   <!-- ============ GAME ============ -->
   <section class="screen" id="scr-game">
     <div class="statusbar">
-      <div class="pot" id="potBox"><span>POT</span><b id="potVal">0</b></div>
       <div class="meta">
         <span class="deckbadge" id="roomBadge" style="display:none">🌐 <b>0000</b></span>
         <span class="deckbadge"><i></i><b id="deckVal">48</b></span>
-        <span class="turnbadge" id="turnBadge">P1</span>
       </div>
+      <span class="turnbadge" id="turnBadge">P1</span>
+    </div>
+
+    <div class="potbar" id="potBox">
+      <span class="potcoin" aria-hidden="true">🪙</span>
+      <span class="potlbl" id="potLbl" data-i18n="potLabel">쌓인 머니</span>
+      <b id="potVal">0</b>
     </div>
 
     <div class="players" id="players"></div>
 
     <div class="table" id="tableEl">
-      <div class="board">
+      <div class="board" id="boardEl">
         <div class="card slot" id="cardA"></div>
-        <div class="range" id="rangeBox"><b id="rangeTxt">2–10</b><span id="probTxt">52%</span></div>
+        <div class="range" id="rangeBox"><b id="rangeTxt">2–10</b></div>
+        <div class="landwrap" id="landWrap"><div class="card landcard" id="landFace"></div><span class="ring"></span></div>
         <div class="card slot" id="cardB"></div>
       </div>
       <div class="stage">
@@ -417,6 +478,7 @@ body{
   </div>
 </div>
 <canvas id="fx"></canvas>
+<div class="toast" id="toast"></div>
 <noscript><p style="color:#fff;padding:20px">이 게임은 JavaScript가 필요합니다.</p></noscript>
 
 <script id="corejs">
@@ -572,6 +634,9 @@ var WNB = (function () {
       third: null,
       bet: 0,
       betKind: 'normal',
+      pairDir: null,
+      passRun: 0,
+      passStreak: 0,
       pair: false,
       noGap: false,
       phase: 'idle',
@@ -645,6 +710,7 @@ var WNB = (function () {
       s.third = null;
       s.bet = 0;
       s.betKind = 'normal';
+      s.pairDir = null;
       s.result = null;
       s.pair = s.board[0].month === s.board[1].month;
       s.noGap = (s.board[1].month - s.board[0].month) <= 1;
@@ -675,6 +741,7 @@ var WNB = (function () {
 
   function placeBet(s, amount) {
     if (s.phase !== 'bet') return { ok: false, err: 'phase' };
+    if (s.pair) return { ok: false, err: 'pair' };   /* 땡은 업/다운을 골라 걸어야 한다 */
     var L = betLimits(s);
     if (L.max < 1) return { ok: false, err: 'nochips' };
     var amt = Math.floor(Number(amount));
@@ -682,9 +749,34 @@ var WNB = (function () {
     amt = Math.max(L.min, Math.min(L.max, amt));
     s.bet = amt;
     s.betKind = 'normal';
+    s.pairDir = null;
+    resetPassStreak(s);
     s.third = draw(s);
     s.phase = 'peek';
     return { ok: true, amount: amt };
+  }
+
+  /* ---------- 땡 — 업(UP)/다운(DOWN) 선택 베팅 ----------
+     두 오픈 패의 월이 같으면(2땡·7땡 …) 세 번째 패가 그보다 높은지(업)/낮은지(다운)를 골라 건다.
+     배당은 일반 사이값과 똑같이 1배(이기면 건 만큼 판돈에서 회수, 지면 건 만큼 판돈으로).
+     땡 숫자와 같은 숫자가 나오면 업·다운 모두 패배. */
+  function placePairBet(s, amount, dir) {
+    if (s.phase !== 'bet') return { ok: false, err: 'phase' };
+    if (!s.pair) return { ok: false, err: 'notpair' };
+    var d = dir === 'down' ? 'down' : (dir === 'up' ? 'up' : null);
+    if (!d) return { ok: false, err: 'dir' };
+    var L = betLimits(s);
+    if (L.max < 1) return { ok: false, err: 'nochips' };
+    var amt = Math.floor(Number(amount));
+    if (!isFinite(amt)) amt = L.min;
+    amt = Math.max(L.min, Math.min(L.max, amt));
+    s.bet = amt;
+    s.betKind = 'pair';
+    s.pairDir = d;
+    resetPassStreak(s);
+    s.third = draw(s);
+    s.phase = 'peek';
+    return { ok: true, amount: amt, dir: d };
   }
 
   function noGapStake(s) {
@@ -692,11 +784,13 @@ var WNB = (function () {
     return Math.max(0, Math.min(s.ante * 2, p.chips, Math.floor(s.pot / 2)));
   }
   function placeNoGapBet(s) {
-    if (s.phase !== 'bet' || !s.noGap) return { ok: false, err: 'phase' };
+    if (s.phase !== 'bet' || !s.noGap || s.pair) return { ok: false, err: 'phase' };
     var amt = noGapStake(s);
     if (amt < 1) return { ok: false, err: 'nostake' };
     s.bet = amt;
     s.betKind = 'nogap';
+    s.pairDir = null;
+    resetPassStreak(s);
     s.third = draw(s);
     s.phase = 'peek';
     return { ok: true, amount: amt };
@@ -718,6 +812,42 @@ var WNB = (function () {
     s.log.push({ t: 'ante-refill', pot: s.pot });
   }
 
+  function resetPassStreak(s) {
+    s.passRun = 0;
+    s.passStreak = 0;
+  }
+
+  /* 전원이 기본 베팅(앤티)을 한 번 더 낸다 — 보유 머니가 모자라면 남은 만큼만 */
+  function anteRefillAll(s) {
+    var added = 0, n = 0, short = 0;
+    s.players.forEach(function (p) {
+      if (p.bankrupt) return;
+      var pay = Math.min(s.ante, Math.max(0, p.chips));
+      if (pay < 1) return;
+      p.chips -= pay;
+      s.pot += pay;
+      added += pay; n++;
+      if (pay < s.ante) short++;
+    });
+    s.log.push({ t: 'pass-refill', amt: added, n: n, hand: s.hand });
+    return { amt: added, n: n, ante: s.ante, short: short };
+  }
+
+  /* 패스 집계 — 활성 인원이 한 바퀴 모두 패스하면 1회, 그게 두 번 연속이면 앤티 재적립 */
+  function registerPass(s) {
+    var need = activeCount(s);
+    if (need < 1) return null;
+    s.passRun = (s.passRun || 0) + 1;
+    if (s.passRun < need) return null;
+    s.passRun = 0;
+    s.passStreak = (s.passStreak || 0) + 1;
+    if (s.passStreak < 2) return null;
+    s.passStreak = 0;
+    var info = anteRefillAll(s);
+    info.streak = 2;
+    return info;
+  }
+
   /* ---------- 결과 판정 ---------- */
   function reveal(s) {
     if (s.phase !== 'peek') return null;
@@ -725,7 +855,21 @@ var WNB = (function () {
     var a = s.board[0].month, b = s.board[1].month, m = s.third.month;
     var bet = s.bet, type, delta, gain, penalty, mult = 1, short = false;
 
-    if (s.betKind === 'nogap') {
+    if (s.betKind === 'pair') {
+      /* 땡 — 업/다운: 같은 숫자가 나오면 무조건 패배, 배당은 일반 사이값과 동일(1배) */
+      var dir = s.pairDir === 'down' ? 'down' : 'up';
+      var hit = dir === 'up' ? (m > a) : (m < a);
+      if (hit) {
+        gain = Math.min(bet, s.pot);
+        p.chips += gain; s.pot -= gain;
+        type = 'pairWin'; delta = gain;
+      } else {
+        penalty = Math.min(bet, p.chips);
+        p.chips -= penalty; s.pot += penalty;
+        type = 'pairLose'; delta = -penalty;
+        short = penalty < bet;
+      }
+    } else if (s.betKind === 'nogap') {
       if (m === a || m === b) {
         gain = Math.min(bet * 2, s.pot);
         p.chips += gain; s.pot -= gain;
@@ -756,7 +900,9 @@ var WNB = (function () {
 
     s.result = {
       type: type, delta: delta, bet: bet, a: a, b: b, m: m,
-      turn: s.turn, mult: mult, short: short, potUp: delta < 0 ? -delta : 0
+      turn: s.turn, mult: mult, short: short, potUp: delta < 0 ? -delta : 0,
+      pair: !!s.pair, dir: s.betKind === 'pair' ? (s.pairDir === 'down' ? 'down' : 'up') : null,
+      kind: s.betKind, refill: null
     };
     s.phase = 'result';
     if (s.pot <= 0) refillPot(s);
@@ -765,9 +911,14 @@ var WNB = (function () {
 
   function fold(s) {
     if (s.phase !== 'bet') return { ok: false, err: 'phase' };
-    s.result = { type: 'fold', delta: 0, bet: 0, a: s.board[0].month, b: s.board[1].month, m: null, turn: s.turn, potUp: 0 };
+    var refill = registerPass(s);
+    s.result = {
+      type: 'fold', delta: 0, bet: 0, a: s.board[0].month, b: s.board[1].month, m: null,
+      turn: s.turn, potUp: 0, pair: !!s.pair, dir: null, kind: 'fold',
+      refill: refill, passStreak: s.passStreak || 0
+    };
     s.phase = 'result';
-    return { ok: true };
+    return { ok: true, refill: refill };
   }
 
   function continueGame(s) {
@@ -786,6 +937,21 @@ var WNB = (function () {
     var L = betLimits(s);
     var p = player(s);
     if (L.max < 1) return { action: 'fold', reason: 'nochips' };
+    if (s.pair) {
+      /* 땡 — 6 이하면 업(위로 열릴 확률이 높다), 7 이상이면 다운. 1은 업, 12는 다운. */
+      var pm = s.board[0].month;
+      var pdir = pm <= 6 ? 'up' : 'down';
+      var r2 = s.rng();
+      var edge = Math.max(pm - 1, 12 - pm) - 5;
+      if (p.style === 'cautious' && edge <= 1 && r2 < 0.5) {
+        return { action: 'fold', reason: 'paircoin', dir: pdir };
+      }
+      var frac2 = p.style === 'reckless' ? (0.4 + r2 * 0.5) : (p.style === 'aggressive' ? (0.3 + r2 * 0.45) : (p.style === 'cautious' ? (0.15 + r2 * 0.25) : (0.22 + r2 * 0.35)));
+      var amt2 = Math.round((L.max * Math.min(1, frac2)) / 5) * 5;
+      if (amt2 < L.min) amt2 = L.min;
+      if (amt2 > L.max) amt2 = L.max;
+      return { action: 'bet', amount: amt2, dir: pdir, pair: true };
+    }
     if (s.noGap) return { action: 'fold', reason: 'nogap' };
     var o = odds(s);
     var pct = o.total ? o.win / o.total : 0;
@@ -1989,7 +2155,8 @@ var WNB = (function () {
   return {
     MONTHS: MONTHS, newDeck: newDeck, shuffle: shuffle, mulberry32: mulberry32,
     newGame: newGame, beginTurn: beginTurn, betLimits: betLimits, odds: odds,
-    placeBet: placeBet, placeNoGapBet: placeNoGapBet, noGapStake: noGapStake,
+    placeBet: placeBet, placePairBet: placePairBet, placeNoGapBet: placeNoGapBet, noGapStake: noGapStake,
+    anteRefillAll: anteRefillAll, registerPass: registerPass,
     reveal: reveal, fold: fold, continueGame: continueGame, refillPot: refillPot,
     isAiTurn: isAiTurn, aiDecide: aiDecide, totalChips: totalChips,
     activeCount: activeCount, meta: meta, faceSVG: faceSVG, backSVG: backSVG
@@ -2016,8 +2183,15 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       players: '인원', matchType: '대전 형식', ante: '앤티',
       ppongOpt: '뽕 2배 페널티', lang: '언어', restart: '처음부터 (모드 선택)', close: '닫기',
       start: '시작하기', heroSub: '금박 숫자(1~12) 전통 화투로 30초 만에 즐기는 K-심리 카드 게임 (두 패 사이를 쪼아 맞히는 룰)',
-      rulesText: '두 장 사이(예: 2와 10 사이 3~9)에 세 번째 패가 들어오면 판돈에서 베팅만큼 획득. 경계와 같거나 바깥이면 베팅액이 판돈으로. 패스하면 앤티만 잃고 차례를 넘깁니다.',
+      rulesText: '두 장 사이(예: 2와 10 사이 3~9)에 세 번째 패가 들어오면 판돈에서 건 만큼 획득. 경계와 같거나 바깥이면 건 만큼 판돈으로. 땡(2·2)이면 업/다운을 골라 걸고, 높은 숫자(업)·낮은 숫자(다운)가 나오면 건 만큼 획득 — 같은 숫자가 나오면 패배. 패스하면 앤티만 잃고, 전원 패스가 두 바퀴 이어지면 모두 앤티를 다시 겁니다.',
       pot: '판돈', deck: '덱', pass: '패스', bet: '걸기', quick: '바로 까기',
+      potLabel: '쌓인 머니', potShort: 'POT',
+      pairTag: '땡', pairMsg: '업 / 다운을 골라 거세요', pairSub: '같은 숫자가 나오면 업·다운 모두 패배',
+      up: '업', down: '다운', upHint: '높은 숫자', downHint: '낮은 숫자',
+      pairWin: '적중!', pairLose: '빗나감', tie: '같은 숫자',
+      passRefillTitle: '2연속 전원 패스!', passRefillSub: '기본 베팅 추가 적립',
+      passOnce: '전원 패스 1회 — 한 번 더면 앤티 재적립',
+      holdHint: '세 장을 확인하세요',
       peekShort: '밀어서 쪼기', peekHint: '카드를 위로 밀어 쪼개 보세요',
       thinking: '생각 중', peeking: '패를 쪼는 중', myPeek: '당신 차례 — 손으로 쪼개세요',
       dealMsg: '패를 나눴습니다', antePaid: '앤티', max: '최대', min: '최소',
@@ -2051,8 +2225,15 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       ppongOpt: 'Double penalty on match', lang: 'Language', restart: 'Back to mode select', close: 'Close',
       start: 'START',
       heroSub: 'A 30-second Korean traditional card game — peel the 3rd card and guess if it lands in between!',
-      rulesText: 'If the third card falls between the two (e.g. 2–10 → 3~9) you take your bet from the pot. Same as either edge or outside, your bet goes in. Pass and you only lose the ante.',
+      rulesText: 'If the third card lands between the two (e.g. 2–10 → 3~9) you win your bet from the pot. Same as either edge or outside, your bet goes in. On a PAIR (2·2) pick UP or DOWN, then a higher (UP) or lower (DOWN) card pays your bet — the same number loses. Pass and you only lose the ante; two full passes in a row and everyone re-antes.',
       pot: 'POT', deck: 'DECK', pass: 'PASS', bet: 'BET', quick: 'Reveal',
+      potLabel: 'POT', potShort: 'POT',
+      pairTag: 'PAIR', pairMsg: 'pick UP or DOWN', pairSub: 'the same number loses either way',
+      up: 'UP', down: 'DOWN', upHint: 'higher', downHint: 'lower',
+      pairWin: 'side hit', pairLose: 'side missed', tie: 'same number',
+      passRefillTitle: '2 full passes in a row!', passRefillSub: 'everyone re-antes',
+      passOnce: 'One full pass — one more and everyone re-antes',
+      holdHint: 'Check all three cards',
       peekShort: 'Push to peek', peekHint: 'Push the card up to squeeze a peek',
       thinking: 'thinking', peeking: 'squeezing', myPeek: 'Your turn — squeeze it yourself',
       dealMsg: 'Cards dealt', min: 'MIN', max: 'MAX', ado: 'ADO',
@@ -2076,6 +2257,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
   };
   var ui = { lang: 'kr', mode: 'solo', count: 3, aiCount: 3, names: [], ante: 10, ppong: false, sel: 0 };
   var S = null, revealed = false, busy = false, aiTimer = null;
+  var HOLD_MS = 2200, resultHoldUntil = 0, holdTimer = null, toastTimer = null, landId = '';
 
   /* 화면 어딘가에서 예외가 나도 조용히 멈추지 않도록 — 상단 띠에만 알린다(게임은 계속). */
   if (typeof window !== 'undefined' && window && window.addEventListener) {
@@ -2289,9 +2471,41 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     function isOn() { return on; }
     function unlock() { ensure(); }
 
+    /* 7) "딱!" — 깐 패가 바닥을 때리는 타격음 (저역 임팩트 + 중역 때림 + 고역 슬랩) */
+    function thud(power) {
+      var c = ensure(); if (!c || !on) return;
+      var v = (power == null ? 1 : power);
+      var t = c.currentTime + 0.002;
+      var o = c.createOscillator(); o.type = 'sine';
+      o.frequency.setValueAtTime(155, t);
+      o.frequency.exponentialRampToValueAtTime(56, t + 0.17);
+      var g = c.createGain();
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.52 * v, t + 0.004);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.25);
+      o.connect(g); g.connect(master);
+      o.start(t); o.stop(t + 0.27);
+
+      var n = burst(t, 0.06);
+      var bp = c.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 1650; bp.Q.value = 0.9;
+      var g2 = c.createGain();
+      g2.gain.setValueAtTime(0.0001, t);
+      g2.gain.exponentialRampToValueAtTime(0.36 * v, t + 0.002);
+      g2.gain.exponentialRampToValueAtTime(0.0001, t + 0.058);
+      n.connect(bp); bp.connect(g2); g2.connect(master);
+
+      var n2 = burst(t, 0.03);
+      var hp = c.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 3900;
+      var g3 = c.createGain();
+      g3.gain.setValueAtTime(0.0001, t);
+      g3.gain.exponentialRampToValueAtTime(0.14 * v, t + 0.0016);
+      g3.gain.exponentialRampToValueAtTime(0.0001, t + 0.03);
+      n2.connect(hp); hp.connect(g3); g3.connect(master);
+    }
+
     return {
       unlock: unlock, dragStart: dragStart, dragMove: dragMove, dragStop: dragStop,
-      snap: snap, tick: tick, win: winSound, lose: loseSound, setOn: setOn, isOn: isOn
+      snap: snap, thud: thud, tick: tick, win: winSound, lose: loseSound, setOn: setOn, isOn: isOn
     };
   })();
 
@@ -2354,6 +2568,8 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
   function round5(v) { return Math.round(v / 5) * 5; }
   function pName(p) { return ui.lang === 'en' ? (p.nameEn || p.name) : p.name; }
   function monthLabel(m) { var x = W.meta(m); return ui.lang === 'en' ? ((m) + ' · ' + x.en) : (m + '월 · ' + x.kr); }
+  function pairLabel(m) { return ui.lang === 'en' ? (m + ' ' + t('pairTag')) : (m + t('pairTag')); }
+  function sideLabel(dir) { return dir === 'down' ? '↓ ' + t('down') : '↑ ' + t('up'); }
 
   /* ------------------------------------------------------------
      카드 마운트
@@ -2434,6 +2650,15 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     tag.textContent = '🔥 ' + t('potUp');
     box.appendChild(tag);
     setTimeout(function () { if (tag.parentNode) tag.parentNode.removeChild(tag); }, 1400);
+  }
+  /* 토스트 — 2연속 전원 패스 등 판 전체에 알리는 배너 */
+  function toast(title, sub, ms) {
+    var el = $('#toast');
+    if (!el) return;
+    el.innerHTML = '<b>' + title + '</b>' + (sub ? '<span>' + sub + '</span>' : '');
+    el.classList.add('on');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { el.classList.remove('on'); }, ms || 2800);
   }
   function vibrate(p) { try { if (navigator.vibrate) navigator.vibrate(p); } catch (e) {} }
 
@@ -2583,22 +2808,54 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     mountCard($('#cardB'), S.board[1]);
     var a = S.board[0].month, b = S.board[1].month;
     var box = $('#rangeBox');
-    box.classList.toggle('nogap', S.noGap);
+    box.classList.toggle('nogap', S.noGap && !S.pair);
     if (S.pair) {
-      $('#rangeTxt').textContent = a + '·' + a;
-      $('#probTxt').textContent = t('noGap');
-    } else if (S.noGap) {
-      $('#rangeTxt').textContent = a + '–' + b;
-      $('#probTxt').textContent = t('noGap');
+      $('#rangeTxt').textContent = pairLabel(a);
     } else {
       $('#rangeTxt').textContent = a + '–' + b;
-      var o = (ON.isOn() && ON.state().snap) ? { pct: ON.state().snap.oddsPct || 0 } : W.odds(S);
-      $('#probTxt').textContent = o.pct + '%';
     }
+  }
+
+  /* 깐 패를 두 패 사이 바닥에 딱 찍는다 — 모든 모드 공통 */
+  function landThird(card, animate) {
+    if (!card) return;
+    var wrap = $('#landWrap'), board = $('#boardEl'), stage = document.querySelector('.stage');
+    if (!wrap || !board) return;
+    var id = card.month + '-' + card.variant;
+    var fresh = (landId !== id);
+    if (fresh) {
+      $('#landFace').innerHTML = W.faceSVG(card);
+      landId = id;
+      wrap.classList.remove('slam', 'impact');
+    }
+    board.classList.add('landed');
+    if (stage) stage.classList.add('gone');
+    if (!animate || !fresh) return;
+    resultHoldUntil = Date.now() + HOLD_MS;
+    var tbl = $('#tableEl');
+    void wrap.offsetWidth;
+    wrap.classList.add('slam');
+    setTimeout(function () {
+      wrap.classList.add('impact');
+      if (tbl) { tbl.classList.remove('thump'); void tbl.offsetWidth; tbl.classList.add('thump'); }
+      SFX.thud(1);
+      vibrate(14);
+    }, 200);
+  }
+
+  function clearLand() {
+    landId = '';
+    var board = $('#boardEl'), wrap = $('#landWrap'), stage = document.querySelector('.stage');
+    var face = $('#landFace');
+    if (board) board.classList.remove('landed');
+    if (wrap) wrap.classList.remove('slam', 'impact');
+    if (face) face.innerHTML = '';
+    if (stage) stage.classList.remove('gone');
   }
 
   function resetThird() {
     revealed = false;
+    clearLand();
     var cover = $('#thirdCover');
     cover.className = 'cover';
     cover.innerHTML = '';
@@ -2650,6 +2907,14 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     }
 
     if (S.phase === 'result') {
+      if (Date.now() < resultHoldUntil) {
+        A.innerHTML = '<div class="holdhint">🃏 ' + t('holdHint') + '</div>';
+        clearTimeout(holdTimer);
+        holdTimer = setTimeout(function () {
+          if (S && !S.over && S.phase === 'result') renderActions();
+        }, Math.max(120, resultHoldUntil - Date.now()));
+        return;
+      }
       A.innerHTML = '<button class="go wide" id="nextBtn">' + (ui.mode === 'solo' ? t('nextHand') : t('next')) + ' →</button>';
       $('#nextBtn').onclick = function () { nextTurn(); };
       var hint = document.createElement('div');
@@ -2668,7 +2933,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     ui.sel = clamp(ui.sel || L.min, L.min, L.max);
     if (opts.indexOf(ui.sel) < 0) ui.sel = L.min;
 
-    if (S.noGap) {
+    if (S.noGap && !S.pair) {
       var stake = W.noGapStake(S);
       return '<div class="betrow"><button class="chip on" id="ngChip"><b>' + fmt(stake) + '</b><span>' + t('ppongBet') + '</span></button></div>' +
         '<div class="ctarow"><button class="ghost" id="passBtn">' + t('pass') + '</button>' +
@@ -2678,6 +2943,18 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     if (L.max < 1) {
       return '<div class="betrow"><button class="chip on"><b>—</b><span>' + t('empty') + '</span></button></div>' +
         '<div class="ctarow"><button class="go wide" id="passBtn">' + t('pass') + ' (' + t('passOnly') + ')</button></div>';
+    }
+
+    if (S.pair) {
+      var hp = '<div class="betrow">';
+      opts.forEach(function (v, i) {
+        var lbl = (v === L.max && v === S.pot) ? t('ado') : (i === 0 ? t('min') : (i === 1 ? '25%' : (i === 2 ? '50%' : t('max'))));
+        hp += '<button class="chip' + (v === ui.sel ? ' on' : '') + '" data-amt="' + v + '"><b>' + fmt(v) + '</b><span>' + lbl + '</span></button>';
+      });
+      hp += '</div><div class="ctarow"><button class="ghost" id="passBtn">' + t('pass') + '</button>' +
+        '<button class="go up" id="upBtn">↑ ' + t('up') + ' ' + fmt(ui.sel) + '</button>' +
+        '<button class="go down" id="downBtn">↓ ' + t('down') + ' ' + fmt(ui.sel) + '</button></div>';
+      return hp;
     }
 
     var html = '<div class="betrow">';
@@ -2728,6 +3005,27 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
         renderActions();
       }
     };
+    bindPairUI();
+  }
+
+  /* 땡 — 업/다운 버튼 (로컬·온라인 공통) */
+  function bindPairUI() {
+    var ub = $('#upBtn'), db = $('#downBtn');
+    if (ub) ub.onclick = function () { if (busy) return; pairGo('up'); };
+    if (db) db.onclick = function () { if (busy) return; pairGo('down'); };
+  }
+  function pairGo(dir) {
+    if (!S || S.phase !== 'bet') return;
+    var L = W.betLimits(S);
+    var amt = clamp(ui.sel || L.min, L.min, Math.max(L.min, L.max));
+    VOICE.action(amt >= L.max ? 'allin' : 'call');
+    if (ON.isOn()) { ON.act('pair', amt, dir); return; }
+    var r = W.placePairBet(S, amt, dir);
+    if (r.ok) {
+      showThird(true);
+      renderMsg('', '👆 ' + t('myPeek'), pairLabel(S.board[0].month) + ' · ' + sideLabel(r.dir) + ' · ' + t('bet') + ' ' + fmt(r.amount));
+      renderActions();
+    }
   }
 
   /* ------------------------------------------------------------
@@ -2745,7 +3043,11 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     var p = S.players[S.turn];
     var info = t('ante') + ' ' + S.ante + ' · ' + t('max') + ' ' + fmt(W.betLimits(S).max);
     if (S.reshuffles !== lastReshuffles) { info += ' · ' + t('reshuffle'); lastReshuffles = S.reshuffles; }
-    if (S.noGap) {
+    if (S.pair) {
+      renderMsg(W.isAiTurn(S) ? 'ai' : '',
+        (W.isAiTurn(S) ? p.avatar + ' ' + pName(p) + ' · ' : '🀄 ') + pairLabel(S.board[0].month) + ' — ' + t('pairMsg'),
+        t('pairSub') + ' · ' + info);
+    } else if (S.noGap) {
       renderMsg('', '⚠️ ' + t('noGapMsg'), t('noGapSub'));
     } else if (W.isAiTurn(S)) {
       renderMsg('ai', p.avatar + ' ' + pName(p) + ' ' + t('turn'), info);
@@ -2777,6 +3079,17 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       afterFold();
       return;
     }
+    if (d.pair) {
+      var rpp = W.placePairBet(S, d.amount, d.dir);
+      if (!rpp.ok) { W.fold(S); afterFold(); return; }
+      showThird(false);
+      renderStatus();
+      renderMsg('ai', S.players[S.turn].avatar + ' ' + pName(S.players[S.turn]) + ' — ' + sideLabel(rpp.dir) + ' ' + t('bet') + ' ' + fmt(rpp.amount),
+        pairLabel(S.board[0].month) + ' · ' + t('peeking') + '…');
+      renderActions();
+      aiTimer = setTimeout(function () { doReveal(true); }, 900 + Math.random() * 350);
+      return;
+    }
     var lim = W.betLimits(S);
     VOICE.action(d.amount >= lim.max ? 'allin' : 'call');
     var r = W.placeBet(S, d.amount);
@@ -2791,9 +3104,23 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
 
   function afterFold() {
     var p = S.players[S.turn];
+    var res = S.result || {};
+    var rf = res.refill;
     renderStatus();
     renderPlayers();
-    renderMsg('', '🙅 ' + pName(p) + ' — ' + t('fold'), t('passHint') + ' · ' + t('pot') + ' ' + fmt(S.pot));
+    var sub;
+    if (rf) {
+      sub = '🃏 ' + t('passRefillTitle') + ' ' + t('passRefillSub') + ' +' + fmt(rf.amt) + ' · ' + t('pot') + ' ' + fmt(S.pot);
+    } else {
+      sub = t('passHint') + ' · ' + t('pot') + ' ' + fmt(S.pot);
+      if (res.passStreak === 1) sub = t('passOnce') + ' · ' + sub;
+    }
+    renderMsg('', '🙅 ' + pName(p) + ' — ' + t('fold'), sub);
+    if (rf) {
+      toast('🃏 ' + t('passRefillTitle'), t('passRefillSub') + ' +' + fmt(rf.amt));
+      potUp();
+      vibrate([18, 50, 18]);
+    }
     renderActions();
     if (W.isAiTurn(S)) aiTimer = setTimeout(nextTurn, 950);
     else renderActions();
@@ -2905,12 +3232,15 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     wrap.classList.add('pop');
     SFX.snap(isAi ? 0.72 : 1);
     $('#peekHint').style.display = 'none';
+    var thirdCard = S.third ? { id: S.third.id, month: S.third.month, variant: S.third.variant } : null;
     var res = W.reveal(S);
     if (!res) { busy = false; return; }
+    /* 깐 패가 두 패 사이 바닥을 딱 때리고 착지 — 결과 확인 시간(2.2초) 동안 그대로 둔다 */
+    landThird(thirdCard, true);
 
-    var win = (res.type === 'win' || res.type === 'ppongWin');
+    var win = (res.type === 'win' || res.type === 'ppongWin' || res.type === 'pairWin');
     if (win) { confetti(); vibrate([30, 40, 70]); }
-    else if (res.type === 'lose' || res.type === 'ppong' || res.type === 'ppongLose') { vibrate([20, 60, 20]); }
+    else if (res.type === 'lose' || res.type === 'ppong' || res.type === 'ppongLose' || res.type === 'pairLose') { vibrate([20, 60, 20]); }
 
     renderStatus();
     renderPlayers();
@@ -2928,8 +3258,14 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
             .map(function (x) { return x.avatar + ' ' + pName(x) + ' 🤧'; }).join('  ');
           react = '<div class="react"><span>' + t('others') + ': ' + others + ' — ' + t('scooped') + '</span></div>';
         }
-        renderMsg('win', '🎉 ' + t('win') + ' +' + fmt(res.delta),
-          nm + ' · ' + monthLabel(res.m) + ' — ' + (res.type === 'ppongWin' ? t('ppongWin') : t('winSub')) + react);
+        renderMsg('win', '🎉 ' + t('win') + ' +' + fmt(res.delta) + (res.type === 'pairWin' ? ' · ' + sideLabel(res.dir) : ''),
+          nm + ' · ' + monthLabel(res.m) + ' — ' + (res.type === 'ppongWin' ? t('ppongWin') : (res.type === 'pairWin' ? t('pairWin') : t('winSub'))) + react);
+      } else if (res.type === 'pairLose') {
+        if (ui.mode !== 'solo') react = '<div class="react"><span>🔥 ' + t('potUp') + ' · ' + (nxt.avatar || '') + ' ' + pName(nxt) + '</span></div>';
+        renderMsg('lose', '🤧 ' + t('lose') + ' −' + fmt(-res.delta) + ' · ' + sideLabel(res.dir),
+          nm + ' · ' + monthLabel(res.m) + ' — ' + (res.m === res.a ? t('tie') + ' · ' : '') + t('pairLose') + ' · ' + t('pot') + ' ' + fmt(S.pot) + react);
+        snot($('#landWrap'));
+        potUp();
       } else if (res.type === 'ppong' || res.type === 'ppongLose') {
         if (ui.mode !== 'solo') react = '<div class="react"><span>🔥 ' + t('potUp') + ' · ' + (nxt.avatar || '') + ' ' + pName(nxt) + '</span></div>';
         renderMsg('ppong', '🤧 ' + t('ppong') + ' −' + fmt(-res.delta),
@@ -3170,9 +3506,10 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
         turn: s.turn, pot: s.pot, deck: s.deck.length, ante: s.ante,
         ppong: !!s.ppongDouble, hand: s.hand, pair: !!s.pair, noGap: !!s.noGap,
         bet: s.bet, betKind: s.betKind,
+        pairDir: s.pairDir || null,
+        passStreak: s.passStreak || 0,
         board: s.board.map(function (c) { return { month: c.month, variant: c.variant }; }),
         third: (s.phase === 'result' && s.third) ? { month: s.third.month, variant: s.third.variant } : null,
-        oddsPct: W.odds(s).pct,
         players: s.players.map(function (p, i) {
           var r = st.roster[i];
           return { cid: r ? r.cid : '', name: p.name, av: p.avatar || '\uD83D\uDE4B', chips: p.chips, bankrupt: !!p.bankrupt };
@@ -3198,6 +3535,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
         board: sn.board.map(function (c) { return { id: c.month + '-' + c.variant, month: c.month, variant: c.variant }; }),
         third: sn.third ? { id: sn.third.month + '-' + sn.third.variant, month: sn.third.month, variant: sn.third.variant } : null,
         bet: sn.bet, betKind: sn.betKind || 'normal', pair: !!sn.pair, noGap: !!sn.noGap,
+        pairDir: sn.pairDir || null, passRun: 0, passStreak: sn.passStreak || 0,
         phase: sn.phase, result: sn.result || null, over: !!sn.over,
         hand: sn.hand || 0, reshuffles: 0, log: []
       };
@@ -3244,9 +3582,8 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
         return;
       }
       if (sn.phase === 'result') {
-        $('#thirdFace').innerHTML = sn.third ? W.faceSVG(sn.third) : '';
-        cover.innerHTML = '';
-        cover.classList.add('off');
+        if (sn.third) landThird(sn.third, true);
+        else { $('#thirdFace').innerHTML = ''; cover.innerHTML = ''; cover.classList.add('off'); }
         $('#peekHint').style.display = 'none';
       }
     }
@@ -3264,8 +3601,8 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       if (sn.phase === 'bet') {
         if (sn.turn === me) {
           var L = W.betLimits(S);
-          renderMsg('', '👆 ' + (ui.lang === 'en' ? 'Your turn — call or pass' : '내 차례 — 걸기 / 패스'),
-            t('ante') + ' ' + sn.ante + ' · ' + t('max') + ' ' + fmt(L.max));
+          renderMsg('', '👆 ' + (sn.pair ? pairLabel(sn.board[0].month) + ' — ' + t('pairMsg') : (ui.lang === 'en' ? 'Your turn — call or pass' : '내 차례 — 걸기 / 패스')),
+            t('ante') + ' ' + sn.ante + ' · ' + t('max') + ' ' + fmt(L.max) + (sn.pair ? ' · ' + t('pairSub') : ''));
         } else {
           renderMsg('ai', (p.av || '') + ' ' + p.name + ' · ' + t('turn'), t('thinking') + '…');
         }
@@ -3310,6 +3647,15 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       }
       if (sn.phase === 'result') {
         if (isHost()) {
+          if (Date.now() < resultHoldUntil) {
+            A.innerHTML = '<div class="holdhint">🃏 ' + t('holdHint') + '</div>';
+            clearTimeout(holdTimer);
+            holdTimer = setTimeout(function () {
+              var s2 = ON.state().snap;
+              if (s2 && s2.phase === 'result') renderActions();
+            }, Math.max(120, resultHoldUntil - Date.now()));
+            return;
+          }
           A.innerHTML = '<button class="go wide" id="nextBtn">' + t('next') + ' →</button>';
           var nb = $('nextBtn');
           if (nb) nb.onclick = function () { hostNext(); };
@@ -3335,13 +3681,14 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       };
       var nb = $('ngBtn');
       if (nb) nb.onclick = function () { if (busy) return; VOICE.call(); act('nogap', 0); };
+      bindPairUI();
     }
 
     /* ---------------- 베팅/쪼기/공개 ---------------- */
-    function act(kind, amount) {
+    function act(kind, amount, dir) {
       if (!st.snap || st.snap.phase !== 'bet' || st.snap.turn !== myIdx() || busy) return;
       busy = true;
-      var m = { rid: st.rid, cid: st.cid, kind: kind, amount: amount || 0, rev: st.snap.rev };
+      var m = { rid: st.rid, cid: st.cid, kind: kind, amount: amount || 0, dir: dir || null, rev: st.snap.rev };
       renderMsg('', '⏳ ' + (ui.lang === 'en' ? 'Sent…' : '전송 중…'), '');
       if (isHost()) hostAct(m); else broadcast('act', m);
       setTimeout(function () { busy = false; }, 2500);
@@ -3357,7 +3704,8 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
         doneApply(fsn, S.result);
         return;
       }
-      if (m.kind === 'nogap') r = W.placeNoGapBet(S);
+      if (m.kind === 'pair') r = W.placePairBet(S, m.amount, m.dir);
+      else if (m.kind === 'nogap') r = W.placeNoGapBet(S);
       else r = W.placeBet(S, m.amount);
       if (!r || !r.ok) return;
       st.third = S.third ? { month: S.third.month, variant: S.third.variant } : null;
@@ -3426,9 +3774,10 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
         wrap.classList.add('pop');
         SFX.snap(1);
       }
-      var win = (res.type === 'win' || res.type === 'ppongWin');
+      if (!isFold && S && S.third) landThird(S.third, true);
+      var win = (res.type === 'win' || res.type === 'ppongWin' || res.type === 'pairWin');
       if (win) { confetti(); vibrate([30, 40, 70]); }
-      else if (!isFold && (res.type === 'lose' || res.type === 'ppong' || res.type === 'ppongLose')) vibrate([20, 60, 20]);
+      else if (!isFold && (res.type === 'lose' || res.type === 'ppong' || res.type === 'ppongLose' || res.type === 'pairLose')) vibrate([20, 60, 20]);
       renderStatus();
       renderPlayers();
       setTimeout(function () {
@@ -3438,13 +3787,24 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
         var react = '';
         var nxt = S.players[(res.turn + 1) % S.players.length];
         if (res.type === 'fold') {
-          renderMsg('', '🙅 ' + nm + ' — ' + t('fold'), t('passHint') + ' · ' + t('pot') + ' ' + fmt(S.pot));
+          var frf = res.refill;
+          var fsub;
+          if (frf) fsub = '🃏 ' + t('passRefillTitle') + ' ' + t('passRefillSub') + ' +' + fmt(frf.amt) + ' · ' + t('pot') + ' ' + fmt(S.pot);
+          else fsub = (res.passStreak === 1 ? t('passOnce') + ' · ' : '') + t('passHint') + ' · ' + t('pot') + ' ' + fmt(S.pot);
+          renderMsg('', '🙅 ' + nm + ' — ' + t('fold'), fsub);
+          if (frf) { toast('🃏 ' + t('passRefillTitle'), t('passRefillSub') + ' +' + fmt(frf.amt)); potUp(); }
         } else if (win) {
           var others = S.players.filter(function (x, i) { return i !== res.turn; })
             .map(function (x) { return x.avatar + ' ' + pName(x) + ' 🤧'; }).join('  ');
           if (others) react = '<div class="react"><span>' + t('others') + ': ' + others + ' — ' + t('scooped') + '</span></div>';
-          renderMsg('win', '🎉 ' + t('win') + ' +' + fmt(res.delta),
-            nm + ' · ' + monthLabel(res.m) + ' — ' + (res.type === 'ppongWin' ? t('ppongWin') : t('winSub')) + react);
+          renderMsg('win', '🎉 ' + t('win') + ' +' + fmt(res.delta) + (res.type === 'pairWin' ? ' · ' + sideLabel(res.dir) : ''),
+            nm + ' · ' + monthLabel(res.m) + ' — ' + (res.type === 'ppongWin' ? t('ppongWin') : (res.type === 'pairWin' ? t('pairWin') : t('winSub'))) + react);
+        } else if (res.type === 'pairLose') {
+          react = '<div class="react"><span>🔥 ' + t('potUp') + ' · ' + (nxt.avatar || '') + ' ' + pName(nxt) + '</span></div>';
+          renderMsg('lose', '🤧 ' + t('lose') + ' −' + fmt(-res.delta) + ' · ' + sideLabel(res.dir),
+            nm + ' · ' + monthLabel(res.m) + ' — ' + (res.m === res.a ? t('tie') + ' · ' : '') + t('pairLose') + ' · ' + t('pot') + ' ' + fmt(S.pot) + react);
+          snot($('#landWrap'));
+          potUp();
         } else if (res.type === 'ppong' || res.type === 'ppongLose') {
           react = '<div class="react"><span>🔥 ' + t('potUp') + ' · ' + (nxt.avatar || '') + ' ' + pName(nxt) + '</span></div>';
           renderMsg('ppong', '🤧 ' + t('ppong') + ' −' + fmt(-res.delta),
@@ -3796,7 +4156,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       prepare: prepare, isOn: isOn, isHost: isHost, canPeek: canPeek,
       create: create, join: join, leave: leave, hostStart: hostStart, hostRestart: hostRestart,
       hostNext: hostNext, share: share, sendPeek: sendPeek, requestReveal: requestReveal,
-      renderLobby: renderLobby, onlineActions: onlineActions, revealFx: revealFx,
+      renderLobby: renderLobby, onlineActions: onlineActions, revealFx: revealFx, act: act,
       applySnap: applySnap, state: function () { return st; }
     };
   })();
