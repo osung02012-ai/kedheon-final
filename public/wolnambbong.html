@@ -953,7 +953,7 @@ var WNB = (function () {
         return { action: 'fold', reason: 'paircoin', dir: pdir };
       }
       var frac2 = p.style === 'reckless' ? (0.4 + r2 * 0.5) : (p.style === 'aggressive' ? (0.3 + r2 * 0.45) : (p.style === 'cautious' ? (0.15 + r2 * 0.25) : (0.22 + r2 * 0.35)));
-      var amt2 = Math.round((L.max * Math.min(1, frac2)) / 5) * 5;
+      var amt2 = Math.round((L.max * Math.min(1, frac2)) / 1000) * 1000;
       if (amt2 < L.min) amt2 = L.min;
       if (amt2 > L.max) amt2 = L.max;
       return { action: 'bet', amount: amt2, dir: pdir, pair: true };
@@ -971,7 +971,7 @@ var WNB = (function () {
     else if (style === 'cautious') frac = 0.10 + r * 0.3;
     else frac = 0.2 + r * 0.4;
     frac *= (0.55 + pct * 0.9);
-    var amt = Math.round((L.max * Math.min(1, frac)) / 5) * 5;
+    var amt = Math.round((L.max * Math.min(1, frac)) / 1000) * 1000;
     if (amt < L.min) amt = L.min;
     if (amt > L.max) amt = L.max;
     return { action: 'bet', amount: amt, pct: pct };
