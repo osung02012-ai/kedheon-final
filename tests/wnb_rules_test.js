@@ -213,5 +213,31 @@ console.log('\n[6] 1,000 단위 기본값 · 전원 패스 재적립 단위');
   eq(refill.amt, 3000, '3인 × 앤티 1,000 = 3,000 적립');
 }
 
+console.log('\n[7] AI 베팅 금액도 1,000 단위');
+{
+  let bad = [];
+  for (let k = 0; k < 40; k++) {
+    const s = scene({ a: 2, b: 10, next: 5, pot: 3000 + k * 700 });
+    s.players.forEach(p => { p.chips = 50000; p.bankrupt = false; });
+    s.turn = 1;
+    s.players[1].style = ['reckless', 'cautious', 'aggressive', 'balanced'][k % 4];
+    const d = W.aiDecide(s);
+    if (d.action === 'bet' && d.amount % 1000 !== 0) bad.push(d.amount);
+  }
+  ok(bad.length === 0, '일반 베팅 40회 모두 1,000 단위', bad);
+
+  let bad2 = [];
+  for (let k = 0; k < 20; k++) {
+    const pm = (k % 12) + 1;
+    const s = scene({ a: pm, next: 9, pot: 5000 + k * 800 });
+    s.players.forEach(p => { p.chips = 50000; p.bankrupt = false; });
+    s.turn = 1; s.board = [card(pm), card(pm)]; s.pair = true;
+    s.players[1].style = ['reckless', 'cautious', 'aggressive', 'balanced'][k % 4];
+    const d = W.aiDecide(s);
+    if (d.action === 'bet' && d.amount % 1000 !== 0) bad2.push(d.amount);
+  }
+  ok(bad2.length === 0, '땡 베팅 20회 모두 1,000 단위', bad2);
+}
+
 console.log('\n결과: ' + pass + ' 통과 / ' + fail + ' 실패');
 process.exit(fail ? 1 : 0);
