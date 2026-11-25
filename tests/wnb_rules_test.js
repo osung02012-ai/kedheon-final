@@ -239,5 +239,163 @@ console.log('\n[7] AI 베팅 금액도 1,000 단위');
   ok(bad2.length === 0, '땡 베팅 20회 모두 1,000 단위', bad2);
 }
 
+console.log('\n[8] 🎟️ 충전 쿠폰 — 우승 적립 · 쿠폰 사용 · localStorage 영속성');
+{
+  /* localStorage 대용(메모리) */
+  function memStore() {
+    const m = {};
+    return {
+      getItem: k => (Object.prototype.hasOwnProperty.call(m, k) ? m[k] : null),
+      setItem: (k, v) => { m[k] = String(v); },
+      removeItem: k => { delete m[k]; }
+    };
+  }
+
+  /* --- 기본 영속성 --- */
+  const A = memStore();
+  eq(W.couponLoad(A), 0, '처음엔 보유 쿠폰 0장');
+  eq(W.couponLoad(null), 0, '저장소가 없으면 0장(안전)');
+  eq(W.couponAdd(A, 1), 1, '1장 적립');
+  eq(A.getItem(W.COUPON_KEY), '1', 'localStorage 키=' + W.COUPON_KEY + ' 에 1 저장');
+  eq(W.couponAdd(A, 2), 3, '2장 더 적립 → 3장');
+  eq(W.couponLoad(memStore()), 0, '다른 저장소(새로고침 전 초기화)엔 안 남는다');
+  const B = memStore();
+  B.setItem(W.COUPON_KEY, '2');
+  eq(W.couponLoad(B), 2, '저장된 2장을 그대로 복원(새로고침·재접속 유지)');
+  B.setItem(W.COUPON_KEY, 'garbage');
+  eq(W.couponLoad(B), 0, '깨진 값은 0장으로 처리');
+  B.setItem(W.COUPON_KEY, '-4');
+  eq(W.couponLoad(B), 0, '음수는 0장으로 처리');
+  B.setItem(W.COUPON_KEY, '1000');
+  eq(W.couponLoad(B), W.couponSave(B, 1000), '상한(99장)까지만 보관');
+
+  /* --- 사용(차감) --- */
+  const C = memStore();
+  W.couponAdd(C, 2);
+  let u = W.couponUse(C);
+  ok(u.ok && u.left === 1, '쿠폰 1장 사용 → 1장 남음', u);
+  eq(u.amount, 10000, '쿠폰 1장 = +10,000 머니');
+  u = W.couponUse(C);
+  ok(u.ok && u.left === 0, '마지막 1장 사용 → 0장', u);
+  u = W.couponUse(C);
+  ok(u.ok === false && u.err === 'nocoupon', '0장이면 사용 불가(nocoupon)', u);
+  eq(C.getItem(W.COUPON_KEY), '0', '0장도 저장 상태로 남는다');
+
+  /* --- 최종 우승 판정 --- */
+  let g = W.newGame({ mode: 'ai', ante: 100, count: 3, chips: 1000, rng: () => 0.5 });
+  g.over = true;
+  g.players.forEach((p, i) => { p.bankrupt = i !== 0; p.chips = i === 0 ? 3000 : 0; });
+  ok(W.isChampion(g, 0), '3인전 마지막 생존(나) → 우승');
+  ok(!W.isChampion(g, 1), '파산한 좌석은 우승 아님');
+  g.players[2].bankrupt = false;
+  ok(!W.isChampion(g, 0), '생존자가 둘이면 우승 확정 아님');
+
+  const soloG = W.newGame({ mode: 'solo', ante: 100, chips: 1000, rng: () => 0.5 });
+  ok(!W.isChampion(soloG, 0), '솔로는 우승 개념 없음(연습)');
+
+  /* --- 지급: 우승 시 1장, 같은 판에서 재지급 없음 --- */
+  const D = memStore();
+  g.players[2].bankrupt = true;
+  g.over = true;
+  let r = W.couponCheck(g, 0, D);
+  ok(r.granted === 1 && r.reason === 'champion', '우승 → 쿠폰 1장 지급', r);
+  eq(D.getItem(W.COUPON_KEY), '1', '저장소에 1장 기록');
+  r = W.couponCheck(g, 0, D);
+  ok(r.granted === 0 && r.reason === 'claimed', '같은 판에서 다시 지급되지 않음', r);
+  eq(W.couponLoad(D), 1, '중복 지급 없이 그대로 1장');
+  r = W.couponCheck(g, 1, D);
+  ok(r.granted === 0, '우승하지 않은 좌석은 지급 없음', r);
+
+  /* 게임이 끝나지 않았으면(over=false) 우승 지급 없음 */
+  const E = memStore();
+  g.over = false;
+  g.couponClaimed = {};
+  r = W.couponCheck(g, 0, E);
+  eq(r.granted, 0, '게임 종료 전에는 우승 지급 없음');
+
+  /* --- 솔로 연습 3승 목표 --- */
+  function soloScene(a, b, next) {
+    const s = W.newGame({ mode: 'solo', ante: 1000, chips: 50000, rng: () => 0.5 });
+    s.over = false;
+    s.players[0].bankrupt = false;
+    s.players[0].chips = 50000;
+    s.pot = 3000;
+    s.turn = 0;
+    s.board = [card(a), card(b)];
+    s.third = null;
+    s.bet = 0; s.betKind = 'normal'; s.pairDir = null; s.phase = 'bet';
+    s.pair = s.board[0].month === s.board[1].month;
+    s.noGap = (s.board[1].month - s.board[0].month) <= 1;
+    s.deck = [card(next)];
+    s.passRun = 0; s.passStreak = 0;
+    return s;
+  }
+  const s1 = soloScene(2, 10, 5);
+  eq(s1.winCounts[0], 0, '새 판 승리 카운트 0');
+  W.placeBet(s1, 1000);
+  W.reveal(s1);
+  eq(s1.winCounts[0], 1, '승리하면 승리 카운트 +1');
+  const s2 = soloScene(2, 10, 5);
+  W.placeBet(s2, 1000);
+  W.reveal(s2);
+  W.continueGame(s2);
+  s2.override = 1;
+  ok(!W.soloGoalHit(s2, 0), '1승으로는 목표 미달');
+  const s3 = soloScene(2, 10, 5);
+  s3.winCounts[0] = 2;
+  let res3 = W.placeBet(s3, 1000);
+  ok(res3.ok, '3승째 판 베팅 수락', res3);
+  W.reveal(s3);
+  eq(s3.winCounts[0], 3, '3승 기록');
+  ok(W.soloGoalHit(s3, 0), '솔로 3승 → 연습 목표 달성');
+  const F = memStore();
+  r = W.couponCheck(s3, 0, F);
+  ok(r.granted === 1 && r.reason === 'solo', '솔로 3승에 쿠폰 1장 지급', r);
+  r = W.couponCheck(s3, 0, F);
+  eq(r.granted, 0, '3승 뒤 더 이겨도 같은 판에서는 추가 지급 없음');
+  eq(W.couponLoad(F), 1, '솔로 쿠폰 1장 유지');
+
+  /* --- 게임 중 사용: +10,000 충전 --- */
+  const G = memStore();
+  W.couponAdd(G, 1);
+  const s4 = soloScene(2, 10, 5);
+  const before4 = s4.players[0].chips;
+  let rc = W.couponRecharge(s4, 0, G);
+  ok(rc.ok, '게임 중 쿠폰 사용 성공', rc);
+  eq(s4.players[0].chips - before4, 10000, '보유 머니 +10,000');
+  eq(rc.left, 0, '사용 후 보유 0장');
+  eq(W.couponLoad(G), 0, 'localStorage에서도 1장 차감');
+  ok(W.couponRecharge(s4, 0, G).ok === false, '0장이면 충전 불가');
+
+  /* --- 파산/게임 종료 시 부활 --- */
+  const H = memStore();
+  W.couponAdd(H, 1);
+  const s5 = soloScene(2, 10, 5);
+  s5.players[0].bankrupt = true;
+  s5.players[0].chips = 0;
+  s5.over = true;
+  s5.phase = 'result';
+  rc = W.couponRecharge(s5, 0, H);
+  ok(rc.ok && rc.revived && rc.wasOver, '파산·종료 상태에서 쿠폰 사용 → 부활', rc);
+  eq(s5.over, false, '게임 종료가 풀린다');
+  eq(s5.players[0].bankrupt, false, '파산 표시가 풀린다');
+  eq(s5.players[0].chips, 10000, '부활 머니 10,000');
+  const bt = W.beginTurn(s5);
+  ok(s5.phase === 'bet' || s5.over === false, '부활 후 다음 차례를 열 수 있다', { phase: s5.phase, over: s5.over });
+
+  /* --- 온라인 방장 대행 충전: 차감 없이 머니만 (손님 기기에서 이미 차감) --- */
+  const s6 = W.newGame({ mode: 'pass', ante: 1000, count: 3, chips: 50000, rng: () => 0.5 });
+  const before6 = s6.players[1].chips;
+  rc = W.couponRecharge(s6, 1, null);
+  ok(rc.ok, '방장 대행 충전 성공(null 저장소)', rc);
+  eq(s6.players[1].chips - before6, 10000, '손님 좌석 +10,000 동기화');
+  eq(s6.players[0].chips, 49000, '다른 좌석 머니는 그대로');
+
+  /* --- 화면 요소·키 존재 --- */
+  ok(/data-cpn/.test(src), '헤더·상태바에 쿠폰 수량 표시([data-cpn])');
+  ok(/id="cpnUseSetup"/.test(src), '설정 화면에 쿠폰 사용 버튼');
+  ok(/localStorage/.test(src), 'localStorage 영속성 코드 존재');
+}
+
 console.log('\n결과: ' + pass + ' 통과 / ' + fail + ' 실패');
 process.exit(fail ? 1 : 0);

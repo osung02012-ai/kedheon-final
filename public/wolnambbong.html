@@ -350,6 +350,26 @@ body{
   .thirdwrap{width:min(24.6vw,17.03vh);height:min(38.13vw,26.4vh)}
   .slot{width:min(14.19vw,9.94vh);height:min(22vw,15.4vh)}
 }
+/* ---------- 🎟️ 충전 쿠폰 ---------- */
+.tbtn.cpn{display:inline-flex;align-items:center;gap:3px;padding:6px 8px;font-size:11px;font-variant-numeric:tabular-nums}
+.tbtn.cpn b{font-size:12px;font-weight:900;color:#ffeec4}
+.tbtn.cpn.zero{opacity:.62}
+.tbtn.cpn.zero b{color:#e6dfcf}
+.cpnbadge{color:#ffeec4;border-color:rgba(230,195,124,.4);background:rgba(230,195,124,.12)}
+.cpnbadge b{font-size:11px;font-weight:900;color:#ffeec4;font-variant-numeric:tabular-nums}
+.cpnrow{display:flex;align-items:center;justify-content:space-between;gap:7px;margin-top:2px;padding:7px 8px;border-radius:11px;
+  border:1px dashed rgba(230,195,124,.3);background:linear-gradient(180deg,rgba(230,195,124,.1),rgba(230,195,124,.03))}
+.cpnrow .cpnnum{display:flex;align-items:baseline;gap:4px;font-size:10px;color:#dfd8c6;letter-spacing:.6px;white-space:nowrap}
+.cpnrow .cpnnum b{font-size:15px;font-weight:900;color:#ffeec4;font-variant-numeric:tabular-nums}
+.cpnrow .cpnnum i{font-style:normal;font-size:9.5px;color:#9fb5aa}
+.cpnrow .tbtn{font-size:9.5px;padding:6px 8px;letter-spacing:0;white-space:nowrap}
+.cpnrow .tbtn.on{background:linear-gradient(180deg,#e6c37c,#c99f4b);color:#2a1b06;border-color:#f0d79a}
+.cpnrow .tbtn:disabled{opacity:.45}
+.cpnhint{font-size:8.5px;line-height:1.45;color:#8fa79b;text-align:center;padding:0 2px}
+.cpnnum{display:inline-flex;align-items:baseline;gap:4px;font-size:10px;color:#dfd8c6}
+.cpnnum b{font-size:14px;font-weight:900;color:#ffeec4;font-variant-numeric:tabular-nums}
+.cpnnum i{font-style:normal;font-size:9.5px;color:#9fb5aa}
+.cpnbtn-wide{width:100%}
 </style>
 </head>
 <body>
@@ -359,6 +379,7 @@ body{
     <div class="brand"><b id="brandTitle">월남뽕</b><span id="brandSub">K-HWATU BETWEEN · 48 HANAFUDA</span></div>
     <div class="tools">
       <a class="tbtn back" href="/xaea12" title="XAEA12" aria-label="XAEA12"><span aria-hidden="true">&#8592;</span><span class="lbl">XAEA12</span></a>
+      <button class="tbtn cpn zero" id="cpnBtn" title="충전 쿠폰" aria-label="충전 쿠폰">🎟️ <b data-cpn>0</b></button>
       <button class="tbtn" id="sfxBtn" aria-label="sound" title="소리">🔊</button>
       <button class="tbtn" id="langBtn">EN</button>
       <button class="tbtn" id="gearBtn">&#9881;</button>
@@ -410,6 +431,11 @@ body{
         <span data-i18n="ppongOpt">뽕 2배 페널티</span>
         <button class="switch" id="ppongSwitch"></button>
       </div>
+      <div class="cpnrow">
+        <span class="cpnnum"><span aria-hidden="true">🎟️</span><b data-cpn>0</b><i data-i18n="couponUnit">장</i></span>
+        <button class="tbtn" id="cpnUseSetup">쿠폰 1장 사용 · 시작 머니 +10,000</button>
+      </div>
+      <p class="cpnhint" id="cpnHint">게임 최종 우승 시 1장 적립 · 다음 게임·위기 때 +10,000 충전</p>
     </div>
 
     <button class="start" id="startBtn">시작하기</button>
@@ -422,6 +448,7 @@ body{
       <div class="meta">
         <span class="deckbadge" id="roomBadge" style="display:none">🌐 <b>0000</b></span>
         <span class="deckbadge"><i></i><b id="deckVal">48</b></span>
+        <span class="deckbadge cpnbadge" id="cpnBadge" title="충전 쿠폰">🎟️ <b data-cpn>0</b></span>
       </div>
       <span class="turnbadge" id="turnBadge">P1</span>
     </div>
@@ -477,6 +504,9 @@ body{
       <div class="row"><span data-i18n="ante">앤티</span><div class="seg" id="anteSeg2"></div></div>
       <div class="row"><span data-i18n="ppongOpt">뽕 2배 페널티</span><button class="switch" id="ppongSwitch2"></button></div>
       <div class="row"><span data-i18n="lang">언어</span><button class="tbtn" id="langBtn2">EN</button></div>
+      <div class="row"><span data-i18n="couponLabel">충전 쿠폰</span><span class="cpnnum"><b data-cpn>0</b> <i data-i18n="couponUnit">장</i></span></div>
+      <p class="cpnhint" id="cpnHint2">게임 최종 우승 시 1장 적립 · 다음 게임·위기 때 +10,000 충전</p>
+      <button class="ghost" id="cpnSheetUse" data-i18n="couponUseBtn">쿠폰 1장 사용 (+10,000 충전)</button>
       <button class="ghost" id="restartBtn" data-i18n="restart">처음부터 (모드 선택)</button>
       <button class="ghost" id="closeSheet" data-i18n="close">닫기</button>
     </div>
@@ -649,7 +679,9 @@ var WNB = (function () {
       over: false,
       hand: 0,
       reshuffles: 0,
-      log: []
+      log: [],
+      winCounts: players.map(function () { return 0; }),   /* 판별 승리 횟수 — 솔로 연습 목표 판정 */
+      couponClaimed: {}                                     /* 한 판에서 쿠폰을 두 번 받지 않도록 */
     };
     beginTurn(s);
     return s;
@@ -904,6 +936,11 @@ var WNB = (function () {
       short = penalty < bet;
     }
 
+    if (type === 'win' || type === 'ppongWin' || type === 'pairWin') {
+      s.winCounts = s.winCounts || [];
+      s.winCounts[s.turn] = (s.winCounts[s.turn] || 0) + 1;
+    }
+
     s.result = {
       type: type, delta: delta, bet: bet, a: a, b: b, m: m,
       turn: s.turn, mult: mult, short: short, potUp: delta < 0 ? -delta : 0,
@@ -979,6 +1016,93 @@ var WNB = (function () {
 
   function totalChips(s) {
     return s.players.reduce(function (t, p) { return t + p.chips; }, 0) + s.pot;
+  }
+
+  /* ============================================================
+     🎟️ 충전 쿠폰 — 최종 우승하면 1장 적립, 다음 게임/위기 때
+        쿠폰 1장으로 +10,000 충전.
+        · 보유 수량은 브라우저 localStorage(wnb_recharge_coupons_v1)에 남는다.
+        · 저장소는 인자로 받는다 — 테스트에서는 가짜 storage를 넣어 그대로 검증한다.
+     ============================================================ */
+  var COUPON_KEY = 'wnb_recharge_coupons_v1';
+  var COUPON_MONEY = 10000;
+  var COUPON_MAX = 99;
+  var COUPON_SOLO_GOAL = 3;          /* 솔로 연습 — 3승 달성 시 1장(무한 파밍 방지) */
+
+  function couponLoad(storage) {
+    try {
+      if (!storage) return 0;
+      var v = parseInt(storage.getItem(COUPON_KEY), 10);
+      if (!isFinite(v) || v < 0) return 0;
+      return Math.min(Math.floor(v), COUPON_MAX);
+    } catch (e) { return 0; }
+  }
+  function couponSave(storage, n) {
+    n = Math.max(0, Math.min(COUPON_MAX, Math.floor(Number(n) || 0)));
+    try { if (storage) storage.setItem(COUPON_KEY, String(n)); } catch (e) {}
+    return n;
+  }
+  function couponAdd(storage, add) {
+    return couponSave(storage, couponLoad(storage) + (Math.floor(Number(add)) || 0));
+  }
+  function couponUse(storage) {
+    var left = couponLoad(storage);
+    if (left < 1) return { ok: false, err: 'nocoupon', left: 0 };
+    left = couponSave(storage, left - 1);
+    return { ok: true, left: left, amount: COUPON_MONEY };
+  }
+
+  /* 최종 우승 = 마지막까지 살아남은 한 명. 솔로는 판돈과의 연습이라 우승 개념이 없다. */
+  function isChampion(s, seat) {
+    if (!s || !s.players || s.mode === 'solo') return false;
+    var alive = s.players.filter(function (p) { return !p.bankrupt; });
+    return alive.length === 1 && alive[0].i === seat;
+  }
+  /* 솔로 연습 목표 — 한 판에서 3승에 닿으면 1장 */
+  function soloGoalHit(s, seat) {
+    if (!s || s.mode !== 'solo') return false;
+    return ((s.winCounts && s.winCounts[seat]) || 0) >= COUPON_SOLO_GOAL;
+  }
+  /* 쿠폰 지급 판정 — 같은 판에서 두 번 지급하지 않는다(s.couponClaimed) */
+  function couponCheck(s, seat, storage) {
+    var total = couponLoad(storage);
+    if (!s) return { granted: 0, total: total, reason: 'none' };
+    s.couponClaimed = s.couponClaimed || {};
+    var key = 's' + seat;
+    if (s.couponClaimed[key]) return { granted: 0, total: total, reason: 'claimed' };
+    var champ = !!(s.over && isChampion(s, seat));
+    var solo = soloGoalHit(s, seat);
+    if (!champ && !solo) return { granted: 0, total: total, reason: 'none' };
+    s.couponClaimed[key] = champ ? 'champion' : 'solo';
+    total = couponAdd(storage, 1);
+    return { granted: 1, total: total, reason: champ ? 'champion' : 'solo' };
+  }
+
+  /* 쿠폰 1장 → seat 머니 +10,000. 파산·게임 종료 상태면 그 자리에서 부활시킨다.
+     storage를 null로 주면 차감 없이 충전만 한다(온라인 방장이 손님 대신 처리할 때). */
+  function couponRecharge(s, seat, storage) {
+    if (!s || !s.players || !s.players[seat]) return { ok: false, err: 'noseat' };
+    if (storage) {
+      var used = couponUse(storage);
+      if (!used.ok) return { ok: false, err: 'nocoupon', left: 0 };
+    }
+    var p = s.players[seat];
+    var wasOver = !!s.over;
+    var revived = false;
+    p.chips += COUPON_MONEY;
+    if (p.bankrupt) { p.bankrupt = false; revived = true; }
+    if (wasOver) {
+      s.over = false;
+      s.result = null;
+      s.phase = 'idle';
+      s.turn = p.i;
+      revived = true;
+    }
+    s.log.push({ t: 'coupon', i: p.i, amt: COUPON_MONEY });
+    return {
+      ok: true, left: couponLoad(storage), amount: COUPON_MONEY,
+      chips: p.chips, revived: revived, wasOver: wasOver, over: !!s.over
+    };
   }
 
   /* ============================================================
@@ -2165,6 +2289,9 @@ var WNB = (function () {
     anteRefillAll: anteRefillAll, registerPass: registerPass,
     reveal: reveal, fold: fold, continueGame: continueGame, refillPot: refillPot,
     isAiTurn: isAiTurn, aiDecide: aiDecide, totalChips: totalChips,
+    couponLoad: couponLoad, couponSave: couponSave, couponAdd: couponAdd, couponUse: couponUse,
+    isChampion: isChampion, soloGoalHit: soloGoalHit, couponCheck: couponCheck, couponRecharge: couponRecharge,
+    COUPON_KEY: COUPON_KEY, COUPON_MONEY: COUPON_MONEY, COUPON_SOLO_GOAL: COUPON_SOLO_GOAL,
     activeCount: activeCount, meta: meta, faceSVG: faceSVG, backSVG: backSVG
   };
 })();
@@ -2218,7 +2345,20 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       reshuffle: '덱 리셋(48장)', betOf: '베팅', onTable: '판돈',
       winSub: '사이 적중! 판돈에서 회수', loseSub: '경계 밖 — 판돈으로', ppongSub: '경계와 같은 숫자!',
       empty: '칩이 부족합니다', passOnly: '패스만 가능',
-      gameOverSub: '칩을 모두 잃었습니다'
+      gameOverSub: '칩을 모두 잃었습니다',
+      couponLabel: '충전 쿠폰', couponUnit: '장', couponTitle: '충전 쿠폰',
+      couponHint: '게임 최종 우승 시 1장 적립 · 다음 게임·위기 때 +10,000 충전',
+      couponUseShort: '쿠폰 1장 사용 · 시작 머니 +10,000',
+      couponReserved: '✓ 이번 판에 사용 (+10,000)',
+      couponReservedHint: '시작할 때 쿠폰 1장이 차감되고 시작 머니가 10,000 늘어납니다',
+      couponUseBtn: '쿠폰 1장 사용 (+10,000 충전)',
+      couponUseRevive: '쿠폰 1장 사용 (+10,000) · 이어서',
+      couponEarned: '충전 쿠폰 1장 획득!',
+      couponEarnedChamp: '최종 우승 — 다음 게임에서 사용할 수 있습니다',
+      couponEarnedSolo: '연습 3승 달성 — 다음 게임에서 사용할 수 있습니다',
+      couponTotal: '보유', couponUsed: '충전 완료',
+      couponUsedBy: '충전 쿠폰을 사용했습니다 (+10,000)',
+      couponNone: '보유 쿠폰 없음', couponNoneSub: '게임 우승 시 적립됩니다'
     },
     en: {
       solo: 'Solo', soloSub: 'Quick practice',
@@ -2260,10 +2400,23 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       chipsLeft: 'chips', reshuffle: 'Deck reset (48)',
       winSub: 'Inside the gap — paid from the pot', loseSub: 'Outside — into the pot', ppongSub: 'Hit the edge exactly!',
       empty: 'Not enough chips', passOnly: 'Pass only',
-      gameOverSub: 'Out of chips'
+      gameOverSub: 'Out of chips',
+      couponLabel: 'Recharge coupon', couponUnit: '', couponTitle: 'Recharge coupon',
+      couponHint: 'Win a game to earn 1 — spend it for +10,000 next game or when you run dry',
+      couponUseShort: 'Use 1 coupon · +10,000 start chips',
+      couponReserved: '✓ Using 1 this game (+10,000)',
+      couponReservedHint: 'One coupon is spent at the start and your starting chips go up by 10,000',
+      couponUseBtn: 'Use 1 coupon (+10,000 chips)',
+      couponUseRevive: 'Use 1 coupon (+10,000) · keep playing',
+      couponEarned: 'Recharge coupon earned!',
+      couponEarnedChamp: 'Champion — use it in your next game',
+      couponEarnedSolo: '3 practice wins — use it in your next game',
+      couponTotal: 'now', couponUsed: 'Recharged',
+      couponUsedBy: 'used a recharge coupon (+10,000)',
+      couponNone: 'No coupons', couponNoneSub: 'Win a game to earn one'
     }
   };
-  var ui = { lang: 'kr', mode: 'solo', count: 3, aiCount: 3, names: [], ante: 1000, chips: 50000, ppong: false, sel: 0 };
+  var ui = { lang: 'kr', mode: 'solo', count: 3, aiCount: 3, names: [], ante: 1000, chips: 50000, ppong: false, sel: 0, useCouponNext: false };
   var S = null, revealed = false, busy = false, aiTimer = null;
   var HOLD_MS = 2200, resultHoldUntil = 0, holdTimer = null, toastTimer = null, landId = '';
 
@@ -2671,6 +2824,89 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
   function vibrate(p) { try { if (navigator.vibrate) navigator.vibrate(p); } catch (e) {} }
 
   /* ------------------------------------------------------------
+     🎟️ 충전 쿠폰 — 보유 수량 표시 · 사용
+       · 우승(또는 솔로 3승)하면 1장 적립, localStorage에 남는다.
+       · 게임 중 머니가 바닥나면 1장으로 +10,000 충전,
+         종료(파산) 화면에서는 부활, 시작 전에는 이번 판 시작 머니에 더한다.
+     ------------------------------------------------------------ */
+  function store() {
+    try { return (typeof window !== 'undefined' && window.localStorage) || null; } catch (e) { return null; }
+  }
+  function couponCount() { return W.couponLoad(store()); }
+
+  function refreshCoupons() {
+    var n = couponCount();
+    var nodes = document.querySelectorAll('[data-cpn]');
+    for (var i = 0; i < nodes.length; i++) nodes[i].textContent = n;
+    var top = $('#cpnBtn');
+    if (top) { top.classList.toggle('zero', n === 0); top.title = t('couponTitle') + ' · ' + n + t('couponUnit'); }
+    var sb = $('#cpnUseSetup');
+    if (sb) {
+      sb.disabled = n < 1;
+      sb.textContent = ui.useCouponNext ? t('couponReserved') : t('couponUseShort');
+      sb.classList.toggle('on', !!ui.useCouponNext);
+    }
+    var h1 = $('#cpnHint');
+    if (h1) h1.textContent = ui.useCouponNext ? t('couponReservedHint') : t('couponHint');
+    var h2 = $('#cpnHint2');
+    if (h2) h2.textContent = t('couponHint');
+  }
+
+  function grantCouponToast(total, reason) {
+    toast('🎟️ ' + t('couponEarned'),
+      (reason === 'solo' ? t('couponEarnedSolo') : t('couponEarnedChamp')) + ' · ' + t('couponTotal') + ' ' + total + t('couponUnit'));
+    refreshCoupons();
+    vibrate([20, 40, 20]);
+  }
+
+  /* 게임이 끝났거나(우승) 솔로 목표에 닿았을 때 호출 — 한 판에 한 번만 지급된다 */
+  function claimCoupons() {
+    if (!S) return null;
+    var seat = ON.isOn() ? ON.myIdx() : 0;
+    var r = W.couponCheck(S, seat, store());
+    if (r && r.granted) { grantCouponToast(r.total, r.reason); confetti(); }
+    return r;
+  }
+
+  /* 쿠폰 1장 사용 — 상황에 따라 즉시 충전/부활/다음 판 예약 */
+  function useCouponNow() {
+    if (ON.isOn()) { ON.useCoupon(); return; }
+    if (couponCount() < 1) {
+      toast('🎟️ ' + t('couponNone'), t('couponNoneSub'));
+      refreshCoupons();
+      return;
+    }
+    if (S) {
+      var seat = (S.mode === 'pass' && !S.over) ? S.turn : 0;
+      var r = W.couponRecharge(S, seat, store());
+      if (!r.ok) { toast('🎟️ ' + t('couponNone'), t('couponNoneSub')); refreshCoupons(); return; }
+      $('#sheet').classList.remove('on');
+      if (r.wasOver) { busy = false; W.beginTurn(S); show('game'); paintTurn(); }
+      else { renderStatus(); renderPlayers(); renderActions(); }
+      toast('🎟️ ' + t('couponUsed'), '+' + fmt(r.amount) + ' · ' + t('couponTotal') + ' ' + W.couponLoad(store()) + t('couponUnit'));
+      refreshCoupons();
+      return;
+    }
+    /* 아직 판이 없으면(설정·로비) 다음 판 시작 머니에 더하도록 예약만 한다 */
+    ui.useCouponNext = !ui.useCouponNext;
+    refreshCoupons();
+  }
+
+  /* 액션 영역에 붙는 인라인 쿠폰 버튼 — 머니가 바닥나기 직전일 때만 */
+  function addCouponRow(A, L, turnIdx) {
+    if (!A || !S) return;
+    var p = S.players[turnIdx || 0];
+    var low = (L && L.max < 1) || !p || p.chips < S.ante * 2;
+    if (!low || couponCount() < 1) return;
+    var b = document.createElement('button');
+    b.className = 'ghost wide';
+    b.id = 'cpnInlineBtn';
+    b.textContent = '🎟️ ' + t('couponUseBtn');
+    b.onclick = useCouponNow;
+    A.appendChild(b);
+  }
+
+  /* ------------------------------------------------------------
      화면 / 설정
      ------------------------------------------------------------ */
   function show(which) {
@@ -2713,6 +2949,8 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     renderSeg($('#aiSeg'), [2, 3, 4], ui.aiCount, function (v) { ui.aiCount = v; applyStatic(); }, ui.lang === 'en' ? 'p' : '인');
     $('#ppongSwitch').classList.toggle('on', ui.ppong);
     $('#ppongSwitch2').classList.toggle('on', ui.ppong);
+    var csh = $('#cpnSheetUse'); if (csh) csh.textContent = t('couponUseBtn');
+    refreshCoupons();
     if (S) { renderPlayers(); renderActions(); renderMsg(lastMsg.cls, lastMsg.l1, lastMsg.l2); }
   }
 
@@ -2783,6 +3021,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
   var lastReshuffles = 0;
 
   function renderStatus() {
+    refreshCoupons();
     $('#potVal').textContent = fmt(S.pot);
     $('#deckVal').textContent = S.deck.length;
     var p = S.players[S.turn];
@@ -2890,7 +3129,12 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     if (ON.isOn()) { ON.onlineActions(A); return; }
 
     if (S.over) {
-      A.innerHTML = '<button class="go wide" id="againBtn">' + t('restartBtn') + '</button>';
+      var meOut = S.players[0] && S.players[0].bankrupt;
+      A.innerHTML = (meOut && couponCount() > 0
+        ? '<button class="ghost wide" id="cpnReviveBtn">🎟️ ' + t('couponUseRevive') + '</button>' : '') +
+        '<button class="go wide" id="againBtn">' + t('restartBtn') + '</button>';
+      var rvb = $('#cpnReviveBtn');
+      if (rvb) rvb.onclick = useCouponNow;
       $('#againBtn').onclick = backToSetup;
       return;
     }
@@ -2903,6 +3147,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       }
       A.innerHTML = buildBetUI();
       bindBetUI();
+      addCouponRow(A, W.betLimits(S), 0);
       return;
     }
 
@@ -3166,6 +3411,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       renderMsg('lose', t('over'), t('gameOverSub'));
     }
     $('#peekHint').style.display = 'none';
+    claimCoupons();
     renderActions();
   }
 
@@ -3303,6 +3549,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       renderPlayers();
       renderActions();
       busy = false;
+      if (S.mode === 'solo' && win) claimCoupons();     /* 연습 3승 목표 */
       if (isAi || W.isAiTurn(S)) aiTimer = setTimeout(nextTurn, 1900);
     }, 420);
   }
@@ -3312,10 +3559,16 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
      ------------------------------------------------------------ */
   function startGame() {
     if (ui.mode === 'online') { if (ON.isOn()) show('lobby'); return; }
+    var boost = 0;
+    if (ui.useCouponNext) {
+      var cu = W.couponUse(store());
+      if (cu.ok) boost = W.COUPON_MONEY;
+      ui.useCouponNext = false;
+    }
     S = W.newGame({
       mode: ui.mode,
       ante: ui.ante,
-      chips: ui.chips,
+      chips: ui.chips + boost,
       ppongDouble: ui.ppong,
       count: ui.mode === 'ai' ? ui.aiCount : ui.count,
       names: ui.names,
@@ -3323,6 +3576,10 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     });
     show('game');
     paintTurn();
+    refreshCoupons();
+    if (boost) {
+      toast('🎟️ ' + t('couponUsed'), '+' + fmt(boost) + ' · ' + t('couponTotal') + ' ' + W.couponLoad(store()) + t('couponUnit'));
+    }
   }
 
   /* ============================================================
@@ -3342,7 +3599,8 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       lastRev: 0, lastDoneRev: 0, stageKey: '', ws: null, ref: 0, joinRef: null,
       joined: false, closed: true, retry: 0, hbTimer: 0, tickTimer: 0,
       hostSeen: 0, seen: {}, joinTimer: null, remoteDrag: false,
-      pending: '', lastPeekSent: 0, reconnectAt: 0
+      pending: '', lastPeekSent: 0, reconnectAt: 0,
+      couponPending: 0, couponOverClaimed: false
     };
     var AV = ['\uD83D\uDE4B', '\uD83D\uDE3A', '\uD83E\uDD89', '\uD83D\uDC2F', '\uD83D\uDC30', '\uD83D\uDC3C'];
 
@@ -3569,6 +3827,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       st.lastRev = sn.rev;
       st.snap = sn;
       if (sn.phase === 'bet') st.third = null;
+      if (sn.phase !== 'over') st.couponOverClaimed = false;
       if (!isHost()) S = makeLocal(sn);   /* 방장은 실제 덱을 가진 자기 상태를 그대로 유지 */
       busy = false;
       revealed = (sn.phase === 'result');
@@ -3617,6 +3876,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
         var w = alive[0];
         if (w) renderMsg('win', '🏆 ' + t('winner') + ': ' + (w.av || '') + ' ' + w.name, fmt(w.chips) + ' ' + t('chipsLeft'));
         else renderMsg('lose', t('over'), t('gameOverSub'));
+        if (!st.couponOverClaimed) { st.couponOverClaimed = true; claimCoupons(); }   /* 최종 우승이면 1장 */
         return;
       }
       if (sn.phase === 'bet') {
@@ -3643,11 +3903,23 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
         A.innerHTML = '<button class="go wide" id="againBtn">' + (isHost() ? t('restartBtn') : t('leave')) + '</button>';
         var ab = $('againBtn');
         if (ab) ab.onclick = function () { if (isHost()) hostRestart(); else leave(true); };
+        var mine = sn.players[me];
+        if (mine && mine.bankrupt && couponCount() > 0) {
+          var cv = document.createElement('button');
+          cv.className = 'ghost wide';
+          cv.id = 'cpnReviveBtn';
+          cv.textContent = '🎟️ ' + t('couponUseRevive');
+          cv.onclick = useCoupon;
+          A.insertBefore(cv, ab);
+        }
         return;
       }
       if (sn.phase === 'bet') {
-        if (sn.turn === me) { A.innerHTML = buildBetUI(); bindOnlineBet(); }
-        else {
+        if (sn.turn === me) {
+          A.innerHTML = buildBetUI();
+          bindOnlineBet();
+          addCouponRow(A, W.betLimits(S), me);
+        } else {
           var p = sn.players[sn.turn];
           A.innerHTML = '<div class="thinking">' + (p.av || '') + ' ' + p.name +
             ' <span class="dots"><i></i><i></i><i></i></span> ' + t('thinking') + '</div>';
@@ -3713,6 +3985,37 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       renderMsg('', '⏳ ' + (ui.lang === 'en' ? 'Sent…' : '전송 중…'), '');
       if (isHost()) hostAct(m); else broadcast('act', m);
       setTimeout(function () { busy = false; }, 2500);
+    }
+
+    /* 🎟️ 충전 쿠폰 — 내 자리 머니 +10,000. 방장이 계산해 전 화면에 동기화한다.
+       쿠폰 차감은 내 기기(localStorage)에서만 일어나고, 방장 확인을 받은 뒤에만 줄어든다. */
+    function useCoupon() {
+      if (!st.snap || busy) return;
+      if (myIdx() < 0) return;
+      if (couponCount() < 1) { toast('🎟️ ' + t('couponNone'), t('couponNoneSub')); return; }
+      busy = true;
+      var m = { rid: st.rid, cid: st.cid, kind: 'coupon', rev: st.snap.rev };
+      if (isHost()) hostCoupon(m);
+      else { st.couponPending = st.snap.rev; broadcast('cpnreq', m); }
+      setTimeout(function () { busy = false; }, 3000);
+    }
+    function hostCoupon(m) {
+      if (!isHost() || !S || !m || !m.cid) return;
+      var seat = -1;
+      for (var i = 0; i < S.players.length; i++) if (cidOf(i) === m.cid) { seat = i; break; }
+      if (seat < 0) return;
+      var r = W.couponRecharge(S, seat, null);      /* 차감은 누른 사람 기기에서 */
+      if (!r.ok) return;
+      if (r.wasOver) { st.couponOverClaimed = false; W.beginTurn(S); st.third = null; }
+      var sn = snapOf();
+      broadcast('coupon', { rid: st.rid, cid: m.cid, rev: m.rev, chips: r.chips, revived: r.revived });
+      broadcast('state', { rid: st.rid, snap: sn });
+      applySnap(sn);
+      if (m.cid === st.cid) {                        /* 방장 본인이 눌렀을 때 */
+        var cu = W.couponUse(store());
+        refreshCoupons();
+        toast('🎟️ ' + t('couponUsed'), '+' + fmt(W.COUPON_MONEY) + ' · ' + t('couponTotal') + ' ' + (cu.ok ? cu.left : W.couponLoad(store())) + t('couponUnit'));
+      }
     }
     function hostAct(m) {
       if (!S || S.phase !== 'bet' || cidOf(S.turn) !== m.cid) return;
@@ -3897,6 +4200,23 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
         case 'done':
           if (!isHost() && d.snap && d.result) doneApply(d.snap, d.result);
           break;
+        case 'cpnreq':
+          /* 손님의 쿠폰 사용 요청 — 방장이 계산해 전 화면에 알린다 */
+          if (isHost() && d.cid !== st.cid) hostCoupon(d);
+          break;
+        case 'coupon':
+          /* 내가 누른 요청이 방장 확인을 받아 되돌아온 경우 — 여기서 1장 차감 */
+          if (d.cid === st.cid && st.couponPending && st.couponPending === d.rev) {
+            st.couponPending = 0;
+            var cu = W.couponUse(store());
+            refreshCoupons();
+            toast('🎟️ ' + t('couponUsed'), '+' + fmt(W.COUPON_MONEY) + ' · ' + t('couponTotal') + ' ' + (cu.ok ? cu.left : W.couponLoad(store())) + t('couponUnit'));
+          } else if (d.cid !== st.cid) {
+            var who = '';
+            st.roster.forEach(function (r) { if (r.cid === d.cid) who = r.nick; });
+            toast('🎟️ ' + (who || t('you')) + ' ' + t('couponUsedBy'), '');
+          }
+          break;
         case 'hb':
           if (d.cid === st.hostCid || d.host) st.hostSeen = Date.now();
           st.seen[d.cid] = Date.now();
@@ -4071,6 +4391,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       var names = st.roster.map(function (r) { return r.nick; });
       S = W.newGame({ mode: 'pass', ante: ui.ante, ppongDouble: ui.ppong, count: names.length, names: names, rng: Math.random });
       st.started = true; st.snap = null; st.lastRev = 0; st.third = null;
+      st.couponOverClaimed = false; st.couponPending = 0;
       var sn = snapOf();
       broadcast('state', { rid: st.rid, snap: sn });
       applySnap(sn);
@@ -4078,6 +4399,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     function hostRestart() {
       if (!isHost()) return;
       st.started = false; S = null; st.snap = null; st.lastRev = 0; st.third = null;
+      st.couponOverClaimed = false; st.couponPending = 0;
       broadcast('reset', { rid: st.rid });
       show('lobby'); renderLobby();
     }
@@ -4088,6 +4410,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       st.code = ''; st.rid = ''; st.role = ''; st.roster = []; st.started = false;
       st.snap = null; st.third = null; st.lastRev = 0; st.lastDoneRev = 0; st.stageKey = '';
       st.hostCid = ''; st.retry = 0; st.remoteDrag = false; st.rev = 0;
+      st.couponPending = 0; st.couponOverClaimed = false;
       setConn('');
       if (!keepCfg) st.cfg = null;
     }
@@ -4174,7 +4497,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     }
 
     return {
-      prepare: prepare, isOn: isOn, isHost: isHost, canPeek: canPeek,
+      prepare: prepare, isOn: isOn, isHost: isHost, canPeek: canPeek, myIdx: myIdx, useCoupon: useCoupon,
       create: create, join: join, leave: leave, hostStart: hostStart, hostRestart: hostRestart,
       hostNext: hostNext, share: share, sendPeek: sendPeek, requestReveal: requestReveal,
       renderLobby: renderLobby, onlineActions: onlineActions, revealFx: revealFx, act: act,
@@ -4190,7 +4513,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       renderMsg(lastMsg.cls, lastMsg.l1.replace(/undefined/g, ''), lastMsg.l2);
     };
     $('#langBtn2').onclick = $('#langBtn').onclick;
-    $('#gearBtn').onclick = function () { $('#sheet').classList.add('on'); };
+    $('#gearBtn').onclick = function () { refreshCoupons(); $('#sheet').classList.add('on'); };
     $('#closeSheet').onclick = function () { $('#sheet').classList.remove('on'); };
     $('#restartBtn').onclick = function () { $('#sheet').classList.remove('on'); backToSetup(); };
     $('#ppongSwitch').onclick = $('#ppongSwitch2').onclick = function () {
@@ -4210,6 +4533,14 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     $('#minus').onclick = function () { ui.count = Math.max(2, ui.count - 1); applyStatic(); };
     $('#plus').onclick = function () { ui.count = Math.min(6, ui.count + 1); applyStatic(); };
     $('#startBtn').onclick = startGame;
+
+    /* 🎟️ 충전 쿠폰 — 헤더 배지(설정 열기) · 설정 화면 행 · 설정 시트 */
+    var cpbtn = $('#cpnBtn');
+    if (cpbtn) cpbtn.onclick = function () { refreshCoupons(); $('#sheet').classList.add('on'); };
+    var cpset = $('#cpnUseSetup');
+    if (cpset) cpset.onclick = useCouponNow;
+    var cpsheet = $('#cpnSheetUse');
+    if (cpsheet) cpsheet.onclick = useCouponNow;
 
     $('#sfxBtn').onclick = function () {
       SFX.setOn(!SFX.isOn());
