@@ -309,7 +309,7 @@ body{
 .potup{position:absolute;left:50%;top:-2px;transform:translateX(-50%);font-size:10px;font-weight:900;color:#ffd166;white-space:nowrap;animation:floatup 1.2s ease-out forwards;pointer-events:none}
 /* 토스트 — 2연속 전원 패스 등 */
 .toast{
-  position:fixed;left:50%;top:calc(58px + env(safe-area-inset-top));z-index:90;
+  position:fixed;left:50%;top:calc(158px + env(safe-area-inset-top));z-index:90;
   transform:translate(-50%,-14px);opacity:0;pointer-events:none;text-align:center;max-width:92vw;
   display:flex;flex-direction:column;align-items:center;gap:2px;padding:9px 16px;border-radius:14px;
   background:linear-gradient(180deg,rgba(240,200,120,.97),rgba(191,144,54,.97));color:#2a1b06;
@@ -2666,7 +2666,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     el.innerHTML = '<b>' + title + '</b>' + (sub ? '<span>' + sub + '</span>' : '');
     el.classList.add('on');
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(function () { el.classList.remove('on'); }, ms || 2800);
+    toastTimer = setTimeout(function () { el.classList.remove('on'); }, ms || 3400);
   }
   function vibrate(p) { try { if (navigator.vibrate) navigator.vibrate(p); } catch (e) {} }
 
