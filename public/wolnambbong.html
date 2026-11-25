@@ -215,6 +215,7 @@ body{
 .table.thump{animation:tblthump .26s ease}
 @keyframes tblthump{0%,100%{transform:translateY(0)}40%{transform:translateY(2px)}}
 .stage.gone{opacity:0;transform:translateY(7px) scale(.95);pointer-events:none;transition:opacity .2s ease,transform .2s ease}
+.stage.gone.shrink{height:0;min-height:0;overflow:hidden;transition:height .3s ease,opacity .2s ease,transform .2s ease}
 .holdhint{display:flex;align-items:center;justify-content:center;gap:6px;font-size:11.5px;color:#cfe0d8;letter-spacing:.3px;padding:10px}
 .stage{position:relative;display:flex;flex-direction:column;align-items:center;gap:5px;z-index:2}
 .thirdwrap{
@@ -2849,6 +2850,8 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       SFX.thud(1);
       vibrate(14);
     }, 200);
+    /* 착지 연출이 끝난 뒤에 빈 쪽기 자리를 접어 세 장을 가운데로 모은다 */
+    setTimeout(function () { if (stage && stage.classList.contains('gone')) stage.classList.add('shrink'); }, 520);
   }
 
   function clearLand() {
@@ -2858,7 +2861,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     if (board) board.classList.remove('landed');
     if (wrap) wrap.classList.remove('slam', 'impact');
     if (face) face.innerHTML = '';
-    if (stage) stage.classList.remove('gone');
+    if (stage) { stage.classList.remove('gone'); stage.classList.remove('shrink'); }
   }
 
   function resetThird() {
