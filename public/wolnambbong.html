@@ -402,6 +402,10 @@ body{
         <div class="seg" id="anteSeg"></div>
       </div>
       <div class="row">
+        <span data-i18n="chips">시작 머니</span>
+        <div class="seg" id="chipsSeg"></div>
+      </div>
+      <div class="row">
         <span data-i18n="ppongOpt">뽕 2배 페널티</span>
         <button class="switch" id="ppongSwitch"></button>
       </div>
@@ -590,16 +594,16 @@ var WNB = (function () {
   function newGame(cfg) {
     cfg = cfg || {};
     var mode = cfg.mode || 'solo';
-    var ante = cfg.ante || 10;
+    var ante = cfg.ante || 1000;
     var rng = cfg.rng || Math.random;
     var players = [];
     var i;
 
     if (mode === 'solo') {
-      players.push({ i: 0, name: '나', nameEn: 'You', chips: cfg.chips || 1000, bankrupt: false, ai: false, avatar: '\uD83D\uDE4B', style: 'human' });
+      players.push({ i: 0, name: '나', nameEn: 'You', chips: cfg.chips || 50000, bankrupt: false, ai: false, avatar: '\uD83D\uDE4B', style: 'human' });
     } else if (mode === 'ai') {
       var n = Math.max(2, Math.min(4, cfg.count || 3));
-      players.push({ i: 0, name: '나', nameEn: 'You', chips: cfg.chips || 1000, bankrupt: false, ai: false, avatar: '\uD83D\uDE4B', style: 'human' });
+      players.push({ i: 0, name: '나', nameEn: 'You', chips: cfg.chips || 50000, bankrupt: false, ai: false, avatar: '\uD83D\uDE4B', style: 'human' });
       var roster = [
         { name: '타짜 고양이', nameEn: 'Tazza Cat', avatar: '\uD83D\uDC31', style: 'reckless' },
         { name: '신중한 부엉이', nameEn: 'Cautious Owl', avatar: '\uD83E\uDD89', style: 'cautious' },
@@ -607,7 +611,7 @@ var WNB = (function () {
       ];
       for (i = 1; i < n; i++) {
         var r = roster[i - 1];
-        players.push({ i: i, name: r.name, nameEn: r.nameEn, chips: cfg.chips || 1000, bankrupt: false, ai: true, avatar: r.avatar, style: r.style });
+        players.push({ i: i, name: r.name, nameEn: r.nameEn, chips: cfg.chips || 50000, bankrupt: false, ai: true, avatar: r.avatar, style: r.style });
       }
     } else {
       var c = Math.max(2, Math.min(6, cfg.count || 3));
@@ -616,7 +620,7 @@ var WNB = (function () {
         players.push({
           i: i, name: (names[i] && String(names[i]).trim()) || ('P' + (i + 1)),
           nameEn: (names[i] && String(names[i]).trim()) || ('P' + (i + 1)),
-          chips: cfg.chips || 1000, bankrupt: false, ai: false, avatar: '\uD83D\uDC64', style: 'human'
+          chips: cfg.chips || 50000, bankrupt: false, ai: false, avatar: '\uD83D\uDC64', style: 'human'
         });
       }
     }
@@ -798,8 +802,9 @@ var WNB = (function () {
 
   function refillPot(s) {
     if (s.mode === 'solo') {
-      s.pot += 100;
-      s.log.push({ t: 'house', amt: 100 });
+      var top = Math.max(1000, s.ante * 10);
+      s.pot += top;
+      s.log.push({ t: 'house', amt: top });
       return;
     }
     s.players.forEach(function (p) {
@@ -2186,6 +2191,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       rulesText: '두 장 사이(예: 2와 10 사이 3~9)에 세 번째 패가 들어오면 판돈에서 건 만큼 획득. 경계와 같거나 바깥이면 건 만큼 판돈으로. 땡(2·2)이면 업/다운을 골라 걸고, 높은 숫자(업)·낮은 숫자(다운)가 나오면 건 만큼 획득 — 같은 숫자가 나오면 패배. 패스하면 앤티만 잃고, 전원 패스가 두 바퀴 이어지면 모두 앤티를 다시 겁니다.',
       pot: '판돈', deck: '덱', pass: '패스', bet: '걸기', quick: '바로 까기',
       potLabel: '쌓인 머니', potShort: 'POT',
+      chips: '시작 머니', half: '하프', allin: '올인',
       pairTag: '땡', pairMsg: '업 / 다운을 골라 거세요', pairSub: '같은 숫자가 나오면 업·다운 모두 패배',
       up: '업', down: '다운', upHint: '높은 숫자', downHint: '낮은 숫자',
       pairWin: '적중!', pairLose: '빗나감', tie: '같은 숫자',
@@ -2228,6 +2234,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       rulesText: 'If the third card lands between the two (e.g. 2–10 → 3~9) you win your bet from the pot. Same as either edge or outside, your bet goes in. On a PAIR (2·2) pick UP or DOWN, then a higher (UP) or lower (DOWN) card pays your bet — the same number loses. Pass and you only lose the ante; two full passes in a row and everyone re-antes.',
       pot: 'POT', deck: 'DECK', pass: 'PASS', bet: 'BET', quick: 'Reveal',
       potLabel: 'POT', potShort: 'POT',
+      chips: 'START CHIPS', half: 'HALF', allin: 'ALL IN',
       pairTag: 'PAIR', pairMsg: 'pick UP or DOWN', pairSub: 'the same number loses either way',
       up: 'UP', down: 'DOWN', upHint: 'higher', downHint: 'lower',
       pairWin: 'side hit', pairLose: 'side missed', tie: 'same number',
@@ -2255,7 +2262,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       gameOverSub: 'Out of chips'
     }
   };
-  var ui = { lang: 'kr', mode: 'solo', count: 3, aiCount: 3, names: [], ante: 10, ppong: false, sel: 0 };
+  var ui = { lang: 'kr', mode: 'solo', count: 3, aiCount: 3, names: [], ante: 1000, chips: 50000, ppong: false, sel: 0 };
   var S = null, revealed = false, busy = false, aiTimer = null;
   var HOLD_MS = 2200, resultHoldUntil = 0, holdTimer = null, toastTimer = null, landId = '';
 
@@ -2565,7 +2572,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
   function t(k) { return (I18N[ui.lang] && I18N[ui.lang][k]) || (I18N.kr[k] || k); }
   function fmt(n) { return (n || 0).toLocaleString('en-US'); }
   function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
-  function round5(v) { return Math.round(v / 5) * 5; }
+  function round1k(v) { return Math.round(v / 1000) * 1000; }
   function pName(p) { return ui.lang === 'en' ? (p.nameEn || p.name) : p.name; }
   function monthLabel(m) { var x = W.meta(m); return ui.lang === 'en' ? ((m) + ' · ' + x.en) : (m + '월 · ' + x.kr); }
   function pairLabel(m) { return ui.lang === 'en' ? (m + ' ' + t('pairTag')) : (m + t('pairTag')); }
@@ -2699,8 +2706,9 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     var lwt = $('#lobbyWait'); if (lwt) lwt.textContent = t('lobbyWaitTxt');
     $('#countVal').textContent = ui.count;
     renderNames();
-    renderSeg($('#anteSeg'), [5, 10, 20, 50], ui.ante, function (v) { ui.ante = v; applyStatic(); });
-    renderSeg($('#anteSeg2'), [5, 10, 20, 50], ui.ante, function (v) { ui.ante = v; applyStatic(); });
+    renderSeg($('#anteSeg'), [1000, 2000, 5000], ui.ante, function (v) { ui.ante = v; applyStatic(); });
+    renderSeg($('#anteSeg2'), [1000, 2000, 5000], ui.ante, function (v) { ui.ante = v; applyStatic(); });
+    renderSeg($('#chipsSeg'), [20000, 50000, 100000], ui.chips, function (v) { ui.chips = v; applyStatic(); });
     renderSeg($('#aiSeg'), [2, 3, 4], ui.aiCount, function (v) { ui.aiCount = v; applyStatic(); }, ui.lang === 'en' ? 'p' : '인');
     $('#ppongSwitch').classList.toggle('on', ui.ppong);
     $('#ppongSwitch2').classList.toggle('on', ui.ppong);
@@ -2712,7 +2720,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     el.innerHTML = '';
     vals.forEach(function (v) {
       var b = document.createElement('button');
-      b.textContent = suffix ? (v + suffix) : String(v);
+      b.textContent = suffix ? (v + suffix) : fmt(v);
       if (v === cur) b.className = 'on';
       b.onclick = function () { cb(v); };
       el.appendChild(b);
@@ -2927,11 +2935,21 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
 
   function buildBetUI() {
     var L = W.betLimits(S);
-    var raw = [L.min, Math.max(L.min, Math.min(L.max, round5(S.pot * 0.25))), Math.max(L.min, Math.min(L.max, round5(S.pot * 0.5))), L.max];
+    /* 1,000 단위 — 최소 / +5,000 / 하프 / 올인 */
     var opts = [];
-    raw.forEach(function (v) { if (opts.indexOf(v) < 0) opts.push(v); });
-    ui.sel = clamp(ui.sel || L.min, L.min, L.max);
-    if (opts.indexOf(ui.sel) < 0) ui.sel = L.min;
+    function opt(v, lbl) {
+      v = Math.max(L.min, Math.min(L.max, Math.round(v / 1000) * 1000));
+      for (var k = 0; k < opts.length; k++) if (opts[k].v === v) return;
+      opts.push({ v: v, l: lbl });
+    }
+    opt(L.min, t('min'));
+    opt(5000, '+' + fmt(5000));
+    opt(Math.round((S.pot * 0.5) / 1000) * 1000, t('half'));
+    opt(L.max, L.max === S.pot ? t('ado') : t('allin'));
+    ui.sel = clamp(ui.sel || L.min, L.min, Math.max(L.min, L.max));
+    var hasSel = false;
+    for (var h = 0; h < opts.length; h++) if (opts[h].v === ui.sel) hasSel = true;
+    if (!hasSel) ui.sel = opts[0].v;
 
     if (S.noGap && !S.pair) {
       var stake = W.noGapStake(S);
@@ -2946,25 +2964,22 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     }
 
     if (S.pair) {
-      var hp = '<div class="betrow">';
-      opts.forEach(function (v, i) {
-        var lbl = (v === L.max && v === S.pot) ? t('ado') : (i === 0 ? t('min') : (i === 1 ? '25%' : (i === 2 ? '50%' : t('max'))));
-        hp += '<button class="chip' + (v === ui.sel ? ' on' : '') + '" data-amt="' + v + '"><b>' + fmt(v) + '</b><span>' + lbl + '</span></button>';
-      });
-      hp += '</div><div class="ctarow"><button class="ghost" id="passBtn">' + t('pass') + '</button>' +
+      return chipRow(opts) +
+        '<div class="ctarow"><button class="ghost" id="passBtn">' + t('pass') + '</button>' +
         '<button class="go up" id="upBtn">↑ ' + t('up') + ' ' + fmt(ui.sel) + '</button>' +
         '<button class="go down" id="downBtn">↓ ' + t('down') + ' ' + fmt(ui.sel) + '</button></div>';
-      return hp;
     }
 
-    var html = '<div class="betrow">';
-    opts.forEach(function (v, i) {
-      var label = (v === L.max && v === S.pot) ? t('ado') : (i === 0 ? t('min') : (i === 1 ? '25%' : (i === 2 ? '50%' : t('max'))));
-      html += '<button class="chip' + (v === ui.sel ? ' on' : '') + '" data-amt="' + v + '"><b>' + fmt(v) + '</b><span>' + label + '</span></button>';
-    });
-    html += '</div><div class="ctarow"><button class="ghost" id="passBtn">' + t('pass') + '</button>' +
+    return chipRow(opts) + '<div class="ctarow"><button class="ghost" id="passBtn">' + t('pass') + '</button>' +
       '<button class="go" id="betBtn">' + t('bet') + ' ' + fmt(ui.sel) + '</button></div>';
-    return html;
+  }
+
+  function chipRow(opts) {
+    var h = '<div class="betrow">';
+    opts.forEach(function (o) {
+      h += '<button class="chip' + (o.v === ui.sel ? ' on' : '') + '" data-amt="' + o.v + '"><b>' + fmt(o.v) + '</b><span>' + (o.l || '') + '</span></button>';
+    });
+    return h + '</div>';
   }
 
   function bindBetUI() {
@@ -3041,7 +3056,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     renderActions();
     ui.sel = W.betLimits(S).min;
     var p = S.players[S.turn];
-    var info = t('ante') + ' ' + S.ante + ' · ' + t('max') + ' ' + fmt(W.betLimits(S).max);
+    var info = t('ante') + ' ' + fmt(S.ante) + ' · ' + t('max') + ' ' + fmt(W.betLimits(S).max);
     if (S.reshuffles !== lastReshuffles) { info += ' · ' + t('reshuffle'); lastReshuffles = S.reshuffles; }
     if (S.pair) {
       renderMsg(W.isAiTurn(S) ? 'ai' : '',
@@ -3295,6 +3310,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     S = W.newGame({
       mode: ui.mode,
       ante: ui.ante,
+      chips: ui.chips,
       ppongDouble: ui.ppong,
       count: ui.mode === 'ai' ? ui.aiCount : ui.count,
       names: ui.names,
@@ -3602,7 +3618,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
         if (sn.turn === me) {
           var L = W.betLimits(S);
           renderMsg('', '👆 ' + (sn.pair ? pairLabel(sn.board[0].month) + ' — ' + t('pairMsg') : (ui.lang === 'en' ? 'Your turn — call or pass' : '내 차례 — 걸기 / 패스')),
-            t('ante') + ' ' + sn.ante + ' · ' + t('max') + ' ' + fmt(L.max) + (sn.pair ? ' · ' + t('pairSub') : ''));
+            t('ante') + ' ' + fmt(sn.ante) + ' · ' + t('max') + ' ' + fmt(L.max) + (sn.pair ? ' · ' + t('pairSub') : ''));
         } else {
           renderMsg('ai', (p.av || '') + ' ' + p.name + ' · ' + t('turn'), t('thinking') + '…');
         }

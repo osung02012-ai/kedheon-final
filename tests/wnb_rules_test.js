@@ -185,5 +185,33 @@ console.log('\n[5] 확률 계산기 미노출');
   ok(/id="potVal"/.test(src), '쌓인 머니(potVal) 표시는 유지');
 }
 
+console.log('\n[6] 1,000 단위 기본값 · 전원 패스 재적립 단위');
+{
+  const s = W.newGame({ mode: 'ai', count: 3 });
+  eq(s.ante, 1000, '기본 앤티 1,000');
+  eq(s.players[0].chips, 49000, '기본 시작 머니 50,000 (앤티 1,000 납부 후 49,000)');
+  const L = W.betLimits(s);
+  eq(L.min, 1000, '최소 베팅 1,000');
+
+  const s2 = W.newGame({ mode: 'ai', count: 3, ante: 2000, chips: 100000 });
+  eq(s2.ante, 2000, '앤티 2,000 설정 반영');
+  eq(s2.players[0].chips, 98000, '시작 머니 100,000 반영');
+  eq(W.betLimits(s2).min, 2000, '앤티 2,000이면 최소 베팅도 2,000');
+
+  // 3인 × 기본 앤티 1,000 — 2연속 전원 패스 적립액
+  const s3 = W.newGame({ mode: 'ai', count: 3 });
+  s3.players.forEach(p => { p.bankrupt = false; p.chips = 50000; });
+  s3.pot = 3000;
+  let refill = null;
+  for (let i = 0; i < 6; i++) {
+    if (s3.phase !== 'bet') break;
+    W.fold(s3);
+    if (s3.result && s3.result.refill) refill = s3.result.refill;
+    W.continueGame(s3);
+  }
+  ok(!!refill, '기본 설정에서도 2연속 전원 패스 발동', refill);
+  eq(refill.amt, 3000, '3인 × 앤티 1,000 = 3,000 적립');
+}
+
 console.log('\n결과: ' + pass + ' 통과 / ' + fail + ' 실패');
 process.exit(fail ? 1 : 0);
