@@ -548,10 +548,10 @@ console.log('\n[12] 48장 카드 — 동그라미 삭제 · 좌상단 황금색 
       const x = +((attrs.match(/ x="([\d.]+)"/) || [])[1]);
       const y = +((attrs.match(/ y="([\d.]+)"/) || [])[1]);
       const fs = +((attrs.match(/font-size="([\d.]+)"/) || [])[1]);
-      /* ④ 좌측 상단 모서리 밀착 — x 5 이하, 글자 꼭대기는 카드 위쪽 6 안쪽 */
-      if (!(x <= 5 && (y - fs * 0.84) <= 6 && y > 14)) posBad.push(m + '-' + v + ':x=' + x + ',y=' + y);
-      /* ⑤ 숫자 크기 확대 — 한 자리 22 이상, 두 자리 20 이상(예전 13.4 / 9.6) */
-      if (!(fs >= (m > 9 ? 20 : 22))) sizeBad.push(m + '-' + v + ':fs=' + fs);
+      /* ④ 좌측 상단 모서리 밀착 — x 8 이하, 글자 꼭대기는 카드 위쪽 8 안쪽 */
+      if (!(x <= 8 && (y - fs * 0.84) <= 8 && y > 14)) posBad.push(m + '-' + v + ':x=' + x + ',y=' + y);
+      /* ⑤ 숫자 크기 확대 — 한 자리 30 이상, 두 자리 26 이상(예전 13.4 / 9.6) */
+      if (!(fs >= (m > 9 ? 26 : 30))) sizeBad.push(m + '-' + v + ':fs=' + fs);
       const norm = attrs.replace(/font-size="[\d.]+"/, 'font-size="F"')
         .replace(/ x="[\d.]+"/, ' x="X"').replace(/ y="[\d.]+"/, ' y="Y"')
         .replace(/text-anchor="\w+"/, 'text-anchor="A"');
@@ -566,7 +566,7 @@ console.log('\n[12] 48장 카드 — 동그라미 삭제 · 좌상단 황금색 
   eq(badFill.length, 0, '48장 모든 숫자가 황금색(#f3c73f)', badFill);
   eq(strokeBad.length, 0, '48장 모두 먹색 외곽선 + paint-order:stroke', strokeBad);
   eq(posBad.length, 0, '좌측 상단 모서리 밀착', posBad);
-  eq(sizeBad.length, 0, '숫자 크기 확대(한 자리 28 / 두 자리 23.5)', sizeBad);
+  eq(sizeBad.length, 0, '숫자 크기 확대(한 자리 38 / 두 자리 31.5)', sizeBad);
   eq(whiteHits.length, 0, '흰색으로 빠지는 카드 0장', whiteHits);
   /* 색상 검증 — 황금색 계열(색상 35~55°, 채도 60% 이상) */
   const hex = '#f3c73f', r = parseInt(hex.slice(1,3),16)/255, g = parseInt(hex.slice(3,5),16)/255, b = parseInt(hex.slice(5,7),16)/255;
@@ -577,9 +577,9 @@ console.log('\n[12] 48장 카드 — 동그라미 삭제 · 좌상단 황금색 
   ok(hue >= 35 && hue <= 55, '숫자 색상이 황금색 계열(H=' + hue.toFixed(1) + '°)');
   ok(sat > 0.6, '숫자 채도 충분(S=' + sat.toFixed(2) + ')');
   ok(mx > 0.8, '숫자 밝기 충분 — 흐린 회색/흰색 아님(L≈' + (mx*100).toFixed(0) + '%)');
-  ok(/x="3\.2"/.test(W.faceSVG({ month: 7, variant: 0 })), '숫자 좌측 x=3.2 — 모서리 밀착');
-  ok(/font-size="28"/.test(W.faceSVG({ month: 7, variant: 0 })), '한 자리 숫자 28 (기존 13.4)');
-  ok(/font-size="23\.5"/.test(W.faceSVG({ month: 12, variant: 0 })), '두 자리 숫자 23.5 (기존 9.6)');
+  ok(/x="6\.5"/.test(W.faceSVG({ month: 7, variant: 0 })), '숫자 좌측 x=6.5 — 카드 테두리 안쪽 모서리 밀착');
+  ok(/font-size="38"/.test(W.faceSVG({ month: 7, variant: 0 })), '한 자리 숫자 38 (기존 13.4)');
+  ok(/font-size="31\.5"/.test(W.faceSVG({ month: 12, variant: 0 })), '두 자리 숫자 31.5 (기존 9.6)');
   ok(!/r="11\.2"/.test(src), '메달 반지름(11.2) 마크업 삭제');
 }
 
