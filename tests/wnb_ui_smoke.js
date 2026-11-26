@@ -202,5 +202,42 @@ ok(!/ppongSwitch/.test(src), '뽕 2배 토글 없음');
 ok(/id="raiseBtn"/.test(src), '판돈 올리기 버튼 존재');
 ok(/id="voteSheet"/.test(src), '온라인 전원 동의 모달 존재');
 
+console.log('\n[UI-9] 연속 숫자(사이 없음) — 베팅 UI가 열려 있다');
+{
+  /* 덱 셔플을 결정적으로 만들기 위해 잠시 Math.random 을 갈아 끼운다 */
+  const origRandom = Math.random;
+  const months = (el) => {
+    const m = String(el.innerHTML).match(/aria-label="(\d+)"/);
+    return m ? +m[1] : 0;
+  };
+  let hit = null;
+  for (let seed = 1; seed <= 80 && !hit; seed++) {
+    Math.random = W.mulberry32(seed * 7919 + 13);
+    getEl('#startBtn').onclick();
+    const a = months(getEl('#cardA')), b = months(getEl('#cardB'));
+    if (a && b && Math.abs(a - b) <= 1) hit = { a: a, b: b, seed: seed };
+  }
+  Math.random = origRandom;
+  ok(!!hit, '연속 숫자(사이 없음) 판을 실제로 딜', hit);
+
+  if (hit) {
+    ok(getEl('#rangeBox').classList.contains('nogap'), '범위 박스가 사이 없음 표시(nogap)');
+    const A = String(getEl('#actions').innerHTML);
+    ok(/id="betBtn"/.test(A), '걸기 버튼이 열려 있다', A);
+    ok(/id="passBtn"/.test(A), '패스 버튼도 있다');
+    ok(/class="chip/.test(A), '베팅액 칩이 노출된다');
+    ok(!/패스만|passOnly/.test(A), "'패스만 가능' 강제 문구 없음", A);
+
+    /* 실제로 걸어 본다 — 이전 버전에서는 버튼 자체가 없었다 */
+    const bet = getEl('#betBtn');
+    ok(typeof bet.onclick === 'function', '걸기 버튼에 핸들러 연결');
+    bet.onclick();
+    ok(String(getEl('#thirdFace').innerHTML).indexOf('<svg') === 0, '걸면 3번째 패가 깔린다(phase=peek)',
+      String(getEl('#thirdFace').innerHTML).slice(0, 40));
+    ok(getEl('#peekHint').style.display === 'flex', '쪼기 안내가 뜬다');
+    ok(/id="quickBtn"/.test(String(getEl('#actions').innerHTML)), '바로 까기 버튼 단계로 진행');
+  }
+}
+
 console.log('\n결과: ' + pass + ' 통과 / ' + fail + ' 실패');
 process.exit(fail ? 1 : 0);

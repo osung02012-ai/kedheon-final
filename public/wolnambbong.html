@@ -9,6 +9,9 @@
 <meta name="description" content="금박 숫자(1~12) 전통 화투로 30초 만에 즐기는 K-심리 카드 게임 — 두 패 사이를 쪼아 맞히는 룰. A 30-second Korean traditional card game by XAEA12." />
 <style>
 :root{
+  /* 기준 패 한 장의 폭 — 3장(착지 패 포함)이 테이블 폭 안에 들어오는 최대치.
+     예전 19.6vw 는 390px 실기기에서 76px 밖에 안 돼 두 패가 작아 보였다. */
+  --cardw:min(27.8vw,16.5vh,124px);
   --gold:#e6c37c;--gold-d:#a8842f;--red:#b3231c;--cream:#fdf7e8;
   --ink:#f6eeda;--muted:#9fb5aa;--win:#7fe0a0;--lose:#ff9489;
   --felt1:#14614a;--felt2:#0a3a2c;--felt3:#06251b;
@@ -179,7 +182,7 @@ body{
   background:repeating-linear-gradient(45deg,#fff 0 1px,transparent 1px 4px);
 }
 .board{display:flex;align-items:center;justify-content:center;gap:9px;flex:0 0 auto;z-index:1}
-.slot{width:min(19.6vw,13.1vh,120px);aspect-ratio:120/186;height:min(30.38vw,20.3vh,186px);animation:deal .35s cubic-bezier(.2,.9,.3,1.3) both}
+.slot{width:var(--cardw);aspect-ratio:120/186;height:calc(var(--cardw)*1.55);animation:deal .35s cubic-bezier(.2,.9,.3,1.3) both}
 @keyframes deal{from{opacity:0;transform:translateY(-14px) scale(.9) rotate(-3deg)}to{opacity:1;transform:none}}
 .range{
   display:flex;flex-direction:column;align-items:center;gap:1px;min-width:46px;
@@ -195,7 +198,7 @@ body{
 .landwrap{display:none;position:relative}
 .board.landed .landwrap{display:block}
 .landcard{
-  width:min(19.6vw,13.1vh,120px);aspect-ratio:120/186;height:min(30.38vw,20.3vh,186px);position:relative;
+  width:var(--cardw);aspect-ratio:120/186;height:calc(var(--cardw)*1.55);position:relative;
   filter:drop-shadow(0 12px 14px rgba(0,0,0,.55));
 }
 .landwrap.slam .landcard{animation:slamIn .5s cubic-bezier(.22,1.5,.4,1) both}
@@ -219,7 +222,7 @@ body{
 .holdhint{display:flex;align-items:center;justify-content:center;gap:6px;font-size:11.5px;color:#cfe0d8;letter-spacing:.3px;padding:10px}
 .stage{position:relative;display:flex;flex-direction:column;align-items:center;gap:5px;z-index:2}
 .thirdwrap{
-  position:relative;width:min(29.33vw,20.82vh);aspect-ratio:120/186;height:min(45.47vw,32.27vh);touch-action:none;
+  position:relative;width:calc(var(--cardw)*1.07);aspect-ratio:120/186;height:calc(var(--cardw)*1.6585);touch-action:none;
   transition:transform .25s ease;filter:drop-shadow(0 10px 16px rgba(0,0,0,.5));
 }
 .thirdwrap.pop{animation:pop .45s cubic-bezier(.2,.9,.3,1.4)}
@@ -367,14 +370,13 @@ body{
   .setupbox{padding:8px 10px;gap:6px}
   .msg{min-height:44px}
   .actions{min-height:80px}
-  .thirdwrap{width:min(27.44vw,18.92vh);height:min(42.53vw,29.33vh)}
+  :root{--cardw:min(27.8vw,14vh,110px)}
   .potbar>b{font-size:26px}
   .potbar{padding:5px 13px 6px}
 }
 @media (max-height:600px){
   .hero-cards{display:none}
-  .thirdwrap{width:min(24.6vw,17.03vh);height:min(38.13vw,26.4vh)}
-  .slot,.landcard{width:min(17.6vw,11.4vh,120px);height:min(27.28vw,17.67vh,186px)}
+  :root{--cardw:min(24vw,13vh,104px)}
 }
 /* ---------- 🎟️ 충전 쿠폰 ---------- */
 .tbtn.cpn{display:inline-flex;align-items:center;gap:3px;padding:6px 8px;font-size:11px;font-variant-numeric:tabular-nums}
@@ -2272,57 +2274,30 @@ var WNB = (function () {
   }
 
   /* ------------------------------------------------------------ */
-  /* 좌측 상단 숫자 배지 — 컴팩트 금메달, 카드 모서리에 밀착        */
-  /*   · 48장 전부 같은 배지: 짙은 먹갈색 바탕 + 금테 + 금색 숫자    */
-  /*   · 바탕이 어두워 어떤 카드 그림 위에서도 '흰 숫자'가 되지 않는다 */
-  /*   · 모든 색을 Hex로 고정 (CSS 변수/테마/브라우저 보정 영향 없음)  */
+  /* 좌측 상단 숫자 — 동그라미(메달) 없이 황금색 숫자만 모서리에 밀착      */
+  /*   · 48장 전부 같은 방식: 황금색(#f3c73f) + 먹색 얇은 외곽선        */
+  /*   · 외곽선은 paint-order="stroke" 로 글자 뒤에 깔려 속이 막히지 않음 */
+  /*   · 모든 색을 Hex로 고정 (CSS 변수/테마/브라우저 보정 영향 없음)      */
   var BG = {
-    cx: 13.6, cy: 14.4, r: 11.2,
-    rim: '#f6e0a2',    /* 카드 그림과 분리하는 바깥 얇은 금테 */
-    edge: '#6b4a0a',   /* 메달 테두리 */
+    x: 3.2,            /* 좌측 끝에서 3.2 — 카드 모서리에 바짝 */
+    top: 1.6,          /* 글자 윗변을 카드 끝에서 1.6 에 맞춤 */
+    fs1: 28,           /* 한 자리(1~9) */
+    fs2: 23.5,         /* 두 자리(10~12) — 폭이 모서리를 넘지 않게만 줄임 */
     ink: '#0d0803',    /* 숫자 외곽선(먹) — 금색 글자를 또렷하게 */
     gold: '#f3c73f',   /* 숫자 — 황금색 단색(48장 공통) */
-    shadow: '#000000'
+    stroke: 1.2        /* 외곽선 두께 — 글자를 먹지 않을 만큼만 */
   };
 
-  /* 금색 숫자(gid) + 메달 바탕(sid) 그라데이션 — 카드마다 고유 id */
-  function goldDefs(gid, sid) {
-    return '<radialGradient id="' + gid + '" cx="32%" cy="24%" r="92%">' +
-        '<stop offset="0" stop-color="#fff0b4"/>' +
-        '<stop offset="0.32" stop-color="#ffdf8a"/>' +
-        '<stop offset="0.58" stop-color="#f2c85c"/>' +
-        '<stop offset="0.80" stop-color="#d9a52a"/>' +
-        '<stop offset="1" stop-color="#a9750c"/>' +
-      '</radialGradient>' +
-      '<linearGradient id="' + sid + '" x1="0.15" y1="0" x2="0.7" y2="1">' +
-        '<stop offset="0" stop-color="#3b2a10"/>' +
-        '<stop offset="0.5" stop-color="#221607"/>' +
-        '<stop offset="1" stop-color="#0c0703"/>' +
-      '</linearGradient>';
-  }
-
-  /* 금색 메달 + 금색 숫자. gid/sid 없이 호출해도 동작하도록 기본 id 사용 */
-  function numBadge(m, gid, sid) {
-    gid = gid || 'gfBadge';
-    sid = sid || 'gsBadge';
-    var cx = BG.cx, cy = BG.cy, r = BG.r;
-    var fs = m > 9 ? 9.6 : 13.4;    /* 두 자리(10~12)도 메달 안에 여유 있게 */
+  /* 좌상단 숫자 — 바탕 원/메달 없이 글자만 */
+  function numBadge(m) {
+    var fs = m > 9 ? BG.fs2 : BG.fs1;
+    /* 글자 상자(ascent ≈ 0.84em)의 꼭대기가 카드 끝 BG.top 에 오도록 baseline 을 잡는다 */
+    var y = +(BG.top + fs * 0.84).toFixed(2);
     return '<g>' +
-      /* 메달이 살짝 떠 보이는 그림자 */
-      '<circle cx="' + cx + '" cy="' + (cy + 0.7) + '" r="' + (r + 0.2) + '" fill="' + BG.shadow + '" fill-opacity="0.34"/>' +
-      /* 짙은 먹갈색 바탕 — 어떤 카드 그림 위에서도 또렷 */
-      '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="url(#' + sid + ')"/>' +
-      /* 바깥 금테 (카드 그림과 분리) */
-      '<circle cx="' + cx + '" cy="' + cy + '" r="' + (r + 0.7) + '" fill="none" stroke="' + BG.rim + '" stroke-opacity="0.62" stroke-width="0.8"/>' +
-      /* 메달 테두리 */
-      '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="none" stroke="' + BG.edge + '" stroke-width="0.9"/>' +
-      /* 안쪽 따뜻한 금테 — 두들겨 편 금박의 눌린 테 */
-      '<circle cx="' + cx + '" cy="' + cy + '" r="' + (r - 1.3) + '" fill="none" stroke="' + BG.rim +
-        '" stroke-opacity="0.26" stroke-width="0.5"/>' +
-      /* 숫자 — 황금색 단색(어떤 렌더러에서도 금색 그대로) + 먹색 외곽선 */
-      '<text x="' + cx + '" y="' + cy + '" dy="0.355em" text-anchor="middle" font-family="' + FONT +
+      '<text x="' + BG.x + '" y="' + y + '" text-anchor="start" font-family="' + FONT +
       '" font-size="' + fs + '" font-weight="900" fill="' + BG.gold + '" stroke="' + BG.ink +
-      '" stroke-width="0.5" stroke-opacity="0.92" paint-order="stroke">' + m + '</text></g>';
+      '" stroke-width="' + BG.stroke + '" stroke-linejoin="round" stroke-opacity="0.95"' +
+      ' paint-order="stroke">' + m + '</text></g>';
   }
 
   var SVG_SEQ = 0;
@@ -2332,13 +2307,11 @@ var WNB = (function () {
     /* 같은 카드가 화면에 여러 번 올라도 defs id가 겹치지 않도록 매번 새 id */
     var uid = 'w' + (++SVG_SEQ);
     var cid = 'cc' + uid;
-    var gid = 'gf' + uid, sid = 'gs' + uid;
     return '<svg viewBox="0 0 120 186" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" role="img" aria-label="' + m + '">' +
-      '<defs><clipPath id="' + cid + '"><rect x="0" y="0" width="120" height="186" rx="9.4"/></clipPath>' +
-      goldDefs(gid, sid) + '</defs>' +
+      '<defs><clipPath id="' + cid + '"><rect x="0" y="0" width="120" height="186" rx="9.4"/></clipPath></defs>' +
       '<g clip-path="url(#' + cid + ')">' +
       '<image x="0" y="0" width="120" height="186" preserveAspectRatio="none" href="' + uri + '"/>' +
-      '</g>' + numBadge(m, gid, sid) + '</svg>';
+      '</g>' + numBadge(m) + '</svg>';
   }
 
   function backSVG() {
@@ -2394,7 +2367,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       players: '인원', matchType: '대전 형식', ante: '앤티',
       lang: '언어', restart: '처음부터 (모드 선택)', close: '닫기',
       start: '시작하기', heroSub: '금박 숫자(1~12) 전통 화투로 30초 만에 즐기는 K-심리 카드 게임 (두 패 사이를 쪼아 맞히는 룰)',
-      rulesText: '두 장 사이(예: 2와 10 사이 3~9)에 세 번째 패가 들어오면 판돈에서 건 만큼 획득. 경계와 같거나 바깥이면 건 만큼 판돈으로. 땡(2·2)이면 업/다운을 골라 걸고, 높은 숫자(업)·낮은 숫자(다운)가 나오면 건 만큼 획득 — 같은 숫자가 나오면 패배. 패스하면 앤티만 잃습니다. 쌓인 머니가 기본 베팅보다 적으면 전원이 기본 베팅을 자동으로 한 번 더 내고, 게임 중 [⤴ 판돈]으로 기본 판돈을 올릴 수 있습니다(온라인 방은 전원 동의). 결과 확인 뒤에는 자동으로 다음 판으로 넘어갑니다.',
+      rulesText: '두 장 사이(예: 2와 10 사이 3~9)에 세 번째 패가 들어오면 판돈에서 건 만큼 획득. 경계와 같거나 바깥이면 건 만큼 판돈으로. 땡(2·2)이면 업/다운을 골라 걸고, 높은 숫자(업)·낮은 숫자(다운)가 나오면 건 만큼 획득 — 같은 숫자가 나오면 패배. 패스하면 앤티만 잃습니다. 2·3처럼 붙은 숫자는 사이가 없어 걸면 무조건 잃지만, 걸지 패스할지는 직접 고릅니다. 쌓인 머니가 기본 베팅보다 적으면 전원이 기본 베팅을 자동으로 한 번 더 내고, 게임 중 [⤴ 판돈]으로 기본 판돈을 올릴 수 있습니다(온라인 방은 전원 동의). 결과 확인 뒤에는 자동으로 다음 판으로 넘어갑니다.',
       pot: '판돈', deck: '덱', pass: '패스', bet: '걸기', quick: '바로 까기',
       potLabel: '쌓인 머니', potShort: 'POT',
       chips: '시작 머니', half: '하프', allin: '올인', quickBet: '퀵',
@@ -2407,8 +2380,8 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       peekShort: '밀어서 쪼기', peekHint: '카드를 위로 밀어 쪼개 보세요',
       thinking: '생각 중', peeking: '패를 쪼는 중', myPeek: '당신 차례 — 손으로 쪼개세요',
       dealMsg: '패를 나눴습니다', antePaid: '앤티', max: '최대', min: '최소',
-      ado: '아도', noGap: '사이 없음', noGapMsg: '사이 없음 — 패스만 가능',
-      noGapSub: '같거나 이어진 숫자라 들어갈 자리가 없습니다',
+      ado: '아도', noGap: '사이 없음', noGapMsg: '사이 없음 — 걸어도 들어갈 자리 없음',
+      noGapSub: '이어지는 숫자라 세 번째 패가 사이에 들어올 수 없습니다 — 직접 걸거나 패스하세요',
       passHint: '앤티만 판돈에 남깁니다',
       win: 'WIN', lose: 'LOSE', ppong: '뽕!',
       fold: '패스', push: '무승부', next: '다음', nextHand: '다음 판',
@@ -2458,7 +2431,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       lang: 'Language', restart: 'Back to mode select', close: 'Close',
       start: 'START',
       heroSub: 'A 30-second Korean traditional card game — peel the 3rd card and guess if it lands in between!',
-      rulesText: 'If the third card lands between the two (e.g. 2–10 → 3~9) you win your bet from the pot. Same as either edge or outside, your bet goes in. On a PAIR (2·2) pick UP or DOWN, then a higher (UP) or lower (DOWN) card pays your bet — the same number loses. Passing costs only the ante. When the pot falls below the basic bet, everyone re-antes automatically, and [⤴ Ante] raises the basic bet mid-game (online rooms need everyone to agree). The next hand starts on its own.',
+      rulesText: 'If the third card lands between the two (e.g. 2–10 → 3~9) you win your bet from the pot. Same as either edge or outside, your bet goes in. On a PAIR (2·2) pick UP or DOWN, then a higher (UP) or lower (DOWN) card pays your bet — the same number loses. Passing costs only the ante. On consecutive months (2·3) nothing can land between, so any bet loses — you still choose to bet or pass. When the pot falls below the basic bet, everyone re-antes automatically, and [⤴ Ante] raises the basic bet mid-game (online rooms need everyone to agree). The next hand starts on its own.',
       pot: 'POT', deck: 'DECK', pass: 'PASS', bet: 'BET', quick: 'Reveal',
       potLabel: 'POT', potShort: 'POT',
       chips: 'START CHIPS', half: 'HALF', allin: 'ALL IN', quickBet: 'QUICK',
@@ -2471,8 +2444,8 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       peekShort: 'Push to peek', peekHint: 'Push the card up to squeeze a peek',
       thinking: 'thinking', peeking: 'squeezing', myPeek: 'Your turn — squeeze it yourself',
       dealMsg: 'Cards dealt', min: 'MIN', max: 'MAX', ado: 'ADO',
-      noGap: 'NO GAP', noGapMsg: 'No gap — pass',
-      noGapSub: 'Equal or consecutive months: nothing can fall between',
+      noGap: 'NO GAP', noGapMsg: 'No gap — nothing can land between',
+      noGapSub: 'Consecutive months: the third card can never land inside — bet or pass as you like',
       passHint: 'Only the ante stays in the pot',
       win: 'WIN', lose: 'LOSE', ppong: 'PPONG!',
       fold: 'PASS', push: 'PUSH', next: 'NEXT', nextHand: 'NEXT HAND',
@@ -3290,10 +3263,6 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     for (var h = 0; h < opts.length; h++) if (opts[h].v === ui.sel) hasSel = true;
     if (!hasSel) ui.sel = opts[0].v;
 
-    if (S.noGap && !S.pair) {
-      return '<div class="ctarow"><button class="go wide" id="passBtn">' + t('pass') + ' (' + t('passOnly') + ')</button></div>';
-    }
-
     if (L.max < 1) {
       return '<div class="betrow"><button class="chip on"><b>—</b><span>' + t('empty') + '</span></button></div>' +
         '<div class="ctarow"><button class="go wide" id="passBtn">' + t('pass') + ' (' + t('passOnly') + ')</button></div>';
@@ -3388,7 +3357,8 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
         (W.isAiTurn(S) ? p.avatar + ' ' + pName(p) + ' · ' : '🀄 ') + pairLabel(S.board[0].month) + ' — ' + t('pairMsg'),
         t('pairSub') + ' · ' + info);
     } else if (S.noGap) {
-      renderMsg('', '⚠️ ' + t('noGapMsg'), t('noGapSub'));
+      /* 사이 없음 — 예전에는 '패스만 가능'으로 막았지만, 이제 플레이어가 직접 걸 수 있다 */
+      renderMsg('', '⚠️ ' + t('noGapMsg'), t('noGapSub') + ' · ' + info);
     } else if (W.isAiTurn(S)) {
       renderMsg('ai', p.avatar + ' ' + pName(p) + ' ' + t('turn'), info);
     } else {

@@ -521,36 +521,53 @@ console.log('\n[11] 삭제·자동 진행 확인 (뽕 2배 · 다음 버튼)');
   ok(/doneApply[\s\S]{0,400}scheduleAdvance/.test(src), '온라인도 방장이 자동으로 다음 판');
 }
 
-console.log('\n[12] 48장 카드 — 숫자 전부 같은 금색 배지(흰색 0장)');
+console.log('\n[12] 48장 카드 — 동그라미 삭제 · 좌상단 황금색 숫자 · 흰 숫자 0장');
 {
-  let sameBadge = [], whiteHits = [], badFill = [], missing = [];
+  let sameNum = [], whiteHits = [], badFill = [], missing = [], circleHits = [];
+  let posBad = [], sizeBad = [], strokeBad = [], gradHits = [];
   let ref = null, count = 0;
   for (let m = 1; m <= 12; m++) {
     for (let v = 0; v < 4; v++) {
       count++;
       const svg = W.faceSVG({ month: m, variant: v });
-      const badge = svg.slice(svg.indexOf('<g><circle cx="13.6"'));
-      if (badge.indexOf('</g></svg>') < 0) { missing.push(m + '-' + v); continue; }
-      const b = badge.slice(0, badge.indexOf('</g></svg>') + 4);
-      /* 카드마다 고유 id → 비교용으로 정규화 */
-      const norm = b.replace(/gfw\d+/g, 'GF').replace(/gsw\d+/g, 'GS')
-        .replace(/font-size="[\d.]+"/, 'font-size="F"')
-        .replace(/<text([^>]*)>\d+<\/text>/, '<text$1>N</text>');
-      if (ref === null) ref = norm; else if (norm !== ref) sameBadge.push(m + '-' + v);
-      /* 숫자 채움 = 금색 그라데이션 */
+      /* ① 원형 배지(메달)가 남아 있으면 실패 — 카드 전체에 <circle> 금지 */
+      if (/<circle/i.test(svg)) circleHits.push(m + '-' + v);
+      /* ② 배지용 그라데이션 defs도 함께 사라져야 한다 */
+      if (/radialGradient|linearGradient|url\(#gf|url\(#gs/.test(svg)) gradHits.push(m + '-' + v);
+      /* ③ 숫자는 카드 마지막(</svg> 직전)에 <g><text> 하나 */
+      const i = svg.lastIndexOf('<g><text');
+      if (i < 0) { missing.push(m + '-' + v); continue; }
+      const b = svg.slice(i);
       const tm = b.match(/<text([^>]*)>(\d+)<\/text>/);
       if (!tm) { missing.push(m + '-' + v); continue; }
-      if (!/fill="#f3c73f"/i.test(tm[1])) badFill.push(m + '-' + v + ':' + (tm[1].match(/fill="[^"]*"/) || [''])[0]);
-      if (/fill="#fff/i.test(tm[1])) whiteHits.push(m + '-' + v);
+      const attrs = tm[1];
       if (+tm[2] !== m) missing.push(m + '-' + v + ':num=' + tm[2]);
-      /* 배지 안에 흰색(#fff) 채움 금지 */
-      if (/#fff/i.test(b)) whiteHits.push(m + '-' + v + ':fill');
+      if (!/fill="#f3c73f"/i.test(attrs)) badFill.push(m + '-' + v);
+      if (/fill="#fff/i.test(attrs)) whiteHits.push(m + '-' + v);
+      if (!/stroke="#0d0803"/i.test(attrs) || !/paint-order="stroke"/.test(attrs)) strokeBad.push(m + '-' + v);
+      const x = +((attrs.match(/ x="([\d.]+)"/) || [])[1]);
+      const y = +((attrs.match(/ y="([\d.]+)"/) || [])[1]);
+      const fs = +((attrs.match(/font-size="([\d.]+)"/) || [])[1]);
+      /* ④ 좌측 상단 모서리 밀착 — x 5 이하, 글자 꼭대기는 카드 위쪽 6 안쪽 */
+      if (!(x <= 5 && (y - fs * 0.84) <= 6 && y > 14)) posBad.push(m + '-' + v + ':x=' + x + ',y=' + y);
+      /* ⑤ 숫자 크기 확대 — 한 자리 22 이상, 두 자리 20 이상(예전 13.4 / 9.6) */
+      if (!(fs >= (m > 9 ? 20 : 22))) sizeBad.push(m + '-' + v + ':fs=' + fs);
+      const norm = attrs.replace(/font-size="[\d.]+"/, 'font-size="F"')
+        .replace(/ x="[\d.]+"/, ' x="X"').replace(/ y="[\d.]+"/, ' y="Y"')
+        .replace(/text-anchor="\w+"/, 'text-anchor="A"');
+      if (ref === null) ref = norm; else if (norm !== ref) sameNum.push(m + '-' + v);
     }
   }
   eq(count, 48, '48장 전부 렌더');
-  eq(missing.length, 0, '모든 카드에 숫자 배지 존재', missing);
-  eq(sameBadge.length, 0, '48장 배지 마크업 동일(정규화 후)', sameBadge);
+  eq(missing.length, 0, '모든 카드에 숫자 존재', missing);
+  eq(circleHits.length, 0, '동그라미(원형 배지) 0장', circleHits);
+  eq(gradHits.length, 0, '배지용 그라데이션 defs 삭제', gradHits);
+  eq(sameNum.length, 0, '48장 숫자 스타일 동일(위치·크기만 자리별)', sameNum);
   eq(badFill.length, 0, '48장 모든 숫자가 황금색(#f3c73f)', badFill);
+  eq(strokeBad.length, 0, '48장 모두 먹색 외곽선 + paint-order:stroke', strokeBad);
+  eq(posBad.length, 0, '좌측 상단 모서리 밀착', posBad);
+  eq(sizeBad.length, 0, '숫자 크기 확대(한 자리 28 / 두 자리 23.5)', sizeBad);
+  eq(whiteHits.length, 0, '흰색으로 빠지는 카드 0장', whiteHits);
   /* 색상 검증 — 황금색 계열(색상 35~55°, 채도 60% 이상) */
   const hex = '#f3c73f', r = parseInt(hex.slice(1,3),16)/255, g = parseInt(hex.slice(3,5),16)/255, b = parseInt(hex.slice(5,7),16)/255;
   const mx = Math.max(r,g,b), mn = Math.min(r,g,b), d = mx-mn;
@@ -560,13 +577,78 @@ console.log('\n[12] 48장 카드 — 숫자 전부 같은 금색 배지(흰색 0
   ok(hue >= 35 && hue <= 55, '숫자 색상이 황금색 계열(H=' + hue.toFixed(1) + '°)');
   ok(sat > 0.6, '숫자 채도 충분(S=' + sat.toFixed(2) + ')');
   ok(mx > 0.8, '숫자 밝기 충분 — 흐린 회색/흰색 아님(L≈' + (mx*100).toFixed(0) + '%)');
-  eq(whiteHits.length, 0, '흰색으로 빠지는 카드 0장', whiteHits);
-  /* 좌상단 모서리 밀착 · 컴팩트 */
-  ok(/cx="13\.6" cy="14\.4" r="11\.2"/.test(ref), '배지 중심 (13.6, 14.4) · 반지름 11.2 — 모서리 밀착·컴팩트');
-  /* 두 자리(10~12)는 메달 안에 들어가도록 숫자 크기만 작다 */
-  ok(/font-size="13\.4"/.test(W.faceSVG({ month: 7, variant: 0 })), '한 자리 숫자 13.4');
-  ok(/font-size="9\.6"/.test(W.faceSVG({ month: 12, variant: 0 })), '두 자리 숫자 9.6');
-  ok(!/r="13\.0"/.test(ref), '기존 큰 배지(r=13) 아님');
+  ok(/x="3\.2"/.test(W.faceSVG({ month: 7, variant: 0 })), '숫자 좌측 x=3.2 — 모서리 밀착');
+  ok(/font-size="28"/.test(W.faceSVG({ month: 7, variant: 0 })), '한 자리 숫자 28 (기존 13.4)');
+  ok(/font-size="23\.5"/.test(W.faceSVG({ month: 12, variant: 0 })), '두 자리 숫자 23.5 (기존 9.6)');
+  ok(!/r="11\.2"/.test(src), '메달 반지름(11.2) 마크업 삭제');
+}
+
+console.log('\n[13] 연속 숫자(사이 없음) — 패스 강제 해제 · 플레이어가 직접 건다');
+{
+  /* 2·3 — 사이가 없어 어떤 패도 들어갈 수 없다 */
+  const s = scene({ a: 2, b: 3, next: 7, pot: 2000 });
+  eq(s.noGap, true, '2·3 → noGap 플래그');
+  const L = W.betLimits(s);
+  ok(L.max >= 500, '베팅 한도는 그대로 계산', L);
+  const before = s.players[0].chips, potBefore = s.pot;
+  const r = W.placeBet(s, 500);
+  ok(r.ok && r.amount === 500, '연속 숫자에서도 걸기 수락', r);
+  eq(s.phase, 'peek', '베팅하면 phase=peek');
+  const res = W.reveal(s);
+  eq(res.type, 'lose', '사이에 못 들어가 패배');
+  eq(res.delta, -500, '잃은 금액 = 건 금액 1배');
+  eq(s.players[0].chips - before, -500, '칩 -500');
+  eq(s.pot, potBefore + 500, '판돈 +500 (1배 적립, 2배 아님)');
+
+  /* 경계(2 또는 3)가 나오면 ppongLose — 역시 1배 */
+  const e = scene({ a: 2, b: 3, next: 3, pot: 2000 });
+  W.placeBet(e, 1000);
+  const re = W.reveal(e);
+  eq(re.type, 'ppongLose', '연속 숫자의 경계 적중 → ppongLose');
+  eq(re.delta, -1000, '경계 적중도 1배');
+
+  /* 걸지 않고 패스하는 선택도 그대로 */
+  const f = scene({ a: 6, b: 7, next: 9, pot: 2000 });
+  const fr = W.fold(f);
+  ok(fr.ok === true, '연속 숫자에서 패스도 가능', fr);
+  eq(f.result.delta, 0, '패스는 손익 0');
+
+  /* 한도 밖 금액은 기존처럼 잘라서 */
+  const c = scene({ a: 4, b: 5, next: 9, pot: 2000 });
+  const cr = W.placeBet(c, 999999);
+  ok(cr.ok && cr.amount === W.betLimits(c).max, '한도 초과는 최대치로 잘림', cr);
+
+  /* 땡(2·2)은 여전히 업/다운 — 일반 베팅 거부 */
+  const p = scene({ a: 2, b: 2, next: 9, pot: 2000 });
+  const pr = W.placeBet(p, 500);
+  ok(pr.ok === false && pr.err === 'pair', '땡은 여전히 업/다운 선택', pr);
+
+  /* AI는 연속 숫자에서 합리적으로 패스 */
+  const ai = scene({ a: 4, b: 5, next: 9, pot: 2000 });
+  ai.turn = 1;
+  const d = W.aiDecide(ai);
+  ok(d.action === 'fold' && d.reason === 'nogap', 'AI는 사이 없음이면 패스', d);
+
+  /* UI에 '패스만 가능' 강제 분기가 없다 · 안내 문구도 바뀐다 */
+  ok(!/if \(S\.noGap && !S\.pair\) \{\s*return '<div class="ctarow">/.test(src), '베팅 UI에 사이 없음 패스 강제 분기 없음');
+  ok(/noGapMsg: '사이 없음 — 걸어도 들어갈 자리 없음'/.test(src), '안내 문구도 강제 패스가 아니라 선택 안내');
+  ok(/id="betBtn"/.test(src) && /id="passBtn"/.test(src), '걸기·패스 버튼이 함께 생성된다');
+}
+
+console.log('\n[14] 모바일 실기기 카드 크기 — 기준 패 2장 확대');
+{
+  const cm = src.match(/--cardw\s*:\s*min\(([\d.]+)vw/);
+  ok(!!cm && +cm[1] >= 26, '카드 폭 vw 계수 26 이상 (이전 19.6vw)', cm && cm[1]);
+  ok(/\.slot\{width:var\(--cardw\)/.test(src), '.slot 이 --cardw 사용');
+  ok(/\.landcard\{[\s\S]{0,80}width:var\(--cardw\)/.test(src), '.landcard 도 --cardw 사용');
+  ok(/calc\(var\(--cardw\)\*1\.55\)/.test(src), '높이는 120:186 비율(×1.55)');
+  ok(!/(?:width|height)\s*:[^;}]*19\.6vw/.test(src), '낡은 19.6vw 크기 규칙 제거(주석 제외)');
+  /* 3장(착지 패 포함)이 테이블 안쪽 폭에 들어오는지 계산 검증 */
+  for (const vw of [360, 390, 412]) {
+    const cardw = Math.min(27.8 * vw / 100, 124);
+    const inner = vw - 24 - 16;   /* 앱 좌우 패딩 12×2 · 테이블 패딩 8×2 */
+    ok(cardw * 3 + 9 * 2 <= inner, vw + 'px 폭: 3장 + 간격 18 ≤ ' + inner + ' (카드 폭 ' + cardw.toFixed(1) + ')');
+  }
 }
 
 console.log('\n결과: ' + pass + ' 통과 / ' + fail + ' 실패');
