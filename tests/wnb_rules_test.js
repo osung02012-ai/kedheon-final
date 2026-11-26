@@ -1,4 +1,5 @@
-/* 월남뽕 룰 검증 — 땡 업/다운(1배·동률 패배), 2연속 전원 패스 앤티 재적립, 확률 계산기 미노출 */
+/* 월남뽕 룰 검증 — 땡 업/다운(1배·동률 패배), 2연속 전원 패스 앤티 재적립, 확률 계산기 미노출,
+   중간 판돈 올리기, 자동 팟 충전, 뽕2배·다음버튼 삭제, 48장 금색 숫자 통일 */
 const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
@@ -100,13 +101,13 @@ console.log('\n[1] 땡 판정 — 업/다운 선택과 1배 정산');
   s = scene({ a: 5, next: 9, pot: 1000 });
   const bad = W.placeBet(s, 100);
   ok(bad.ok === false && bad.err === 'pair', '땡에서 placeBet은 거부(err=pair)', bad);
-  const badNg = W.placeNoGapBet(s);
-  ok(badNg.ok === false, '땡에서 뽕(사이없음) 베팅도 거부', badNg);
+  ok(typeof W.placeNoGapBet === 'undefined', '뽕 ×2(사이없음) 베팅 API 삭제됨');
+  ok(typeof W.noGapStake === 'undefined', '뽕 ×2 배율 계산(noGapStake) 삭제됨');
   const noDir = W.placePairBet(s, 100, null);
   ok(noDir.ok === false && noDir.err === 'dir', '방향 없이 땡 베팅 거부', noDir);
 }
 
-console.log('\n[2] 땡이 아닌 일반 사이값 — 기존 룰 유지(경계 2배 옵션 꺼짐 = 1배)');
+console.log('\n[2] 땡이 아닌 일반 사이값 — 기존 룰 유지(경계 적중 = 1배 손실)');
 {
   const s = scene({ a: 2, b: 10, next: 5, pot: 1000 });
   const before = s.players[0].chips;
@@ -114,6 +115,14 @@ console.log('\n[2] 땡이 아닌 일반 사이값 — 기존 룰 유지(경계 2
   const res = W.reveal(s);
   eq(res.type, 'win', '2–10 사이 5 → win');
   eq(s.players[0].chips - before, 100, '일반 사이값 승리는 여전히 1배');
+
+  /* 경계와 같은 숫자 = 1배 손실 (뽕 2배 페널티 삭제) */
+  const e1 = scene({ a: 2, b: 10, next: 2, pot: 1000 });
+  W.placeBet(e1, 100);
+  const rEdge = W.reveal(e1);
+  eq(rEdge.type, 'ppongLose', '경계(2) 적중 → ppongLose');
+  eq(rEdge.delta, -100, '경계 적중 손실도 1배(-100)');
+  ok(e1.log.every(l => l.t !== 'ppong-double'), '2배 배율 로그 없음');
 }
 
 console.log('\n[3] AI — 땡에서 업/다운을 스스로 고른다');
@@ -395,6 +404,169 @@ console.log('\n[8] 🎟️ 충전 쿠폰 — 우승 적립 · 쿠폰 사용 · l
   ok(/data-cpn/.test(src), '헤더·상태바에 쿠폰 수량 표시([data-cpn])');
   ok(/id="cpnUseSetup"/.test(src), '설정 화면에 쿠폰 사용 버튼');
   ok(/localStorage/.test(src), 'localStorage 영속성 코드 존재');
+}
+
+console.log('\n[9] 중간 판돈 올리기 — 단계 상향 · 하향 거부 · 상한');
+{
+  const g = W.newGame({ mode: 'ai', ante: 1000, count: 3, chips: 50000 });
+  eq(g.ante, 1000, '시작 앤티 1,000');
+
+  const up = W.raiseAnte(g, 2000);
+  ok(up.ok && up.from === 1000 && up.ante === 2000, '1,000 → 2,000 인상', up);
+  eq(g.ante, 2000, '상태의 앤티가 2,000으로');
+  eq(g.anteRaises, 1, '인상 횟수 1');
+  eq(g.anteHistory.length, 1, '인상 이력 1건');
+  eq(g.anteHistory[0].to, 2000, '이력에 새 앤티 기록');
+  eq(W.betLimits(g).min, 1000, '최소 베팅은 팟 한도(팟 1,000 → 1,000)');
+  g.pot = 5000;
+  eq(W.betLimits(g).min, 2000, '팟이 충분하면 최소 베팅 = 새 앤티(2,000)');
+
+  const low = W.raiseAnte(g, 2000);
+  ok(low.ok === false && low.err === 'low', '같은 금액은 거부(err=low)', low);
+  const down = W.raiseAnte(g, 1000);
+  ok(down.ok === false && down.err === 'low', '내리는 것도 거부', down);
+  const nan = W.raiseAnte(g, 'abc');
+  ok(nan.ok === false && nan.err === 'amount', '숫자가 아니면 거부', nan);
+
+  const cap = W.raiseAnte(g, 999999);
+  ok(cap.ok && cap.ante === W.ANTE_MAX, '상한 50,000으로 캡', cap);
+  eq(W.ANTE_MAX, 50000, '최대 앤티 50,000');
+
+  const opts = W.anteOptions({ ante: 1000 });
+  eq(opts[0], 2000, '1,000에서 다음 단계 2,000');
+  ok(opts.indexOf(5000) > 0 && opts.indexOf(10000) > 0, '5,000·10,000 단계 노출', opts);
+  eq(W.anteOptions({ ante: 50000 }).length, 0, '최대에서는 더 올릴 단계 없음');
+
+  const go = W.newGame({ mode: 'solo', ante: 1000 });
+  go.over = true;
+  const overRaise = W.raiseAnte(go, 2000);
+  ok(overRaise.ok === false && overRaise.err === 'over', '게임 종료 뒤에는 인상 불가', overRaise);
+}
+
+console.log('\n[10] 쌓인 머니 < 기본 베팅 → 자동 추가 베팅(팟 충전)');
+{
+  /* 3인 · 앤티 1,000 · 팟 500 → 자동 충전 */
+  const s = W.newGame({ mode: 'pass', ante: 1000, count: 3, chips: 20000, rng: () => 0.5 });
+  s.players.forEach(p => { p.chips = 20000; p.bankrupt = false; });
+  s.pot = 500;
+  const info = W.autoTopUp(s);
+  ok(!!info, '팟 < 앤티 → 자동 충전 발동', info);
+  eq(info.amt, 3000, '3인 × 앤티 1,000 = 3,000 추가 베팅');
+  eq(info.n, 3, '납부 인원 3');
+  eq(s.pot, 3500, '팟 500 → 3,500');
+  ok(s.players.every(p => p.chips === 19000), '전원 1,000씩 차감', s.players.map(p => p.chips));
+  ok(s.log.some(l => l.t === 'auto-topup'), '자동 충전 로그 기록');
+
+  /* 이미 앤티 이상이면 아무 일도 없다(멱등) */
+  eq(W.autoTopUp(s), null, '팟 ≥ 앤티면 발동하지 않음');
+  eq(s.pot, 3500, '팟 변화 없음');
+
+  /* 보유 머니가 모자란 참가자는 남은 만큼만 */
+  const s2 = W.newGame({ mode: 'pass', ante: 1000, count: 3, chips: 20000, rng: () => 0.5 });
+  s2.players.forEach(p => { p.chips = 20000; p.bankrupt = false; });
+  s2.players[1].chips = 400;
+  s2.players[2].bankrupt = true;
+  s2.pot = 100;
+  const i2 = W.autoTopUp(s2);
+  eq(i2.amt, 1400, '부족자는 400만 · 나머지는 1,000 (1,400)');
+  eq(s2.players[1].chips, 0, '부족자는 0칩');
+  eq(i2.short, 2, '부족·파산 인원 2 보고');
+  eq(s2.pot, 1500, '팟 100 → 1,500');
+
+  /* 솔로 — 하우스가 부족분을 채운다 */
+  const so = W.newGame({ mode: 'solo', ante: 1000, chips: 50000, rng: () => 0.5 });
+  so.pot = 300;
+  const i3 = W.autoTopUp(so);
+  ok(i3 && i3.house, '솔로는 하우스 충전', i3);
+  eq(so.pot, 1000, '솔로 팟이 앤티(1,000)까지 채워짐');
+  eq(so.players[0].chips, 49000, '솔로 플레이어 머니는 그대로');
+
+  /* 턴 시작 시 자동 발동 — 앤티를 내도 팟이 앤티보다 적은 상황 */
+  const s3 = W.newGame({ mode: 'pass', ante: 1000, count: 3, chips: 20000, rng: () => 0.5 });
+  s3.players.forEach(p => { p.chips = 20000; p.bankrupt = false; });
+  s3.pot = 0; s3.phase = 'idle'; s3.turn = 0; s3.deck = W.newDeck();
+  W.beginTurn(s3);
+  ok(s3.pot >= s3.ante, '턴 시작 뒤 팟은 최소 앤티 이상', { pot: s3.pot, ante: s3.ante });
+
+  /* 정산 직후 자동 발동 — 큰 승리로 팟이 앤티 밑으로 떨어질 때 */
+  const s4 = W.newGame({ mode: 'pass', ante: 1000, count: 3, chips: 20000, rng: () => 0.5 });
+  s4.players.forEach(p => { p.chips = 20000; p.bankrupt = false; });
+  s4.turn = 0; s4.phase = 'bet';
+  s4.board = [card(2), card(10)];
+  s4.pair = false; s4.noGap = false; s4.third = null; s4.bet = 0; s4.betKind = 'normal';
+  s4.deck = [card(5)];
+  s4.pot = 1500;
+  W.placeBet(s4, 1000);
+  const r4 = W.reveal(s4);           /* win +1000 → 팟 500 < 앤티 1,000 */
+  eq(r4.type, 'win', '2–10 사이 5 승리');
+  ok(!!r4.autotop, '정산 직후 자동 충전 결과에 기록', r4.autotop);
+  ok(s4.pot > s4.ante, '정산 뒤 팟이 앤티보다 커진다', s4.pot);
+  const chipsSum = s4.players.reduce((t, p) => t + p.chips, 0) + s4.pot;
+  eq(chipsSum, W.totalChips(s4), '머니 총량 보존(자동 충전은 이동만)');
+}
+
+console.log('\n[11] 삭제·자동 진행 확인 (뽕 2배 · 다음 버튼)');
+{
+  ok(!/ppongDouble/.test(src), '뽕 2배 배율 상태(ppongDouble) 삭제');
+  ok(!/ppongSwitch/.test(src), '설정·로비의 뽕 2배 토글 삭제');
+  ok(!/ppongBet/.test(src), '뽕 ×2 걸기 버튼 문구 삭제');
+  ok(!/placeNoGapBet|noGapStake/.test(src), '뽕 ×2 베팅 로직 삭제');
+  ok(!/id="nextBtn"/.test(src), "'다음' 버튼 UI 삭제");
+  ok(!/id="ngBtn"/.test(src), "'뽕 ×2 걸기' 버튼 UI 삭제");
+  ok(/scheduleAdvance\(HOLD_MS\)/.test(src), '공개 뒤 자동 진행 예약(landThird → HOLD_MS)');
+  ok(/scheduleAdvance\(FOLD_MS\)/.test(src), '패스 뒤 자동 진행 예약');
+  ok(/function scheduleAdvance/.test(src), '자동 진행 스케줄러 존재');
+  const hm = src.match(/HOLD_MS\s*=\s*(\d+)/);
+  ok(hm && +hm[1] >= 1800 && +hm[1] <= 2200, '결과 확인 시간 1.8~2.2초 (HOLD_MS=' + (hm && hm[1]) + ')');
+  ok(/doneApply[\s\S]{0,400}scheduleAdvance/.test(src), '온라인도 방장이 자동으로 다음 판');
+}
+
+console.log('\n[12] 48장 카드 — 숫자 전부 같은 금색 배지(흰색 0장)');
+{
+  let sameBadge = [], whiteHits = [], badFill = [], missing = [];
+  let ref = null, count = 0;
+  for (let m = 1; m <= 12; m++) {
+    for (let v = 0; v < 4; v++) {
+      count++;
+      const svg = W.faceSVG({ month: m, variant: v });
+      const badge = svg.slice(svg.indexOf('<g><circle cx="13.6"'));
+      if (badge.indexOf('</g></svg>') < 0) { missing.push(m + '-' + v); continue; }
+      const b = badge.slice(0, badge.indexOf('</g></svg>') + 4);
+      /* 카드마다 고유 id → 비교용으로 정규화 */
+      const norm = b.replace(/gfw\d+/g, 'GF').replace(/gsw\d+/g, 'GS')
+        .replace(/font-size="[\d.]+"/, 'font-size="F"')
+        .replace(/<text([^>]*)>\d+<\/text>/, '<text$1>N</text>');
+      if (ref === null) ref = norm; else if (norm !== ref) sameBadge.push(m + '-' + v);
+      /* 숫자 채움 = 금색 그라데이션 */
+      const tm = b.match(/<text([^>]*)>(\d+)<\/text>/);
+      if (!tm) { missing.push(m + '-' + v); continue; }
+      if (!/fill="#f3c73f"/i.test(tm[1])) badFill.push(m + '-' + v + ':' + (tm[1].match(/fill="[^"]*"/) || [''])[0]);
+      if (/fill="#fff/i.test(tm[1])) whiteHits.push(m + '-' + v);
+      if (+tm[2] !== m) missing.push(m + '-' + v + ':num=' + tm[2]);
+      /* 배지 안에 흰색(#fff) 채움 금지 */
+      if (/#fff/i.test(b)) whiteHits.push(m + '-' + v + ':fill');
+    }
+  }
+  eq(count, 48, '48장 전부 렌더');
+  eq(missing.length, 0, '모든 카드에 숫자 배지 존재', missing);
+  eq(sameBadge.length, 0, '48장 배지 마크업 동일(정규화 후)', sameBadge);
+  eq(badFill.length, 0, '48장 모든 숫자가 황금색(#f3c73f)', badFill);
+  /* 색상 검증 — 황금색 계열(색상 35~55°, 채도 60% 이상) */
+  const hex = '#f3c73f', r = parseInt(hex.slice(1,3),16)/255, g = parseInt(hex.slice(3,5),16)/255, b = parseInt(hex.slice(5,7),16)/255;
+  const mx = Math.max(r,g,b), mn = Math.min(r,g,b), d = mx-mn;
+  let hue = mx === r ? ((g-b)/d)%6 : mx === g ? (b-r)/d+2 : (r-g)/d+4;
+  hue = (hue*60+360)%360;
+  const sat = d/mx;
+  ok(hue >= 35 && hue <= 55, '숫자 색상이 황금색 계열(H=' + hue.toFixed(1) + '°)');
+  ok(sat > 0.6, '숫자 채도 충분(S=' + sat.toFixed(2) + ')');
+  ok(mx > 0.8, '숫자 밝기 충분 — 흐린 회색/흰색 아님(L≈' + (mx*100).toFixed(0) + '%)');
+  eq(whiteHits.length, 0, '흰색으로 빠지는 카드 0장', whiteHits);
+  /* 좌상단 모서리 밀착 · 컴팩트 */
+  ok(/cx="13\.6" cy="14\.4" r="11\.2"/.test(ref), '배지 중심 (13.6, 14.4) · 반지름 11.2 — 모서리 밀착·컴팩트');
+  /* 두 자리(10~12)는 메달 안에 들어가도록 숫자 크기만 작다 */
+  ok(/font-size="13\.4"/.test(W.faceSVG({ month: 7, variant: 0 })), '한 자리 숫자 13.4');
+  ok(/font-size="9\.6"/.test(W.faceSVG({ month: 12, variant: 0 })), '두 자리 숫자 9.6');
+  ok(!/r="13\.0"/.test(ref), '기존 큰 배지(r=13) 아님');
 }
 
 console.log('\n결과: ' + pass + ' 통과 / ' + fail + ' 실패');

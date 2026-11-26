@@ -183,5 +183,24 @@ getEl('#cpnSheetUse').onclick();
 ok(W.couponLoad(localStorage) === 0, '0장에서 더 차감되지 않음(음수 없음)', W.couponLoad(localStorage));
 ok(/없음|No coupons/.test(toastEl.innerHTML), '보유 쿠폰 없음 안내', toastEl.innerHTML);
 
+console.log('\n[UI-7] 게임 중 기본 판돈 올리기 (솔로 = 즉시 적용)');
+ok(getEl('#raiseNext').textContent === '2,000', '판돈 버튼에 다음 단계(2,000) 표시', getEl('#raiseNext').textContent);
+getEl('#raiseBtn').onclick();
+ok(getEl('#raiseSheet').classList.contains('on'), '판돈 올리기 시트가 열린다');
+const opts = getEl('#raiseOpts').children;
+ok(opts.length >= 2, '상향 단계 버튼 노출', opts.length);
+ok(/2,000/.test(opts[0].innerHTML), '첫 단계 2,000', opts[0].innerHTML);
+opts[0].onclick();
+ok(!getEl('#raiseSheet').classList.contains('on'), '고른 뒤 시트 닫힘');
+ok(getEl('#raiseNext').textContent === '5,000', '앤티 2,000 반영 → 다음 단계 5,000', getEl('#raiseNext').textContent);
+ok(/판돈|앤티|2,000/.test(getEl('#toast').innerHTML), '인상 안내 토스트', getEl('#toast').innerHTML);
+
+console.log('\n[UI-8] 다음 버튼·뽕 2배 토글 없음');
+ok(!/id="nextBtn"/.test(src), "'다음' 버튼 없음");
+ok(!/id="ngBtn"/.test(src), "'뽕 ×2 걸기' 버튼 없음");
+ok(!/ppongSwitch/.test(src), '뽕 2배 토글 없음');
+ok(/id="raiseBtn"/.test(src), '판돈 올리기 버튼 존재');
+ok(/id="voteSheet"/.test(src), '온라인 전원 동의 모달 존재');
+
 console.log('\n결과: ' + pass + ' 통과 / ' + fail + ' 실패');
 process.exit(fail ? 1 : 0);

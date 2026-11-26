@@ -179,7 +179,7 @@ body{
   background:repeating-linear-gradient(45deg,#fff 0 1px,transparent 1px 4px);
 }
 .board{display:flex;align-items:center;justify-content:center;gap:9px;flex:0 0 auto;z-index:1}
-.slot{width:min(16.08vw,11.82vh);aspect-ratio:120/186;height:min(24.93vw,18.33vh);animation:deal .35s cubic-bezier(.2,.9,.3,1.3) both}
+.slot{width:min(19.6vw,13.1vh,120px);aspect-ratio:120/186;height:min(30.38vw,20.3vh,186px);animation:deal .35s cubic-bezier(.2,.9,.3,1.3) both}
 @keyframes deal{from{opacity:0;transform:translateY(-14px) scale(.9) rotate(-3deg)}to{opacity:1;transform:none}}
 .range{
   display:flex;flex-direction:column;align-items:center;gap:1px;min-width:46px;
@@ -195,7 +195,7 @@ body{
 .landwrap{display:none;position:relative}
 .board.landed .landwrap{display:block}
 .landcard{
-  width:min(16.08vw,11.82vh);aspect-ratio:120/186;height:min(24.93vw,18.33vh);position:relative;
+  width:min(19.6vw,13.1vh,120px);aspect-ratio:120/186;height:min(30.38vw,20.3vh,186px);position:relative;
   filter:drop-shadow(0 12px 14px rgba(0,0,0,.55));
 }
 .landwrap.slam .landcard{animation:slamIn .5s cubic-bezier(.22,1.5,.4,1) both}
@@ -320,6 +320,32 @@ body{
 .toast b{font-size:13px;font-weight:900;letter-spacing:.4px}
 .toast span{font-size:10.5px;font-weight:700;opacity:.82}
 @keyframes floatup{0%{opacity:0;transform:translate(-50%,6px) scale(.8)}25%{opacity:1}100%{opacity:0;transform:translate(-50%,-18px) scale(1.05)}}
+/* ---------- 판돈 올리기 버튼 (테이블 우상단) ---------- */
+.raisebtn{
+  position:absolute;top:7px;right:8px;z-index:5;display:inline-flex;align-items:center;gap:3px;
+  padding:5px 9px;border-radius:999px;border:1px solid rgba(230,195,124,.45);
+  background:linear-gradient(180deg,rgba(230,195,124,.20),rgba(0,0,0,.42));
+  color:#ffeec4;font-size:10px;font-weight:900;letter-spacing:.4px;font-family:inherit;cursor:pointer;
+  box-shadow:0 3px 10px rgba(0,0,0,.36);
+}
+.raisebtn:active{transform:scale(.94)}
+.raisebtn b{font-size:10.5px;font-variant-numeric:tabular-nums;color:#ffe9b6}
+.raisebtn.max{opacity:.42}
+.nexthint{font-size:9.5px;color:#8fa79b;text-align:center}
+/* ---------- 온라인 판돈 인상 표결 ---------- */
+.votesheet{position:fixed;inset:0;background:rgba(0,0,0,.66);display:none;align-items:center;justify-content:center;z-index:95;backdrop-filter:blur(3px);padding:20px}
+.votesheet.on{display:flex}
+.votebox{width:100%;max-width:330px;background:#0c2b22;border:1px solid rgba(230,195,124,.45);border-radius:16px;padding:15px;
+  display:flex;flex-direction:column;gap:9px;box-shadow:0 18px 44px rgba(0,0,0,.65)}
+.votebox h3{font-size:12px;letter-spacing:1.8px;color:var(--gold);font-weight:800;text-align:center}
+.votebox .vamt{font-size:23px;font-weight:900;color:#ffe9b6;text-align:center;letter-spacing:1px;font-variant-numeric:tabular-nums}
+.votebox .vamt i{font-style:normal;font-size:14px;color:#9fb5aa;margin:0 4px}
+.votebox p{font-size:10.5px;color:#9fb5aa;line-height:1.5;text-align:center}
+.votebox .vrow{display:flex;gap:7px;margin-top:2px}
+.votebox .vrow button{flex:1}
+.sheetbox .vopts{display:flex;gap:6px}
+.sheetbox .vopts .go{flex:1;padding:12px 4px;font-size:13px}
+.sheetbox .vopts .go small{display:block;font-size:9px;font-weight:700;opacity:.72;letter-spacing:0}
 /* ---------- sheet ---------- */
 .sheet{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:flex-end;justify-content:center;z-index:80;backdrop-filter:blur(3px)}
 .sheet.on{display:flex}
@@ -348,7 +374,7 @@ body{
 @media (max-height:600px){
   .hero-cards{display:none}
   .thirdwrap{width:min(24.6vw,17.03vh);height:min(38.13vw,26.4vh)}
-  .slot{width:min(14.19vw,9.94vh);height:min(22vw,15.4vh)}
+  .slot,.landcard{width:min(17.6vw,11.4vh,120px);height:min(27.28vw,17.67vh,186px)}
 }
 /* ---------- 🎟️ 충전 쿠폰 ---------- */
 .tbtn.cpn{display:inline-flex;align-items:center;gap:3px;padding:6px 8px;font-size:11px;font-variant-numeric:tabular-nums}
@@ -427,10 +453,6 @@ body{
         <span data-i18n="chips">시작 머니</span>
         <div class="seg" id="chipsSeg"></div>
       </div>
-      <div class="row">
-        <span data-i18n="ppongOpt">뽕 2배 페널티</span>
-        <button class="switch" id="ppongSwitch"></button>
-      </div>
       <div class="cpnrow">
         <span class="cpnnum"><span aria-hidden="true">🎟️</span><b data-cpn>0</b><i data-i18n="couponUnit">장</i></span>
         <button class="tbtn" id="cpnUseSetup">쿠폰 1장 사용 · 시작 머니 +10,000</button>
@@ -462,6 +484,7 @@ body{
     <div class="players" id="players"></div>
 
     <div class="table" id="tableEl">
+      <button class="raisebtn" id="raiseBtn" title="기본 판돈 올리기">&#10514; <b id="raiseNext">2,000</b></button>
       <div class="board" id="boardEl">
         <div class="card slot" id="cardA"></div>
         <div class="range" id="rangeBox"><b id="rangeTxt">2–10</b></div>
@@ -498,11 +521,33 @@ body{
     </div>
   </section>
 
+  <!-- 기본 판돈 올리기 -->
+  <div class="sheet" id="raiseSheet">
+    <div class="sheetbox">
+      <h3 id="raiseTitle">기본 판돈 올리기</h3>
+      <p class="lhint" id="raiseHint"></p>
+      <div class="vopts" id="raiseOpts"></div>
+      <button class="ghost" id="raiseCancel">닫기</button>
+    </div>
+  </div>
+
+  <!-- 온라인: 판돈 인상 전원 동의 -->
+  <div class="votesheet" id="voteSheet">
+    <div class="votebox">
+      <h3 id="voteTitle">판돈 인상 제안</h3>
+      <div class="vamt" id="voteAmt">1,000 <i>&#8594;</i> 2,000</div>
+      <p id="voteDesc"></p>
+      <div class="vrow">
+        <button class="ghost" id="voteNo">거절</button>
+        <button class="go" id="voteYes">동의</button>
+      </div>
+    </div>
+  </div>
+
   <div class="sheet" id="sheet">
     <div class="sheetbox">
       <h3 id="sheetTitle">설정</h3>
       <div class="row"><span data-i18n="ante">앤티</span><div class="seg" id="anteSeg2"></div></div>
-      <div class="row"><span data-i18n="ppongOpt">뽕 2배 페널티</span><button class="switch" id="ppongSwitch2"></button></div>
       <div class="row"><span data-i18n="lang">언어</span><button class="tbtn" id="langBtn2">EN</button></div>
       <div class="row"><span data-i18n="couponLabel">충전 쿠폰</span><span class="cpnnum"><b data-cpn>0</b> <i data-i18n="couponUnit">장</i></span></div>
       <p class="cpnhint" id="cpnHint2">게임 최종 우승 시 1장 적립 · 다음 게임·위기 때 +10,000 충전</p>
@@ -659,7 +704,9 @@ var WNB = (function () {
     var s = {
       mode: mode,
       ante: ante,
-      ppongDouble: !!cfg.ppongDouble,
+      anteBase: ante,
+      anteRaises: 0,
+      anteHistory: [],
       players: players,
       turn: 0,
       pot: 0,
@@ -731,6 +778,7 @@ var WNB = (function () {
       }
       p.chips -= s.ante;
       s.pot += s.ante;
+      autoTopUp(s);                    /* 쌓인 머니가 기본 베팅보다 적으면 자동 재적립 */
       if (p.chips < 1) {              /* 앤티로 전 재산을 낸 플레이어는 더 걸 수 없다 → 파산 처리 */
         p.bankrupt = true;
         s.log.push({ t: 'broke', i: p.i });
@@ -755,6 +803,65 @@ var WNB = (function () {
       return;
     }
     s.over = true;
+  }
+
+  /* ============================================================
+     기본 판돈(앤티) 올리기 — 게임 중 언제든 단계별 상향.
+       · 솔로·AI·오프라인: 즉시 적용
+       · 온라인 방: 전원 동의 후 방장이 적용(UI/ON 모듈에서 표결)
+     ============================================================ */
+  var ANTE_MAX = 50000;
+  var ANTE_STEPS = [1000, 2000, 5000, 10000, 20000, 50000];
+
+  function anteOptions(s) {
+    var cur = s ? s.ante : 0;
+    var out = [];
+    for (var i = 0; i < ANTE_STEPS.length; i++) if (ANTE_STEPS[i] > cur) out.push(ANTE_STEPS[i]);
+    return out;
+  }
+
+  function raiseAnte(s, target) {
+    if (!s) return { ok: false, err: 'nostate' };
+    if (s.over) return { ok: false, err: 'over' };
+    var to = Math.floor(Number(target));
+    if (!isFinite(to)) return { ok: false, err: 'amount' };
+    if (to > ANTE_MAX) to = ANTE_MAX;
+    if (to <= s.ante) return { ok: false, err: 'low', ante: s.ante };
+    var from = s.ante;
+    s.ante = to;
+    s.anteRaises = (s.anteRaises || 0) + 1;
+    s.anteHistory = s.anteHistory || [];
+    s.anteHistory.push({ from: from, to: to, hand: s.hand });
+    s.log.push({ t: 'ante-raise', from: from, to: to, hand: s.hand });
+    return { ok: true, from: from, ante: to };
+  }
+
+  /* 쌓인 머니(POT) < 기본 베팅(앤티) → 전원이 기본 베팅을 한 번 더 낸다.
+     · 보유 머니가 모자란 참가자는 남은 만큼만(파산 규칙은 그대로 둔다)
+     · 솔로는 하우스가 부족분을 채운다
+     · 이미 앤티 이상이면 아무 일도 하지 않는다(멱등) */
+  function autoTopUp(s) {
+    if (!s || s.over) return null;
+    var need = s.ante - s.pot;
+    if (need <= 0) return null;
+    if (s.mode === 'solo') {
+      s.pot += need;
+      s.log.push({ t: 'auto-topup', house: true, amt: need, hand: s.hand });
+      return { amt: need, n: 1, ante: s.ante, short: 0, house: true, pot: s.pot };
+    }
+    var amt = 0, n = 0, short = 0;
+    s.players.forEach(function (p) {
+      if (p.bankrupt) { short++; return; }
+      var pay = Math.min(s.ante, Math.max(0, p.chips));
+      if (pay < 1) { short++; return; }
+      p.chips -= pay;
+      s.pot += pay;
+      amt += pay; n++;
+      if (pay < s.ante) short++;
+    });
+    if (amt < 1) return null;
+    s.log.push({ t: 'auto-topup', amt: amt, n: n, ante: s.ante, hand: s.hand });
+    return { amt: amt, n: n, ante: s.ante, short: short, pot: s.pot };
   }
 
   function betLimits(s) {
@@ -816,23 +923,6 @@ var WNB = (function () {
     return { ok: true, amount: amt, dir: d };
   }
 
-  function noGapStake(s) {
-    var p = player(s);
-    return Math.max(0, Math.min(s.ante * 2, p.chips, Math.floor(s.pot / 2)));
-  }
-  function placeNoGapBet(s) {
-    if (s.phase !== 'bet' || !s.noGap || s.pair) return { ok: false, err: 'phase' };
-    var amt = noGapStake(s);
-    if (amt < 1) return { ok: false, err: 'nostake' };
-    s.bet = amt;
-    s.betKind = 'nogap';
-    s.pairDir = null;
-    resetPassStreak(s);
-    s.third = draw(s);
-    s.phase = 'peek';
-    return { ok: true, amount: amt };
-  }
-
   function refillPot(s) {
     if (s.mode === 'solo') {
       var top = Math.max(1000, s.ante * 10);
@@ -891,7 +981,7 @@ var WNB = (function () {
     if (s.phase !== 'peek') return null;
     var p = player(s);
     var a = s.board[0].month, b = s.board[1].month, m = s.third.month;
-    var bet = s.bet, type, delta, gain, penalty, mult = 1, short = false;
+    var bet = s.bet, type, delta, gain, penalty, short = false;
 
     if (s.betKind === 'pair') {
       /* 땡 — 업/다운: 같은 숫자가 나오면 무조건 패배, 배당은 일반 사이값과 동일(1배) */
@@ -907,28 +997,17 @@ var WNB = (function () {
         type = 'pairLose'; delta = -penalty;
         short = penalty < bet;
       }
-    } else if (s.betKind === 'nogap') {
-      if (m === a || m === b) {
-        gain = Math.min(bet * 2, s.pot);
-        p.chips += gain; s.pot -= gain;
-        type = 'ppongWin'; delta = gain;
-      } else {
-        penalty = Math.min(bet, p.chips);
-        p.chips -= penalty; s.pot += penalty;
-        type = 'lose'; delta = -penalty;
-        short = penalty < bet;
-      }
     } else if (m > a && m < b) {
       gain = Math.min(bet, s.pot);
       p.chips += gain; s.pot -= gain;
       type = 'win'; delta = gain;
     } else if (m === a || m === b) {
-      mult = s.ppongDouble ? 2 : 1;
-      penalty = Math.min(bet * mult, p.chips);
+      /* 경계와 같은 숫자 — 건 만큼 그대로 판돈으로(2배 페널티 없음) */
+      penalty = Math.min(bet, p.chips);
       p.chips -= penalty; s.pot += penalty;
-      type = mult > 1 ? 'ppong' : 'ppongLose';
+      type = 'ppongLose';
       delta = -penalty;
-      short = penalty < bet * mult;
+      short = penalty < bet;
     } else {
       penalty = Math.min(bet, p.chips);
       p.chips -= penalty; s.pot += penalty;
@@ -936,19 +1015,21 @@ var WNB = (function () {
       short = penalty < bet;
     }
 
-    if (type === 'win' || type === 'ppongWin' || type === 'pairWin') {
+    if (type === 'win' || type === 'pairWin') {
       s.winCounts = s.winCounts || [];
       s.winCounts[s.turn] = (s.winCounts[s.turn] || 0) + 1;
     }
 
     s.result = {
       type: type, delta: delta, bet: bet, a: a, b: b, m: m,
-      turn: s.turn, mult: mult, short: short, potUp: delta < 0 ? -delta : 0,
+      turn: s.turn, short: short, potUp: delta < 0 ? -delta : 0,
       pair: !!s.pair, dir: s.betKind === 'pair' ? (s.pairDir === 'down' ? 'down' : 'up') : null,
       kind: s.betKind, refill: null
     };
     s.phase = 'result';
     if (s.pot <= 0) refillPot(s);
+    var top = autoTopUp(s);          /* 정산 직후 — 쌓인 머니가 기본 베팅보다 적으면 자동 충전 */
+    if (top) s.result.autotop = top;
     return s.result;
   }
 
@@ -2191,71 +2272,67 @@ var WNB = (function () {
   }
 
   /* ------------------------------------------------------------ */
-  /* 좌측 상단 숫자 배지 — 금박(Gold Foil) 원형 1개                */
+  /* 좌측 상단 숫자 배지 — 컴팩트 금메달, 카드 모서리에 밀착        */
+  /*   · 48장 전부 같은 배지: 짙은 먹갈색 바탕 + 금테 + 금색 숫자    */
+  /*   · 바탕이 어두워 어떤 카드 그림 위에서도 '흰 숫자'가 되지 않는다 */
   /*   · 모든 색을 Hex로 고정 (CSS 변수/테마/브라우저 보정 영향 없음)  */
-  /*   · 안쪽 채움은 SVG <radialGradient> + 대각선 광택 <linearGradient> */
   var BG = {
-    cx: 20, cy: 20.5, r: 13.0,
-    edge: '#7a5408',   /* 바깥 테두리 — 진한 금동색 */
-    ink: '#1b1005',    /* 숫자 — 금박 위에서 가장 진한 먹색 */
-    shadow: '#20140a'
+    cx: 13.6, cy: 14.4, r: 11.2,
+    rim: '#f6e0a2',    /* 카드 그림과 분리하는 바깥 얇은 금테 */
+    edge: '#6b4a0a',   /* 메달 테두리 */
+    ink: '#0d0803',    /* 숫자 외곽선(먹) — 금색 글자를 또렷하게 */
+    gold: '#f3c73f',   /* 숫자 — 황금색 단색(48장 공통) */
+    shadow: '#000000'
   };
 
-  /* 금박 그라데이션 defs — 카드마다 같은 정의를 넣어(사본 간 id 충돌 없이) 항상 로컬 참조 */
+  /* 금색 숫자(gid) + 메달 바탕(sid) 그라데이션 — 카드마다 고유 id */
   function goldDefs(gid, sid) {
-    return '<radialGradient id="' + gid + '" cx="34%" cy="27%" r="80%">' +
-        '<stop offset="0" stop-color="#fff8d6"/>' +
-        '<stop offset="0.18" stop-color="#fff2b2"/>' +
-        '<stop offset="0.42" stop-color="#f7da78"/>' +
-        '<stop offset="0.64" stop-color="#efc65a"/>' +
-        '<stop offset="0.84" stop-color="#c89116"/>' +
+    return '<radialGradient id="' + gid + '" cx="32%" cy="24%" r="92%">' +
+        '<stop offset="0" stop-color="#fff0b4"/>' +
+        '<stop offset="0.32" stop-color="#ffdf8a"/>' +
+        '<stop offset="0.58" stop-color="#f2c85c"/>' +
+        '<stop offset="0.80" stop-color="#d9a52a"/>' +
         '<stop offset="1" stop-color="#a9750c"/>' +
       '</radialGradient>' +
-      '<linearGradient id="' + sid + '" x1="0" y1="1" x2="1" y2="0">' +
-        '<stop offset="0" stop-color="#fffdf0" stop-opacity="0"/>' +
-        '<stop offset="0.22" stop-color="#fffdf0" stop-opacity="0.06"/>' +
-        '<stop offset="0.28" stop-color="#fffdf0" stop-opacity="0.36"/>' +
-        '<stop offset="0.31" stop-color="#fffdf0" stop-opacity="0.46"/>' +
-        '<stop offset="0.35" stop-color="#fffdf0" stop-opacity="0.10"/>' +
-        '<stop offset="0.40" stop-color="#fffdf0" stop-opacity="0"/>' +
-        '<stop offset="0.50" stop-color="#fff8d2" stop-opacity="0.30"/>' +
-        '<stop offset="0.53" stop-color="#fff8d2" stop-opacity="0.40"/>' +
-        '<stop offset="0.57" stop-color="#fff8d2" stop-opacity="0.08"/>' +
-        '<stop offset="0.62" stop-color="#fff8d2" stop-opacity="0"/>' +
-        '<stop offset="0.77" stop-color="#fffdf0" stop-opacity="0.16"/>' +
-        '<stop offset="0.80" stop-color="#fffdf0" stop-opacity="0.28"/>' +
-        '<stop offset="0.84" stop-color="#fffdf0" stop-opacity="0.06"/>' +
-        '<stop offset="0.90" stop-color="#fffdf0" stop-opacity="0"/>' +
+      '<linearGradient id="' + sid + '" x1="0.15" y1="0" x2="0.7" y2="1">' +
+        '<stop offset="0" stop-color="#3b2a10"/>' +
+        '<stop offset="0.5" stop-color="#221607"/>' +
+        '<stop offset="1" stop-color="#0c0703"/>' +
       '</linearGradient>';
   }
 
-  /* 금박 원 + 정중앙 먹색 숫자. gid/sid 없이 호출해도 동작하도록 기본 id 사용 */
+  /* 금색 메달 + 금색 숫자. gid/sid 없이 호출해도 동작하도록 기본 id 사용 */
   function numBadge(m, gid, sid) {
     gid = gid || 'gfBadge';
     sid = sid || 'gsBadge';
     var cx = BG.cx, cy = BG.cy, r = BG.r;
-    var fs = m > 9 ? 12.0 : 15.6;   /* 두 자리(10~12)도 원 안에 여유 있게 */
+    var fs = m > 9 ? 9.6 : 13.4;    /* 두 자리(10~12)도 메달 안에 여유 있게 */
     return '<g>' +
-      /* 살짝 떠 보이는 미세 그림자 */
-      '<circle cx="' + cx + '" cy="' + (cy + 0.85) + '" r="' + r + '" fill="' + BG.shadow + '" fill-opacity="0.26"/>' +
-      /* 금박 채움 */
-      '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="url(#' + gid + ')"/>' +
-      /* 대각선 광택(금박 반짝임) */
+      /* 메달이 살짝 떠 보이는 그림자 */
+      '<circle cx="' + cx + '" cy="' + (cy + 0.7) + '" r="' + (r + 0.2) + '" fill="' + BG.shadow + '" fill-opacity="0.34"/>' +
+      /* 짙은 먹갈색 바탕 — 어떤 카드 그림 위에서도 또렷 */
       '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="url(#' + sid + ')"/>' +
-      /* 안쪽 하이라이트 링 — 두들겨 편 금박의 눌린 테 */
-      '<circle cx="' + cx + '" cy="' + cy + '" r="' + (r - 1.15) + '" fill="none" stroke="#fff8d8" stroke-opacity="0.5" stroke-width="0.7"/>' +
-      /* 바깥 테두리 */
-      '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="none" stroke="' + BG.edge + '" stroke-width="1.2"/>' +
-      /* 숫자 — text-anchor middle + dy(0.355em)로 원 정중앙 */
+      /* 바깥 금테 (카드 그림과 분리) */
+      '<circle cx="' + cx + '" cy="' + cy + '" r="' + (r + 0.7) + '" fill="none" stroke="' + BG.rim + '" stroke-opacity="0.62" stroke-width="0.8"/>' +
+      /* 메달 테두리 */
+      '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="none" stroke="' + BG.edge + '" stroke-width="0.9"/>' +
+      /* 안쪽 따뜻한 금테 — 두들겨 편 금박의 눌린 테 */
+      '<circle cx="' + cx + '" cy="' + cy + '" r="' + (r - 1.3) + '" fill="none" stroke="' + BG.rim +
+        '" stroke-opacity="0.26" stroke-width="0.5"/>' +
+      /* 숫자 — 황금색 단색(어떤 렌더러에서도 금색 그대로) + 먹색 외곽선 */
       '<text x="' + cx + '" y="' + cy + '" dy="0.355em" text-anchor="middle" font-family="' + FONT +
-      '" font-size="' + fs + '" font-weight="900" fill="' + BG.ink + '">' + m + '</text></g>';
+      '" font-size="' + fs + '" font-weight="900" fill="' + BG.gold + '" stroke="' + BG.ink +
+      '" stroke-width="0.5" stroke-opacity="0.92" paint-order="stroke">' + m + '</text></g>';
   }
 
+  var SVG_SEQ = 0;
   function faceSVG(card) {
     var m = card.month, v = card.variant;
     var uri = CARD_ART[m + '_' + v] || '';
-    var cid = 'cc' + m + '_' + v;
-    var gid = 'gf' + m + '_' + v, sid = 'gs' + m + '_' + v;
+    /* 같은 카드가 화면에 여러 번 올라도 defs id가 겹치지 않도록 매번 새 id */
+    var uid = 'w' + (++SVG_SEQ);
+    var cid = 'cc' + uid;
+    var gid = 'gf' + uid, sid = 'gs' + uid;
     return '<svg viewBox="0 0 120 186" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" role="img" aria-label="' + m + '">' +
       '<defs><clipPath id="' + cid + '"><rect x="0" y="0" width="120" height="186" rx="9.4"/></clipPath>' +
       goldDefs(gid, sid) + '</defs>' +
@@ -2285,7 +2362,8 @@ var WNB = (function () {
   return {
     MONTHS: MONTHS, newDeck: newDeck, shuffle: shuffle, mulberry32: mulberry32,
     newGame: newGame, beginTurn: beginTurn, betLimits: betLimits, odds: odds,
-    placeBet: placeBet, placePairBet: placePairBet, placeNoGapBet: placeNoGapBet, noGapStake: noGapStake,
+    placeBet: placeBet, placePairBet: placePairBet,
+    raiseAnte: raiseAnte, anteOptions: anteOptions, autoTopUp: autoTopUp, ANTE_STEPS: ANTE_STEPS, ANTE_MAX: ANTE_MAX,
     anteRefillAll: anteRefillAll, registerPass: registerPass,
     reveal: reveal, fold: fold, continueGame: continueGame, refillPot: refillPot,
     isAiTurn: isAiTurn, aiDecide: aiDecide, totalChips: totalChips,
@@ -2314,9 +2392,9 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       onlineHintTxt: '방을 만들면 4자리 코드와 초대 링크가 생깁니다.', roomCode: '방 코드',
       shareLink: '초대 링크', lobbyWaitTxt: '방장이 [게임 시작]을 누르면 시작합니다.', leave: '나가기',
       players: '인원', matchType: '대전 형식', ante: '앤티',
-      ppongOpt: '뽕 2배 페널티', lang: '언어', restart: '처음부터 (모드 선택)', close: '닫기',
+      lang: '언어', restart: '처음부터 (모드 선택)', close: '닫기',
       start: '시작하기', heroSub: '금박 숫자(1~12) 전통 화투로 30초 만에 즐기는 K-심리 카드 게임 (두 패 사이를 쪼아 맞히는 룰)',
-      rulesText: '두 장 사이(예: 2와 10 사이 3~9)에 세 번째 패가 들어오면 판돈에서 건 만큼 획득. 경계와 같거나 바깥이면 건 만큼 판돈으로. 땡(2·2)이면 업/다운을 골라 걸고, 높은 숫자(업)·낮은 숫자(다운)가 나오면 건 만큼 획득 — 같은 숫자가 나오면 패배. 패스하면 앤티만 잃고, 전원 패스가 두 바퀴 이어지면 모두 앤티를 다시 겁니다.',
+      rulesText: '두 장 사이(예: 2와 10 사이 3~9)에 세 번째 패가 들어오면 판돈에서 건 만큼 획득. 경계와 같거나 바깥이면 건 만큼 판돈으로. 땡(2·2)이면 업/다운을 골라 걸고, 높은 숫자(업)·낮은 숫자(다운)가 나오면 건 만큼 획득 — 같은 숫자가 나오면 패배. 패스하면 앤티만 잃습니다. 쌓인 머니가 기본 베팅보다 적으면 전원이 기본 베팅을 자동으로 한 번 더 내고, 게임 중 [⤴ 판돈]으로 기본 판돈을 올릴 수 있습니다(온라인 방은 전원 동의). 결과 확인 뒤에는 자동으로 다음 판으로 넘어갑니다.',
       pot: '판돈', deck: '덱', pass: '패스', bet: '걸기', quick: '바로 까기',
       potLabel: '쌓인 머니', potShort: 'POT',
       chips: '시작 머니', half: '하프', allin: '올인', quickBet: '퀵',
@@ -2329,10 +2407,10 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       peekShort: '밀어서 쪼기', peekHint: '카드를 위로 밀어 쪼개 보세요',
       thinking: '생각 중', peeking: '패를 쪼는 중', myPeek: '당신 차례 — 손으로 쪼개세요',
       dealMsg: '패를 나눴습니다', antePaid: '앤티', max: '최대', min: '최소',
-      ado: '아도', noGap: '사이 없음', noGapMsg: '사이 없음 — 패스 권장',
+      ado: '아도', noGap: '사이 없음', noGapMsg: '사이 없음 — 패스만 가능',
       noGapSub: '같거나 이어진 숫자라 들어갈 자리가 없습니다',
-      ppongBet: '뽕 ×2 걸기', passHint: '앤티만 판돈에 남깁니다',
-      win: 'WIN', lose: 'LOSE', ppong: '뽕!', ppongWin: '뽕 적중',
+      passHint: '앤티만 판돈에 남깁니다',
+      win: 'WIN', lose: 'LOSE', ppong: '뽕!',
       fold: '패스', push: '무승부', next: '다음', nextHand: '다음 판',
       others: '다른 플레이어들', potUp: '판돈 UP! 다음 차례 대박 찬스',
       scooped: '팟 회수!', snot: '콧물',
@@ -2358,7 +2436,15 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       couponEarnedSolo: '연습 3승 달성 — 다음 게임에서 사용할 수 있습니다',
       couponTotal: '보유', couponUsed: '충전 완료',
       couponUsedBy: '충전 쿠폰을 사용했습니다 (+10,000)',
-      couponNone: '보유 쿠폰 없음', couponNoneSub: '게임 우승 시 적립됩니다'
+      couponNone: '보유 쿠폰 없음', couponNoneSub: '게임 우승 시 적립됩니다',
+      raiseTitle: '기본 판돈 올리기', raiseHint: '현재 앤티', raiseHint2: '올리면 다음 차례부터 새 앤티가 적용됩니다',
+      raiseBtn: '판돈', raiseDone: '기본 판돈 인상!', raiseMax: '이미 최대 판돈(50,000)입니다',
+      raiseLow: '지금보다 높은 금액만 올릴 수 있습니다', raiseProposed: '판돈 인상 제안',
+      raiseProposedSub: '다른 참가자의 동의를 기다리는 중…', raiseVoteDesc: '전원이 동의하면 새 판돈이 적용됩니다',
+      agree: '동의', decline: '거절', raiseRejected: '판돈 인상이 거절되었습니다',
+      raiseRejectedSub: '판돈은 그대로입니다', raiseTimeout: '동의 시간이 지나 제안이 취소되었습니다',
+      raiseCount: '동의', autoTopupTitle: '판돈 자동 충전',
+      autoTopupSub: '쌓인 머니가 기본 베팅보다 적어 전원 기본 베팅 재적립'
     },
     en: {
       solo: 'Solo', soloSub: 'Quick practice',
@@ -2369,10 +2455,10 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       onlineHintTxt: 'Creating a room gives you a 4-digit code and an invite link.', roomCode: 'ROOM CODE',
       shareLink: 'Invite link', lobbyWaitTxt: 'The host starts the game.', leave: 'Leave',
       players: 'Players', matchType: 'Match', ante: 'Ante',
-      ppongOpt: 'Double penalty on match', lang: 'Language', restart: 'Back to mode select', close: 'Close',
+      lang: 'Language', restart: 'Back to mode select', close: 'Close',
       start: 'START',
       heroSub: 'A 30-second Korean traditional card game — peel the 3rd card and guess if it lands in between!',
-      rulesText: 'If the third card lands between the two (e.g. 2–10 → 3~9) you win your bet from the pot. Same as either edge or outside, your bet goes in. On a PAIR (2·2) pick UP or DOWN, then a higher (UP) or lower (DOWN) card pays your bet — the same number loses. Pass and you only lose the ante; two full passes in a row and everyone re-antes.',
+      rulesText: 'If the third card lands between the two (e.g. 2–10 → 3~9) you win your bet from the pot. Same as either edge or outside, your bet goes in. On a PAIR (2·2) pick UP or DOWN, then a higher (UP) or lower (DOWN) card pays your bet — the same number loses. Passing costs only the ante. When the pot falls below the basic bet, everyone re-antes automatically, and [⤴ Ante] raises the basic bet mid-game (online rooms need everyone to agree). The next hand starts on its own.',
       pot: 'POT', deck: 'DECK', pass: 'PASS', bet: 'BET', quick: 'Reveal',
       potLabel: 'POT', potShort: 'POT',
       chips: 'START CHIPS', half: 'HALF', allin: 'ALL IN', quickBet: 'QUICK',
@@ -2387,8 +2473,8 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       dealMsg: 'Cards dealt', min: 'MIN', max: 'MAX', ado: 'ADO',
       noGap: 'NO GAP', noGapMsg: 'No gap — pass',
       noGapSub: 'Equal or consecutive months: nothing can fall between',
-      ppongBet: 'PPONG ×2', passHint: 'Only the ante stays in the pot',
-      win: 'WIN', lose: 'LOSE', ppong: 'PPONG!', ppongWin: 'PPONG HIT',
+      passHint: 'Only the ante stays in the pot',
+      win: 'WIN', lose: 'LOSE', ppong: 'PPONG!',
       fold: 'PASS', push: 'PUSH', next: 'NEXT', nextHand: 'NEXT HAND',
       others: 'Others', potUp: 'POT UP — next seat gets a shot',
       scooped: 'scooped the pot!', snot: 'tears',
@@ -2413,12 +2499,21 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       couponEarnedSolo: '3 practice wins — use it in your next game',
       couponTotal: 'now', couponUsed: 'Recharged',
       couponUsedBy: 'used a recharge coupon (+10,000)',
-      couponNone: 'No coupons', couponNoneSub: 'Win a game to earn one'
+      couponNone: 'No coupons', couponNoneSub: 'Win a game to earn one',
+      raiseTitle: 'Raise the ante', raiseHint: 'Ante now', raiseHint2: 'the new ante applies from the next turn',
+      raiseBtn: 'Ante', raiseDone: 'Ante raised!', raiseMax: 'Already at the maximum ante (50,000)',
+      raiseLow: 'Pick an amount above the current ante', raiseProposed: 'Ante raise proposed',
+      raiseProposedSub: 'Waiting for the other players to agree…', raiseVoteDesc: 'It applies when everyone agrees',
+      agree: 'Agree', decline: 'Decline', raiseRejected: 'The ante raise was declined',
+      raiseRejectedSub: 'The ante stays the same', raiseTimeout: 'The vote timed out and was cancelled',
+      raiseCount: 'agreed', autoTopupTitle: 'Pot auto top-up',
+      autoTopupSub: 'Everyone re-antes because the pot fell below the basic bet'
     }
   };
-  var ui = { lang: 'kr', mode: 'solo', count: 3, aiCount: 3, names: [], ante: 1000, chips: 50000, ppong: false, sel: 0, useCouponNext: false };
+  var ui = { lang: 'kr', mode: 'solo', count: 3, aiCount: 3, names: [], ante: 1000, chips: 50000, sel: 0, useCouponNext: false };
   var S = null, revealed = false, busy = false, aiTimer = null;
-  var HOLD_MS = 2200, resultHoldUntil = 0, holdTimer = null, toastTimer = null, landId = '';
+  var HOLD_MS = 2100, FOLD_MS = 1500, resultHoldUntil = 0, holdTimer = null, toastTimer = null, landId = '';
+  var nextTimer = null;   /* 결과 확인 뒤 자동 진행 타이머 */
 
   /* 화면 어딘가에서 예외가 나도 조용히 멈추지 않도록 — 상단 띠에만 알린다(게임은 계속). */
   if (typeof window !== 'undefined' && window && window.addEventListener) {
@@ -2947,9 +3042,13 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     renderSeg($('#anteSeg2'), [1000, 2000, 5000], ui.ante, function (v) { ui.ante = v; applyStatic(); });
     renderSeg($('#chipsSeg'), [20000, 50000, 100000], ui.chips, function (v) { ui.chips = v; applyStatic(); });
     renderSeg($('#aiSeg'), [2, 3, 4], ui.aiCount, function (v) { ui.aiCount = v; applyStatic(); }, ui.lang === 'en' ? 'p' : '인');
-    $('#ppongSwitch').classList.toggle('on', ui.ppong);
-    $('#ppongSwitch2').classList.toggle('on', ui.ppong);
     var csh = $('#cpnSheetUse'); if (csh) csh.textContent = t('couponUseBtn');
+    var rct = $('#raiseCancel'); if (rct) rct.textContent = t('close');
+    var rtt = $('#raiseTitle'); if (rtt) rtt.textContent = t('raiseTitle');
+    var vyt = $('#voteTitle'); if (vyt) vyt.textContent = t('raiseProposed');
+    var vyb = $('#voteYes'); if (vyb) vyb.textContent = t('agree');
+    var vnb = $('#voteNo'); if (vnb) vnb.textContent = t('decline');
+    refreshRaiseBtn();
     refreshCoupons();
     if (S) { renderPlayers(); renderActions(); renderMsg(lastMsg.cls, lastMsg.l1, lastMsg.l2); }
   }
@@ -3022,6 +3121,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
 
   function renderStatus() {
     refreshCoupons();
+    refreshRaiseBtn();
     $('#potVal').textContent = fmt(S.pot);
     $('#deckVal').textContent = S.deck.length;
     var p = S.players[S.turn];
@@ -3163,20 +3263,9 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     }
 
     if (S.phase === 'result') {
-      if (Date.now() < resultHoldUntil) {
-        A.innerHTML = '<div class="holdhint">🃏 ' + t('holdHint') + '</div>';
-        clearTimeout(holdTimer);
-        holdTimer = setTimeout(function () {
-          if (S && !S.over && S.phase === 'result') renderActions();
-        }, Math.max(120, resultHoldUntil - Date.now()));
-        return;
-      }
-      A.innerHTML = '<button class="go wide" id="nextBtn">' + (ui.mode === 'solo' ? t('nextHand') : t('next')) + ' →</button>';
-      $('#nextBtn').onclick = function () { nextTurn(); };
-      var hint = document.createElement('div');
-      hint.style.cssText = 'font-size:9.5px;color:#8fa79b;text-align:center';
-      hint.textContent = t('pot') + ' ' + fmt(S.pot) + ' · ' + t('deck') + ' ' + S.deck.length;
-      A.appendChild(hint);
+      /* '다음' 버튼 없음 — 착지 연출을 2초 남짓 보여준 뒤 자동으로 다음 판 */
+      A.innerHTML = '<div class="holdhint">🃏 ' + t('holdHint') + '</div>' +
+        '<div class="nexthint">' + t('pot') + ' ' + fmt(S.pot) + ' · ' + t('deck') + ' ' + S.deck.length + '</div>';
       return;
     }
   }
@@ -3202,10 +3291,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     if (!hasSel) ui.sel = opts[0].v;
 
     if (S.noGap && !S.pair) {
-      var stake = W.noGapStake(S);
-      return '<div class="betrow"><button class="chip on" id="ngChip"><b>' + fmt(stake) + '</b><span>' + t('ppongBet') + '</span></button></div>' +
-        '<div class="ctarow"><button class="ghost" id="passBtn">' + t('pass') + '</button>' +
-        '<button class="go" id="ngBtn"' + (stake < 1 ? ' disabled' : '') + '>' + t('ppongBet') + '</button></div>';
+      return '<div class="ctarow"><button class="go wide" id="passBtn">' + t('pass') + ' (' + t('passOnly') + ')</button></div>';
     }
 
     if (L.max < 1) {
@@ -3253,17 +3339,6 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       if (busy) return;
       VOICE.action(ui.sel >= L.max ? 'allin' : 'call');
       var r = W.placeBet(S, ui.sel);
-      if (r.ok) {
-        showThird(true);
-        renderMsg('', '👆 ' + t('myPeek'), t('peekHint'));
-        renderActions();
-      }
-    };
-    var nb = $('#ngBtn');
-    if (nb) nb.onclick = function () {
-      if (busy) return;
-      VOICE.call();
-      var r = W.placeNoGapBet(S);
       if (r.ok) {
         showThird(true);
         renderMsg('', '👆 ' + t('myPeek'), t('peekHint'));
@@ -3387,17 +3462,75 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       vibrate([18, 50, 18]);
     }
     renderActions();
-    if (W.isAiTurn(S)) aiTimer = setTimeout(nextTurn, 950);
-    else renderActions();
+    scheduleAdvance(FOLD_MS);          /* 패스 안내를 잠깐 보여주고 자동으로 다음 차례 */
   }
 
   function nextTurn() {
     clearTimeout(aiTimer);
+    clearTimeout(nextTimer);
     if (!S || S.over) return;
     var r = W.continueGame(S);
     if (!r.ok) return;
     if (r.over || S.over) { showOver(); return; }
     paintTurn();
+  }
+
+  /* 결과 확인 뒤 자동으로 다음 턴 — '다음' 버튼을 없앤 대신 여기서 넘긴다 */
+  function scheduleAdvance(ms) {
+    clearTimeout(nextTimer);
+    nextTimer = setTimeout(function () {
+      if (!S || S.over) return;
+      if (ON.isOn()) { if (ON.isHost()) ON.hostNext(); return; }
+      if (S.phase === 'result') nextTurn();
+    }, ms);
+  }
+
+  /* ------------------------------------------------------------
+     기본 판돈 올리기 — 솔로·AI·오프라인은 즉시, 온라인은 전원 동의
+     ------------------------------------------------------------ */
+  function anteOptions() {
+    return W.anteOptions({ ante: (S ? S.ante : ui.ante) });
+  }
+  function refreshRaiseBtn() {
+    var b = $('#raiseBtn'), n = $('#raiseNext');
+    if (!b) return;
+    var opts = anteOptions();
+    if (n) n.textContent = opts.length ? fmt(opts[0]) : 'MAX';
+    b.classList.toggle('max', !opts.length);
+    b.title = t('raiseTitle');
+  }
+  function openRaise() {
+    if (!S || S.over) return;
+    if (ON.isOn() && !ON.state().snap) return;
+    var opts = anteOptions();
+    if (!opts.length) { toast('⤴ ' + t('raiseBtn'), t('raiseMax')); return; }
+    var hint = $('#raiseHint');
+    if (hint) hint.textContent = t('raiseHint') + ' ' + fmt(S.ante) + ' · ' + t('raiseHint2');
+    var box = $('#raiseOpts');
+    if (!box) return;
+    box.innerHTML = '';
+    opts.forEach(function (v) {
+      var b = document.createElement('button');
+      b.className = 'go';
+      var k = v / S.ante;
+      b.innerHTML = '<span>' + fmt(v) + '</span>' +
+        (k === Math.floor(k) && k > 1 ? '<small>×' + k + '</small>' : '');
+      b.onclick = function () { chooseRaise(v); };
+      box.appendChild(b);
+    });
+    $('#raiseSheet').classList.add('on');
+  }
+  function chooseRaise(v) {
+    var sh = $('#raiseSheet');
+    if (sh) sh.classList.remove('on');
+    if (!S) return;
+    if (ON.isOn()) { ON.proposeRaise(v); return; }
+    var r = W.raiseAnte(S, v);
+    if (!r.ok) { toast('⤴ ' + t('raiseBtn'), t('raiseLow')); return; }
+    potUp(); vibrate([14, 30, 14]);
+    renderStatus(); renderPlayers();
+    if (S.phase === 'bet') renderActions();
+    toast('⤴ ' + t('raiseDone'), t('ante') + ' ' + fmt(r.from) + ' → ' + fmt(r.ante));
   }
 
   function showOver() {
@@ -3503,8 +3636,9 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     if (!res) { busy = false; return; }
     /* 깐 패가 두 패 사이 바닥을 딱 때리고 착지 — 결과 확인 시간(2.2초) 동안 그대로 둔다 */
     landThird(thirdCard, true);
+    scheduleAdvance(HOLD_MS);          /* 착지 연출을 충분히 보여준 뒤 자동으로 다음 턴 */
 
-    var win = (res.type === 'win' || res.type === 'ppongWin' || res.type === 'pairWin');
+    var win = (res.type === 'win' || res.type === 'pairWin');
     if (win) { confetti(); vibrate([30, 40, 70]); }
     else if (res.type === 'lose' || res.type === 'ppong' || res.type === 'ppongLose' || res.type === 'pairLose') { vibrate([20, 60, 20]); }
 
@@ -3525,7 +3659,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
           react = '<div class="react"><span>' + t('others') + ': ' + others + ' — ' + t('scooped') + '</span></div>';
         }
         renderMsg('win', '🎉 ' + t('win') + ' +' + fmt(res.delta) + (res.type === 'pairWin' ? ' · ' + sideLabel(res.dir) : ''),
-          nm + ' · ' + monthLabel(res.m) + ' — ' + (res.type === 'ppongWin' ? t('ppongWin') : (res.type === 'pairWin' ? t('pairWin') : t('winSub'))) + react);
+          nm + ' · ' + monthLabel(res.m) + ' — ' + (res.type === 'pairWin' ? t('pairWin') : t('winSub')) + react);
       } else if (res.type === 'pairLose') {
         if (ui.mode !== 'solo') react = '<div class="react"><span>🔥 ' + t('potUp') + ' · ' + (nxt.avatar || '') + ' ' + pName(nxt) + '</span></div>';
         renderMsg('lose', '🤧 ' + t('lose') + ' −' + fmt(-res.delta) + ' · ' + sideLabel(res.dir),
@@ -3550,8 +3684,11 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       renderActions();
       busy = false;
       if (S.mode === 'solo' && win) claimCoupons();     /* 연습 3승 목표 */
-      if (isAi || W.isAiTurn(S)) aiTimer = setTimeout(nextTurn, 1900);
     }, 420);
+    if (res.autotop) {
+      toast('🪙 ' + t('autoTopupTitle'), t('autoTopupSub') + ' +' + fmt(res.autotop.amt));
+      potUp();
+    }
   }
 
   /* ------------------------------------------------------------
@@ -3569,7 +3706,6 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       mode: ui.mode,
       ante: ui.ante,
       chips: ui.chips + boost,
-      ppongDouble: ui.ppong,
       count: ui.mode === 'ai' ? ui.aiCount : ui.count,
       names: ui.names,
       rng: Math.random
@@ -3600,7 +3736,8 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       joined: false, closed: true, retry: 0, hbTimer: 0, tickTimer: 0,
       hostSeen: 0, seen: {}, joinTimer: null, remoteDrag: false,
       pending: '', lastPeekSent: 0, reconnectAt: 0,
-      couponPending: 0, couponOverClaimed: false
+      couponPending: 0, couponOverClaimed: false,
+      prop: null, votes: {}, voteTimer: 0, myVote: null
     };
     var AV = ['\uD83D\uDE4B', '\uD83D\uDE3A', '\uD83E\uDD89', '\uD83D\uDC2F', '\uD83D\uDC30', '\uD83D\uDC3C'];
 
@@ -3761,7 +3898,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     function hostWelcome(cid) {
       broadcast('welcome', {
         to: cid, rid: st.rid, code: st.code, hostCid: st.cid, started: st.started,
-        list: rosterPub(), ante: ui.ante, ppong: ui.ppong,
+        list: rosterPub(), ante: ui.ante,
         snap: (st.started && S) ? snapOf() : null,
         third: (st.started && S && S.phase === 'peek' && cidOf(S.turn) === cid && st.third) ? st.third : null
       });
@@ -3783,7 +3920,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
         rid: st.rid, rev: ++st.rev,
         phase: s.over ? 'over' : s.phase,
         turn: s.turn, pot: s.pot, deck: s.deck.length, ante: s.ante,
-        ppong: !!s.ppongDouble, hand: s.hand, pair: !!s.pair, noGap: !!s.noGap,
+        hand: s.hand, pair: !!s.pair, noGap: !!s.noGap,
         bet: s.bet, betKind: s.betKind,
         pairDir: s.pairDir || null,
         passStreak: s.passStreak || 0,
@@ -3809,7 +3946,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       var deck = [], k;
       for (k = 0; k < (sn.deck || 0); k++) deck.push({ id: 'h' + k, month: 0, variant: 0 });
       return {
-        mode: 'pass', ante: sn.ante, ppongDouble: !!sn.ppong, players: players,
+        mode: 'pass', ante: sn.ante, players: players,
         turn: sn.turn, pot: sn.pot, deck: deck, rng: Math.random,
         board: sn.board.map(function (c) { return { id: c.month + '-' + c.variant, month: c.month, variant: c.variant }; }),
         third: sn.third ? { id: sn.third.month + '-' + sn.third.variant, month: sn.third.month, variant: sn.third.variant } : null,
@@ -3939,22 +4076,9 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
         return;
       }
       if (sn.phase === 'result') {
-        if (isHost()) {
-          if (Date.now() < resultHoldUntil) {
-            A.innerHTML = '<div class="holdhint">🃏 ' + t('holdHint') + '</div>';
-            clearTimeout(holdTimer);
-            holdTimer = setTimeout(function () {
-              var s2 = ON.state().snap;
-              if (s2 && s2.phase === 'result') renderActions();
-            }, Math.max(120, resultHoldUntil - Date.now()));
-            return;
-          }
-          A.innerHTML = '<button class="go wide" id="nextBtn">' + t('next') + ' →</button>';
-          var nb = $('nextBtn');
-          if (nb) nb.onclick = function () { hostNext(); };
-        } else {
-          A.innerHTML = '<div class="thinking">' + (ui.lang === 'en' ? 'Waiting for the host…' : '방장이 다음 판을 준비 중…') + '</div>';
-        }
+        /* 방장이 자동으로 넘긴다 — 아무도 버튼을 누르지 않는다 */
+        A.innerHTML = '<div class="holdhint">🃏 ' + t('holdHint') + '</div>' +
+          '<div class="nexthint">' + t('pot') + ' ' + fmt(sn.pot) + '</div>';
       }
     }
 
@@ -3972,8 +4096,6 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
         VOICE.action(ui.sel >= L.max ? 'allin' : 'call');
         act('bet', ui.sel);
       };
-      var nb = $('ngBtn');
-      if (nb) nb.onclick = function () { if (busy) return; VOICE.call(); act('nogap', 0); };
       bindPairUI();
     }
 
@@ -4029,7 +4151,6 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
         return;
       }
       if (m.kind === 'pair') r = W.placePairBet(S, m.amount, m.dir);
-      else if (m.kind === 'nogap') r = W.placeNoGapBet(S);
       else r = W.placeBet(S, m.amount);
       if (!r || !r.ok) return;
       st.third = S.third ? { month: S.third.month, variant: S.third.variant } : null;
@@ -4072,6 +4193,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       if (sn.rev > st.lastRev) applySnap(sn);
       revealed = true;
       revealFx(res);
+      if (isHost()) scheduleAdvance(res && res.type === 'fold' ? FOLD_MS : HOLD_MS);
     }
     function hostNext() {
       if (!isHost() || !S) return;
@@ -4080,6 +4202,113 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       if (!r.ok) return;
       st.third = null;
       pushState('');
+    }
+
+    /* ---------------- 기본 판돈 인상 — 제안 · 전원 동의 ----------------
+       누구나 제안 → 참가자 전원이 [동의]해야 방장이 적용한다.
+       한 명이라도 거절하거나 25초가 지나면 제안은 취소되고 판돈은 그대로. */
+    function showVote(ante, base, nick) {
+      var v = $('voteSheet');
+      if (!v) return;
+      var amt = $('voteAmt');
+      if (amt) amt.innerHTML = fmt(base) + ' <i>&#8594;</i> ' + fmt(ante);
+      var dsc = $('voteDesc');
+      if (dsc) dsc.textContent = (nick ? nick + ' · ' : '') + t('raiseVoteDesc');
+      v.classList.add('on');
+    }
+    function hideVote() {
+      var v = $('voteSheet');
+      if (v) v.classList.remove('on');
+    }
+    function finishRaise() {
+      clearTimeout(st.voteTimer);
+      st.voteTimer = 0;
+      st.prop = null;
+      st.votes = {};
+      st.myVote = null;
+      hideVote();
+    }
+    function proposeRaise(ante) {
+      if (!st.snap || !st.joined) { toast('⤴ ' + t('raiseProposed'), t('raiseProposedSub')); return false; }
+      if (st.snap.over) return false;
+      ante = Math.floor(Number(ante) || 0);
+      if (!(ante > st.snap.ante)) return false;
+      var base = st.snap.ante;
+      st.prop = { cid: st.cid, nick: st.nick, ante: ante, base: base, ts: Date.now() };
+      st.votes = {}; st.votes[st.cid] = true; st.myVote = true;
+      broadcast('raiseprop', { rid: st.rid, cid: st.cid, nick: st.nick, ante: ante, base: base, ts: Date.now() });
+      return true;
+    }
+    function voteRaise(agree) {
+      var p = st.prop;
+      hideVote();
+      if (!p) return;
+      st.myVote = !!agree;
+      broadcast('raisevote', { rid: st.rid, cid: st.cid, agree: !!agree, ante: p.ante });
+      if (isHost()) hostTakeVote({ cid: st.cid, agree: !!agree, ante: p.ante });
+    }
+    function takeProposal(d) {
+      if (!d || !d.ante) return;
+      var base = st.snap ? st.snap.ante : 0;
+      if (!(d.ante > base)) return;
+      st.prop = { cid: d.cid, nick: d.nick || '', ante: d.ante, base: base, ts: d.ts || Date.now() };
+      if (isHost()) {
+        st.votes = {}; st.votes[d.cid] = true;
+        clearTimeout(st.voteTimer);
+        st.voteTimer = setTimeout(function () {
+          if (!st.prop) return;
+          broadcast('raisereject', { rid: st.rid, cid: st.cid, ante: st.prop.ante, reason: 'timeout' });
+          finishRaise();
+        }, 25000);
+      }
+      if (d.cid === st.cid) {                 /* 내가 낸 제안 */
+        toast('⤴ ' + t('raiseProposed'), t('raiseProposedSub'));
+        return;
+      }
+      showVote(d.ante, base, d.nick);
+    }
+    function hostTakeVote(d) {
+      if (!isHost() || !st.prop || !d) return;
+      if (d.ante && d.ante !== st.prop.ante) return;
+      if (d.agree === false) {
+        broadcast('raisereject', { rid: st.rid, cid: d.cid, ante: st.prop.ante, reason: 'declined' });
+        finishRaise();
+        return;
+      }
+      st.votes[d.cid] = true;
+      var need = st.roster.map(function (r) { return r.cid; });
+      var got = 0;
+      for (var i = 0; i < need.length; i++) if (st.votes[need[i]]) got++;
+      broadcast('raisecount', { rid: st.rid, got: got, need: need.length, ante: st.prop.ante });
+      if (need.length > 0 && got >= need.length) hostApplyRaise();
+    }
+    function hostApplyRaise() {
+      if (!isHost() || !S || !st.prop) return;
+      var target = st.prop.ante;
+      var r = W.raiseAnte(S, target);
+      finishRaise();
+      if (!r.ok) { broadcast('raisereject', { rid: st.rid, cid: st.cid, ante: target, reason: 'invalid' }); return; }
+      broadcast('raiseok', { rid: st.rid, from: r.from, ante: r.ante });
+      pushState('');
+      potUp();
+      vibrate([14, 30, 14]);
+    }
+    function raiseApplied(d) {
+      finishRaise();
+      if (!d || !d.ante) return;
+      toast('⤴ ' + t('raiseDone'), t('ante') + ' ' + fmt(d.from || '') + ' → ' + fmt(d.ante));
+      refreshRaiseBtn();
+    }
+    function raiseRejected(d) {
+      finishRaise();
+      if (d && d.reason === 'timeout') { toast('⤴ ' + t('raiseRejected'), t('raiseTimeout')); return; }
+      toast('⤴ ' + t('raiseRejected'), t('raiseRejectedSub'));
+    }
+    function raiseCounted(d) {
+      if (!d) return;
+      if (!isHost() && st.prop && d.ante === st.prop.ante) {
+        toast('⤴ ' + t('raiseProposed'), t('raiseCount') + ' ' + d.got + '/' + d.need);
+      }
     }
 
     /* ---------------- 공개 연출(모든 화면 공통) ---------------- */
@@ -4099,7 +4328,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
         SFX.snap(1);
       }
       if (!isFold && S && S.third) landThird(S.third, true);
-      var win = (res.type === 'win' || res.type === 'ppongWin' || res.type === 'pairWin');
+      var win = (res.type === 'win' || res.type === 'pairWin');
       if (win) { confetti(); vibrate([30, 40, 70]); }
       else if (!isFold && (res.type === 'lose' || res.type === 'ppong' || res.type === 'ppongLose' || res.type === 'pairLose')) vibrate([20, 60, 20]);
       renderStatus();
@@ -4122,7 +4351,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
             .map(function (x) { return x.avatar + ' ' + pName(x) + ' 🤧'; }).join('  ');
           if (others) react = '<div class="react"><span>' + t('others') + ': ' + others + ' — ' + t('scooped') + '</span></div>';
           renderMsg('win', '🎉 ' + t('win') + ' +' + fmt(res.delta) + (res.type === 'pairWin' ? ' · ' + sideLabel(res.dir) : ''),
-            nm + ' · ' + monthLabel(res.m) + ' — ' + (res.type === 'ppongWin' ? t('ppongWin') : (res.type === 'pairWin' ? t('pairWin') : t('winSub'))) + react);
+            nm + ' · ' + monthLabel(res.m) + ' — ' + (res.type === 'pairWin' ? t('pairWin') : t('winSub')) + react);
         } else if (res.type === 'pairLose') {
           react = '<div class="react"><span>🔥 ' + t('potUp') + ' · ' + (nxt.avatar || '') + ' ' + pName(nxt) + '</span></div>';
           renderMsg('lose', '🤧 ' + t('lose') + ' −' + fmt(-res.delta) + ' · ' + sideLabel(res.dir),
@@ -4146,6 +4375,10 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
         renderPlayers();
         renderActions();
       }, 420);
+      if (res.autotop) {
+        toast('🪙 ' + t('autoTopupTitle'), t('autoTopupSub') + ' +' + fmt(res.autotop.amt));
+        potUp();
+      }
     }
 
     /* ---------------- 메시지 라우팅 ---------------- */
@@ -4217,6 +4450,21 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
             toast('🎟️ ' + (who || t('you')) + ' ' + t('couponUsedBy'), '');
           }
           break;
+        case 'raiseprop':
+          takeProposal(d);
+          break;
+        case 'raisevote':
+          if (isHost()) hostTakeVote(d);
+          break;
+        case 'raisecount':
+          raiseCounted(d);
+          break;
+        case 'raiseok':
+          raiseApplied(d);
+          break;
+        case 'raisereject':
+          raiseRejected(d);
+          break;
         case 'hb':
           if (d.cid === st.hostCid || d.host) st.hostSeen = Date.now();
           st.seen[d.cid] = Date.now();
@@ -4263,7 +4511,6 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       clearInterval(st.joinTimer); st.joinTimer = null;
       setConn('');
       if (d.ante) ui.ante = d.ante;
-      if (typeof d.ppong === 'boolean') ui.ppong = d.ppong;
       if (d.third) st.third = d.third;
       if (d.snap) { applySnap(d.snap); show('game'); }
       else { show('lobby'); renderLobby(); }
@@ -4389,7 +4636,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     function hostStart() {
       if (!isHost() || st.roster.length < 2) return;
       var names = st.roster.map(function (r) { return r.nick; });
-      S = W.newGame({ mode: 'pass', ante: ui.ante, ppongDouble: ui.ppong, count: names.length, names: names, rng: Math.random });
+      S = W.newGame({ mode: 'pass', ante: ui.ante, count: names.length, names: names, rng: Math.random });
       st.started = true; st.snap = null; st.lastRev = 0; st.third = null;
       st.couponOverClaimed = false; st.couponPending = 0;
       var sn = snapOf();
@@ -4411,6 +4658,8 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       st.snap = null; st.third = null; st.lastRev = 0; st.lastDoneRev = 0; st.stageKey = '';
       st.hostCid = ''; st.retry = 0; st.remoteDrag = false; st.rev = 0;
       st.couponPending = 0; st.couponOverClaimed = false;
+      clearTimeout(st.voteTimer); st.voteTimer = 0; st.prop = null; st.votes = {}; st.myVote = null;
+      hideVote();
       setConn('');
       if (!keepCfg) st.cfg = null;
     }
@@ -4500,6 +4749,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       prepare: prepare, isOn: isOn, isHost: isHost, canPeek: canPeek, myIdx: myIdx, useCoupon: useCoupon,
       create: create, join: join, leave: leave, hostStart: hostStart, hostRestart: hostRestart,
       hostNext: hostNext, share: share, sendPeek: sendPeek, requestReveal: requestReveal,
+      proposeRaise: proposeRaise, voteRaise: voteRaise,
       renderLobby: renderLobby, onlineActions: onlineActions, revealFx: revealFx, act: act,
       applySnap: applySnap, state: function () { return st; }
     };
@@ -4516,11 +4766,6 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     $('#gearBtn').onclick = function () { refreshCoupons(); $('#sheet').classList.add('on'); };
     $('#closeSheet').onclick = function () { $('#sheet').classList.remove('on'); };
     $('#restartBtn').onclick = function () { $('#sheet').classList.remove('on'); backToSetup(); };
-    $('#ppongSwitch').onclick = $('#ppongSwitch2').onclick = function () {
-      ui.ppong = !ui.ppong;
-      if (S) S.ppongDouble = ui.ppong;
-      applyStatic();
-    };
     document.querySelectorAll('.mode').forEach(function (b) {
       b.onclick = function () {
         var next = b.getAttribute('data-mode');
@@ -4541,6 +4786,16 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     if (cpset) cpset.onclick = useCouponNow;
     var cpsheet = $('#cpnSheetUse');
     if (cpsheet) cpsheet.onclick = useCouponNow;
+
+    /* ⤴ 기본 판돈 올리기 · 온라인 전원 동의 */
+    var rbtn = $('#raiseBtn');
+    if (rbtn) rbtn.onclick = openRaise;
+    var rcancel = $('#raiseCancel');
+    if (rcancel) rcancel.onclick = function () { $('#raiseSheet').classList.remove('on'); };
+    var vyes = $('#voteYes');
+    if (vyes) vyes.onclick = function () { ON.voteRaise(true); };
+    var vno = $('#voteNo');
+    if (vno) vno.onclick = function () { ON.voteRaise(false); };
 
     $('#sfxBtn').onclick = function () {
       SFX.setOn(!SFX.isOn());
