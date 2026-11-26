@@ -50,11 +50,15 @@ def to_picking(page):
     page.click('[data-mode="ai"]')
     page.click('#startBtn')
     page.wait_for_timeout(250)
-    # 판돈(최대) 칩 → 걸기
+    # 판돈(최대) 칩 → 걸기 (떡 판이면 업/다운으로 건다)
     chips = page.query_selector_all('#actions .chip[data-amt]')
     assert chips, 'betting chips not rendered'
     chips[-1].click()
-    page.click('#betBtn')
+    page.wait_for_timeout(80)
+    if page.query_selector('#upBtn'):
+        page.click('#upBtn')
+    else:
+        page.click('#betBtn')
     page.wait_for_timeout(450)      # 3번째 패 딜 + 쪼기 안내
     assert page.evaluate("() => getComputedStyle(document.getElementById('peekHint')).display") != 'none', \
         'picking hint not shown'
