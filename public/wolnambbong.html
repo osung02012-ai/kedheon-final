@@ -9,9 +9,13 @@
 <meta name="description" content="금박 숫자(1~12) 전통 화투로 30초 만에 즐기는 K-심리 카드 게임 — 두 패 사이를 쪼아 맞히는 룰. A 30-second Korean traditional card game by XAEA12." />
 <style>
 :root{
-  /* 기준 패 한 장의 폭 — 3장(착지 패 포함)이 테이블 폭 안에 들어오는 최대치.
-     예전 19.6vw 는 390px 실기기에서 76px 밖에 안 돼 두 패가 작아 보였다. */
-  --cardw:min(27.8vw,16.5vh,120px);
+  /* 기준 패 한 장의 폭 — 화면 높이에서 머리(상태바·쌓인머니·좌석·메시지·버튼)를 뺀
+     테이블 높이로 역산한다. 주소창까지 있는 짧은 모바일 크롬(640~700px)에서도
+     깔린 2장 + 쪼기 패가 위아래로 잘리지 않고 한 화면에 들어온다. */
+  --chrome:434px;                                  /* 머리·발치 고정 높이(≤700px 화면은 414px) */
+  --fitw:calc((100dvh - var(--chrome))/2.744);     /* 카드 1.55 + 쪼기패 1.194 + 여백 32px */
+  --cardw:min(27.8vw,120px,var(--fitw));
+  --pickw:calc(var(--cardw)*.72);                  /* 쪼기 패는 기준 패의 72% — 엄지로 밀기 쉽게 */
   --gold:#e6c37c;--gold-d:#a8842f;--red:#b3231c;--cream:#fdf7e8;
   --ink:#f6eeda;--muted:#9fb5aa;--win:#7fe0a0;--lose:#ff9489;
   --felt1:#14614a;--felt2:#0a3a2c;--felt3:#06251b;
@@ -200,6 +204,9 @@ body{
 .table{
   flex:1 1 auto;min-height:0;position:relative;border-radius:18px;padding:9px 8px 6px;
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  /* 테이블 높이를 기준으로 카드 크기를 잡을 수 있게 컨테이너로 만든다(cqh).
+     넘칠 때는 아래(safe)로 흘려 위쪽 숫자가 잘리지 않게 한다. */
+  container-type:size;justify-content:safe center;
   background:
     radial-gradient(120% 90% at 50% 0%,var(--felt1) 0%,var(--felt2) 62%,var(--felt3) 100%);
   box-shadow:inset 0 0 0 1px rgba(230,195,124,.2),inset 0 0 46px rgba(0,0,0,.55),0 10px 24px rgba(0,0,0,.4);
@@ -274,7 +281,7 @@ body{
 .holdhint{display:flex;align-items:center;justify-content:center;gap:6px;font-size:11.5px;color:#cfe0d8;letter-spacing:.3px;padding:10px}
 .stage{position:relative;display:flex;flex-direction:column;align-items:center;gap:5px;z-index:2}
 .thirdwrap{
-  position:relative;width:calc(var(--cardw)*1.07);aspect-ratio:120/186;height:calc(var(--cardw)*1.6585);touch-action:none;
+  position:relative;width:calc(var(--pickw)*1.07);aspect-ratio:120/186;height:calc(var(--pickw)*1.6585);touch-action:none;
   transition:transform .25s ease;filter:drop-shadow(0 10px 16px rgba(0,0,0,.5));
 }
 .thirdwrap.pop{animation:pop .45s cubic-bezier(.2,.9,.3,1.4)}
@@ -376,9 +383,9 @@ body{
 .toast b{font-size:13px;font-weight:900;letter-spacing:.4px}
 .toast span{font-size:10.5px;font-weight:700;opacity:.82}
 @keyframes floatup{0%{opacity:0;transform:translate(-50%,6px) scale(.8)}25%{opacity:1}100%{opacity:0;transform:translate(-50%,-18px) scale(1.05)}}
-/* ---------- 판돈 올리기 버튼 (테이블 우상단) ---------- */
+/* ---------- 판돈 올리기 버튼 (테이블 우하단 — 깔린 패·쪼기 패와 겹치지 않는 자리) ---------- */
 .raisebtn{
-  position:absolute;top:7px;right:8px;z-index:5;display:inline-flex;align-items:center;gap:3px;
+  position:absolute;bottom:6px;right:8px;z-index:5;display:inline-flex;align-items:center;gap:3px;
   padding:5px 9px;border-radius:999px;border:1px solid rgba(230,195,124,.45);
   background:linear-gradient(180deg,rgba(230,195,124,.20),rgba(0,0,0,.42));
   color:#ffeec4;font-size:10px;font-weight:900;letter-spacing:.4px;font-family:inherit;cursor:pointer;
@@ -423,13 +430,18 @@ body{
   .setupbox{padding:8px 10px;gap:6px}
   .msg{min-height:44px}
   .actions{min-height:80px}
-  :root{--cardw:min(27.8vw,14vh,110px)}
+  :root{--chrome:414px;--cardw:min(27.8vw,110px,var(--fitw))}
   .potbar>b{font-size:26px}
   .potbar{padding:5px 13px 6px}
 }
 @media (max-height:600px){
   .hero-cards{display:none}
-  :root{--cardw:min(24vw,13vh,104px)}
+  :root{--chrome:414px;--cardw:min(24vw,104px,var(--fitw))}
+}
+/* 컨테이너 쿼리를 쓰는 브라우저에서는 테이블에 실제로 남은 높이도 함께 본다.
+   (메시지가 길어져 테이블이 줄어도 위쪽이 잘리지 않게 하는 안전장치) */
+@supports (container-type:size){
+  :root{--fitw:min(calc((100dvh - var(--chrome))/2.744),calc((100cqh - 36px)/2.744))}
 }
 /* ---------- 🎟️ 충전 쿠폰 ---------- */
 .tbtn.cpn{display:inline-flex;align-items:center;gap:3px;padding:6px 8px;font-size:11px;font-variant-numeric:tabular-nums}

@@ -723,5 +723,43 @@ console.log('\n[15] 아도(판 전액) 판정 — 승리하면 팟 전액 회수
   eq(res.delta, 2, '회수액 2');
 }
 
+console.log('\n[16] 짧은 모바일 화면 — 깔린 2장 잘림 0px · [⤒] 겹침 방지');
+{
+  /* 쪼기 패는 기준 패의 72% — 작아야 위쪽 두 패를 키운 채 한 화면에 들어온다 */
+  const pw = src.match(/--pickw:calc\(var\(--cardw\)\s*\*\s*([\d.]+)\)/);
+  ok(!!pw && +pw[1] >= 0.7 && +pw[1] <= 0.78, '쪼기 패 = 기준 패의 0.70~0.78배', pw && pw[1]);
+  ok(/\.thirdwrap\{[\s\S]{0,140}width:calc\(var\(--pickw\)\*1\.07\)/.test(src), '.thirdwrap 폭이 --pickw 기준');
+  ok(/\.thirdwrap\{[\s\S]{0,200}height:calc\(var\(--pickw\)\*1\.6585\)/.test(src), '.thirdwrap 높이도 --pickw 기준');
+  ok(!/\.thirdwrap\{[^}]*width:calc\(var\(--cardw\)\*1\.07\)/.test(src), '옛 기준 패 크기(×1.07) 규칙 제거');
+
+  /* 카드 폭을 화면 높이에서 역산 — 짧은 뷰포트에서 테이블 높이가 모자라 위가 잘리던 원인 */
+  ok(/--fitw:calc\(\(100dvh - var\(--chrome\)\)\/2\.744\)/.test(src), '화면 높이(100dvh)에서 머리 높이를 뺀 값으로 카드 폭 역산');
+  ok(/--cardw:min\(27\.8vw,120px,var\(--fitw\)\)/.test(src), '카드 폭 상한 = min(27.8vw, 120px, 역산값)');
+  ok(/@media \(max-height:700px\)\{[\s\S]{0,900}--chrome:414px/.test(src), '≤700px 화면은 머리 높이 414px 로 보정');
+  ok(/container-type:size/.test(src), '.table 이 크기 컨테이너(cqh 안전장치)');
+  ok(/justify-content:safe center/.test(src), '넘칠 때 위가 아니라 아래로 흘리는 safe center(justify-content)');
+
+  /* [⤒] 판돈 버튼은 테이블 우하단 — 상단 패와 겹칠 수 없는 자리 */
+  ok(/\.raisebtn\{[\s\S]{0,140}bottom:6px;right:8px/.test(src), '[⤒] 판돈 버튼을 테이블 우하단에 배치');
+  ok(!/\.raisebtn\{[^}]*\btop:7px/.test(src), '상단 고정(top:7px) 규칙 제거 — 깔린 오른쪽 패와 겹침 방지');
+
+  /* 실제 높이 계산: 카드 1.55 + 쪼기패 1.6585×비율 + 간격·쪼기안내 32 + 테이블 패딩 15 ≤ 테이블 높이 */
+  const pick = +pw[1];
+  const div = +(src.match(/--fitw:calc\(\(100dvh - var\(--chrome\)\)\/([\d.]+)\)/) || [0, 2.744])[1];
+  const cases = [
+    /* [뷰포트 폭, 높이, 머리 높이, 카드 상한]  — 360×640·390×680·390×740·365×700 */
+    [360, 640, 414, 110], [390, 640, 414, 110],
+    [390, 680, 414, 110], [365, 700, 414, 110],
+    [390, 740, 434, 120], [412, 800, 434, 120]
+  ];
+  for (const [vw, vh, chrome, cap] of cases) {
+    const cardw = Math.min(27.8 * vw / 100, cap, (vh - chrome) / div);
+    const tableH = vh - (chrome - 47);          /* 머리·발치를 뺀 테이블 높이 */
+    const need = 1.55 * cardw + 6 + 1.6585 * pick * cardw + 5 + 21 + 15;
+    ok(need <= tableH + 2, vw + '×' + vh + ' 쪼개기 단계가 잘림 없이 들어온다 (필요 ' + need.toFixed(1) + ' ≤ ' + tableH + ', 카드 ' + cardw.toFixed(1) + 'px)', [need, tableH]);
+    ok(cardw >= 60, vw + '×' + vh + ' 카드 폭이 읽을 만하다 (' + cardw.toFixed(1) + 'px ≥ 60)', cardw);
+  }
+}
+
 console.log('\n결과: ' + pass + ' 통과 / ' + fail + ' 실패');
 process.exit(fail ? 1 : 0);

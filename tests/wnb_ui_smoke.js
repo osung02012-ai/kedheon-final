@@ -435,5 +435,27 @@ console.log('\n[UI-11] 차례 강조 · 보유 머니 가독성');
   ok(cardw >= moneyW, '390px·4인에서 내 돈(16px)이 카드 폭에 들어온다', [cardw, Math.round(moneyW)]);
 }
 
+console.log('\n[UI-12] 짧은 모바일 뷰포트 — 쪼기 단계 상단 잘림·[⤒] 겹침 방지 CSS');
+{
+  /* 실기기(안드로이드 크롬, 주소창 포함 640~700px)에서 깔린 2장 숫자가 위로 잘리던 문제의 재발 방지.
+     실제 픽셀·rect 검사는 tests/wnb_layout_test.py(Chromium)가 담당하고, 여기서는 그 근거가 되는
+     CSS 배선이 살아 있는지만 본다. */
+  ok(/--pickw:calc\(var\(--cardw\)\*\.7[0-8]\)/.test(src), '쪼기(피킹) 패 전용 폭 --pickw 정의(기준 패의 72%)');
+  ok(/width:calc\(var\(--pickw\)\*1\.07\)/.test(src), '쪼기 패 폭이 --pickw 기준');
+  ok(/height:calc\(var\(--pickw\)\*1\.6585\)/.test(src), '쪼기 패 높이도 --pickw 기준(세로 드래그 거리 단축)');
+  ok(src.indexOf('var(--pickw)') < src.indexOf('id="thirdWrap"'), '쪼기 패 크기 변수가 마크업보다 먼저 정의');
+
+  ok(/--fitw:calc\(\(100dvh - var\(--chrome\)\)\//.test(src), '카드 폭을 100dvh 에서 역산(--fitw)');
+  ok(/--cardw:min\(27\.8vw,120px,var\(--fitw\)\)/.test(src), '카드 폭 = min(27.8vw, 120px, 역산값)');
+  ok(/--chrome:414px/.test(src) && /--chrome:434px/.test(src), '짧은 화면(≤700px)과 기본 화면의 머리 높이 분리');
+  ok(/@supports \(container-type:size\)/.test(src), 'cqh 안전장치를 @supports 로 감쌈(미지원 브라우저는 dvh 값 유지)');
+  ok(/justify-content:safe center/.test(src) && /justify-content:center/.test(src), '기본 center + 지원 시 safe center(위 잘림 방지)');
+
+  ok(/\.raisebtn\{[\s\S]{0,160}bottom:6px;right:8px/.test(src), '[⤒] 판돈 버튼이 테이블 우하단으로 이동');
+  ok(!/\.raisebtn\{[^}]*top:7px/.test(src), '상단 고정 규칙이 남아 있지 않음(오른쪽 카드와 겹침 제거)');
+  ok(/\n\.thirdwrap\.peeked \.cover\{/.test(src) || /\.thirdwrap\.peeked \.cover/.test(src), '쪼기 중 덮개(peeked) 규칙 유지');
+  ok(/\.cover\.off\{[^}]*translateY\(-125%\)/.test(src), '착지 연출(덮개가 위로 벗겨짐)은 그대로');
+}
+
 console.log('\n결과: ' + pass + ' 통과 / ' + fail + ' 실패');
 process.exit(fail ? 1 : 0);
