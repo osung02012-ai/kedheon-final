@@ -651,5 +651,77 @@ console.log('\n[14] 모바일 실기기 카드 크기 — 기준 패 2장 확대
   }
 }
 
+console.log('\n[15] 아도(판 전액) 판정 — 승리하면 팟 전액 회수 · 일반 올인과 구분');
+{
+  /* 판돈 4,000 / 내 돈 8,000 → 최대 베팅 = 판돈 = 아도 */
+  let s = scene({ a: 2, b: 10, next: 5, pot: 4000, chips: 8000 });
+  let L = W.betLimits(s);
+  eq(L.max, 4000, '최대 베팅 = 판돈(내 돈이 더 많을 때)');
+  let before = s.players[0].chips;
+  W.placeBet(s, L.max);
+  let res = W.reveal(s);
+  eq(res.type, 'win', '사이값 적중 → win');
+  eq(res.ado, true, '건 금액 = 판돈 → res.ado === true');
+  eq(res.sweep, true, '팟 통째 회수(sweep) 표시');
+  eq(res.delta, 4000, '회수액 = 판돈 전액 4,000');
+  /* 판돈이 0이 되어 전원 앤티(100) 자동 충전이 붙으므로 칩 변화는 4,000 − 100 */
+  eq(s.players[0].chips - before, 3900, '칩 증가 = 회수 4,000 − 자동 충전 앤티 100');
+  eq(res.pot0, 4000, '정산 전 판돈(pot0)도 결과에 남는다');
+
+  /* 같은 조건인데 최소 베팅 → 아도 아님 */
+  s = scene({ a: 2, b: 10, next: 5, pot: 4000, chips: 8000 });
+  W.placeBet(s, 1000);
+  res = W.reveal(s);
+  eq(res.type, 'win', '일반 베팅도 적중하면 win');
+  eq(res.ado, false, '최소 베팅(1,000) 승리 → ado === false');
+  eq(res.sweep, false, '일반 승리는 sweep 아님');
+
+  /* 내 돈이 판돈보다 적은 올인 → 아도 아님(팟을 다 못 쓸어간다) */
+  s = scene({ a: 2, b: 10, next: 5, pot: 4000, chips: 1000 });
+  L = W.betLimits(s);
+  eq(L.max, 1000, '내 돈이 모자라면 최대 = 내 돈(올인)');
+  W.placeBet(s, L.max);
+  res = W.reveal(s);
+  eq(res.type, 'win', '올인 적중 → win');
+  eq(res.ado, false, '내 돈 전액 올인이라도 판돈 전액이 아니면 ado === false');
+  eq(res.sweep, false, '팟을 다 쓸어가지 못하므로 sweep === false');
+  eq(res.delta, 1000, '회수액은 건 금액 1,000');
+
+  /* 아도인데 지면 ado 표시는 남되 승리 분기(대형음)는 타지 않는다 */
+  s = scene({ a: 2, b: 10, next: 12, pot: 4000, chips: 8000 });
+  W.placeBet(s, 4000);
+  res = W.reveal(s);
+  eq(res.type, 'lose', '바깥 숫자 → lose');
+  eq(res.ado, true, '아도 패배에도 ado === true');
+  eq(res.sweep, false, '패배는 sweep 아님');
+
+  /* 땡(2·2) 아도 — 업/다운 적중이면 팟 전액 */
+  s = scene({ a: 2, b: 2, next: 9, pot: 3000, chips: 3000 });
+  W.placePairBet(s, 3000, 'up');
+  res = W.reveal(s);
+  eq(res.type, 'pairWin', '2땡 + 업 + 9 → pairWin');
+  eq(res.ado, true, '땡 아도도 ado === true');
+  eq(res.sweep, true, '땡 아도 적중 → 팟 전액 회수');
+  eq(res.delta, 3000, '회수액 3,000');
+
+  /* 패스는 아도가 아니다 */
+  s = scene({ a: 2, b: 10, next: 5, pot: 4000, chips: 8000 });
+  const fr = W.fold(s);
+  ok(fr.ok === true, '패스 수락', fr);
+  eq(s.result.ado, false, '패스 결과 ado === false');
+  eq(s.result.sweep, false, '패스 결과 sweep === false');
+
+  /* 판돈이 0이거나 베팅이 없으면 ado 아님(0으로 나누기·오판 방지) */
+  s = scene({ a: 2, b: 10, next: 5, pot: 1, chips: 8000 });
+  s.pot = 0;
+  eq(W.betLimits(s).max, 0, '판돈 0이면 최대 베팅 0');
+  s.pot = 2; s.players[0].chips = 8000;
+  W.placeBet(s, 2);
+  res = W.reveal(s);
+  eq(res.type, 'win', '초소액 판도 승리하면 win');
+  eq(res.ado, true, '판돈 2를 전부 건 판도 ado === true');
+  eq(res.delta, 2, '회수액 2');
+}
+
 console.log('\n결과: ' + pass + ' 통과 / ' + fail + ' 실패');
 process.exit(fail ? 1 : 0);

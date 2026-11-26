@@ -158,15 +158,43 @@ body{
 .players{display:flex;gap:5px;flex:0 0 auto;overflow-x:auto;scrollbar-width:none;padding:1px 0}
 .players::-webkit-scrollbar{display:none}
 .pl{
-  flex:1 1 0;min-width:46px;display:flex;flex-direction:column;align-items:center;gap:1px;
-  padding:4px 2px;border-radius:10px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.07);
+  flex:1 1 0;min-width:50px;display:flex;flex-direction:column;align-items:center;gap:1px;
+  padding:4px 3px;border-radius:10px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.07);
   transition:.2s;position:relative;
 }
-.pl.on{background:linear-gradient(180deg,rgba(230,195,124,.24),rgba(230,195,124,.06));border-color:rgba(230,195,124,.65);box-shadow:0 0 12px rgba(230,195,124,.22)}
+/* 내 자리 — 상대와 한 번에 구분되는 은은한 금빛 바탕 */
+.pl.me{background:rgba(230,195,124,.1);border-color:rgba(230,195,124,.3)}
+/* 지금 차례 — 2.5px 금빛 테두리 + 글로우 + 밝은 바탕으로 즉각 구분 */
+.pl.on{
+  background:linear-gradient(180deg,rgba(255,215,120,.34),rgba(230,195,124,.13));
+  border:2.5px solid #ffd76a;
+  box-shadow:0 0 0 1px rgba(255,215,110,.35),0 0 16px rgba(255,203,84,.55);
+  animation:turnGlow 1.7s ease-in-out infinite;
+}
+@keyframes turnGlow{
+  0%,100%{box-shadow:0 0 0 1px rgba(255,215,110,.35),0 0 13px rgba(255,203,84,.45)}
+  50%{box-shadow:0 0 0 1px rgba(255,215,110,.55),0 0 23px rgba(255,203,84,.72)}
+}
 .pl.dead{opacity:.4}
-.pl .av{font-size:12px;line-height:1}
-.pl .nm{font-size:8.5px;color:#dfd8c6;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.pl .ch{font-size:10px;font-weight:800;color:#ffe9b6;font-variant-numeric:tabular-nums}
+.pl .av{font-size:13px;line-height:1}
+.pl .nm{font-size:9.5px;color:#e6ddc8;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.2}
+.pl.on .nm{color:#fff5da;font-weight:800}
+/* 보유 머니 — 모바일에서 한눈에 읽히게 키우고 대비를 올린다 */
+.pl .ch{
+  font-size:12.5px;font-weight:900;color:#f1e7d0;font-variant-numeric:tabular-nums;
+  letter-spacing:-.2px;line-height:1.18;text-shadow:0 1px 2px rgba(0,0,0,.55);max-width:100%;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.pl.me .ch{font-size:16px;color:#ffd76a;text-shadow:0 0 10px rgba(255,196,64,.35),0 1px 2px rgba(0,0,0,.6)}
+.pl.on.me .ch{color:#fff2c8;text-shadow:0 0 12px rgba(255,206,90,.6),0 1px 3px rgba(0,0,0,.7)}
+/* 5~6인처럼 좌석이 좁을 때는 한 단계만 줄여 넘침을 막는다 */
+.players.many .pl .ch{font-size:11.5px}
+.players.many .pl.me .ch{font-size:13.5px}
+.pl .tb{
+  font-size:8.5px;font-weight:900;letter-spacing:.2px;line-height:1;padding:2px 5px;border-radius:999px;
+  background:linear-gradient(180deg,#ffe493,#e9b23f);color:#3b2708;white-space:nowrap;
+  box-shadow:0 1px 5px rgba(0,0,0,.5);margin-bottom:1px;
+}
 .pl .tag{position:absolute;top:-6px;right:-2px;font-size:10px}
 /* ---------- table ---------- */
 .table{
@@ -217,6 +245,30 @@ body{
 @keyframes landimpact{0%{opacity:.95;transform:scale(.25)}65%{opacity:.4}100%{opacity:0;transform:scale(5.4)}}
 .table.thump{animation:tblthump .26s ease}
 @keyframes tblthump{0%,100%{transform:translateY(0)}40%{transform:translateY(2px)}}
+/* 아도 승리 — 판을 통째로 쓸어담는 '딱!!' : 일반 착지보다 한 체급 큰 타격 */
+.landwrap.ado .landcard{
+  animation:adoSlam .62s cubic-bezier(.2,1.55,.35,1) both;
+  filter:drop-shadow(0 14px 20px rgba(0,0,0,.6)) drop-shadow(0 0 10px rgba(255,206,90,.45));
+}
+@keyframes adoSlam{
+  0%{transform:translateY(-112%) scale(1.36) rotate(-9deg);opacity:.06}
+  46%{transform:translateY(9%) scale(1.13) rotate(2.4deg);opacity:1}
+  60%{transform:translateY(-5%) scale(1.05) rotate(-1.1deg)}
+  76%{transform:translateY(2.4%) scale(1.02)}
+  100%{transform:translateY(0) scale(1) rotate(0)}
+}
+.landwrap.ado .ring{
+  width:22px;height:22px;margin:0 0 -11px -11px;border-width:3px;
+  border-color:rgba(255,226,140,1);box-shadow:0 0 18px rgba(255,206,90,.9);
+}
+.landwrap.ado.impact .ring{animation:adoImpact .85s ease-out both}
+@keyframes adoImpact{0%{opacity:1;transform:scale(.22)}50%{opacity:.6}100%{opacity:0;transform:scale(9)}}
+.table.adohit{animation:adoTable .62s ease}
+@keyframes adoTable{
+  0%,100%{box-shadow:inset 0 0 0 1px rgba(230,195,124,.2),inset 0 0 46px rgba(0,0,0,.55),0 10px 24px rgba(0,0,0,.4)}
+  10%{box-shadow:inset 0 0 0 3px rgba(255,214,110,.95),inset 0 0 76px rgba(255,196,64,.34),0 0 34px rgba(255,206,90,.55);transform:translateY(1.5px)}
+  42%{box-shadow:inset 0 0 0 2px rgba(255,214,110,.55),inset 0 0 54px rgba(255,196,64,.16),0 0 18px rgba(255,206,90,.28)}
+}
 .stage.gone{opacity:0;transform:translateY(7px) scale(.95);pointer-events:none;transition:opacity .2s ease,transform .2s ease}
 .stage.gone.shrink{height:0;min-height:0;overflow:hidden;transition:height .3s ease,opacity .2s ease,transform .2s ease}
 .holdhint{display:flex;align-items:center;justify-content:center;gap:6px;font-size:11.5px;color:#cfe0d8;letter-spacing:.3px;padding:10px}
@@ -985,6 +1037,9 @@ var WNB = (function () {
     var p = player(s);
     var a = s.board[0].month, b = s.board[1].month, m = s.third.month;
     var bet = s.bet, type, delta, gain, penalty, short = false;
+    /* 아도 = 판에 쌓인 머니 전액을 건 판(최대 베팅 = 판돈). 승리하면 팟을 통째로 쓸어간다. */
+    var pot0 = s.pot;
+    var ado = (bet > 0 && pot0 > 0 && bet >= pot0);
 
     if (s.betKind === 'pair') {
       /* 땡 — 업/다운: 같은 숫자가 나오면 무조건 패배, 배당은 일반 사이값과 동일(1배) */
@@ -1027,7 +1082,9 @@ var WNB = (function () {
       type: type, delta: delta, bet: bet, a: a, b: b, m: m,
       turn: s.turn, short: short, potUp: delta < 0 ? -delta : 0,
       pair: !!s.pair, dir: s.betKind === 'pair' ? (s.pairDir === 'down' ? 'down' : 'up') : null,
-      kind: s.betKind, refill: null
+      kind: s.betKind, refill: null,
+      ado: ado, pot0: pot0,                              /* 아도 판 여부 — 승리 시 대형 '딱!!' 분기 */
+      sweep: ado && (gain || 0) >= pot0                  /* 팟 전액 회수(쓸어담기) */
     };
     s.phase = 'result';
     if (s.pot <= 0) refillPot(s);
@@ -1042,7 +1099,8 @@ var WNB = (function () {
     s.result = {
       type: 'fold', delta: 0, bet: 0, a: s.board[0].month, b: s.board[1].month, m: null,
       turn: s.turn, potUp: 0, pair: !!s.pair, dir: null, kind: 'fold',
-      refill: refill, passStreak: s.passStreak || 0
+      refill: refill, passStreak: s.passStreak || 0,
+      ado: false, pot0: s.pot, sweep: false
     };
     s.phase = 'result';
     return { ok: true, refill: refill };
@@ -2388,7 +2446,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       fold: '패스', push: '무승부', next: '다음', nextHand: '다음 판',
       others: '다른 플레이어들', potUp: '판돈 UP! 다음 차례 대박 찬스',
       scooped: '팟 회수!', snot: '콧물',
-      me: '나', you: '당신', turn: '차례',
+      me: '나', you: '당신', turn: '차례', myTurn: '내 차례',
       bankrupt: '파산', over: '게임 종료', winner: '우승',
       restartBtn: '다시 시작', house: '하우스 충전',
       aiTurn: 'AI 차례', humanTurn: '내 차례',
@@ -2452,7 +2510,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       fold: 'PASS', push: 'PUSH', next: 'NEXT', nextHand: 'NEXT HAND',
       others: 'Others', potUp: 'POT UP — next seat gets a shot',
       scooped: 'scooped the pot!', snot: 'tears',
-      me: 'You', you: 'You', turn: 'turn',
+      me: 'You', you: 'You', turn: 'turn', myTurn: 'YOUR TURN',
       bankrupt: 'BUST', over: 'GAME OVER', winner: 'Winner', restartBtn: 'Play again',
       house: 'House top-up',
       aiTurn: 'AI turn', humanTurn: 'Your turn',
@@ -2513,6 +2571,8 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     if (!AC && typeof webkitAudioContext !== 'undefined') AC = webkitAudioContext;
 
     var ctx = null, master = null, noise = null, drag = null, on = true;
+    var played = [];   /* 어떤 효과가 실제로 울렸는지 — 소리 없는 환경의 분기 검증용(최근 40개) */
+    function mark(name) { played.push(name); if (played.length > 40) played.shift(); }
 
     function ensure() {
       if (!AC) return null;
@@ -2577,6 +2637,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     /* 2) "띡!!" — 플라스틱 화투패가 부디처 튕기는 소리 */
     function snap(power) {
       var c = ensure(); if (!c || !on) return;
+      mark('snap');
       var v = (power == null ? 1 : power);
       var t = c.currentTime + 0.002, i;
 
@@ -2642,6 +2703,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     /* 4) 이김 — 짧고 경쾌한 팡파레 */
     function winSound() {
       var c = ensure(); if (!c || !on) return;
+      mark('win');
       var t = c.currentTime + 0.02, i;
       var notes = [659.25, 830.61, 987.77, 1318.51];
       for (i = 0; i < notes.length; i++) {
@@ -2669,6 +2731,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     /* 5) 칩 — 상강하하는 우스꽝스러운 "뿌우~" */
     function loseSound() {
       var c = ensure(); if (!c || !on) return;
+      mark('lose');
       var t = c.currentTime + 0.02;
       var o = c.createOscillator(); o.type = 'sawtooth';
       o.frequency.setValueAtTime(330, t);
@@ -2704,6 +2767,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     /* 7) "딱!" — 깐 패가 바닥을 때리는 타격음 (저역 임팩트 + 중역 때림 + 고역 슬랩) */
     function thud(power) {
       var c = ensure(); if (!c || !on) return;
+      mark('thud');
       var v = (power == null ? 1 : power);
       var t = c.currentTime + 0.002;
       var o = c.createOscillator(); o.type = 'sine';
@@ -2733,11 +2797,106 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       n2.connect(hp); hp.connect(g3); g3.connect(master);
     }
 
+    /* 8) "딱!!" — 아도(판 전액) 승리의 대형 타격음
+       일반 착지 "탁"보다 한 체급 크게: ①깊은 저역 펀치 ②찰진 화투패 크랙
+       ③중역 공명 ④95ms 뒤 2단 임팩트 ⑤짧은 고역 잔향.
+       피크는 마지막 컴프레서로 눌러 클리핑 없이 밀도만 올린다. */
+    function adoHit() {
+      var c = ensure(); if (!c || !on) return;
+      mark('ado');
+      var t = c.currentTime + 0.002;
+
+      /* 0) 최종단 — 큰 피크를 눌러 찌그러짐 없이 '꽉 찬' 소리로 */
+      var comp = c.createDynamicsCompressor();
+      comp.threshold.value = -10;
+      comp.knee.value = 8;
+      comp.ratio.value = 4.5;
+      comp.attack.value = 0.002;
+      comp.release.value = 0.18;
+      var bus = c.createGain(); bus.gain.value = 1.25;
+      bus.connect(comp); comp.connect(master);
+
+      /* 1) 저역 펀치 — 128 → 38Hz, 여운을 길게 끌어 판이 울리게 */
+      var sub = c.createOscillator(); sub.type = 'sine';
+      sub.frequency.setValueAtTime(128, t);
+      sub.frequency.exponentialRampToValueAtTime(38, t + 0.30);
+      var sg = c.createGain();
+      sg.gain.setValueAtTime(0.0001, t);
+      sg.gain.exponentialRampToValueAtTime(0.95, t + 0.005);
+      sg.gain.exponentialRampToValueAtTime(0.30, t + 0.10);
+      sg.gain.exponentialRampToValueAtTime(0.0001, t + 0.44);
+      sub.connect(sg); sg.connect(bus);
+      sub.start(t); sub.stop(t + 0.46);
+
+      /* 2) 어택 클릭 — 4.8kHz 하이패스(2ms 피크) : 손바닥이 내려꽂히는 순간 */
+      var n1 = burst(t, 0.06);
+      var hp1 = c.createBiquadFilter(); hp1.type = 'highpass'; hp1.frequency.value = 4800;
+      var g1 = c.createGain();
+      g1.gain.setValueAtTime(0.0001, t);
+      g1.gain.exponentialRampToValueAtTime(0.62, t + 0.0015);
+      g1.gain.exponentialRampToValueAtTime(0.0001, t + 0.026);
+      n1.connect(hp1); hp1.connect(g1); g1.connect(bus);
+
+      /* 3) 화투패 크랙 — 1.5kHz 대역 + 2.7kHz 피킹 : '찰진' 플라스틱 */
+      var n2 = burst(t, 0.12);
+      var bp2 = c.createBiquadFilter(); bp2.type = 'bandpass'; bp2.frequency.value = 1520; bp2.Q.value = 0.85;
+      var pk2 = c.createBiquadFilter(); pk2.type = 'peaking'; pk2.frequency.value = 2750; pk2.Q.value = 1.3; pk2.gain.value = 9;
+      var g2 = c.createGain();
+      g2.gain.setValueAtTime(0.0001, t);
+      g2.gain.exponentialRampToValueAtTime(0.55, t + 0.002);
+      g2.gain.exponentialRampToValueAtTime(0.0001, t + 0.085);
+      n2.connect(bp2); bp2.connect(pk2); pk2.connect(g2); g2.connect(bus);
+
+      /* 4) 중역 공명 — 760 → 250Hz 삼각파 : 판 전체가 "퉁" 하고 받는 느낌 */
+      var md = c.createOscillator(); md.type = 'triangle';
+      md.frequency.setValueAtTime(760, t);
+      md.frequency.exponentialRampToValueAtTime(250, t + 0.09);
+      var mg = c.createGain();
+      mg.gain.setValueAtTime(0.0001, t);
+      mg.gain.exponentialRampToValueAtTime(0.46, t + 0.004);
+      mg.gain.exponentialRampToValueAtTime(0.0001, t + 0.16);
+      md.connect(mg); mg.connect(bus);
+      md.start(t); md.stop(t + 0.18);
+
+      /* 5) 2단 임팩트 — 95ms 뒤 한 번 더 "탁" (앞 타격보다 조금 작게) */
+      var t2 = t + 0.095;
+      var sub2 = c.createOscillator(); sub2.type = 'sine';
+      sub2.frequency.setValueAtTime(96, t2);
+      sub2.frequency.exponentialRampToValueAtTime(42, t2 + 0.22);
+      var sg2 = c.createGain();
+      sg2.gain.setValueAtTime(0.0001, t2);
+      sg2.gain.exponentialRampToValueAtTime(0.52, t2 + 0.004);
+      sg2.gain.exponentialRampToValueAtTime(0.0001, t2 + 0.30);
+      sub2.connect(sg2); sg2.connect(bus);
+      sub2.start(t2); sub2.stop(t2 + 0.32);
+
+      var n3 = burst(t2, 0.07);
+      var bp3 = c.createBiquadFilter(); bp3.type = 'bandpass'; bp3.frequency.value = 2400; bp3.Q.value = 1.1;
+      var g3 = c.createGain();
+      g3.gain.setValueAtTime(0.0001, t2);
+      g3.gain.exponentialRampToValueAtTime(0.28, t2 + 0.002);
+      g3.gain.exponentialRampToValueAtTime(0.0001, t2 + 0.06);
+      n3.connect(bp3); bp3.connect(g3); g3.connect(bus);
+
+      /* 6) 잔향 — 6.8kHz 위주의 짧은 쉬머("촤악" 하고 팟을 쓸어담는 느낌) */
+      var n4 = burst(t + 0.02, 0.16);
+      var hp4 = c.createBiquadFilter(); hp4.type = 'highpass'; hp4.frequency.value = 6800;
+      var g4 = c.createGain();
+      g4.gain.setValueAtTime(0.0001, t + 0.02);
+      g4.gain.exponentialRampToValueAtTime(0.09, t + 0.07);
+      g4.gain.exponentialRampToValueAtTime(0.0001, t + 0.34);
+      n4.connect(hp4); hp4.connect(g4); g4.connect(bus);
+    }
+
     return {
       unlock: unlock, dragStart: dragStart, dragMove: dragMove, dragStop: dragStop,
-      snap: snap, thud: thud, tick: tick, win: winSound, lose: loseSound, setOn: setOn, isOn: isOn
+      snap: snap, thud: thud, adoHit: adoHit, tick: tick, win: winSound, lose: loseSound,
+      setOn: setOn, isOn: isOn, log: function () { return played.slice(); }
     };
   })();
+
+  /* 분기 검증용 최소 핸들 — 소리 없이 어떤 효과가 울렸는지 확인한다(테스트 전용) */
+  if (typeof window !== 'undefined' && window) { try { window.WNB_SFX = SFX; } catch (e) {} }
 
   /* ------------------------------------------------------------
      음성 안내 — 패스 / 콜 / 올인 (Web Speech API · 외부 파일 0건)
@@ -2843,6 +3002,16 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       });
     }
     if (!fx.raf) fx.raf = requestAnimationFrame(fxStep);
+  }
+
+  /* 아도 승리 — 판이 통째로 울리는 순간의 금빛 타격. 사운드 '딱!!'과 같은 박자로 찰나에 번쩍인다. */
+  function adoFlash() {
+    var tbl = $('#tableEl');
+    if (!tbl) return;
+    tbl.classList.remove('adohit');
+    void tbl.offsetWidth;
+    tbl.classList.add('adohit');
+    setTimeout(function () { if (tbl.classList) tbl.classList.remove('adohit'); }, 620);
   }
   function fxStep() {
     var ctx = fx.ctx;
@@ -3106,14 +3275,20 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
 
   function renderPlayers() {
     var box = $('#players');
+    box.className = 'players' + (S.players.length >= 5 ? ' many' : '');
     box.innerHTML = '';
+    /* 온라인이면 내 좌석은 서버가 준 cid로 찾고, 오프라인이면 늘 0번이 나다 */
+    var me = (ui.mode === 'online' ? ON.myIdx() : 0);
     S.players.forEach(function (p, i) {
+      var turnOn = (i === S.turn && !S.over);
+      var isMe = (i === me);
       var d = document.createElement('div');
-      d.className = 'pl' + (i === S.turn && !S.over ? ' on' : '') + (p.bankrupt ? ' dead' : '');
-      d.innerHTML = '<span class="av">' + (p.avatar || '🙋') + '</span>' +
+      d.className = 'pl' + (turnOn ? ' on' : '') + (isMe ? ' me' : '') + (p.bankrupt ? ' dead' : '');
+      d.innerHTML = (turnOn ? '<span class="tb">▶ ' + (isMe ? t('myTurn') : t('turn')) + '</span>' : '') +
+        '<span class="av">' + (p.avatar || '🙋') + '</span>' +
         '<span class="nm">' + pName(p) + '</span>' +
         '<span class="ch">' + (p.bankrupt ? t('bankrupt') : fmt(p.chips)) + '</span>' +
-        (i === S.turn && !S.over ? '<span class="tag">' + (p.ai ? '🤖' : '👆') + '</span>' : '');
+        (turnOn ? '<span class="tag">' + (p.ai ? '🤖' : '👆') + '</span>' : '');
       box.appendChild(d);
     });
   }
@@ -3139,7 +3314,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
   }
 
   /* 깐 패를 두 패 사이 바닥에 딱 찍는다 — 모든 모드 공통 */
-  function landThird(card, animate) {
+  function landThird(card, animate, ado) {
     if (!card) return;
     var wrap = $('#landWrap'), board = $('#boardEl'), stage = document.querySelector('.stage');
     if (!wrap || !board) return;
@@ -3149,6 +3324,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       $('#landFace').innerHTML = W.faceSVG(card);
       landId = id;
       wrap.classList.remove('slam', 'impact');
+      if (ado) wrap.classList.add('ado'); else wrap.classList.remove('ado');
     }
     board.classList.add('landed');
     if (stage) stage.classList.add('gone');
@@ -3172,7 +3348,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     var board = $('#boardEl'), wrap = $('#landWrap'), stage = document.querySelector('.stage');
     var face = $('#landFace');
     if (board) board.classList.remove('landed');
-    if (wrap) wrap.classList.remove('slam', 'impact');
+    if (wrap) wrap.classList.remove('slam', 'impact', 'ado');
     if (face) face.innerHTML = '';
     if (stage) { stage.classList.remove('gone'); stage.classList.remove('shrink'); }
   }
@@ -3605,17 +3781,23 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     cover.classList.add('off');
     wrap.classList.remove('shake');
     wrap.classList.add('pop');
-    SFX.snap(isAi ? 0.72 : 1);
     $('#peekHint').style.display = 'none';
     var thirdCard = S.third ? { id: S.third.id, month: S.third.month, variant: S.third.variant } : null;
     var res = W.reveal(S);
     if (!res) { busy = false; return; }
+    var win = (res.type === 'win' || res.type === 'pairWin');
+    var adoWin = win && !!res.ado;
+    /* 아도 승리는 일반 착지 "탁" 대신 한 체급 큰 "딱!!" — 음소거면 SFX가 스스로 침묵한다 */
+    if (adoWin) SFX.adoHit(); else SFX.snap(isAi ? 0.72 : 1);
     /* 깐 패가 두 패 사이 바닥을 딱 때리고 착지 — 결과 확인 시간(2.2초) 동안 그대로 둔다 */
-    landThird(thirdCard, true);
+    landThird(thirdCard, true, adoWin);
     scheduleAdvance(HOLD_MS);          /* 착지 연출을 충분히 보여준 뒤 자동으로 다음 턴 */
 
-    var win = (res.type === 'win' || res.type === 'pairWin');
-    if (win) { confetti(); vibrate([30, 40, 70]); }
+    if (win) {
+      confetti();
+      if (adoWin) { adoFlash(); vibrate([45, 55, 45, 55, 130]); }
+      else vibrate([30, 40, 70]);
+    }
     else if (res.type === 'lose' || res.type === 'ppong' || res.type === 'ppongLose' || res.type === 'pairLose') { vibrate([20, 60, 20]); }
 
     renderStatus();
@@ -3634,7 +3816,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
             .map(function (x) { return x.avatar + ' ' + pName(x) + ' 🤧'; }).join('  ');
           react = '<div class="react"><span>' + t('others') + ': ' + others + ' — ' + t('scooped') + '</span></div>';
         }
-        renderMsg('win', '🎉 ' + t('win') + ' +' + fmt(res.delta) + (res.type === 'pairWin' ? ' · ' + sideLabel(res.dir) : ''),
+        renderMsg('win', '🎉 ' + t('win') + ' +' + fmt(res.delta) + (res.ado ? ' · ' + t('ado') : '') + (res.type === 'pairWin' ? ' · ' + sideLabel(res.dir) : ''),
           nm + ' · ' + monthLabel(res.m) + ' — ' + (res.type === 'pairWin' ? t('pairWin') : t('winSub')) + react);
       } else if (res.type === 'pairLose') {
         if (ui.mode !== 'solo') react = '<div class="react"><span>🔥 ' + t('potUp') + ' · ' + (nxt.avatar || '') + ' ' + pName(nxt) + '</span></div>';
@@ -4291,6 +4473,8 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     function revealFx(res) {
       var isFold = res.type === 'fold';
       var cover = $('#thirdCover'), wrap = $('#thirdWrap');
+      var win = (res.type === 'win' || res.type === 'pairWin');
+      var adoWin = win && !!res.ado;
       $('#peekHint').style.display = 'none';
       SFX.dragStop(0.03);
       if (!isFold) {
@@ -4301,11 +4485,15 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
         cover.innerHTML = '';
         wrap.classList.remove('shake');
         wrap.classList.add('pop');
-        SFX.snap(1);
+        /* 아도 승리 = 한 체급 큰 "딱!!" / 일반 = "띡!!" */
+        if (adoWin) SFX.adoHit(); else SFX.snap(1);
       }
-      if (!isFold && S && S.third) landThird(S.third, true);
-      var win = (res.type === 'win' || res.type === 'pairWin');
-      if (win) { confetti(); vibrate([30, 40, 70]); }
+      if (!isFold && S && S.third) landThird(S.third, true, adoWin);
+      if (win) {
+        confetti();
+        if (adoWin) { adoFlash(); vibrate([45, 55, 45, 55, 130]); }
+        else vibrate([30, 40, 70]);
+      }
       else if (!isFold && (res.type === 'lose' || res.type === 'ppong' || res.type === 'ppongLose' || res.type === 'pairLose')) vibrate([20, 60, 20]);
       renderStatus();
       renderPlayers();
@@ -4326,7 +4514,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
           var others = S.players.filter(function (x, i) { return i !== res.turn; })
             .map(function (x) { return x.avatar + ' ' + pName(x) + ' 🤧'; }).join('  ');
           if (others) react = '<div class="react"><span>' + t('others') + ': ' + others + ' — ' + t('scooped') + '</span></div>';
-          renderMsg('win', '🎉 ' + t('win') + ' +' + fmt(res.delta) + (res.type === 'pairWin' ? ' · ' + sideLabel(res.dir) : ''),
+          renderMsg('win', '🎉 ' + t('win') + ' +' + fmt(res.delta) + (res.ado ? ' · ' + t('ado') : '') + (res.type === 'pairWin' ? ' · ' + sideLabel(res.dir) : ''),
             nm + ' · ' + monthLabel(res.m) + ' — ' + (res.type === 'pairWin' ? t('pairWin') : t('winSub')) + react);
         } else if (res.type === 'pairLose') {
           react = '<div class="react"><span>🔥 ' + t('potUp') + ' · ' + (nxt.avatar || '') + ' ' + pName(nxt) + '</span></div>';
