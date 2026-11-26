@@ -3529,7 +3529,12 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     if (!r.ok) { toast('⤴ ' + t('raiseBtn'), t('raiseLow')); return; }
     potUp(); vibrate([14, 30, 14]);
     renderStatus(); renderPlayers();
-    if (S.phase === 'bet') renderActions();
+    if (S.phase === 'bet') {
+      renderActions();
+      /* 안내 줄의 앤티·최대 베팅도 새 판돈으로 갱신 */
+      renderMsg(lastMsg.cls, lastMsg.l1,
+        t('ante') + ' ' + fmt(S.ante) + ' · ' + t('max') + ' ' + fmt(W.betLimits(S).max));
+    }
     toast('⤴ ' + t('raiseDone'), t('ante') + ' ' + fmt(r.from) + ' → ' + fmt(r.ante));
   }
 
