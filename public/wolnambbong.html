@@ -2876,7 +2876,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       crownRule: 'Solo and AI practice count up to rank 2; from rank 3 only online wins against people count. Offline pass-and-play is informal and excluded. Win rate = last 100 hands.',
       crownComeback: 'Comeback = a win while holding 3× the ante or less',
       crownRank: 'The season-ranking conditions for ranks 6–7 are replaced by MAX win rate until rankings launch.',
-      cWins: 'Wins', cPlays: 'Hands', cRate: 'Win rate', cStreak: 'Streak', cAdo: 'MAX wins', cAdoRate: 'MAX rate', cComeback: 'Comebacks',
+      cWins: 'Wins', cPlays: 'Hands', cRate: 'Win rate', cStreak: '-win streak', cAdo: 'MAX wins', cAdoRate: 'MAX rate', cComeback: 'Comebacks',
       thr1: 'Rookie', thr2: 'Player', thr3: 'Challenger', thr4: 'Master', thr5: 'Tazza', thr6: 'Legend', thr7: 'God of Hwatu',
       th1: 'Plain wooden bench', th2: 'Woven bamboo seat', th3: 'Red-lacquer throne', th4: 'Bronze tiger & plum throne',
       th5: 'Mother-of-pearl throne', th6: 'Obsidian & gold phoenix throne', th7: 'Sun-moon-five-peaks divine throne'
@@ -3564,6 +3564,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       box.appendChild(d);
     });
     var ti = $('#thrTitle'); if (ti) ti.textContent = t('crownTitle');
+    var xb = $('#thrClose'); if (xb) xb.setAttribute('aria-label', t('close'));
     var nt = $('#thrNote'); if (nt) nt.textContent = t('crownNote');
     var ft = $('#thrFoot');
     if (ft) ft.textContent = t('crownRule') + ' · ' + t('crownComeback') + ' · ' + t('crownRank');
