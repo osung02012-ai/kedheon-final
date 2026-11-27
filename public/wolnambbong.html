@@ -774,7 +774,7 @@ body{
         <button class="htab" id="htabSeats" data-htab="seats">왕좌 좌석</button>
       </div>
       <div id="hallPaneTop"><ol class="hlist" id="hallList"></ol></div>
-      <div id="hallPaneSeats" style="display:none"><div class="seatgrid" id="seatGrid"></div></div>
+      <div id="hallPaneSeats" style="display:none"><p class="thrfoot" id="seatLegend"></p><div class="seatgrid" id="seatGrid"></div></div>
       <p class="thrfoot" id="hallNote"></p>
       <button class="ghost" id="hallClose2">닫기</button>
     </div>
@@ -2925,6 +2925,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       hallEmpty: '아직 기록이 없습니다 — 첫 주자가 되어 보세요.',
       hallMeNone: '한 판만 두면 자동으로 등록됩니다.',
       hallSeatMine: '내 번호', hallSeatRemain: '남음', hallSeatFull: '마감', hallNoServer: '오프라인 — 내 번호만',
+      seatLegend: '각 줄: 왼쪽 = 잔여 / 총정원 · 오른쪽 = 내 번호(#001부터 선착순)',
       hallNote: '100% 무료 인앱 포인트 · Pi·현금으로 바꿀 수 없습니다. 좌석 번호는 선착순 명예 기록입니다.',
       hallInvite: '친구 초대', hallInviteCopy: '초대 링크를 복사했습니다', hallInvites: '개척자',
       hallPiLink: 'π 연결', hallPiEdit: '변경', hallPiDeclared: 'π 선언', hallPiVerified: 'π 인증',
@@ -3017,6 +3018,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       hallEmpty: 'No records yet — be the first to play.',
       hallMeNone: 'Play one hand and you are on the board.',
       hallSeatMine: 'My no.', hallSeatRemain: 'left', hallSeatFull: 'full', hallNoServer: 'offline — my number only',
+      seatLegend: 'Each row: left = seats left / capacity · right = my number (#001 first come, first served)',
       hallNote: '100% free in-game points — not convertible to Pi or cash. Seat numbers are honor records, first come first served.',
       hallInvite: 'Invite a friend', hallInviteCopy: 'Invite link copied', hallInvites: 'recruits',
       hallPiLink: 'Connect π', hallPiEdit: 'edit', hallPiDeclared: 'π declared', hallPiVerified: 'π verified',
@@ -3789,7 +3791,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
        · 환금성 없음: 좌석·랭킹은 명예 표시일 뿐 돈·코인으로 바꿀 수 없다.
      ------------------------------------------------------------ */
   var DEV_KEY = 'wnb_device_v1', REF_KEY = 'wnb_ref_v1', SEAT_KEY = 'wnb_seats_v1', MONEY_KEY = 'wnb_best_money_v1', PI_KEY = 'wnb_pi_v1';
-  var hall = { open: false, tab: 'top', data: null, timer: 0, pushTimer: 0, nickEdit: false, seat: null };
+  var hall = { open: false, tab: 'top', data: null, timer: 0, pushTimer: 0, nickEdit: false, piEdit: false, seat: null };
 
   function hx(v) {
     return String(v == null ? '' : v).replace(/&/g, '&amp;').replace(/</g, '&lt;')
@@ -3951,14 +3953,14 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     }
     var pi = piUser(), piVer = !!(me && me.piVerified);
     var piHtml;
-    if (pi) {
+    if (pi && !hall.piEdit) {
       piHtml = '<span class="pibadge' + (piVer ? ' v' : '') + '">' + hx(piVer ? t('hallPiVerified') : t('hallPiDeclared')) + '</span> <b>@' + hx(pi) + '</b> <button class="mini" id="piEdit">' + hx(t('hallPiEdit')) + '</button>';
     } else {
-      piHtml = '<input id="piInput" maxlength="20" placeholder="' + hx(t('hallPiLink')) + ' · @username" /> <button class="mini" id="piSave">' + hx(t('hallSave')) + '</button>';
+      piHtml = '<input id="piInput" maxlength="20" value="' + hx(pi) + '" placeholder="' + hx(t('hallPiLink')) + ' · @username" /> <button class="mini" id="piSave">' + hx(t('hallSave')) + '</button>';
     }
     var nickHtml = hall.nickEdit
       ? '<input id="nickInput2" maxlength="8" value="' + hx(myNick()) + '" /> <button class="mini" id="nickSave">' + hx(t('hallSave')) + '</button>'
-      : '<b>' + hx(myNick()) + ' <button class="mini" id="nickEdit">' + hx(t('hallNick')) + '</button></b>';
+      : '<b>' + hx(myNick()) + ' <button class="mini" id="nickEdit">' + hx(t('hallPiEdit')) + '</button></b>';
     el.innerHTML =
       '<div class="hmtop">' +
         '<img src="' + throneImg(g) + '" alt="" class="' + (g ? '' : 'lock') + '">' +
@@ -3996,8 +3998,12 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       if (!String(name).replace('@', '').trim()) { toast('π', t('hallPiBad'), 1800); return; }
       savePi(name, false);
     };
+    var pin = $('#piInput');
+    if (pin) pin.onkeydown = function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); savePi(this.value, false); }
+    };
     var pe = $('#piEdit');
-    if (pe) pe.onclick = function () { lsSet(PI_KEY, ''); boardGet(function () { renderHall(); }); };
+    if (pe) pe.onclick = function () { hall.piEdit = true; renderHallMe(); };
   }
 
   function renderHallTop() {
@@ -4049,6 +4055,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     var t1 = $('#htabTop'); if (t1) t1.textContent = t('hallTabTop');
     var t2 = $('#htabSeats'); if (t2) t2.textContent = t('hallTabSeats');
     var nt = $('#hallNote'); if (nt) nt.textContent = t('hallNote');
+    var lg = $('#seatLegend'); if (lg) lg.textContent = t('seatLegend');
     var c1 = $('#hallClose'); if (c1) c1.setAttribute('aria-label', t('close'));
     var c2 = $('#hallClose2'); if (c2) c2.textContent = t('close');
     var p1 = $('#hallPaneTop'), p2 = $('#hallPaneSeats');
@@ -4126,6 +4133,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     boardPost({ action: 'pi', username: name, verified: !!verified }, function (j) {
       if (!j || !j.ok) { toast('π', t('hallPiBad'), 1800); return; }
       lsSet(PI_KEY, name);
+      hall.piEdit = false;
       boardGet(function () { renderHall(); paintHallBar(); });
       toast('π', t('hallPiSaved'), 1800);
     });
