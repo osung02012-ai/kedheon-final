@@ -485,7 +485,8 @@ body{
 .thronebar i{font-size:9px;font-style:normal;color:#9fb5aa;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .thronebar .tbgo{font-size:16px;color:var(--gold);opacity:.7;flex:0 0 auto}
 .sheet.thr{align-items:flex-end}
-.thrbox{max-height:90dvh;overflow-y:auto;-webkit-overflow-scrolling:touch;gap:9px}
+.thrbox{max-height:90dvh;overflow-y:auto;-webkit-overflow-scrolling:touch;gap:9px;scrollbar-width:none}
+.thrbox::-webkit-scrollbar{display:none}
 .thrhead{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .thrhead h3{font-size:12px;letter-spacing:1.6px;color:#ffeec4;font-weight:900}
 .thrme{display:flex;gap:10px;align-items:center;padding:8px 10px;border-radius:13px;flex:0 0 auto;
@@ -497,8 +498,8 @@ body{
 .thrmetxt span{font-size:10px;color:var(--gold);font-weight:800}
 .thrmetxt em{font-size:9.5px;font-style:normal;color:#9fb5aa;line-height:1.4}
 .thrnote{font-size:9.5px;line-height:1.6;color:#c9d8cf;background:rgba(255,255,255,.05);border-radius:10px;padding:7px 9px;flex:0 0 auto}
-.thrlist{display:flex;flex-direction:column;gap:6px}
-.thrcard{display:flex;align-items:center;gap:9px;padding:7px 8px;border-radius:13px;
+.thrlist{display:flex;flex-direction:column;gap:5px}
+.thrcard{display:flex;align-items:center;gap:9px;padding:6px 8px;border-radius:13px;
   border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.035)}
 .thrcard .thrpic{width:46px;height:46px;flex:0 0 auto;border-radius:9px;overflow:hidden;border:1px solid rgba(230,195,124,.26)}
 .thrcard .thrpic img{width:100%;height:100%;object-fit:cover;display:block}
