@@ -139,5 +139,38 @@ ok('next.rank = prev.rank' in push, '순위는 이전 보드 값을 유지')
 ok('next.seats' in push, '좌석(고유 번호)도 유지')
 ok('paintHallBar' in push, '전송 후 바 즉시 갱신')
 
+print('\n[HALL-NICK] 닉네임 인라인 편집 — 인앱 브라우저에서 튕기지 않게')
+# 2026-11-27 실기기 제보: 명예의 전당 `Player [변경]` → 새 닉네임을 넣어도 튕김.
+#   prompt() 는 원래 쓰지 않았고, 20초 보드 폴링이 카드를 다시 그리며 입력 중인 칸과
+#   키보드 포커스를 날리고 있었다(20.1초에 입력값이 'Player' 로 되돌아감 실측).
+ok('prompt(' not in SRC, 'prompt() 미사용')
+ok('alert(' not in SRC, 'alert() 미사용')
+ok('confirm(' not in SRC, 'confirm() 미사용')
+rhall = slice_from('function renderHall() {')
+ok('if (!hall.nickEdit && !hall.piEdit) renderHallMe();' in rhall, '편집 중에는 카드를 다시 그리지 않는다')
+ok('renderHallMe();' not in rhall.replace('if (!hall.nickEdit && !hall.piEdit) renderHallMe();', ''),
+   '다른 경로로 카드를 통째로 다시 그리는 곳이 없다')
+me = slice_from('function renderHallMe() {')
+ok('id="nickInput2"' in me, '카드 안 인라인 <input id=nickInput2>')
+ok('maxlength="8"' in me, 'maxlength=8')
+ok('id="nickSave"' in me and "t('hallOk')" in me, '[확인] 버튼')
+ok('id="nickCancel"' in me and "t('hallCancel')" in me, '[취소] 버튼')
+for fn in ('function startNickEdit() {', 'function saveNick() {', 'function endNickEdit() {', 'function startPiEdit() {', 'function endPiEdit() {'):
+    body = slice_from(fn)
+    ok(len(body) > 0, '핸들러 존재: ' + fn.split()[1])
+start = slice_from('function startNickEdit() {')
+ok('hall.nickFocus = true' in start, '[변경] → 자동 포커스')
+save = slice_from('function saveNick() {')
+ok('setNick(v)' in save and 'pushProfile(80)' in save, '[확인] → 저장 + 서버 기록')
+ok('hall.nickEdit = false' in save, '[확인] → 편집칸 닫기')
+end = slice_from('function endNickEdit() {')
+ok('hall.nickEdit = false' in end and 'setNick' not in end, '[취소] → 저장하지 않고 닫기')
+ok("hall.nickDraft !== null" in me and 'hx(nickVal)' in me, '입력값(draft)을 다시 그려도 살린다')
+ok("hall.piDraft !== null" in me and 'hx(piVal)' in me, 'π 입력값도 살린다')
+ok('hall.nickDraft = null' in slice_from('function openHall() {'), '명예의 전당을 열면 초안 초기화')
+for key in ('hallOk', 'hallCancel', 'hallNickSaved'):
+    ok(SRC.count(key + ":" ) >= 2 or SRC.count(key + " :") >= 2 or SRC.count("'" + key + "'") >= 2,
+       '다국어 문구 2개 언어: ' + key)
+
 print('\n결과: %d 통과 / %d 실패' % (pass_n, fail))
 sys.exit(1 if fail else 0)

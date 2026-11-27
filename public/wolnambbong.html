@@ -556,6 +556,8 @@ body{
 .hallme .hmrank{margin-left:auto;font-size:10px;color:#ffe9b6;font-weight:900;white-space:nowrap}
 .hallme .hmline{display:flex;align-items:center;gap:6px;font-size:9.5px;color:#a9bcb2;flex-wrap:wrap}
 .hallme .hmline b{color:#ffe9b6}
+.hallme .iedit{display:flex;align-items:center;gap:5px;flex:1;min-width:0}
+.hallme .iedit button{flex:0 0 auto;white-space:nowrap}
 .hallme input{flex:1;min-width:0;font-size:11px;padding:5px 8px;border-radius:8px;border:1px solid rgba(255,255,255,.16);background:rgba(0,0,0,.28);color:#fff}
 .mini{border:1px solid rgba(230,195,124,.42);background:rgba(230,195,124,.12);color:#ffeec4;border-radius:8px;padding:4px 8px;font-size:9.5px;font-weight:800;cursor:pointer}
 .mini:active{transform:scale(.97)}
@@ -2933,6 +2935,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       hallPiHint: 'Pi 유저명을 넣으면 π 배지가 붙습니다. Pi Browser에서는 실제 인증도 가능합니다.',
       hallPiGuide: '파이 지갑이 없다면? Kedheon 가이드', hallPiSaved: 'π 배지를 연결했습니다',
       hallPiBad: '유저명을 넣어 주세요', hallRankYou: '나', hallNick: '닉네임', hallSave: '저장',
+      hallOk: '확인', hallCancel: '취소', hallNickSaved: '닉네임을 저장했습니다',
       seatTitle: '왕좌 각인', seatDesc: '{g}등급 · {cap}석 중 {left}석 남음', seatClaim: '각인하기',
       seatLater: '나중에', seatDone: '각인 완료', seatNeedNick: '닉네임을 넣어 주세요',
       seatPiNote: 'π 유저명(선택) — 넣으면 π 배지가 함께 각인됩니다', seatMineNow: '내 고유 번호',
@@ -3027,6 +3030,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       hallPiHint: 'Enter your Pi username to get a π badge. Inside Pi Browser you can verify for real.',
       hallPiGuide: 'No Pi wallet? Open the Kedheon guide', hallPiSaved: 'π badge connected',
       hallPiBad: 'Enter a username', hallRankYou: 'you', hallNick: 'Nickname', hallSave: 'Save',
+      hallOk: 'OK', hallCancel: 'Cancel', hallNickSaved: 'Nickname saved',
       seatTitle: 'Engrave your seat', seatDesc: 'Rank {g} · {left} of {cap} seats left', seatClaim: 'Engrave',
       seatLater: 'Later', seatDone: 'Engraved', seatNeedNick: 'Enter a nickname first',
       seatPiNote: 'Pi username (optional) — adds a π badge to your seat', seatMineNow: 'My number',
@@ -3793,7 +3797,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
        · 환금성 없음: 좌석·랭킹은 명예 표시일 뿐 돈·코인으로 바꿀 수 없다.
      ------------------------------------------------------------ */
   var DEV_KEY = 'wnb_device_v1', REF_KEY = 'wnb_ref_v1', SEAT_KEY = 'wnb_seats_v1', MONEY_KEY = 'wnb_best_money_v1', PI_KEY = 'wnb_pi_v1';
-  var hall = { open: false, tab: 'top', data: null, timer: 0, pushTimer: 0, nickEdit: false, piEdit: false, seat: null };
+  var hall = { open: false, tab: 'top', data: null, timer: 0, pushTimer: 0, nickEdit: false, piEdit: false, nickDraft: null, piDraft: null, nickFocus: false, piFocus: false, seat: null };
 
   function hx(v) {
     return String(v == null ? '' : v).replace(/&/g, '&amp;').replace(/</g, '&lt;')
@@ -3963,6 +3967,60 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       '<span><b>' + hx(t('hallTabSeats')) + '</b> ' + fmt(W.seatTotal()) + '</span>';
   }
 
+  /* 인라인 편집기 — 모바일 인앱 브라우저(Pi Browser·삼성 인터넷) 대응
+     · window.prompt/alert/confirm 은 쓰지 않는다(인앱 브라우저가 막거나 튕긴다).
+     · 보드 새로고침(20초 폴링·기록 전송 응답)이 카드를 다시 그리면서 입력 중인 칸을
+       지우면 '다른 닉네임을 넣으려 해도 튕긴다'가 된다. 그래서 편집 중에는 카드를
+       다시 그리지 않고, 입력값은 hall.nickDraft / hall.piDraft 에 남겨 두었다가
+       어떤 경로로 다시 그려도 그대로 되살린다. */
+  function focusField(el, selectAll) {
+    if (!el) return;
+    try { el.focus({ preventScroll: true }); } catch (e) { try { el.focus(); } catch (e2) {} }
+    try {
+      if (selectAll) el.select();
+      else el.setSelectionRange(el.value.length, el.value.length);
+    } catch (e) {}
+    /* 키보드가 올라와 칸이 가려지지 않게 — 모달 안 스크롤 컨테이너까지 함께 내린다 */
+    setTimeout(function () {
+      try { el.scrollIntoView({ block: 'center', inline: 'nearest' }); }
+      catch (e) { try { el.scrollIntoView(); } catch (e2) {} }
+    }, 60);
+  }
+  function startNickEdit() {
+    hall.nickEdit = true;
+    hall.nickDraft = myNick();
+    hall.nickFocus = true;
+    renderHallMe();
+  }
+  function endNickEdit() {
+    hall.nickEdit = false; hall.nickDraft = null; hall.nickFocus = false;
+    renderHallMe();
+  }
+  function saveNick() {
+    var inp = $('#nickInput2');
+    var v = String((inp ? inp.value : hall.nickDraft) || '').replace(/\s+/g, ' ').trim().slice(0, 8);
+    if (!v) { toast(t('hallNick'), t('seatNeedNick'), 1800); if (inp) focusField(inp, false); return; }
+    setNick(v);
+    hall.nickEdit = false; hall.nickDraft = null;
+    renderHallMe();
+    toast(t('hallNick'), t('hallNickSaved'), 1600);
+    pushProfile(80);
+    /* 명예의 전당 목록에도 새 이름이 바로 보이게 한 번 더 받아 둔다 */
+    setTimeout(function () {
+      boardGet(function () { if (hall.open) { renderHallTop(); paintHallBar(); } });
+    }, 700);
+  }
+  function startPiEdit() {
+    hall.piEdit = true;
+    hall.piDraft = piUser();
+    hall.piFocus = true;
+    renderHallMe();
+  }
+  function endPiEdit() {
+    hall.piEdit = false; hall.piDraft = null; hall.piFocus = false;
+    renderHallMe();
+  }
+
   function renderHallMe() {
     var el = $('#hallMe');
     if (!el) return;
@@ -3975,15 +4033,18 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     }
     var pi = piUser(), piVer = !!(me && me.piVerified);
     var inPi = /PiBrowser/i.test(navigator.userAgent || '') || !!(window.Pi && window.Pi.authenticate);
+    var piVal = (hall.piEdit && hall.piDraft !== null && hall.piDraft !== undefined) ? hall.piDraft : pi;
     var piHtml;
     if (pi && !hall.piEdit) {
       piHtml = '<span class="pibadge' + (piVer ? ' v' : '') + '">' + hx(piVer ? t('hallPiVerified') : t('hallPiDeclared')) + '</span> <b>@' + hx(pi) + '</b> <button class="mini" id="piEdit">' + hx(t('hallPiEdit')) + '</button>';
     } else {
-      piHtml = '<input id="piInput" maxlength="20" value="' + hx(pi) + '" placeholder="' + hx(t('hallPiLink')) + ' · @username" /> <button class="mini" id="piSave">' + hx(t('hallSave')) + '</button>' +
-        (inPi ? ' <button class="mini" id="piAuth">' + hx(t('hallPiVerified')) + '</button>' : '');
+      piHtml = '<span class="iedit"><input id="piInput" type="text" maxlength="20" inputmode="text" enterkeyhint="done" autocapitalize="off" autocorrect="off" spellcheck="false" value="' + hx(piVal) + '" placeholder="' + hx(t('hallPiLink')) + ' · @username" /> <button class="mini" id="piSave">' + hx(t('hallOk')) + '</button>' +
+        (hall.piEdit ? ' <button class="mini" id="piCancel">' + hx(t('hallCancel')) + '</button>' : '') +
+        (inPi ? ' <button class="mini" id="piAuth">' + hx(t('hallPiVerified')) + '</button>' : '') + '</span>';
     }
+    var nickVal = (hall.nickEdit && hall.nickDraft !== null && hall.nickDraft !== undefined) ? hall.nickDraft : myNick();
     var nickHtml = hall.nickEdit
-      ? '<input id="nickInput2" maxlength="8" value="' + hx(myNick()) + '" /> <button class="mini" id="nickSave">' + hx(t('hallSave')) + '</button>'
+      ? '<span class="iedit"><input id="nickInput2" type="text" maxlength="8" inputmode="text" enterkeyhint="done" autocapitalize="off" autocorrect="off" spellcheck="false" value="' + hx(nickVal) + '" aria-label="' + hx(t('hallNick')) + '" /> <button class="mini" id="nickSave">' + hx(t('hallOk')) + '</button> <button class="mini" id="nickCancel">' + hx(t('hallCancel')) + '</button></span>'
       : '<b>' + hx(myNick()) + ' <button class="mini" id="nickEdit">' + hx(t('hallPiEdit')) + '</button></b>';
     el.innerHTML =
       '<div class="hmtop">' +
@@ -4007,30 +4068,44 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     var inv = $('#hallInvite');
     if (inv) inv.onclick = shareInvite;
     var ne = $('#nickEdit');
-    if (ne) ne.onclick = function () { hall.nickEdit = true; renderHallMe(); };
+    if (ne) ne.onclick = startNickEdit;
+    var nc = $('#nickCancel');
+    if (nc) nc.onclick = endNickEdit;
     var ns = $('#nickSave');
-    if (ns) ns.onclick = function () {
-      var inp = $('#nickInput2');
-      setNick(inp ? inp.value : '');
-      hall.nickEdit = false;
-      pushProfile(80);
-      renderHallMe();
-    };
+    if (ns) ns.onclick = saveNick;
+    var nin = $('#nickInput2');
+    if (nin) {
+      nin.oninput = function () { hall.nickDraft = this.value; };
+      nin.onkeydown = function (e) {
+        if (e.key === 'Enter') { e.preventDefault(); saveNick(); }
+        else if (e.key === 'Escape' || e.key === 'Esc') { e.preventDefault(); endNickEdit(); }
+      };
+      /* 방금 [변경]을 눌러 열린 칸이면 바로 키보드가 올라오고, 기존 이름이 선택돼
+         새 이름을 그대로 덮어쓸 수 있게 한다 */
+      if (hall.nickFocus) { hall.nickFocus = false; focusField(nin, true); }
+    }
     var ps = $('#piSave');
     if (ps) ps.onclick = function () {
       var inp = $('#piInput');
       var name = inp ? inp.value : '';
-      if (!String(name).replace('@', '').trim()) { toast('π', t('hallPiBad'), 1800); return; }
+      if (!String(name).replace('@', '').trim()) { toast('π', t('hallPiBad'), 1800); if (inp) focusField(inp, false); return; }
       savePi(name, false);
     };
+    var pc = $('#piCancel');
+    if (pc) pc.onclick = endPiEdit;
     var pin = $('#piInput');
-    if (pin) pin.onkeydown = function (e) {
-      if (e.key === 'Enter') { e.preventDefault(); savePi(this.value, false); }
-    };
+    if (pin) {
+      pin.oninput = function () { hall.piDraft = this.value; };
+      pin.onkeydown = function (e) {
+        if (e.key === 'Enter') { e.preventDefault(); savePi(this.value, false); }
+        else if (e.key === 'Escape' || e.key === 'Esc') { e.preventDefault(); endPiEdit(); }
+      };
+      if (hall.piFocus) { hall.piFocus = false; focusField(pin, true); }
+    }
     var pa = $('#piAuth');
     if (pa) pa.onclick = function () { if (!piAuth()) toast('π', t('hallPiHint'), 2600); };
     var pe = $('#piEdit');
-    if (pe) pe.onclick = function () { hall.piEdit = true; renderHallMe(); };
+    if (pe) pe.onclick = startPiEdit;
   }
 
   function renderHallTop() {
@@ -4091,13 +4166,17 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     if (t1) t1.className = 'htab' + (hall.tab === 'top' ? ' on' : '');
     if (t2) t2.className = 'htab' + (hall.tab === 'seats' ? ' on' : '');
     renderHallStats();
-    renderHallMe();
+    /* 편집 중(인라인 입력칸 열림)에는 카드를 다시 그리지 않는다 —
+       20초 폴링·기록 전송 응답이 입력 중인 값을 지우고 키보드를 닫아 버린다 */
+    if (!hall.nickEdit && !hall.piEdit) renderHallMe();
     renderHallTop();
     renderSeatGrid();
   }
 
   function openHall() {
     hall.open = true;
+    hall.nickEdit = false; hall.piEdit = false; hall.nickDraft = null; hall.piDraft = null;
+    hall.nickFocus = false; hall.piFocus = false;
     var el = $('#hallSheet'); if (el) el.classList.add('on');
     paintHallBar();
     renderHall();
@@ -4110,6 +4189,8 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
   }
   function closeHall() {
     hall.open = false;
+    hall.nickEdit = false; hall.piEdit = false; hall.nickDraft = null; hall.piDraft = null;
+    hall.nickFocus = false; hall.piFocus = false;
     clearInterval(hall.timer);
     var el = $('#hallSheet'); if (el) el.classList.remove('on');
   }
@@ -4161,6 +4242,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       if (!j || !j.ok) { toast('π', t('hallPiBad'), 1800); return; }
       lsSet(PI_KEY, name);
       hall.piEdit = false;
+      hall.piDraft = null;
       boardGet(function () { renderHall(); paintHallBar(); });
       toast('π', t('hallPiSaved'), 1800);
     });
@@ -4172,14 +4254,14 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
           return window.Pi.authenticate(['username'], function () {});
         }).then(function (res) {
           var token = res && res.accessToken;
-          if (!token) return null;
+          if (!token) { toast('π', t('hallPiHint'), 2600); return null; }
           return fetch('/api/pi/verify', {
             method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ accessToken: token })
           }).then(function (r) { return r.json(); }).then(function (j) {
             if (j && j.verified && j.username) savePi(j.username, true);
           });
-        }).catch(function () {});
-      } catch (e) {}
+        }).catch(function () { toast('π', t('hallPiHint'), 2600); });
+      } catch (e) { toast('π', t('hallPiHint'), 2600); }
     }
     if (window.Pi && typeof window.Pi.init === 'function') { run(); return true; }
     if (!/PiBrowser/i.test(navigator.userAgent || '')) return false;
