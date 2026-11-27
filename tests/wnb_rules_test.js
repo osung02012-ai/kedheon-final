@@ -1047,5 +1047,68 @@ console.log('\n[21] 왕좌 — 화면 배선 · 다국어');
   ok(/honor rank|cash out/i.test(en), '영문 고지에 비환금성 명시');
 }
 
+/* ============================================================
+   [22] 왕좌 좌석 — 등급별 피라미드 정원 · 고유 번호 표기
+   ============================================================ */
+console.log('\n[22] 왕좌 좌석 — 7등급 피라미드 정원 · #001 표기');
+{
+  const caps = W.THRONE_SEATS.map((s) => s.cap);
+  eq(W.THRONE_SEATS.length, 7, '좌석 정원표는 7등급');
+  eq(caps.join(','), '31415,15707,6283,3141,1570,628,314', '파이 숫자 피라미드 정원');
+  ok(caps.every((v, i) => i === 0 || v < caps[i - 1]), '상위 등급일수록 좌석이 적다', caps);
+  eq(W.THRONE_SEATS.map((s) => s.g).join(','), '1,2,3,4,5,6,7', '등급 1~7 순서');
+  eq(W.seatTotal(), 59058, '전체 좌석 합계 59,058');
+  eq(W.seatCap(7), 314, '7등급(신) 314석');
+  eq(W.seatCap(1), 31415, '1등급 31,415석');
+  eq(W.seatCap(0), 0, '없는 등급은 0');
+  eq(W.seatCap(8), 0, '8등급은 없다');
+
+  /* 고유 번호 표기 — 세 자리 고정 */
+  eq(W.seatNo(1), '#001', '1번 = #001');
+  eq(W.seatNo(7), '#007', '7번 = #007');
+  eq(W.seatNo(314), '#314', '314번 = #314');
+  eq(W.seatNo(1204), '#1204', '네 자리는 그대로 #1204');
+  eq(W.seatNo(31415), '#31415', '마지막 좌석도 그대로');
+  eq(W.seatNo(0), '—', '번호 없음 = —');
+  eq(W.seatNo('x'), '—', '잘못된 값 = —');
+
+  /* 잔여 좌석 */
+  eq(W.seatLeft(7, 0), 314, '7등급 비었을 때 314');
+  eq(W.seatLeft(7, 1), 313, '7등급 1석 발급 → 313');
+  eq(W.seatLeft(7, 314), 0, '정원 도달 → 0');
+  eq(W.seatLeft(7, 400), 0, '초과해도 음수 없음');
+  eq(W.seatLeft(1, -5), 31415, '음수 발급값은 0으로 본다');
+  eq(W.seatLeft(4, 141), 3000, '4등급 3,141 - 141 = 3,000');
+}
+
+/* ============================================================
+   [23] 명예의 전당 — 화면 · API · 다국어 규약
+   ============================================================ */
+console.log('\n[23] 명예의 전당 — UI · API · 다국어');
+{
+  ok(/id="setupHall"/.test(src), '로비에 명예의 전당 버튼');
+  ok(/id="hallSheet"/.test(src), '명예의 전당 시트');
+  ok(/id="seatSheet"/.test(src), '왕좌 각인 모달');
+  ok(/id="seatNo"/.test(src) && /id="seatGrid"/.test(src), '고유 번호·좌석 그리드 자리');
+  ok(/id="hallList"/.test(src), 'TOP 10 목록 자리');
+  ok(/\/api\/wolnambbong\/board/.test(src), '명예의 전당 API 경로');
+  ok(/\?ref=/.test(src), '개척자(초대) 링크 = ?ref=');
+  ok(/wnb_device_v1/.test(src), '기기 식별자 키');
+  ok(/wnb_seats_v1/.test(src), '내 좌석 번호 캐시 키');
+  /* 환금성 없음 — 좌석·랭킹에 돈·코인 필드 없음 */
+  ok(!/seatPrice|price_pi|buy_seat|cashout/i.test(src), '좌석 구매·환전 필드 없음');
+  const dict = (name) => {
+    const m = src.match(new RegExp('\\n    ' + name + ': \\{([\\s\\S]*?)\\n    \\}'));
+    return m ? m[1] : '';
+  };
+  const kr = dict('kr'), en = dict('en');
+  ['hallBar', 'hallTitle', 'hallTabTop', 'hallTabSeats', 'hallPioneers', 'hallPlayers', 'hallEmpty',
+    'hallSeatMine', 'hallNote', 'hallInvite', 'hallPiLink', 'hallPiHint', 'hallPiVerified', 'hallPiDeclared',
+    'seatTitle', 'seatDesc', 'seatClaim', 'seatLater', 'seatNeedNick', 'seatPiNote'].forEach((k) => {
+    ok(new RegExp('\\b' + k + ': ').test(kr) && new RegExp('\\b' + k + ': ').test(en), '명예의 전당 문구 다국어: ' + k);
+  });
+  ok(/비환금성|바꿀 수 없습니다/.test(kr) && /convertible|cash/i.test(en), '좌석 안내에도 환금 불가 명시');
+}
+
 console.log('\n결과: ' + pass + ' 통과 / ' + fail + ' 실패');
 process.exit(fail ? 1 : 0);

@@ -535,6 +535,60 @@ body{
 .thrup img{width:34px;height:34px;border-radius:9px;object-fit:cover;border:1px solid rgba(74,50,8,.35)}
 .thrup b{display:block;font-size:12px;font-weight:900;letter-spacing:.3px}
 .thrup span{display:block;font-size:10px;font-weight:800;opacity:.75}
+/* ---------- 🏆 명예의 전당 · 왕좌 좌석(선착순 고유 번호) ---------- */
+.hallbar{display:flex;align-items:center;gap:9px;width:100%;margin-top:7px;padding:8px 11px;border-radius:14px;
+  border:1px solid rgba(230,195,124,.34);background:linear-gradient(100deg,rgba(230,195,124,.15),rgba(255,255,255,.03));
+  color:#ffeec4;text-align:left;cursor:pointer}
+.hallbar:active{transform:scale(.985)}
+.hallbar .hbico{font-size:17px;flex:0 0 auto}
+.hallbar .hbtext{display:flex;flex-direction:column;line-height:1.25;min-width:0;flex:1}
+.hallbar b{font-size:11.5px;font-weight:900;letter-spacing:.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hallbar i{font-size:9px;font-style:normal;color:#9fb5aa;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hallbar .tbgo{font-size:16px;color:var(--gold);opacity:.7;flex:0 0 auto}
+.hallbox{max-height:88vh;overflow:auto;display:flex;flex-direction:column;gap:8px}
+.hallstats{font-size:10px;line-height:1.5;color:#bfd0c6;display:flex;gap:9px;flex-wrap:wrap}
+.hallstats b{color:#ffeec4}
+.hallme{border:1px solid rgba(230,195,124,.28);background:rgba(230,195,124,.07);border-radius:13px;padding:8px 10px;display:flex;flex-direction:column;gap:6px}
+.hallme .hmtop{display:flex;align-items:center;gap:8px}
+.hallme .hmtop img{width:34px;height:34px;border-radius:8px;object-fit:cover;border:1px solid rgba(230,195,124,.4);flex:0 0 auto}
+.hallme .hmtop b{font-size:12px;color:#ffeec4;display:block}
+.hallme .hmtop span{font-size:9px;color:#9fb5aa;display:block}
+.hallme .hmrank{margin-left:auto;font-size:10px;color:#ffe9b6;font-weight:900;white-space:nowrap}
+.hallme .hmline{display:flex;align-items:center;gap:6px;font-size:9.5px;color:#a9bcb2;flex-wrap:wrap}
+.hallme .hmline b{color:#ffe9b6}
+.hallme input{flex:1;min-width:0;font-size:11px;padding:5px 8px;border-radius:8px;border:1px solid rgba(255,255,255,.16);background:rgba(0,0,0,.28);color:#fff}
+.mini{border:1px solid rgba(230,195,124,.42);background:rgba(230,195,124,.12);color:#ffeec4;border-radius:8px;padding:4px 8px;font-size:9.5px;font-weight:800;cursor:pointer}
+.mini:active{transform:scale(.97)}
+.halltabs{display:flex;gap:5px}
+.htab{flex:1;padding:7px 4px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:#cfe0d7;font-size:10.5px;font-weight:800;cursor:pointer}
+.htab.on{background:linear-gradient(100deg,#f7e2ae,#d1a54a);color:#2a1b06;border-color:transparent}
+.hlist{list-style:none;display:flex;flex-direction:column;gap:4px;margin:0;padding:0}
+.hrow{display:flex;align-items:center;gap:7px;padding:6px 8px;border-radius:11px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07)}
+.hrow.me{border-color:rgba(230,195,124,.55);background:rgba(230,195,124,.1)}
+.hrow .hrk{width:18px;flex:0 0 auto;text-align:center;font-size:11px;font-weight:900;color:#8fa79b;font-variant-numeric:tabular-nums}
+.hrow .hrk.top{color:#ffe9b6}
+.hrow .hrpic{width:26px;height:26px;flex:0 0 auto;border-radius:7px;overflow:hidden;border:1px solid rgba(230,195,124,.25)}
+.hrow .hrpic img{width:100%;height:100%;object-fit:cover;display:block}
+.hrow .hrbody{flex:1;min-width:0}
+.hrow .hrbody b{font-size:11px;color:#f2f7f3;display:flex;align-items:center;gap:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hrow .hrbody span{font-size:9px;color:#8fa79b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.hrow .hrseat{font-size:9px;font-weight:900;color:#ffe9b6;font-variant-numeric:tabular-nums;white-space:nowrap}
+.pibadge{font-size:8px;font-weight:900;padding:1px 4px;border-radius:6px;background:rgba(140,220,255,.16);color:#a9e6ff;border:1px solid rgba(140,220,255,.35)}
+.pibadge.v{background:rgba(120,255,180,.16);color:#9dffc9;border-color:rgba(120,255,180,.4)}
+.seatgrid{display:flex;flex-direction:column;gap:5px}
+.sgrow{display:flex;align-items:center;gap:7px;padding:7px 9px;border-radius:11px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07)}
+.sgrow.mine{border-color:rgba(230,195,124,.5);background:rgba(230,195,124,.08)}
+.sgrow .sgn{font-size:10.5px;font-weight:900;color:#ffeec4;width:66px;flex:0 0 auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sgrow .sgbar{flex:1;height:6px;border-radius:4px;background:rgba(255,255,255,.09);overflow:hidden;min-width:34px}
+.sgrow .sgbar i{display:block;height:100%;background:linear-gradient(90deg,#d1a54a,#f7e2ae);border-radius:4px}
+.sgrow .sgt{font-size:9px;color:#9fb5aa;white-space:nowrap;font-variant-numeric:tabular-nums}
+.sgrow .sgno{font-size:9.5px;font-weight:900;color:#ffe9b6;font-variant-numeric:tabular-nums;min-width:38px;text-align:right}
+.seatbox{display:flex;flex-direction:column;gap:9px;align-items:stretch;text-align:center}
+.seatno{font-size:34px;font-weight:900;letter-spacing:1px;color:#ffe9b6;text-shadow:0 0 18px rgba(230,195,124,.45);font-variant-numeric:tabular-nums}
+.seatdesc{font-size:10.5px;line-height:1.6;color:#c9d8cf}
+.seatpi{font-size:9.5px;line-height:1.55;color:#9fb5aa}
+.thrseat{font-size:9px;color:#c8b98a;font-variant-numeric:tabular-nums;margin-top:2px;display:block}
+.thrseat b{color:#ffe9b6}
 </style>
 </head>
 <body>
@@ -564,6 +618,12 @@ body{
     <button class="thronebar" id="setupThr">
       <img id="setupThrImg" alt="" src="/thrones/throne-1-rookie.webp" />
       <span class="tbtext"><b id="setupThrName">—</b><i id="setupThrSub"></i></span>
+      <span class="tbgo" aria-hidden="true">›</span>
+    </button>
+
+    <button class="hallbar" id="setupHall" aria-label="명예의 전당">
+      <span class="hbico" aria-hidden="true">🏆</span>
+      <span class="hbtext"><b id="hallBarTitle">명예의 전당 · TOP 10</b><i id="hallBarSub">불러오는 중…</i></span>
       <span class="tbgo" aria-hidden="true">›</span>
     </button>
 
@@ -702,6 +762,36 @@ body{
     </div>
   </div>
   <div class="thrup" id="thrUp"></div>
+
+  <!-- 🏆 명예의 전당 — TOP 10 · 왕좌 좌석(선착순 고유 번호) · π 브릿지 -->
+  <div class="sheet hall" id="hallSheet">
+    <div class="sheetbox hallbox">
+      <div class="thrhead"><h3 id="hallTitle">🏆 명예의 전당</h3><button class="tbtn" id="hallClose" aria-label="닫기">✕</button></div>
+      <p class="hallstats" id="hallStats"></p>
+      <div class="hallme" id="hallMe"></div>
+      <div class="halltabs">
+        <button class="htab on" id="htabTop" data-htab="top">TOP 10</button>
+        <button class="htab" id="htabSeats" data-htab="seats">왕좌 좌석</button>
+      </div>
+      <div id="hallPaneTop"><ol class="hlist" id="hallList"></ol></div>
+      <div id="hallPaneSeats" style="display:none"><div class="seatgrid" id="seatGrid"></div></div>
+      <p class="thrfoot" id="hallNote"></p>
+      <button class="ghost" id="hallClose2">닫기</button>
+    </div>
+  </div>
+
+  <!-- 왕좌 각인 — 등급 도달 시 고유 번호 발급 -->
+  <div class="sheet" id="seatSheet">
+    <div class="sheetbox seatbox">
+      <div class="seatno" id="seatNo">#—</div>
+      <h3 id="seatTitle">왕좌 각인</h3>
+      <p class="seatdesc" id="seatDesc"></p>
+      <div class="orow"><span id="seatNickLbl">닉네임</span><input class="onlineInput" id="seatNick" maxlength="8" placeholder="예: 파이대장" autocomplete="nickname" /></div>
+      <p class="seatpi" id="seatPi"></p>
+      <button class="go wide" id="seatClaim">각인하기</button>
+      <button class="ghost" id="seatLater">나중에</button>
+    </div>
+  </div>
 
   <div class="sheet" id="sheet">
     <div class="sheetbox">
@@ -2557,6 +2647,30 @@ var WNB = (function () {
     { g: 7, id: 'god', img: 'throne-7-god.webp', plays: 0, wins: 3000, rate: 63, streak: 20, ado: 100, adoRate: 60, comeback: 0, human: true }
   ];
 
+  /* 등급별 좌석 정원 — 파이 숫자 피라미드. 도달 순서대로 고유 번호(#001~)를 각인한다. */
+  var THRONE_SEATS = [
+    { g: 1, cap: 31415 }, { g: 2, cap: 15707 }, { g: 3, cap: 6283 }, { g: 4, cap: 3141 },
+    { g: 5, cap: 1570 }, { g: 6, cap: 628 }, { g: 7, cap: 314 }
+  ];
+  function seatCap(g) {
+    for (var i = 0; i < THRONE_SEATS.length; i++) if (THRONE_SEATS[i].g === g) return THRONE_SEATS[i].cap;
+    return 0;
+  }
+  function seatTotal() { var t = 0; for (var i = 0; i < THRONE_SEATS.length; i++) t += THRONE_SEATS[i].cap; return t; }
+  /* 고유 번호 표기 — 세 자리 고정(#001), 1,000 이상은 그대로(#1204) */
+  function seatNo(n) {
+    n = Math.floor(Number(n) || 0);
+    if (n <= 0) return '—';
+    var s = String(n);
+    while (s.length < 3) s = '0' + s;
+    return '#' + s;
+  }
+  function seatLeft(g, taken) {
+    var cap = seatCap(g), t = Math.floor(Number(taken) || 0);
+    if (t < 0) t = 0;
+    return Math.max(0, cap - t);
+  }
+
   function throneBlank() {
     return {
       v: 1, plays: 0, wins: 0, streak: 0, streakBest: 0, adoN: 0, adoW: 0, comeback: 0,
@@ -2716,7 +2830,8 @@ var WNB = (function () {
     throneBlank: throneBlank, throneLoad: throneLoad, throneSave: throneSave, throneRow: throneRow,
     throneRate: throneRate, throneStatsFor: throneStatsFor, throneCheck: throneCheck,
     throneGrade: throneGrade, throneApply: throneApply, throneRecord: throneRecord,
-    throneFromResult: throneFromResult
+    throneFromResult: throneFromResult,
+    THRONE_SEATS: THRONE_SEATS, seatCap: seatCap, seatTotal: seatTotal, seatNo: seatNo, seatLeft: seatLeft
   };
 })();
 if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
@@ -2803,7 +2918,23 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       cWins: '승리', cPlays: '승부', cRate: '승률', cStreak: '연승', cAdo: '아도 성공', cAdoRate: '아도 성공률', cComeback: '역전승',
       thr1: '풋내기', thr2: '꾼', thr3: '승부사', thr4: '고수', thr5: '타짜', thr6: '전설', thr7: '신',
       th1: '소박한 원목 평상', th2: '대나무 엮은 좌식 왕좌', th3: '주칠(붉은 옻칠) 어좌', th4: '청동 호랑이·매화 어좌',
-      th5: '나전칠기(자개) 왕좌', th6: '흑요석·순금 봉황 왕좌', th7: '일월오봉도 천상 신좌'
+      th5: '나전칠기(자개) 왕좌', th6: '흑요석·순금 봉황 왕좌', th7: '일월오봉도 천상 신좌',
+      hallBar: '명예의 전당 · TOP 10', hallBarSub: '실시간 랭킹 · 왕좌 좌석',
+      hallTitle: '🏆 명예의 전당', hallTabTop: 'TOP 10', hallTabSeats: '왕좌 좌석',
+      hallPioneers: 'π 개척자', hallPlayers: '등록 선수', hallMyRank: '내 순위',
+      hallEmpty: '아직 기록이 없습니다 — 첫 주자가 되어 보세요.',
+      hallMeNone: '한 판만 두면 자동으로 등록됩니다.',
+      hallSeatMine: '내 번호', hallSeatRemain: '남음', hallSeatFull: '마감', hallNoServer: '오프라인 — 내 번호만',
+      hallNote: '100% 무료 인앱 포인트 · Pi·현금으로 바꿀 수 없습니다. 좌석 번호는 선착순 명예 기록입니다.',
+      hallInvite: '친구 초대', hallInviteCopy: '초대 링크를 복사했습니다', hallInvites: '개척자',
+      hallPiLink: 'π 연결', hallPiEdit: '변경', hallPiDeclared: 'π 선언', hallPiVerified: 'π 인증',
+      hallPiHint: 'Pi 유저명을 넣으면 π 배지가 붙습니다. Pi Browser에서는 실제 인증도 가능합니다.',
+      hallPiGuide: '파이 지갑이 없다면? Kedheon 가이드', hallPiSaved: 'π 배지를 연결했습니다',
+      hallPiBad: '유저명을 넣어 주세요', hallRankYou: '나', hallNick: '닉네임', hallSave: '저장',
+      seatTitle: '왕좌 각인', seatDesc: '{g}등급 · {cap}석 중 {left}석 남음', seatClaim: '각인하기',
+      seatLater: '나중에', seatDone: '각인 완료', seatNeedNick: '닉네임을 넣어 주세요',
+      seatPiNote: 'π 유저명(선택) — 넣으면 π 배지가 함께 각인됩니다', seatMineNow: '내 고유 번호',
+      seatWin: '왕좌 각인!', seatLoading: '불러오는 중…', seatFail: '명예의 전당을 불러오지 못했습니다'
     },
     en: {
       solo: 'Solo', soloSub: 'Quick practice',
@@ -2879,7 +3010,23 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       cWins: 'Wins', cPlays: 'Hands', cRate: 'Win rate', cStreak: '-win streak', cAdo: 'MAX wins', cAdoRate: 'MAX rate', cComeback: 'Comebacks',
       thr1: 'Rookie', thr2: 'Player', thr3: 'Challenger', thr4: 'Master', thr5: 'Tazza', thr6: 'Legend', thr7: 'God of Hwatu',
       th1: 'Plain wooden bench', th2: 'Woven bamboo seat', th3: 'Red-lacquer throne', th4: 'Bronze tiger & plum throne',
-      th5: 'Mother-of-pearl throne', th6: 'Obsidian & gold phoenix throne', th7: 'Sun-moon-five-peaks divine throne'
+      th5: 'Mother-of-pearl throne', th6: 'Obsidian & gold phoenix throne', th7: 'Sun-moon-five-peaks divine throne',
+      hallBar: 'Hall of Fame · TOP 10', hallBarSub: 'live ranking · throne seats',
+      hallTitle: '🏆 Hall of Fame', hallTabTop: 'TOP 10', hallTabSeats: 'Throne seats',
+      hallPioneers: 'π pioneers', hallPlayers: 'players', hallMyRank: 'My rank',
+      hallEmpty: 'No records yet — be the first to play.',
+      hallMeNone: 'Play one hand and you are on the board.',
+      hallSeatMine: 'My no.', hallSeatRemain: 'left', hallSeatFull: 'full', hallNoServer: 'offline — my number only',
+      hallNote: '100% free in-game points — not convertible to Pi or cash. Seat numbers are honor records, first come first served.',
+      hallInvite: 'Invite a friend', hallInviteCopy: 'Invite link copied', hallInvites: 'recruits',
+      hallPiLink: 'Connect π', hallPiEdit: 'edit', hallPiDeclared: 'π declared', hallPiVerified: 'π verified',
+      hallPiHint: 'Enter your Pi username to get a π badge. Inside Pi Browser you can verify for real.',
+      hallPiGuide: 'No Pi wallet? Open the Kedheon guide', hallPiSaved: 'π badge connected',
+      hallPiBad: 'Enter a username', hallRankYou: 'you', hallNick: 'Nickname', hallSave: 'Save',
+      seatTitle: 'Engrave your seat', seatDesc: 'Rank {g} · {left} of {cap} seats left', seatClaim: 'Engrave',
+      seatLater: 'Later', seatDone: 'Engraved', seatNeedNick: 'Enter a nickname first',
+      seatPiNote: 'Pi username (optional) — adds a π badge to your seat', seatMineNow: 'My number',
+      seatWin: 'Seat engraved!', seatLoading: 'Loading…', seatFail: 'Could not load the Hall of Fame'
     }
   };
   var ui = { lang: 'kr', mode: 'solo', count: 3, aiCount: 3, names: [], ante: 1000, chips: 50000, sel: 0, useCouponNext: false };
@@ -3534,6 +3681,17 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     return '';
   }
 
+  /* 도감 카드의 좌석 한 줄 — 내 고유 번호 + 등급 잔여 좌석 */
+  function seatLine(g) {
+    var mine = seatOf(g), taken = seatTaken(g), cap = W.seatCap(g);
+    var left = Math.max(0, cap - taken);
+    if (hall.data && hall.data.available) {
+      return '<span class="thrseat">' + (mine ? '<b>' + W.seatNo(mine) + '</b> · ' : '') +
+        fmt(left) + ' / ' + fmt(cap) + ' ' + hx(t('hallSeatRemain')) + '</span>';
+    }
+    return '<span class="thrseat">' + (mine ? '<b>' + W.seatNo(mine) + '</b> · ' : '') + fmt(cap) + '</span>';
+  }
+
   function renderThroneSheet() {
     var c = throneState();
     var me = $('#thrMe');
@@ -3559,7 +3717,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       d.innerHTML = '<div class="thrpic"><img src="' + throneImg(row.g) + '" alt=""></div>' +
         '<div class="thrbody"><div class="thrttl"><b>' + row.g + ' · ' + t('thr' + row.g) + '</b>' +
         '<span>' + t('th' + row.g) + ' · ' + (row.human ? t('crownHuman') : t('crownPractice')) + '</span></div>' +
-        '<ul class="thrconds">' + lis + '</ul></div>' +
+        '<ul class="thrconds">' + lis + '</ul>' + seatLine(row.g) + '</div>' +
         '<div class="thrseal">' + (chk.ok ? '★ ' + t('crownDone') : '🔒 ' + t('crownLocked')) + '</div>';
       box.appendChild(d);
     });
@@ -3609,7 +3767,421 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     paintThrone();
     if (thrSheetOpen) renderThroneSheet();
     if (r.up) throneCelebrate(r.upGrade);
+    noteBestMoney(S, seat);
+    pushProfile();
+    /* 도달한 등급의 좌석(고유 번호)을 받아 둔다 — 새로 받은 번호는 각인 모달로 보여 준다 */
+    var upTo = r.best || r.grade || 0;
+    if (upTo > 0) {
+      claimSeats(upTo, function (last) {
+        paintHallBar();
+        if (thrSheetOpen) renderThroneSheet();
+        if (hall.open) renderHall();
+        if (last && last.granted && last.seat) openSeat(last);
+      });
+    }
     return r;
+  }
+
+  /* ------------------------------------------------------------
+     🏆 명예의 전당 — TOP 10 · 왕좌 좌석(선착순 고유 번호) · π 브릿지
+       · 서버(/api/wolnambbong/board)가 없거나 테이블이 없으면 로컬 모드로 조용히 동작한다.
+       · 좌석 번호는 서버가 등급별로 원자 발급하고, 이 기기는 받은 번호를 캐시한다.
+       · 환금성 없음: 좌석·랭킹은 명예 표시일 뿐 돈·코인으로 바꿀 수 없다.
+     ------------------------------------------------------------ */
+  var DEV_KEY = 'wnb_device_v1', REF_KEY = 'wnb_ref_v1', SEAT_KEY = 'wnb_seats_v1', MONEY_KEY = 'wnb_best_money_v1', PI_KEY = 'wnb_pi_v1';
+  var hall = { open: false, tab: 'top', data: null, timer: 0, pushTimer: 0, nickEdit: false, seat: null };
+
+  function hx(v) {
+    return String(v == null ? '' : v).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+  function tf(k, vars) {
+    var s = t(k);
+    for (var p in vars) if (Object.prototype.hasOwnProperty.call(vars, p)) s = s.split('{' + p + '}').join(String(vars[p]));
+    return s;
+  }
+  function lsGet(k) { try { var s = store(); return s ? s.getItem(k) : null; } catch (e) { return null; } }
+  function lsSet(k, v) { try { var s = store(); if (s) s.setItem(k, String(v)); } catch (e) {} }
+
+  function deviceId() {
+    var v = lsGet(DEV_KEY) || '';
+    if (/^[a-z0-9]{8,40}$/.test(v)) return v;
+    var abc = 'abcdefghijkmnpqrstuvwxyz23456789', out = '', i;
+    for (i = 0; i < 16; i++) out += abc.charAt(Math.floor(Math.random() * abc.length));
+    lsSet(DEV_KEY, out);
+    return out;
+  }
+  function refId() { var v = lsGet(REF_KEY) || ''; return /^[a-z0-9]{8,40}$/.test(v) ? v : ''; }
+  function captureRef() {
+    try {
+      var m = /[?&]ref=([a-z0-9]{8,40})/i.exec(location.search || '');
+      if (!m) return;
+      var ref = m[1].toLowerCase();
+      if (ref === deviceId() || refId()) return;
+      lsSet(REF_KEY, ref);
+    } catch (e) {}
+  }
+  function myNick() {
+    var v = String(lsGet('wnb.nick') || '').replace(/\s+/g, ' ').trim().slice(0, 8);
+    return v || 'Player';
+  }
+  function setNick(v) {
+    v = String(v || '').replace(/\s+/g, ' ').trim().slice(0, 8);
+    if (v) lsSet('wnb.nick', v);
+    return myNick();
+  }
+  function mySeats() {
+    try { var o = JSON.parse(lsGet(SEAT_KEY) || '{}'); return (o && typeof o === 'object') ? o : {}; } catch (e) { return {}; }
+  }
+  function setSeat(g, n) { var o = mySeats(); o[String(g)] = n; lsSet(SEAT_KEY, JSON.stringify(o)); }
+  function bestMoney() { return Math.max(0, parseInt(lsGet(MONEY_KEY), 10) || 0); }
+  function piUser() { var me = hall.data && hall.data.me; return (me && me.pi) || lsGet(PI_KEY) || ''; }
+  function seatTaken(g) {
+    var list = (hall.data && hall.data.seats) || [];
+    for (var i = 0; i < list.length; i++) if (Number(list[i].grade) === Number(g)) return Number(list[i].taken) || 0;
+    return 0;
+  }
+  function seatOf(g) {
+    var me = hall.data && hall.data.me;
+    return (me && me.seats && me.seats[String(g)]) || mySeats()[String(g)] || 0;
+  }
+
+  /* ---------------- 서버 연결 ---------------- */
+  function boardGet(cb) {
+    if (typeof fetch !== 'function') {
+      hall.data = hall.data || { available: false, seats: [], top: [], players: 0, pioneers: 0, me: null };
+      if (cb) cb(hall.data);
+      return;
+    }
+    fetch('/api/wolnambbong/board?device=' + encodeURIComponent(deviceId()), { cache: 'no-store' })
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        hall.data = (j && j.available) ? j : { available: false, seats: [], top: [], players: 0, pioneers: 0, me: null };
+        if (cb) cb(hall.data);
+      })
+      .catch(function () {
+        if (!hall.data) hall.data = { available: false, seats: [], top: [], players: 0, pioneers: 0, me: null };
+        if (cb) cb(hall.data);
+      });
+  }
+  function boardPost(body, cb) {
+    body.device = deviceId();
+    if (typeof fetch !== 'function') { if (cb) cb({ ok: false }); return; }
+    fetch('/api/wolnambbong/board', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body)
+    }).then(function (r) { return r.json(); })
+      .then(function (j) { if (cb) cb(j || {}); })
+      .catch(function () { if (cb) cb({ ok: false }); });
+  }
+
+  /* 기록 올리기(1.2초 묶음) — 값은 서버에서 내려가지 않는다 */
+  function pushProfile(delay) {
+    clearTimeout(hall.pushTimer);
+    hall.pushTimer = setTimeout(function () {
+      var c = throneState();
+      boardPost({
+        action: 'profile', nickname: myNick(), grade: Math.max(c.g, c.best),
+        money: bestMoney(), wins: c.st.wins, plays: c.st.plays
+      }, function (j) {
+        if (!j || !j.ok) return;
+        if (j.me) {
+          hall.data = hall.data || {};
+          hall.data.available = true;
+          hall.data.me = j.me;
+        }
+        paintHallBar();
+        if (hall.open) renderHall();
+        if (refId()) boardPost({ action: 'invite', ref: refId() }, function () {});
+      });
+    }, delay || 1200);
+  }
+
+  /* 도달한 등급까지 좌석을 순서대로 발급받는다(이미 있으면 서버가 기존 번호를 돌려준다) */
+  function claimSeats(upTo, cb) {
+    var have = mySeats(), todo = [], g;
+    for (g = 1; g <= upTo; g++) if (!have[String(g)]) todo.push(g);
+    if (!todo.length) { if (cb) cb(null); return; }
+    var i = 0, last = null;
+    function step() {
+      if (i >= todo.length) { if (cb) cb(last); return; }
+      var grade = todo[i++];
+      boardPost({ action: 'seat', grade: grade, nickname: myNick(), pi: piUser() }, function (j) {
+        if (j && j.ok && j.claim && j.claim.seat) {
+          setSeat(grade, j.claim.seat);
+          last = { grade: grade, seat: Number(j.claim.seat), taken: Number(j.claim.taken) || 0, granted: !!j.claim.granted };
+        }
+        step();
+      });
+    }
+    step();
+  }
+
+  /* ---------------- 명예의 전당 화면 ---------------- */
+  function paintHallBar() {
+    var b = $('#hallBarTitle'), s = $('#hallBarSub');
+    if (b) b.textContent = t('hallBar');
+    if (!s) return;
+    var d = hall.data;
+    if (!d) { s.textContent = t('seatLoading'); return; }
+    if (d.available === false) { s.textContent = t('hallNoServer'); return; }
+    var me = d.me ? (' · ' + t('hallMyRank') + ' ' + (d.me.rank || '-')) : '';
+    var lead = (d.top && d.top[0]) ? (' · 1 ' + hx(d.top[0].nickname)) : '';
+    s.textContent = t('hallPioneers') + ' ' + fmt(d.pioneers || 0) + ' · ' + t('hallPlayers') + ' ' + fmt(d.players || 0) + me + lead;
+  }
+
+  function renderHallStats() {
+    var el = $('#hallStats');
+    if (!el) return;
+    var d = hall.data || {};
+    if (d.available === false) { el.textContent = t('seatFail'); return; }
+    el.innerHTML = '<span><b>' + hx(t('hallPioneers')) + '</b> ' + fmt(d.pioneers || 0) + '</span>' +
+      '<span><b>' + hx(t('hallPlayers')) + '</b> ' + fmt(d.players || 0) + '</span>' +
+      '<span><b>' + hx(t('hallTabSeats')) + '</b> ' + fmt(W.seatTotal()) + '</span>';
+  }
+
+  function renderHallMe() {
+    var el = $('#hallMe');
+    if (!el) return;
+    var d = hall.data || {}, me = d.me || null, c = throneState();
+    var g = Math.max(c.g, c.best);
+    var parts = [], i, n;
+    for (i = 1; i <= 7; i++) {
+      n = seatOf(i);
+      if (n) parts.push('<b>' + i + '</b> ' + W.seatNo(n));
+    }
+    var pi = piUser(), piVer = !!(me && me.piVerified);
+    var piHtml;
+    if (pi) {
+      piHtml = '<span class="pibadge' + (piVer ? ' v' : '') + '">' + hx(piVer ? t('hallPiVerified') : t('hallPiDeclared')) + '</span> <b>@' + hx(pi) + '</b> <button class="mini" id="piEdit">' + hx(t('hallPiEdit')) + '</button>';
+    } else {
+      piHtml = '<input id="piInput" maxlength="20" placeholder="' + hx(t('hallPiLink')) + ' · @username" /> <button class="mini" id="piSave">' + hx(t('hallSave')) + '</button>';
+    }
+    var nickHtml = hall.nickEdit
+      ? '<input id="nickInput2" maxlength="8" value="' + hx(myNick()) + '" /> <button class="mini" id="nickSave">' + hx(t('hallSave')) + '</button>'
+      : '<b>' + hx(myNick()) + ' <button class="mini" id="nickEdit">' + hx(t('hallNick')) + '</button></b>';
+    el.innerHTML =
+      '<div class="hmtop">' +
+        '<img src="' + throneImg(g) + '" alt="" class="' + (g ? '' : 'lock') + '">' +
+        '<div style="min-width:0;flex:1">' + nickHtml +
+          '<span>' + (g ? g + ' · ' + t('thr' + g) : t('crownNone')) +
+            (me ? ' · ' + t('cWins') + ' ' + fmt(me.wins) : '') +
+            ' · ' + t('hallInvites') + ' ' + fmt(me ? me.invites : 0) + '</span>' +
+        '</div>' +
+        (me && me.rank ? '<span class="hmrank">' + hx(t('hallMyRank')) + ' #' + me.rank + '</span>' : '') +
+      '</div>' +
+      '<div class="hmline"><span>' + hx(t('seatMineNow')) + '</span>' +
+        (parts.length ? '<span>' + parts.join(' · ') + '</span>' : '<span>' + hx(t('hallMeNone')) + '</span>') + '</div>' +
+      '<div class="hmline"><span>π</span>' + piHtml + '</div>' +
+      '<div class="hmline">' +
+        '<button class="mini" id="hallInvite">' + hx(t('hallInvite')) + '</button>' +
+        '<a class="mini" href="/xaea12">' + hx(t('hallPiGuide')) + '</a>' +
+      '</div>';
+
+    var inv = $('#hallInvite');
+    if (inv) inv.onclick = shareInvite;
+    var ne = $('#nickEdit');
+    if (ne) ne.onclick = function () { hall.nickEdit = true; renderHallMe(); };
+    var ns = $('#nickSave');
+    if (ns) ns.onclick = function () {
+      var inp = $('#nickInput2');
+      setNick(inp ? inp.value : '');
+      hall.nickEdit = false;
+      pushProfile(80);
+      renderHallMe();
+    };
+    var ps = $('#piSave');
+    if (ps) ps.onclick = function () {
+      var inp = $('#piInput');
+      var name = inp ? inp.value : '';
+      if (!String(name).replace('@', '').trim()) { toast('π', t('hallPiBad'), 1800); return; }
+      savePi(name, false);
+    };
+    var pe = $('#piEdit');
+    if (pe) pe.onclick = function () { lsSet(PI_KEY, ''); boardGet(function () { renderHall(); }); };
+  }
+
+  function renderHallTop() {
+    var el = $('#hallList');
+    if (!el) return;
+    var d = hall.data || {}, top = d.top || [];
+    if (!top.length) {
+      el.innerHTML = '<li style="list-style:none;font-size:10px;color:#9fb5aa;line-height:1.6">' +
+        hx(d.available === false ? t('hallNoServer') : t('hallEmpty')) + '</li>';
+      return;
+    }
+    var out = '';
+    for (var i = 0; i < top.length; i++) {
+      var r = top[i], g = Number(r.grade) || 0;
+      out += '<li class="hrow">' +
+        '<span class="hrk' + (i < 3 ? ' top' : '') + '">' + (i + 1) + '</span>' +
+        '<span class="hrpic"><img src="' + throneImg(g) + '" alt=""></span>' +
+        '<span class="hrbody"><b>' + hx(r.nickname || 'Player') +
+          (r.pi ? ' <span class="pibadge' + (r.piVerified ? ' v' : '') + '">π</span>' : '') + '</b>' +
+          '<span>' + (g ? g + ' · ' + t('thr' + g) : t('crownNone')) + ' · ' + t('cWins') + ' ' + fmt(r.wins) +
+            ' · ' + fmt(r.money) + ' · ' + t('hallInvites') + ' ' + fmt(r.invites) + '</span></span>' +
+        '</li>';
+    }
+    el.innerHTML = out;
+  }
+
+  function renderSeatGrid() {
+    var el = $('#seatGrid');
+    if (!el) return;
+    var out = '';
+    for (var i = 0; i < W.THRONE_SEATS.length; i++) {
+      var row = W.THRONE_SEATS[i];
+      var taken = seatTaken(row.g);
+      var left = Math.max(0, row.cap - taken);
+      var pct = row.cap ? Math.min(100, Math.round(taken / row.cap * 100)) : 0;
+      var mine = seatOf(row.g);
+      out += '<div class="sgrow' + (mine ? ' mine' : '') + '">' +
+        '<span class="sgn">' + row.g + ' · ' + hx(t('thr' + row.g)) + '</span>' +
+        '<span class="sgbar"><i style="width:' + pct + '%"></i></span>' +
+        '<span class="sgt">' + fmt(left) + ' / ' + fmt(row.cap) + '</span>' +
+        '<span class="sgno">' + (mine ? W.seatNo(mine) : (left === 0 ? hx(t('hallSeatFull')) : '—')) + '</span>' +
+        '</div>';
+    }
+    el.innerHTML = out;
+  }
+
+  function renderHall() {
+    var ti = $('#hallTitle'); if (ti) ti.textContent = t('hallTitle');
+    var t1 = $('#htabTop'); if (t1) t1.textContent = t('hallTabTop');
+    var t2 = $('#htabSeats'); if (t2) t2.textContent = t('hallTabSeats');
+    var nt = $('#hallNote'); if (nt) nt.textContent = t('hallNote');
+    var c1 = $('#hallClose'); if (c1) c1.setAttribute('aria-label', t('close'));
+    var c2 = $('#hallClose2'); if (c2) c2.textContent = t('close');
+    var p1 = $('#hallPaneTop'), p2 = $('#hallPaneSeats');
+    if (p1) p1.style.display = hall.tab === 'top' ? '' : 'none';
+    if (p2) p2.style.display = hall.tab === 'seats' ? '' : 'none';
+    if (t1) t1.className = 'htab' + (hall.tab === 'top' ? ' on' : '');
+    if (t2) t2.className = 'htab' + (hall.tab === 'seats' ? ' on' : '');
+    renderHallStats();
+    renderHallMe();
+    renderHallTop();
+    renderSeatGrid();
+  }
+
+  function openHall() {
+    hall.open = true;
+    var el = $('#hallSheet'); if (el) el.classList.add('on');
+    paintHallBar();
+    renderHall();
+    boardGet(function () { renderHall(); paintHallBar(); });
+    clearInterval(hall.timer);
+    hall.timer = setInterval(function () {
+      if (!hall.open) { clearInterval(hall.timer); return; }
+      boardGet(function () { renderHall(); paintHallBar(); });
+    }, 20000);
+  }
+  function closeHall() {
+    hall.open = false;
+    clearInterval(hall.timer);
+    var el = $('#hallSheet'); if (el) el.classList.remove('on');
+  }
+
+  /* ---------------- 왕좌 각인 모달 ---------------- */
+  function openSeat(info) {
+    if (!info || !info.grade || !info.seat) return;
+    hall.seat = info;
+    var g = info.grade;
+    var noEl = $('#seatNo'); if (noEl) noEl.textContent = W.seatNo(info.seat);
+    var tt = $('#seatTitle'); if (tt) tt.textContent = t('seatTitle') + ' · ' + g + ' ' + t('thr' + g);
+    var ds = $('#seatDesc');
+    if (ds) ds.textContent = tf('seatDesc', { g: g, cap: fmt(W.seatCap(g)), left: fmt(W.seatLeft(g, info.taken)) });
+    var lbl = $('#seatNickLbl'); if (lbl) lbl.textContent = t('hallNick');
+    var inp = $('#seatNick'); if (inp) inp.value = myNick();
+    var pn = $('#seatPi'); if (pn) pn.textContent = t('seatPiNote');
+    var cb = $('#seatClaim'); if (cb) cb.textContent = t('seatClaim');
+    var lb = $('#seatLater'); if (lb) lb.textContent = t('seatLater');
+    var sh = $('#seatSheet'); if (sh) sh.classList.add('on');
+  }
+  function closeSeat() {
+    var sh = $('#seatSheet'); if (sh) sh.classList.remove('on');
+  }
+  function seatSubmit() {
+    var inp = $('#seatNick');
+    var v = String(inp ? inp.value : '').trim();
+    if (!v) { toast(t('seatTitle'), t('seatNeedNick'), 2000); if (inp) inp.focus(); return; }
+    setNick(v);
+    var info = hall.seat || {};
+    pushProfile(80);
+    closeSeat();
+    if (!info.grade) return;
+    boardPost({ action: 'seat', grade: info.grade, nickname: myNick(), pi: piUser() }, function (j) {
+      if (j && j.ok && j.claim && j.claim.seat) {
+        setSeat(info.grade, j.claim.seat);
+        toast(t('seatWin'), info.grade + ' · ' + W.seatNo(j.claim.seat), 2600);
+        vibrate([16, 40, 90]);
+      }
+      boardGet(function () { if (hall.open) renderHall(); paintHallBar(); });
+    });
+    hall.seat = null;
+  }
+
+  /* ---------------- π 브릿지 ---------------- */
+  function savePi(name, verified) {
+    name = String(name || '').replace(/^@/, '').trim().slice(0, 32);
+    if (!name) { toast('π', t('hallPiBad'), 1800); return; }
+    boardPost({ action: 'pi', username: name, verified: !!verified }, function (j) {
+      if (!j || !j.ok) { toast('π', t('hallPiBad'), 1800); return; }
+      lsSet(PI_KEY, name);
+      boardGet(function () { renderHall(); paintHallBar(); });
+      toast('π', t('hallPiSaved'), 1800);
+    });
+  }
+  function piAuth() {
+    function run() {
+      try {
+        Promise.resolve(window.Pi.init({ version: '2.0', sandbox: false })).then(function () {
+          return window.Pi.authenticate(['username'], function () {});
+        }).then(function (res) {
+          var token = res && res.accessToken;
+          if (!token) return null;
+          return fetch('/api/pi/verify', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ accessToken: token })
+          }).then(function (r) { return r.json(); }).then(function (j) {
+            if (j && j.verified && j.username) savePi(j.username, true);
+          });
+        }).catch(function () {});
+      } catch (e) {}
+    }
+    if (window.Pi && typeof window.Pi.init === 'function') { run(); return true; }
+    if (!/PiBrowser/i.test(navigator.userAgent || '')) return false;
+    var s = document.createElement('script');
+    s.src = 'https://sdk.minepi.com/pi-sdk.js';
+    s.onload = function () { if (window.Pi) run(); };
+    document.head.appendChild(s);
+    return true;
+  }
+
+  /* ---------------- 친구 초대(개척자) ---------------- */
+  function myInviteLink() {
+    var o = (location.origin && location.origin !== 'null') ? location.origin : '';
+    return o + '/wolnambbong.html?ref=' + deviceId();
+  }
+  function shareInvite() {
+    var link = myInviteLink();
+    try {
+      if (navigator.share) { navigator.share({ title: '월남뽕 · K-Hwatu Between', text: t('hallInvite'), url: link }); }
+      else if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(link); toast(t('hallInvite'), t('hallInviteCopy'), 2000); }
+      else {
+        var ta = document.createElement('textarea');
+        ta.value = link; document.body.appendChild(ta); ta.select();
+        document.execCommand('copy'); document.body.removeChild(ta);
+        toast(t('hallInvite'), t('hallInviteCopy'), 2000);
+      }
+    } catch (e) {}
+  }
+
+  /* 판이 끝날 때마다 최고 보유머니를 갱신한다(랭킹 표시용) */
+  function noteBestMoney(s, seat) {
+    try {
+      var p = s && s.players && s.players[seat];
+      if (!p) return;
+      var chips = Math.floor(Number(p.chips) || 0);
+      if (chips > bestMoney()) lsSet(MONEY_KEY, chips);
+    } catch (e) {}
   }
 
   /* ------------------------------------------------------------
@@ -3662,6 +4234,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     refreshRaiseBtn();
     refreshCoupons();
     paintThrone();
+    paintHallBar();
     if (thrSheetOpen) renderThroneSheet();
     if (S) { renderPlayers(); renderActions(); renderMsg(lastMsg.cls, lastMsg.l1, lastMsg.l2); }
   }
@@ -5484,6 +6057,24 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     var tsh = $('#throneSheet');
     if (tsh) tsh.onclick = function (e) { if (e.target === tsh) closeThrone(); };
 
+    /* 🏆 명예의 전당 · 왕좌 각인 */
+    var shb = $('#setupHall');
+    if (shb) shb.onclick = openHall;
+    var hc1 = $('#hallClose');
+    if (hc1) hc1.onclick = closeHall;
+    var hc2 = $('#hallClose2');
+    if (hc2) hc2.onclick = closeHall;
+    var hsh = $('#hallSheet');
+    if (hsh) hsh.onclick = function (e) { if (e.target === hsh) closeHall(); };
+    var ht1 = $('#htabTop');
+    if (ht1) ht1.onclick = function () { hall.tab = 'top'; renderHall(); };
+    var ht2 = $('#htabSeats');
+    if (ht2) ht2.onclick = function () { hall.tab = 'seats'; renderHall(); };
+    var scl = $('#seatClaim');
+    if (scl) scl.onclick = seatSubmit;
+    var slt = $('#seatLater');
+    if (slt) slt.onclick = function () { hall.seat = null; closeSeat(); };
+
     $('#sfxBtn').onclick = function () {
       SFX.setOn(!SFX.isOn());
       VOICE.setOn(SFX.isOn());
@@ -5536,8 +6127,10 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
   fxInit();
   bind();
   try { if (W.parseInvite(location.href)) ui.mode = 'online'; } catch (e) {}
+  captureRef();
   applyStatic();
   renderHero();
+  boardGet(function () { paintHallBar(); if (hall.open) renderHall(); });
   if (ui.mode === 'online') ON.prepare();
 })();
 </script>
