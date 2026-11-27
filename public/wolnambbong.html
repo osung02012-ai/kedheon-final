@@ -5017,6 +5017,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     $('#langBtn').onclick = function () {
       ui.lang = ui.lang === 'en' ? 'kr' : 'en';
       applyStatic(); renderHero();
+      if (ON.isOn()) ON.renderLobby();   /* 대기실(방장 태그·[게임 시작] 라벨)도 즉시 새 언어로 */
       if (S) { renderStatus(); renderPlayers(); renderBoard(); renderActions(); }
       renderMsg(lastMsg.cls, lastMsg.l1.replace(/undefined/g, ''), lastMsg.l2);
     };
