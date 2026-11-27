@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover, interactive-widget=resizes-content" />
 <meta name="theme-color" content="#08251c" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <title>월남뽕 · K-Hwatu Between</title>
@@ -4173,8 +4173,35 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     renderSeatGrid();
   }
 
+  /* 키보드가 올라오면 '보이는 영역(visualViewport)'만 줄어드는 인앱 브라우저가 있다
+     (Pi Browser·삼성 인터넷 등). 그때는 바닥에 붙은 시트가 키보드 뒤로 숨어
+     입력칸이 가려지므로, 명예의 전당 시트를 보이는 영역 높이에 맞춰 올린다.
+     · interactive-widget=resizes-content 를 지원하는 브라우저는 레이아웃이 이미 줄어
+       들어 여기서 할 일이 없다(키보드 높이 80px 미만 → 초기화). */
+  function fitHallSheet() {
+    var s = $('#hallSheet'), vv = (typeof window !== 'undefined') ? window.visualViewport : null;
+    if (!s || !vv) return;
+    var kb = (window.innerHeight || 0) - vv.height - (vv.offsetTop || 0);
+    if (hall.open && kb > 80) {
+      s.style.height = vv.height + 'px';
+      s.style.top = (vv.offsetTop || 0) + 'px';
+      s.style.bottom = 'auto';
+      if (s.firstElementChild) s.firstElementChild.style.maxHeight = Math.max(160, vv.height - 14) + 'px';
+    } else {
+      s.style.height = ''; s.style.top = ''; s.style.bottom = '';
+      if (s.firstElementChild) s.firstElementChild.style.maxHeight = '';
+    }
+  }
+  function bindHallViewport() {
+    var vv = (typeof window !== 'undefined') ? window.visualViewport : null;
+    if (!vv || !vv.addEventListener) return;
+    vv.addEventListener('resize', fitHallSheet);
+    vv.addEventListener('scroll', fitHallSheet);
+  }
+
   function openHall() {
     hall.open = true;
+    fitHallSheet();
     hall.nickEdit = false; hall.piEdit = false; hall.nickDraft = null; hall.piDraft = null;
     hall.nickFocus = false; hall.piFocus = false;
     var el = $('#hallSheet'); if (el) el.classList.add('on');
@@ -4189,6 +4216,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
   }
   function closeHall() {
     hall.open = false;
+    fitHallSheet();
     hall.nickEdit = false; hall.piEdit = false; hall.nickDraft = null; hall.piDraft = null;
     hall.nickFocus = false; hall.piFocus = false;
     clearInterval(hall.timer);
@@ -6183,6 +6211,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     if (hc2) hc2.onclick = closeHall;
     var hsh = $('#hallSheet');
     if (hsh) hsh.onclick = function (e) { if (e.target === hsh) closeHall(); };
+    bindHallViewport();   /* 키보드가 보이는 영역만 줄이는 인앱 브라우저에서 시트를 위로 올린다 */
     var ht1 = $('#htabTop');
     if (ht1) ht1.onclick = function () { hall.tab = 'top'; renderHall(); };
     var ht2 = $('#htabSeats');

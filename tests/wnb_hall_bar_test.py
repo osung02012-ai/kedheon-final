@@ -172,5 +172,15 @@ for key in ('hallOk', 'hallCancel', 'hallNickSaved'):
     ok(SRC.count(key + ":" ) >= 2 or SRC.count(key + " :") >= 2 or SRC.count("'" + key + "'") >= 2,
        '다국어 문구 2개 언어: ' + key)
 
+print('\n[HALL-KEY] 키보드가 보이는 영역만 줄어드는 인앱 브라우저 대응')
+ok('interactive-widget=resizes-content' in SRC, 'viewport meta 에 interactive-widget')
+ok('function fitHallSheet() {' in SRC, 'fitHallSheet 존재')
+fit = slice_from('function fitHallSheet() {')
+ok('visualViewport' in fit and "s.style.height" in fit and "style.maxHeight" in fit,
+   '보이는 영역 높이에 시트를 맞춘다')
+ok('bindHallViewport' in slice_from('function bindHallViewport() {'), 'visualViewport resize/scroll 바인딩')
+ok('bindHallViewport();' in slice_from('function bind() {'), 'bind() 에서 호출')
+ok('fitHallSheet()' in slice_from('function openHall() {'), '열 때·닫을 때 초기화')
+
 print('\n결과: %d 통과 / %d 실패' % (pass_n, fail))
 sys.exit(1 if fail else 0)
