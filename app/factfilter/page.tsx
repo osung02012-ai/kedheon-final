@@ -487,6 +487,122 @@ const FAKE_ARCHIVES: ArchivedFake[] = [
   }
 ];
 
+/**
+ * 최신 팩트체크 (2026-11-27) — CEX.io 상장폐지 & GCV($314,159) 도래 루머 반박
+ *  · 1차 원문 대조: CEX.IO Help Centre 공지 · Pi 공식 KYB 명단 · 서밋 리캡 공식 블로그
+ *  · UI 규칙: 이중부정 금지(‘❌ 루머’ ✗ → ‘루머’), ‘✅ 팩트’ 유지, 거래소 시세 언급 배제
+ */
+const LATEST_CHECK_DATE = '2026.11.27';
+
+interface LatestFact {
+  tag: string;
+  tagEn: string;
+  text: string;
+  textEn: string;
+}
+
+const LATEST_RUMORS: string[] = [
+  '“파이코인이 주요 거래소에서 줄줄이 상장폐지되며 생태계가 붕괴하고 있다”',
+  '“기존 거래소가 모두 사라지고 곧바로 $314,159 고정가(GCV) 체제로 전환된다”'
+];
+const LATEST_RUMORS_EN: string[] = [
+  '“Pi is being delisted from major exchanges one after another and the ecosystem is collapsing.”',
+  '“Every existing exchange disappears and the market switches straight to a fixed $314,159 (GCV) price.”'
+];
+
+const LATEST_FACTS: LatestFact[] = [
+  {
+    tag: '비(非) KYB 거래소 1곳의 정리',
+    tagEn: 'One non-KYB exchange tidying up',
+    text: 'CEX.io는 파이 공식 KYB 명단(minepi.com/kyb-list)에 없는 비 KYB 거래소입니다. 자체 심사에 따라 2026년 11월 26일 매수·현물 거래를 중단하고, 12월 24일 거래를 종료한 뒤 2027년 1월 11일 최종 상장폐지합니다. 12월 28일부터 1월 11일 사이에 남은 잔액은 시장가로 USDC로 자동 전환됩니다.',
+    textEn: 'CEX.io is not on Pi’s official KYB list (minepi.com/kyb-list) — it is a non-KYB exchange. Under its own review it suspended purchases and spot trading on Nov 26, 2026, ends trading on Dec 24, and completes delisting on Jan 11, 2027. Any balance left between Dec 28 and Jan 11 is automatically converted to USDC at the prevailing market rate.'
+  },
+  {
+    tag: 'KYB 공식 인증 거래소 정상 가동',
+    tagEn: 'KYB-verified exchanges keep running',
+    text: 'OKX, Kraken, Bitget, Gate, MEXC 등 파이 공식 KYB 인증 거래소들은 정상 운영 중입니다. 공식 KYB 명단에 오른 사업자만 파이 메인넷 지갑을 두고 계속 서비스합니다.',
+    textEn: 'Pi’s officially KYB-verified exchanges — OKX, Kraken, Bitget, Gate, MEXC and others — are operating as usual. Only businesses on the official KYB list hold a Pi Mainnet wallet and keep serving Pioneers.'
+  },
+  {
+    tag: 'Q1 2027 메인넷 로드맵 재확인',
+    tagEn: 'Q1 2027 Mainnet roadmap restated',
+    text: '파이 코어팀은 서밋 리캡 공식 블로그(11-24)와 공식 계정(@PiCoreTeam)을 통해 2027년 1분기 메인넷 Pi Launchpad·DEX·AMM 출시를 다시 확인했습니다. 강제 고정가(GCV)가 아니라 온체인 유동성과 실사용 유틸리티가 시장을 형성합니다.',
+    textEn: 'Through the official Summit recap (Nov 24) and its official account (@PiCoreTeam), the Pi Core Team restated that Pi Launchpad, DEX and AMM will launch on Mainnet in Q1 2027. Prices are formed by on-chain liquidity and real utility — not by an enforced fixed price (GCV).'
+  }
+];
+
+/** 최신 팩트체크 카드 — 최상단 배치 */
+const LatestFactCheck = ({ ko }: { ko: boolean }) => (
+  <section className="bg-white border border-[#E5E7EB] rounded-2xl shadow-[var(--card-shadow)] overflow-hidden text-left">
+    <div className="flex items-center justify-between gap-2 bg-black px-3 py-1.5">
+      <span className="flex items-center gap-1.5 t-tag font-bold uppercase text-white">
+        <span className="w-1.5 h-1.5 rounded-full bg-[#dc2626] inline-block shrink-0" />
+        {ko ? '최신 팩트체크 · 1차 원문 대조' : 'Latest fact check · primary sources'}
+      </span>
+      <span translate="no" className="notranslate t-tag text-white/60 whitespace-nowrap">
+        {LATEST_CHECK_DATE}
+      </span>
+    </div>
+
+    <div className="px-3 py-2.5 md:p-4">
+      <h2 className="t-section text-black">
+        {ko
+          ? 'CEX.io 상장폐지 & GCV($314,159) 도래 루머 반박'
+          : 'FACT CHECK: CEX.io Delisting & $314,159 GCV Rumors'}
+      </h2>
+      <p className="t-sub text-neutral-500 mt-0.5">
+        {ko
+          ? '거래소 한 곳의 정리와 생태계 전체의 붕괴는 다릅니다. 공지·KYB 명단·공식 로드맵 원문으로 대조했습니다.'
+          : 'One exchange winding down is not an ecosystem collapse. Checked against the notice, the KYB list and the official roadmap.'}
+      </p>
+
+      <div className="mt-2 space-y-1.5 rounded-xl bg-neutral-50 border border-neutral-200 px-2.5 py-2">
+        {(ko ? LATEST_RUMORS : LATEST_RUMORS_EN).map(r => (
+          <p key={r} className="t-sub text-neutral-500 flex items-start gap-1.5">
+            <span className="shrink-0 px-1.5 rounded bg-white border border-neutral-300 text-neutral-500 t-tag">{ko ? '루머' : 'RUMOR'}</span>
+            <span className="min-w-0">{r}</span>
+          </p>
+        ))}
+      </div>
+
+      <div className="mt-2 space-y-2">
+        {(ko ? LATEST_FACTS : LATEST_FACTS.map(f => ({ ...f, tag: f.tagEn, text: f.textEn }))).map(f => (
+          <div key={f.tag} className="border-t border-neutral-200 pt-2">
+            <p className="t-card text-black flex flex-wrap items-center gap-x-1.5 gap-y-1">
+              <span className="shrink-0 px-1.5 rounded bg-black text-white t-tag">{ko ? '✅ 팩트' : '✅ FACT'}</span>
+              <span className="min-w-0 flex-1">{f.tag}</span>
+            </p>
+            <p className="t-sub text-neutral-700 mt-0.5">{f.text}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="flex flex-wrap items-center gap-1.5 mt-2">
+        <span className="t-tag text-neutral-400">{ko ? '출처' : 'Sources'}</span>
+        {[
+          {
+            label: 'CEX.IO 공지(1-11-2027 상장폐지)',
+            labelEn: 'CEX.IO notice (delisting Jan 11, 2027)',
+            url: 'https://support.cex.io/en/articles/18594237-pi-delisting-notice-january-11-2027'
+          },
+          { label: '파이 공식 KYB 명단', labelEn: 'Pi official KYB list', url: 'https://minepi.com/kyb-list/' },
+          { label: '파이 생태계 서밋 리캡', labelEn: 'Pi Ecosystem Summit recap', url: 'https://minepi.com/blog/ecosystem-summit-recap/' }
+        ].map(s => (
+          <a
+            key={s.url}
+            href={s.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="t-tag px-2 py-1 rounded-lg bg-neutral-100 text-black hover:bg-black hover:text-white transition-colors"
+          >
+            🔗 {ko ? s.label : s.labelEn}
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+);
+
 /** 피처드 2 — 오늘의 가짜뉴스 박제 카드 (3건) */
 const FakeNewsArchive = ({ ko }: { ko: boolean }) => (
   <section className="bg-white border border-[#E5E7EB] rounded-2xl shadow-[var(--card-shadow)] overflow-hidden text-left">
@@ -1307,7 +1423,8 @@ export default function FactFilterPage() {
         {/* TAB 1: AI FACT CHECK */}
         {activeTab === 'CHECK' && (
           <div className="space-y-3">
-            {/* 최상단 — 특별 안건(토론형) · 오늘의 진짜뉴스(서밋 Day 3) · 가짜뉴스 박제 */}
+            {/* 최상단 — 최신 팩트체크(11-27) · 특별 안건(토론형) · 오늘의 진짜뉴스(서밋 Day 3) · 가짜뉴스 박제 */}
+            <LatestFactCheck ko={ko} />
             <SpecialAgenda
               ko={ko}
               counts={serverVerdicts[SPECIAL_AGENDA_ID] || {}}
