@@ -851,11 +851,12 @@ console.log('\n[19] 왕좌(명예 등급) — 7단계 정의');
   ok(wins.every((v, i) => i === 0 || v > wins[i - 1]), '누적 승리 조건이 등급마다 엄격히 증가', wins);
   const rates = W.THRONES.map((t) => t.rate);
   ok(rates.every((v, i) => i === 0 || v >= rates[i - 1]), '승률 조건이 내려가지 않는다', rates);
-  eq(W.THRONE_HUMAN_FROM, 3, '3등급부터 사람 대전만 집계');
+  eq(W.THRONE_HUMAN_FROM, 5, '5등급부터 사람 대전만 집계');
   eq(W.THRONE_RECENT, 100, '승률 모수 = 최근 100판');
   eq(W.THRONE_COMEBACK_MULT, 3, '역전승 = 앤티 3배 이하 위기');
-  ok(W.THRONES.slice(2).every((t) => t.human === true), '3~7등급은 사람(온라인) 기록 기준');
-  ok(W.THRONES.slice(0, 2).every((t) => t.human === false), '1~2등급은 연습전 포함');
+  ok(W.THRONES.slice(4).every((t) => t.human === true), '5~7등급은 사람(온라인) 기록 기준');
+  ok(W.THRONES.slice(0, 4).every((t) => t.human === false), '1~4등급은 연습전 포함');
+  ok(W.THRONES.every((t) => t.human === (t.g >= W.THRONE_HUMAN_FROM)), '등급별 human 플래그가 기준(5등급)과 일치');
 
   /* 이미지 실물 — 저장소에 WebP 7종이 있고 과하게 무겁지 않다 */
   const dir = path.join(__dirname, '..', 'public', 'thrones');
@@ -902,27 +903,37 @@ console.log('\n[20] 왕좌 — 저장·집계·승격 판정');
   eq(gradeOf(Object.assign({}, g2, { recent: recentMix(35, 100) })), 1, '승률 35% 면 2등급 미달');
   eq(gradeOf(Object.assign({}, g2, { wins: 29, streakBest: 3 })), 1, '29승이면 2등급 미달');
 
-  /* AI·솔로 연습전은 2등급까지만 — 사람 기록 0이면 3등급 불가 */
-  const farmed = { plays: 4000, wins: 3500, streakBest: 40, adoN: 300, adoW: 250, comeback: 50, recent: recentMix(90, 100) };
-  eq(gradeOf(farmed), 2, '연습전 3,500승을 쌓아도 2등급에서 멈춘다');
+  /* 3등급 — (연습전 포함) 100승 · 48% · 5연승 · 아도 3 */
+  const g3 = { plays: 200, wins: 100, streakBest: 5, adoN: 5, adoW: 3, recent: recentMix(48, 100) };
+  eq(gradeOf(g3), 3, '100승+ · 48% · 5연승 · 아도 3 = 3등급 승부사');
+  eq(gradeOf(Object.assign({}, g3, { wins: 99 })), 2, '99승이면 3등급 미달');
+  eq(gradeOf(Object.assign({}, g3, { adoW: 2 })), 2, '아도 성공 2회면 3등급 미달');
+  eq(gradeOf(Object.assign({}, g3, { streakBest: 4 })), 2, '4연승이면 3등급 미달');
+  eq(gradeOf(Object.assign({}, g3, { recent: recentMix(47, 100) })), 2, '승률 47% 면 3등급 미달');
+  eq(W.throneCheck(W.throneLoad(fakeStore(g3)), 3).human, false, '3등급은 연습전 포함 집계(human=false)');
 
-  /* 3등급 — 사람 대전 100승 · 48% · 5연승 · 아도 3 */
-  const g3 = { plays: 4000, wins: 3500, streakBest: 3, recent: recentMix(90, 100), hPlays: 140, hWins: 100, hStreakBest: 5, hAdoN: 5, hAdoW: 3, hrecent: recentMix(48, 100) };
-  eq(gradeOf(g3), 3, '사람 100승+ · 48% · 5연승 · 아도 3 = 3등급 승부사');
-  eq(gradeOf(Object.assign({}, g3, { hWins: 99 })), 2, '사람 99승이면 3등급 미달');
-  eq(gradeOf(Object.assign({}, g3, { hAdoW: 2 })), 2, '아도 성공 2회면 3등급 미달');
-  eq(gradeOf(Object.assign({}, g3, { hStreakBest: 4 })), 2, '4연승이면 3등급 미달');
-  eq(gradeOf(Object.assign({}, g3, { hrecent: recentMix(47, 100) })), 2, '사람 승률 47% 면 3등급 미달');
-
-  /* 4등급 — 역전승 5회 추가 */
-  const g4 = Object.assign({}, g3, { hWins: 300, hPlays: 400, hStreakBest: 7, hAdoW: 10, hAdoN: 14, hrecent: recentMix(53, 100), hComeback: 5 });
+  /* 4등급 — 역전승 5회 추가 (여전히 연습전 포함) */
+  const g4 = Object.assign({}, g3, { plays: 600, wins: 300, streakBest: 7, adoN: 14, adoW: 10, comeback: 5, recent: recentMix(53, 100) });
   eq(gradeOf(g4), 4, '300승·53%·7연승·아도 10·역전승 5 = 4등급 고수');
-  eq(gradeOf(Object.assign({}, g4, { hComeback: 4 })), 3, '역전승 4회면 4등급 미달');
+  eq(gradeOf(Object.assign({}, g4, { comeback: 4 })), 3, '역전승 4회면 4등급 미달');
+  eq(W.throneCheck(W.throneLoad(fakeStore(g4)), 4).human, false, '4등급은 연습전 포함 집계(human=false)');
+  ok(!g4.hPlays && !g4.hWins, '3·4등급 예시 기록에는 사람 대전(hWins)이 0');
 
-  /* 5·6·7등급 */
-  const g5 = Object.assign({}, g4, { hWins: 700, hPlays: 900, hStreakBest: 10, hAdoW: 25, hAdoN: 45, hrecent: recentMix(57, 100) });
-  eq(gradeOf(g5), 5, '700승·57%·10연승·아도 25·성공률 55% = 5등급 타짜');
-  eq(gradeOf(Object.assign({}, g5, { hAdoN: 60, hAdoW: 25 })), 4, '아도 성공률 41% 면 5등급 미달');
+  /* AI·솔로 연습전 파밍 상한 = 4등급 — 아무리 쌓아도 5등급 불가 */
+  const farmed = { plays: 4000, wins: 3500, streakBest: 40, adoN: 300, adoW: 250, comeback: 50, recent: recentMix(90, 100) };
+  eq(gradeOf(farmed), 4, '연습전 3,500승을 쌓아도 4등급에서 멈춘다');
+
+  /* 5등급 — 사람 대전 700승 · 57% · 10연승 · 아도 25 · 성공률 50% */
+  const g5 = Object.assign({}, farmed, { hPlays: 900, hWins: 700, hStreakBest: 10, hAdoN: 45, hAdoW: 25, hrecent: recentMix(57, 100) });
+  eq(gradeOf(g5), 5, '사람 700승·57%·10연승·아도 25(56%) = 5등급 타짜');
+  eq(W.throneCheck(W.throneLoad(fakeStore(g5)), 5).human, true, '5등급은 사람 대전만 집계(human=true)');
+  eq(gradeOf(Object.assign({}, g5, { hAdoN: 60, hAdoW: 25 })), 4, '사람 아도 성공률 41% 면 5등급 미달');
+  eq(gradeOf(Object.assign({}, g5, { hWins: 699 })), 4, '사람 699승이면 5등급 미달');
+  eq(gradeOf(Object.assign({}, g5, { hrecent: recentMix(56, 100) })), 4, '사람 승률 56% 면 5등급 미달');
+  /* 5등급부터는 전체 기록(연습전 포함)만으로는 오를 수 없다 */
+  eq(gradeOf(Object.assign({}, g5, { hPlays: 0, hWins: 0, hStreakBest: 0, hAdoN: 0, hAdoW: 0, hComeback: 0, hrecent: [] })), 4, '사람 기록이 비면 연습전 기록이 아무리 많아도 5등급 불가');
+
+  /* 6·7등급 */
   const g6 = Object.assign({}, g5, { hWins: 1500, hPlays: 1800, hStreakBest: 15, hAdoW: 60, hAdoN: 100, hrecent: recentMix(60, 100) });
   eq(gradeOf(g6), 6, '1,500승·60%·15연승·아도 60·성공률 60% = 6등급 전설');
   const g7 = Object.assign({}, g6, { hWins: 3000, hPlays: 3500, hStreakBest: 20, hAdoW: 100, hAdoN: 160, hrecent: recentMix(63, 100) });
@@ -1025,6 +1036,13 @@ console.log('\n[21] 왕좌 — 화면 배선 · 다국어');
   }
   ok(!/아도|ADO/.test(en), '영문 사전에 아도·ADO 없음(MAX 사용)');
   ok(/MAX/.test(en), '영문 아도 표기는 MAX');
+  /* 도감 하단 집계 규칙 문구 — 코드 기준(1~4등급 연습전 포함 · 5등급부터 온라인만)과 일치 */
+  ok(/1~4등급은 솔로·AI 연습전/.test(kr), '한국어 집계 규칙: 1~4등급 연습전 포함');
+  ok(/5등급부터는 온라인 사람 대전/.test(kr), '한국어 집계 규칙: 5등급부터 온라인 사람 대전만');
+  ok(!/2등급까지/.test(kr) && !/3등급부터/.test(kr), '옛 기준(2등급까지·3등급부터) 문구가 남지 않음(KR)');
+  ok(/Ranks 1–4 count solo and AI practice/.test(en), '영문 집계 규칙: 1~4등급 연습전 포함');
+  ok(/from rank 5 only online wins/.test(en), '영문 집계 규칙: 5등급부터 온라인만');
+  ok(!/up to rank 2/.test(en) && !/from rank 3/.test(en), '옛 기준(rank 2·rank 3) 문구가 남지 않음(EN)');
   ok(/비환금성|바꿀 수 없습니다/.test(kr) || /명예 등급입니다/.test(kr), '한국어 고지에 비환금성 명시');
   ok(/honor rank|cash out/i.test(en), '영문 고지에 비환금성 명시');
 }

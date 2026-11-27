@@ -2534,14 +2534,14 @@ var WNB = (function () {
        · 돈·파이·칩·후원·초대 수로 오르지 않는다. 코인·현금·상품으로
          바꿀 수 없고(환금 가치 0), 판돈·확률·배당·매칭에도 영향이 없다.
        · 고액 베팅을 반복해도 오르지 않는다 — 승패·업적만 센다.
-       · 솔로·AI 연습전은 2등급까지, 3등급부터는 온라인 사람 대전만 집계.
+       · 솔로·AI 연습전은 4등급까지 포함, 5등급부터는 온라인 사람 대전만 집계.
          오프라인 패스앤플레이(친구방)는 비공식이라 세지 않는다.
        · 기록은 브라우저 localStorage(wnb_throne_v1)에 남는다.
        · 조건값·집계 규칙을 바꾸면 테스트(tests/wnb_rules_test.js [19][20])도
          같이 고쳐야 한다 — 도감 문구와 집계가 어긋나지 않게.
      ============================================================ */
   var THRONE_KEY = 'wnb_throne_v1';
-  var THRONE_HUMAN_FROM = 3;        /* 이 등급부터는 사람(온라인) 대전 기록만 인정 */
+  var THRONE_HUMAN_FROM = 5;        /* 이 등급부터는 사람(온라인) 대전 기록만 인정 */
   var THRONE_RECENT = 100;          /* 승률 = 최근 100판 */
   var THRONE_COMEBACK_MULT = 3;     /* 역전승 = 보유 머니가 앤티의 3배 이하일 때 이긴 판 */
 
@@ -2550,8 +2550,8 @@ var WNB = (function () {
   var THRONES = [
     { g: 1, id: 'rookie', img: 'throne-1-rookie.webp', plays: 10, wins: 0, rate: 0, streak: 0, ado: 0, adoRate: 0, comeback: 0, human: false },
     { g: 2, id: 'player', img: 'throne-2-player.webp', plays: 0, wins: 30, rate: 40, streak: 3, ado: 0, adoRate: 0, comeback: 0, human: false },
-    { g: 3, id: 'challenger', img: 'throne-3-challenger.webp', plays: 0, wins: 100, rate: 48, streak: 5, ado: 3, adoRate: 0, comeback: 0, human: true },
-    { g: 4, id: 'master', img: 'throne-4-master.webp', plays: 0, wins: 300, rate: 53, streak: 7, ado: 10, adoRate: 0, comeback: 5, human: true },
+    { g: 3, id: 'challenger', img: 'throne-3-challenger.webp', plays: 0, wins: 100, rate: 48, streak: 5, ado: 3, adoRate: 0, comeback: 0, human: false },
+    { g: 4, id: 'master', img: 'throne-4-master.webp', plays: 0, wins: 300, rate: 53, streak: 7, ado: 10, adoRate: 0, comeback: 5, human: false },
     { g: 5, id: 'tazza', img: 'throne-5-tazza.webp', plays: 0, wins: 700, rate: 57, streak: 10, ado: 25, adoRate: 50, comeback: 0, human: true },
     { g: 6, id: 'legend', img: 'throne-6-legend.webp', plays: 0, wins: 1500, rate: 60, streak: 15, ado: 60, adoRate: 55, comeback: 0, human: true },
     { g: 7, id: 'god', img: 'throne-7-god.webp', plays: 0, wins: 3000, rate: 63, streak: 20, ado: 100, adoRate: 60, comeback: 0, human: true }
@@ -2797,7 +2797,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       crownBest: '최고 왕좌', crownDone: '달성', crownLocked: '잠금', crownUp: '왕좌 승격!',
       crownHint: '눌러서 7 왕좌 도감 보기', crownHuman: '온라인 기록', crownPractice: '연습전 포함',
       crownNote: '명예 등급입니다 — 돈·파이·칩·후원으로 오르지 않고 코인·현금·상품으로 바꿀 수 없습니다. 판돈·확률·배당·매칭에 영향 없음.',
-      crownRule: '솔로·AI 연습전은 2등급까지, 3등급부터는 온라인 사람 대전 승리만 셉니다. 오프라인 패스앤플레이는 비공식이라 제외. 승률은 최근 100판 기준.',
+      crownRule: '1~4등급은 솔로·AI 연습전 기록도 셉니다. 5등급부터는 온라인 사람 대전 승리만 셉니다. 오프라인 패스앤플레이는 비공식이라 제외. 승률은 최근 100판 기준.',
       crownComeback: '역전승 = 앤티의 3배 이하 위기에서 이긴 판',
       crownRank: '6·7등급 시즌 랭킹 조건은 랭킹 도입 전까지 아도 성공률로 대체합니다.',
       cWins: '승리', cPlays: '승부', cRate: '승률', cStreak: '연승', cAdo: '아도 성공', cAdoRate: '아도 성공률', cComeback: '역전승',
@@ -2873,7 +2873,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       crownBest: 'Best throne', crownDone: 'Unlocked', crownLocked: 'Locked', crownUp: 'THRONE UP!',
       crownHint: 'Tap to open all 7 thrones', crownHuman: 'online only', crownPractice: 'practice included',
       crownNote: 'An honor rank — never bought with money, Pi, chips or gifts, and worth nothing to cash out. No effect on ante, odds, payouts or matchmaking.',
-      crownRule: 'Solo and AI practice count up to rank 2; from rank 3 only online wins against people count. Offline pass-and-play is informal and excluded. Win rate = last 100 hands.',
+      crownRule: 'Ranks 1–4 count solo and AI practice too; from rank 5 only online wins against people count. Offline pass-and-play is informal and excluded. Win rate = last 100 hands.',
       crownComeback: 'Comeback = a win while holding 3× the ante or less',
       crownRank: 'The season-ranking conditions for ranks 6–7 are replaced by MAX win rate until rankings launch.',
       cWins: 'Wins', cPlays: 'Hands', cRate: 'Win rate', cStreak: '-win streak', cAdo: 'MAX wins', cAdoRate: 'MAX rate', cComeback: 'Comebacks',
