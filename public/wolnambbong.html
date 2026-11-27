@@ -3548,8 +3548,9 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       d.className = 'thrcard' + (row.g === 7 ? ' god' : '') + (chk.ok ? ' done' : ' lock') + (c.g === row.g ? ' now' : '');
       var lis = '';
       chk.items.forEach(function (it) {
+        var pct = (it.k === 'rate' || it.k === 'adoRate');
         lis += '<li class="' + (it.ok ? 'ok' : '') + '"><span>' + condLine(it) + '</span> <i>' +
-          fmt(it.have) + '/' + fmt(it.need) + (it.k === 'rate' || it.k === 'adoRate' ? '%' : '') + '</i></li>';
+          fmt(it.have) + (pct ? '%' : '') + '/' + fmt(it.need) + (pct ? '%' : '') + '</i></li>';
       });
       d.innerHTML = '<div class="thrpic"><img src="' + throneImg(row.g) + '" alt=""></div>' +
         '<div class="thrbody"><div class="thrttl"><b>' + row.g + ' · ' + t('thr' + row.g) + '</b>' +
