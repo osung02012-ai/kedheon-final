@@ -3952,11 +3952,13 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       if (n) parts.push('<b>' + i + '</b> ' + W.seatNo(n));
     }
     var pi = piUser(), piVer = !!(me && me.piVerified);
+    var inPi = /PiBrowser/i.test(navigator.userAgent || '') || !!(window.Pi && window.Pi.authenticate);
     var piHtml;
     if (pi && !hall.piEdit) {
       piHtml = '<span class="pibadge' + (piVer ? ' v' : '') + '">' + hx(piVer ? t('hallPiVerified') : t('hallPiDeclared')) + '</span> <b>@' + hx(pi) + '</b> <button class="mini" id="piEdit">' + hx(t('hallPiEdit')) + '</button>';
     } else {
-      piHtml = '<input id="piInput" maxlength="20" value="' + hx(pi) + '" placeholder="' + hx(t('hallPiLink')) + ' · @username" /> <button class="mini" id="piSave">' + hx(t('hallSave')) + '</button>';
+      piHtml = '<input id="piInput" maxlength="20" value="' + hx(pi) + '" placeholder="' + hx(t('hallPiLink')) + ' · @username" /> <button class="mini" id="piSave">' + hx(t('hallSave')) + '</button>' +
+        (inPi ? ' <button class="mini" id="piAuth">' + hx(t('hallPiVerified')) + '</button>' : '');
     }
     var nickHtml = hall.nickEdit
       ? '<input id="nickInput2" maxlength="8" value="' + hx(myNick()) + '" /> <button class="mini" id="nickSave">' + hx(t('hallSave')) + '</button>'
@@ -3974,6 +3976,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       '<div class="hmline"><span>' + hx(t('seatMineNow')) + '</span>' +
         (parts.length ? '<span>' + parts.join(' · ') + '</span>' : '<span>' + hx(t('hallMeNone')) + '</span>') + '</div>' +
       '<div class="hmline"><span>π</span>' + piHtml + '</div>' +
+      (pi ? '' : '<div class="hmline" style="font-size:9px;color:#8fa79b;line-height:1.5">' + hx(t('hallPiHint')) + '</div>') +
       '<div class="hmline">' +
         '<button class="mini" id="hallInvite">' + hx(t('hallInvite')) + '</button>' +
         '<a class="mini" href="/xaea12">' + hx(t('hallPiGuide')) + '</a>' +
@@ -4002,6 +4005,8 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     if (pin) pin.onkeydown = function (e) {
       if (e.key === 'Enter') { e.preventDefault(); savePi(this.value, false); }
     };
+    var pa = $('#piAuth');
+    if (pa) pa.onclick = function () { if (!piAuth()) toast('π', t('hallPiHint'), 2600); };
     var pe = $('#piEdit');
     if (pe) pe.onclick = function () { hall.piEdit = true; renderHallMe(); };
   }
