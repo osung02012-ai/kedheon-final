@@ -124,6 +124,11 @@ body{
 .lobby>*{flex:0 0 auto}
 .lobby .ghost,.lobby .start{flex:0 0 auto;width:100%}
 .lobby .lk{font-size:9.5px;letter-spacing:2.4px;color:var(--gold-d);font-weight:800;text-align:center}
+/* 초대하기 — 대기실 주요 버튼 / 진행 중 상단 방 코드 배지(방장 전용 초대 트리거) */
+#inviteBtn{letter-spacing:.4px}
+#roomBadge.invitable{cursor:pointer}
+#roomBadge.invitable:active{transform:translateY(1px)}
+#roomBadge.invitable:focus-visible{outline:2px solid rgba(230,195,124,.75);outline-offset:1px}
 .lobby .code{font-size:42px;font-weight:900;letter-spacing:11px;text-align:center;color:#ffeec4;text-shadow:0 2px 14px rgba(230,195,124,.35);font-variant-numeric:tabular-nums;padding-left:11px}
 .lobbyList{display:flex;flex-direction:column;gap:4px;background:rgba(0,0,0,.22);border:1px solid rgba(230,195,124,.14);border-radius:14px;padding:8px;min-height:56px;max-height:38vh;overflow-y:auto}
 .lp{display:flex;align-items:center;gap:7px;font-size:12px;color:#e9e2cf;padding:5px 7px;border-radius:9px}
@@ -535,7 +540,7 @@ body{
   <section class="screen" id="scr-game">
     <div class="statusbar">
       <div class="meta">
-        <span class="deckbadge" id="roomBadge" style="display:none">🌐 <b>0000</b></span>
+        <span class="deckbadge" id="roomBadge" role="button" tabindex="-1" style="display:none">🌐 <b>0000</b></span>
         <span class="deckbadge"><i></i><b id="deckVal">48</b></span>
         <span class="deckbadge cpnbadge" id="cpnBadge" title="충전 쿠폰">🎟️ <b data-cpn>0</b></span>
       </div>
@@ -578,7 +583,7 @@ body{
       <p class="lk" data-i18n="roomCode">방 코드</p>
       <div class="code" id="roomCode">----</div>
       <div id="shareRow">
-        <button class="ghost wide" id="shareBtn">🔗 <span data-i18n="shareLink">초대 링크</span></button>
+        <button class="go wide" id="inviteBtn">📨 <span data-i18n="invite">초대하기</span></button>
         <p class="lhint" id="shareHint" style="margin-top:4px;word-break:break-all"></p>
       </div>
       <div class="lobbyList" id="lobbyList"></div>
@@ -2403,6 +2408,40 @@ var WNB = (function () {
       '</svg>';
   }
 
+  /* ------------------------------------------------------------
+     온라인 방 초대 — 링크 생성 · 파싱 · 안내 문구
+     UI와 테스트가 같은 함수를 쓰도록 순수 함수로 둔다.
+     ------------------------------------------------------------ */
+  var INVITE_PATH = '/wolnambbong.html';
+  function roomCode(v) {
+    var s = String(v == null ? '' : v).replace(/[^0-9]/g, '');
+    return s.length === 4 ? s : '';
+  }
+  /* origin + 경로 + ?room=XXXX (origin이 비면 상대 경로) */
+  function inviteLink(base, code) {
+    var c = roomCode(code);
+    if (!c) return '';
+    var o = String(base == null ? '' : base).replace(/\/+$/, '');
+    return (o ? o + INVITE_PATH : INVITE_PATH) + '?room=' + c;
+  }
+  /* 초대 URL · 쿼리 · 4자리 코드 어느 쪽을 넣어도 코드만 뽑아낸다(없으면 '') */
+  function parseInvite(input) {
+    var v = String(input == null ? '' : input).trim();
+    if (!v) return '';
+    var m = v.match(/[?&]room=(\d{4})(?:[&#]|$)/i);
+    if (m) return m[1];
+    /* URL·쿼리가 아닌 '코드만' 붙여넣은 경우 — 주소 안의 숫자를 잘못 주워담지 않도록 */
+    if (/[\/?:&=#]/.test(v)) return '';
+    return roomCode(v);
+  }
+  /* 공유 시트·클립보드로 나갈 안내 문구(방 코드 포함) */
+  function inviteText(code, lang) {
+    var c = roomCode(code) || String(code == null ? '' : code);
+    return lang === 'en'
+      ? 'Join my Wol-nam-bbong room · Room code ' + c
+      : '월남뽕 온라인 방에 들어와 · 방 코드 ' + c;
+  }
+
   return {
     MONTHS: MONTHS, newDeck: newDeck, shuffle: shuffle, mulberry32: mulberry32,
     newGame: newGame, beginTurn: beginTurn, betLimits: betLimits, odds: odds,
@@ -2414,7 +2453,8 @@ var WNB = (function () {
     couponLoad: couponLoad, couponSave: couponSave, couponAdd: couponAdd, couponUse: couponUse,
     isChampion: isChampion, soloGoalHit: soloGoalHit, couponCheck: couponCheck, couponRecharge: couponRecharge,
     COUPON_KEY: COUPON_KEY, COUPON_MONEY: COUPON_MONEY, COUPON_SOLO_GOAL: COUPON_SOLO_GOAL,
-    activeCount: activeCount, meta: meta, faceSVG: faceSVG, backSVG: backSVG
+    activeCount: activeCount, meta: meta, faceSVG: faceSVG, backSVG: backSVG,
+    roomCode: roomCode, inviteLink: inviteLink, parseInvite: parseInvite, inviteText: inviteText
   };
 })();
 if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
@@ -2435,6 +2475,8 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       nickname: '닉네임', createRoom: '🌐 방 만들기', joinRoom: '입장', orJoin: '또는 4자리 코드로 입장',
       onlineHintTxt: '방을 만들면 4자리 코드와 초대 링크가 생깁니다.', roomCode: '방 코드',
       shareLink: '초대 링크', lobbyWaitTxt: '방장이 [게임 시작]을 누르면 시작합니다.', leave: '나가기',
+      invite: '초대하기', inviteTitle: '월남뽕 온라인 방 초대', inviteCopied: '초대 링크를 복사했습니다',
+      invitedHint: '닉네임을 확인하고 [입장]을 누르세요',
       players: '인원', matchType: '대전 형식', ante: '앤티',
       lang: '언어', restart: '처음부터 (모드 선택)', close: '닫기',
       start: '시작하기', heroSub: '금박 숫자(1~12) 전통 화투로 30초 만에 즐기는 K-심리 카드 게임 (두 패 사이를 쪼아 맞히는 룰)',
@@ -2451,7 +2493,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       peekShort: '밀어서 쪼기', peekHint: '카드를 위로 밀어 쪼개 보세요',
       thinking: '생각 중', peeking: '패를 쪼는 중', myPeek: '당신 차례 — 손으로 쪼개세요',
       dealMsg: '패를 나눴습니다', antePaid: '앤티', max: '최대', min: '최소',
-      ado: '아도', noGap: '사이 없음', noGapMsg: '사이 없음 — 걸어도 들어갈 자리 없음',
+      ado: '아도', adoWin: '아도', noGap: '사이 없음', noGapMsg: '사이 없음 — 걸어도 들어갈 자리 없음',
       noGapSub: '이어지는 숫자라 세 번째 패가 사이에 들어올 수 없습니다 — 직접 걸거나 패스하세요',
       passHint: '앤티만 판돈에 남깁니다',
       win: 'WIN', lose: 'LOSE', ppong: '뽕!',
@@ -2498,6 +2540,8 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       nickname: 'Nickname', createRoom: '🌐 Create room', joinRoom: 'Join', orJoin: 'or join with a 4-digit code',
       onlineHintTxt: 'Creating a room gives you a 4-digit code and an invite link.', roomCode: 'ROOM CODE',
       shareLink: 'Invite link', lobbyWaitTxt: 'The host starts the game.', leave: 'Leave',
+      invite: 'Invite', inviteTitle: 'Wolnambbong online room invite', inviteCopied: 'Invite link copied',
+      invitedHint: 'check your nickname, then press Join',
       players: 'Players', matchType: 'Match', ante: 'Ante',
       lang: 'Language', restart: 'Back to mode select', close: 'Close',
       start: 'START',
@@ -2514,7 +2558,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       holdHint: 'Check all three cards',
       peekShort: 'Push to peek', peekHint: 'Push the card up to squeeze a peek',
       thinking: 'thinking', peeking: 'squeezing', myPeek: 'Your turn — squeeze it yourself',
-      dealMsg: 'Cards dealt', min: 'MIN', max: 'MAX', ado: 'ADO',
+      dealMsg: 'Cards dealt', min: 'MIN', max: 'MAX', ado: 'MAX', adoWin: 'MAX BET',
       noGap: 'NO GAP', noGapMsg: 'No gap — nothing can land between',
       noGapSub: 'Consecutive months: the third card can never land inside — bet or pass as you like',
       passHint: 'Only the ante stays in the pot',
@@ -3828,7 +3872,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
             .map(function (x) { return x.avatar + ' ' + pName(x) + ' 🤧'; }).join('  ');
           react = '<div class="react"><span>' + t('others') + ': ' + others + ' — ' + t('scooped') + '</span></div>';
         }
-        renderMsg('win', '🎉 ' + t('win') + ' +' + fmt(res.delta) + (res.ado ? ' · ' + t('ado') : '') + (res.type === 'pairWin' ? ' · ' + sideLabel(res.dir) : ''),
+        renderMsg('win', '🎉 ' + t('win') + ' +' + fmt(res.delta) + (res.ado ? ' · ' + t('adoWin') : '') + (res.type === 'pairWin' ? ' · ' + sideLabel(res.dir) : ''),
           nm + ' · ' + monthLabel(res.m) + ' — ' + (res.type === 'pairWin' ? t('pairWin') : t('winSub')) + react);
       } else if (res.type === 'pairLose') {
         if (ui.mode !== 'solo') react = '<div class="react"><span>🔥 ' + t('potUp') + ' · ' + (nxt.avatar || '') + ' ' + pName(nxt) + '</span></div>';
@@ -4127,6 +4171,20 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       };
     }
 
+    /* 상단 방 코드 배지 — 방장에게는 탭하면 초대가 열리는 버튼, 손님에게는 읽기 전용 표시 */
+    function paintRoomBadge() {
+      var badge = $('roomBadge');
+      if (!badge) return;
+      if (!st.code) { badge.style.display = 'none'; return; }
+      badge.style.display = 'inline-flex';
+      badge.innerHTML = '🌐 <b>' + st.code + '</b>';
+      var host = isHost();
+      badge.classList.toggle('invitable', host);
+      badge.tabIndex = host ? 0 : -1;
+      var label = t('roomCode') + ' ' + st.code;
+      badge.setAttribute('title', host ? t('invite') + ' · ' + label : label);
+      badge.setAttribute('aria-label', host ? t('invite') + ' · ' + label : label);
+    }
     function applySnap(sn) {
       if (!sn) return;
       if (sn.rid && st.rid && sn.rid !== st.rid) return;
@@ -4139,8 +4197,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       busy = false;
       revealed = (sn.phase === 'result');
       show('game');
-      var badge = $('roomBadge');
-      if (badge) { badge.style.display = 'inline-flex'; badge.innerHTML = '🌐 <b>' + st.code + '</b>'; }
+      paintRoomBadge();
       renderStatus();
       renderPlayers();
       renderBoard();
@@ -4526,7 +4583,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
           var others = S.players.filter(function (x, i) { return i !== res.turn; })
             .map(function (x) { return x.avatar + ' ' + pName(x) + ' 🤧'; }).join('  ');
           if (others) react = '<div class="react"><span>' + t('others') + ': ' + others + ' — ' + t('scooped') + '</span></div>';
-          renderMsg('win', '🎉 ' + t('win') + ' +' + fmt(res.delta) + (res.ado ? ' · ' + t('ado') : '') + (res.type === 'pairWin' ? ' · ' + sideLabel(res.dir) : ''),
+          renderMsg('win', '🎉 ' + t('win') + ' +' + fmt(res.delta) + (res.ado ? ' · ' + t('adoWin') : '') + (res.type === 'pairWin' ? ' · ' + sideLabel(res.dir) : ''),
             nm + ' · ' + monthLabel(res.m) + ' — ' + (res.type === 'pairWin' ? t('pairWin') : t('winSub')) + react);
         } else if (res.type === 'pairLose') {
           react = '<div class="react"><span>🔥 ' + t('potUp') + ' · ' + (nxt.avatar || '') + ' ' + pName(nxt) + '</span></div>';
@@ -4738,7 +4795,8 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       var w = $('lobbyWait'); if (w) w.style.display = isHost() ? 'none' : '';
     }
     function shareLink() {
-      return location.origin + '/wolnambbong.html?room=' + st.code;
+      var o = (location.origin && location.origin !== 'null') ? location.origin : '';
+      return W.inviteLink(o, st.code);
     }
 
     /* ---------------- 방 만들기 / 입장 / 나가기 ---------------- */
@@ -4836,6 +4894,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       st.couponPending = 0; st.couponOverClaimed = false;
       clearTimeout(st.voteTimer); st.voteTimer = 0; st.prop = null; st.votes = {}; st.myVote = null;
       hideVote();
+      var rb = $('roomBadge'); if (rb) { rb.style.display = 'none'; rb.classList.remove('invitable'); rb.tabIndex = -1; }
       setConn('');
       if (!keepCfg) st.cfg = null;
     }
@@ -4886,11 +4945,14 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       try { nk = localStorage.getItem('wnb.nick') || ''; } catch (e) {}
       if (nk && $('nickInput') && !$('nickInput').value) $('nickInput').value = nk;
       var q = '';
-      try { q = new URLSearchParams(location.search).get('room') || ''; } catch (e) {}
-      if (/^\d{4}$/.test(q)) {
+      try { q = W.parseInvite(location.href); } catch (e) { q = ''; }
+      if (q) {
+        /* 초대 링크(?room=XXXX) — 온라인 모드로 열고 코드를 채운 뒤, 닉네임만 확인하면 [입장] 한 번으로 들어간다 */
+        if (ui.mode !== 'online') { ui.mode = 'online'; applyStatic(); }
         if ($('codeInput')) $('codeInput').value = q;
         if (!nk && $('nickInput')) $('nickInput').focus();
-        hint(ui.lang === 'en' ? 'Invite link — enter a nickname and press Join.' : '초대 링크로 접속했습니다. 닉네임을 넣고 [입장]을 눌러 주세요.');
+        else if ($('#joinBtn')) $('#joinBtn').focus();
+        hint('🎟️ ' + t('roomCode') + ' ' + q + ' · ' + t('invitedHint'));
       }
       st.on = true;
       startTicker();
@@ -4899,26 +4961,46 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     function canPeek() {
       return !!(st.snap && st.snap.phase === 'peek' && st.snap.turn === myIdx() && !busy && !revealed);
     }
+    /* 예전 브라우저·비보안 컨텍스트용 복사 폴백 */
+    function copyFallback(txt) {
+      try {
+        var ta = document.createElement('textarea');
+        ta.value = txt;
+        ta.setAttribute('readonly', '');
+        ta.style.cssText = 'position:fixed;top:-1000px;left:0;opacity:0';
+        document.body.appendChild(ta);
+        ta.select();
+        var ok = false;
+        try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+        document.body.removeChild(ta);
+        return ok;
+      } catch (e) { return false; }
+    }
+    /* 초대하기 — 방 코드 + 초대 링크를 공유 시트 → 클립보드 → 수동 복사 순으로 넘긴다 */
     function share() {
+      if (!st.code) return;
+      var code = st.code;
       var link = shareLink();
+      var msg = W.inviteText(code, ui.lang) + '\n' + link;
+      var h = $('shareHint');
+      if (h) h.textContent = link;
       var done = function () {
-        var h = $('shareHint');
-        if (h) h.textContent = (ui.lang === 'en' ? 'Copied: ' : '복사됨! ') + link;
-        hint((ui.lang === 'en' ? 'Link copied: ' : '초대 링크 복사됨: ') + link);
+        toast('📨 ' + t('inviteCopied'), t('roomCode') + ' ' + code + ' · ' + link, 4600);
       };
       try {
         if (navigator.share) {
-          navigator.share({ title: '월남뽕 · 온라인 방 ' + st.code, text: (ui.lang === 'en' ? 'Join my Wol-nam-bbong room: ' : '월남뽕 온라인 방에 들어와: '), url: link }).catch(function () {});
+          var pr = navigator.share({ title: t('inviteTitle'), text: msg, url: link });
+          if (pr && pr.catch) pr.catch(function () {});
           return;
         }
       } catch (e) {}
       try {
         if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(link).then(done, function () { done(); });
+          navigator.clipboard.writeText(msg).then(done, function () { copyFallback(msg); done(); });
           return;
         }
       } catch (e) {}
-      done();
+      copyFallback(msg); done();
     }
 
     return {
@@ -4999,8 +5081,16 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     if (cbtn) cbtn.onclick = function () { ON.create(); };
     var jbtn = $('#joinBtn');
     if (jbtn) jbtn.onclick = function () { ON.join(); };
-    var sbtn = $('#shareBtn');
-    if (sbtn) sbtn.onclick = function () { ON.share(); };
+    var ib = $('#inviteBtn');
+    if (ib) ib.onclick = function () { ON.share(); };
+    var rb = $('#roomBadge');
+    if (rb) {
+      var inviteOpen = function () { if (ON.isHost() && ON.state().code) ON.share(); };
+      rb.onclick = inviteOpen;
+      rb.onkeydown = function (e) {
+        if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') { e.preventDefault(); inviteOpen(); }
+      };
+    }
     var lbtn = $('#leaveBtn');
     if (lbtn) lbtn.onclick = function () { ON.leave(true); };
     var hs = $('#hostStartBtn');
@@ -5016,10 +5106,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
 
   fxInit();
   bind();
-  try {
-    var _room = new URLSearchParams(location.search).get('room') || '';
-    if (/^\d{4}$/.test(_room)) ui.mode = 'online';
-  } catch (e) {}
+  try { if (W.parseInvite(location.href)) ui.mode = 'online'; } catch (e) {}
   applyStatic();
   renderHero();
   if (ui.mode === 'online') ON.prepare();

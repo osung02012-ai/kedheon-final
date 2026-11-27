@@ -761,5 +761,61 @@ console.log('\n[16] 짧은 모바일 화면 — 깔린 2장 잘림 0px · [⤒] 
   }
 }
 
+console.log('\n[17] 초대하기 · 초대 링크 딥링크(?room=) 파싱');
+{
+  /* 순수 함수 — 화면과 같은 W.inviteLink / W.parseInvite / W.inviteText 를 검사한다 */
+  eq(W.inviteLink('https://xaea12.kedheon.com', '4821'),
+    'https://xaea12.kedheon.com/wolnambbong.html?room=4821', '초대 링크 = origin + /wolnambbong.html?room=XXXX');
+  eq(W.inviteLink('https://xaea12.kedheon.com/', ' 4 8 2 1 '),
+    'https://xaea12.kedheon.com/wolnambbong.html?room=4821', '끝 슬래시·공백·비숫자는 정리');
+  eq(W.inviteLink('', '4821'), '/wolnambbong.html?room=4821', 'origin 이 없으면 상대 경로');
+  eq(W.inviteLink('https://x', '12'), '', '3자리 코드는 링크를 만들지 않는다');
+  eq(W.inviteLink('https://x', 'abcd'), '', '숫자 아닌 코드는 링크를 만들지 않는다');
+  eq(W.roomCode('00 12'), '0012', 'roomCode 는 4자리만 인정');
+
+  eq(W.parseInvite('https://xaea12.kedheon.com/wolnambbong.html?room=4821'), '4821', '딥링크에서 방 코드 추출');
+  eq(W.parseInvite('https://xaea12.kedheon.com/wolnambbong.html?room=4821&x=1'), '4821', '뒤에 다른 쿼리가 붙어도 추출');
+  eq(W.parseInvite('?room=9070#invite'), '9070', '#앵커가 붙어도 추출');
+  eq(W.parseInvite(' 4821 '), '4821', '4자리 코드만 붙여넣어도 통과');
+  eq(W.parseInvite('https://xaea12.kedheon.com/wolnambbong.html?room=12'), '', '3자리 room 파라미터는 무시');
+  eq(W.parseInvite('https://xaea12.kedheon.com/wolnambbong.html'), '', 'room 파라미터 없는 링크는 코드 없음');
+  eq(W.parseInvite(''), '', '빈 문자열은 코드 없음');
+  eq(W.parseInvite(null), '', 'null 안전');
+
+  ok(/방 코드/.test(W.inviteText('4821', 'kr')) && /4821/.test(W.inviteText('4821', 'kr')), '한국어 초대 문구에 방 코드 포함');
+  ok(/Room code/i.test(W.inviteText('4821', 'en')) && /4821/.test(W.inviteText('4821', 'en')), '영어 초대 문구에 Room code 포함');
+  ok(W.inviteText('4821', 'kr') !== W.inviteText('4821', 'en'), '언어별 문구가 다르다');
+
+  /* 화면 배선 */
+  ok(/id="inviteBtn"/.test(src), '대기실에 초대하기 버튼(#inviteBtn)');
+  ok(/id="inviteBtn"[\s\S]{0,90}data-i18n="invite"/.test(src), '초대하기 버튼은 다국어(data-i18n="invite")');
+  ok(/#inviteBtn\{/.test(src), '초대하기 버튼 스타일 정의');
+  ok(/W\.inviteLink\(/.test(src) && /W\.parseInvite\(/.test(src), '화면이 W.inviteLink·W.parseInvite 를 사용');
+  ok(/navigator\.share/.test(src) && /navigator\.clipboard\.writeText/.test(src), '공유 시트 → 클립보드 순 폴백');
+  ok(/cdocument/.test(src) === false && /execCommand\('copy'\)/.test(src), '클립보드 미지원 시 수동 복사 폴백');
+  ok(/function paintRoomBadge/.test(src), '상단 방 코드 배지 = 방장 초대 트리거');
+  ok(/#roomBadge\.invitable\{cursor:pointer\}/.test(src), '방장일 때만 배지가 클릭 커서');
+  ok(/hint\('🎟️ ' \+ t\('roomCode'\)/.test(src), '초대 링크 접속 시 방 코드·안내 문구 표시');
+  ok(/ui\.mode !== 'online'\) \{ ui\.mode = 'online'; applyStatic\(\)/.test(src), '초대 링크로 오면 온라인 모드로 전환');
+}
+
+console.log('\n[18] 다국어 — 번역본에 ADO(아도) 잔존 0');
+{
+  const langBlock = (name) => {
+    const m = src.match(new RegExp('\\n    ' + name + ': \\{([\\s\\S]*?)\\n    \\}'));
+    return m ? m[0] : '';
+  };
+  const kr = langBlock('kr'), en = langBlock('en');
+  ok(!!kr && !!en, 'kr·en 사전을 찾는다');
+  ok(/ado: 'MAX'/.test(en), "영문 아도 라벨 = 'MAX'");
+  ok(/adoWin: 'MAX BET'/.test(en), "영문 우승 문구 = 'MAX BET'");
+  ok(!/'ADO'/.test(en) && !/아도/.test(en), '영문 사전에 ADO·아도 없음');
+  ok(/ado: '아도'/.test(kr), "한국어 라벨은 그대로 '아도'");
+  ok(/adoWin: '아도'/.test(kr), "한국어 우승 문구도 '아도'");
+  ok(/invite: '초대하기'/.test(kr) && /invite: 'Invite'/.test(en), '초대하기 라벨 다국어');
+  ok((src.match(/t\('ado'\)/g) || []).length === 1, "t('ado') 는 베팅 칩 라벨 한 곳에서만", (src.match(/t\('ado'\)/g) || []).length);
+  ok((src.match(/t\('adoWin'\)/g) || []).length === 2, "우승 문구는 t('adoWin') 두 곳", (src.match(/t\('adoWin'\)/g) || []).length);
+}
+
 console.log('\n결과: ' + pass + ' 통과 / ' + fail + ' 실패');
 process.exit(fail ? 1 : 0);
