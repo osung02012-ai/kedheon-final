@@ -2922,6 +2922,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       hallBar: '명예의 전당 · TOP 10', hallBarSub: '실시간 랭킹 · 왕좌 좌석',
       hallTitle: '🏆 명예의 전당', hallTabTop: 'TOP 10', hallTabSeats: '왕좌 좌석',
       hallPioneers: 'π 개척자', hallPlayers: '등록 선수', hallMyRank: '내 순위',
+      hallPioneersN: 'π 개척자 {n}', hallPlayersN: '등록 선수 {n}', hallRankN: '내 순위 {r}위',
       hallEmpty: '아직 기록이 없습니다 — 첫 주자가 되어 보세요.',
       hallMeNone: '한 판만 두면 자동으로 등록됩니다.',
       hallSeatMine: '내 번호', hallSeatRemain: '남음', hallSeatFull: '마감', hallNoServer: '오프라인 — 내 번호만',
@@ -3015,6 +3016,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       hallBar: 'Hall of Fame · TOP 10', hallBarSub: 'live ranking · throne seats',
       hallTitle: '🏆 Hall of Fame', hallTabTop: 'TOP 10', hallTabSeats: 'Throne seats',
       hallPioneers: 'π pioneers', hallPlayers: 'players', hallMyRank: 'My rank',
+      hallPioneersN: 'π Pioneers {n}', hallPlayersN: '{n} Players', hallPlayersN1: '{n} Player', hallRankN: 'My Rank #{r}',
       hallEmpty: 'No records yet — be the first to play.',
       hallMeNone: 'Play one hand and you are on the board.',
       hallSeatMine: 'My no.', hallSeatRemain: 'left', hallSeatFull: 'full', hallNoServer: 'offline — my number only',
@@ -3887,9 +3889,15 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       }, function (j) {
         if (!j || !j.ok) return;
         if (j.me) {
-          hall.data = hall.data || {};
-          hall.data.available = true;
-          hall.data.me = j.me;
+          /* 기록 응답(player_touch)에는 순위·좌석이 없다 — 보드에서 받아 둔 순위·좌석을
+             덮어쓰지 않고 합친다(예전엔 통째로 갈아 끼워 '내 순위 -' 가 됐다). */
+          var d = hall.data || (hall.data = {});
+          var prev = d.me || {}, next = {}, k;
+          for (k in j.me) if (Object.prototype.hasOwnProperty.call(j.me, k)) next[k] = j.me[k];
+          if (next.rank == null && prev.rank != null) next.rank = prev.rank;
+          if (!next.seats && prev.seats) next.seats = prev.seats;
+          d.available = true;
+          d.me = next;
         }
         paintHallBar();
         if (hall.open) renderHall();
@@ -3919,6 +3927,19 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
   }
 
   /* ---------------- 명예의 전당 화면 ---------------- */
+  /* 로비 바 문구 — 언어별로 온전히 읽히게(영문·한글 혼용 금지).
+     · 선수 수: 한국어 '등록 선수 1' · 영어 '1 Player'(1명일 때 단수)
+     · 내 순위: 서버가 준 순위가 있을 때만 '내 순위 1위' 로 쓰고, 없으면 칸을 비운다('-' 금지)
+     · 1위 닉네임은 바에 넣지 않는다 — 예전 '· 1 Player' 는 순위 1번의 닉네임이 붙어
+       '1명'으로 오독됐다. 1위는 명예의 전당 TOP 10 목록에서 본다. */
+  function playersCountLabel(n) {
+    var single = n === 1 && I18N[ui.lang] && I18N[ui.lang].hallPlayersN1;
+    return tf(single ? 'hallPlayersN1' : 'hallPlayersN', { n: fmt(n) });
+  }
+  function myRankLabel(r) {
+    r = Number(r) || 0;
+    return r > 0 ? tf('hallRankN', { r: fmt(r) }) : '';
+  }
   function paintHallBar() {
     var b = $('#hallBarTitle'), s = $('#hallBarSub');
     if (b) b.textContent = t('hallBar');
@@ -3926,9 +3947,10 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     var d = hall.data;
     if (!d) { s.textContent = t('seatLoading'); return; }
     if (d.available === false) { s.textContent = t('hallNoServer'); return; }
-    var me = d.me ? (' · ' + t('hallMyRank') + ' ' + (d.me.rank || '-')) : '';
-    var lead = (d.top && d.top[0]) ? (' · 1 ' + hx(d.top[0].nickname)) : '';
-    s.textContent = t('hallPioneers') + ' ' + fmt(d.pioneers || 0) + ' · ' + t('hallPlayers') + ' ' + fmt(d.players || 0) + me + lead;
+    var parts = [tf('hallPioneersN', { n: fmt(d.pioneers || 0) }), playersCountLabel(Number(d.players) || 0)];
+    var rk = myRankLabel(d.me && d.me.rank);
+    if (rk) parts.push(rk);
+    s.textContent = parts.join(' · ');
   }
 
   function renderHallStats() {
@@ -3971,7 +3993,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
             (me ? ' · ' + t('cWins') + ' ' + fmt(me.wins) : '') +
             ' · ' + t('hallInvites') + ' ' + fmt(me ? me.invites : 0) + '</span>' +
         '</div>' +
-        (me && me.rank ? '<span class="hmrank">' + hx(t('hallMyRank')) + ' #' + me.rank + '</span>' : '') +
+        (me && me.rank ? '<span class="hmrank">' + hx(myRankLabel(me.rank)) + '</span>' : '') +
       '</div>' +
       '<div class="hmline"><span>' + hx(t('seatMineNow')) + '</span>' +
         (parts.length ? '<span>' + parts.join(' · ') + '</span>' : '<span>' + hx(t('hallMeNone')) + '</span>') + '</div>' +

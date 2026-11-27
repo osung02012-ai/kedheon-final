@@ -118,7 +118,13 @@ export async function POST(req: Request) {
       p_plays: num(body.plays, 10_000_000)
     });
     if (!r.ok) return json({ ok: false, available: !isMissingObject(r.status, r.error), error: r.error });
-    return json({ ok: true, available: true, me: r.data });
+    /* wnb_player_touch 는 기록만 돌려준다(순위·좌석 없음). 화면이 '내 순위 -' 가 되지 않도록
+       보드에서 그 기기의 me(순위·좌석 포함)를 다시 읽어 합쳐 준다. */
+    const b = await sbRpc<Record<string, unknown>>('wnb_board', { p_device: device, p_top: 1 });
+    const me = b.ok && b.data && typeof b.data === 'object'
+      ? ((b.data as Record<string, unknown>).me as Record<string, unknown> | null)
+      : null;
+    return json({ ok: true, available: true, me: me ? { ...(r.data || {}), ...me } : r.data });
   }
 
   if (action === 'seat') {
