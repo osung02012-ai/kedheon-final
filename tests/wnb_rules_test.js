@@ -817,5 +817,217 @@ console.log('\n[18] 다국어 — 번역본에 ADO(아도) 잔존 0');
   ok((src.match(/t\('adoWin'\)/g) || []).length === 2, "우승 문구는 t('adoWin') 두 곳", (src.match(/t\('adoWin'\)/g) || []).length);
 }
 
+/* ============================================================
+   [19] 왕좌(명예 등급) — 판정 · 집계 · 보존
+   ============================================================ */
+function fakeStore(raw) {
+  const m = {};
+  if (raw !== undefined) m[W.THRONE_KEY] = typeof raw === 'string' ? raw : JSON.stringify(raw);
+  return {
+    getItem: (k) => (k in m ? m[k] : null),
+    setItem: (k, v) => { m[k] = String(v); },
+    removeItem: (k) => { delete m[k]; }
+  };
+}
+function stOf(raw) { return W.throneLoad(fakeStore(raw)); }
+function gradeOf(raw) { return W.throneGrade(stOf(raw)); }
+/* 이벤트 n건 적용한 뒤의 기록 */
+function play(evs, base) {
+  let st = stOf(base || {});
+  evs.forEach((e) => { st = W.throneApply(st, Object.assign({ play: true, win: false, ado: false, comeback: false, human: false }, e)); });
+  return st;
+}
+const winN = (n, extra) => Array(n).fill(0).map(() => Object.assign({ win: true }, extra || {}));
+const loseN = (n, extra) => Array(n).fill(0).map(() => Object.assign({ win: false }, extra || {}));
+const recentMix = (wins, total) => Array(total).fill(0).map((_, i) => (i < wins ? 1 : 0));
+
+console.log('\n[19] 왕좌(명예 등급) — 7단계 정의');
+{
+  eq(W.THRONES.length, 7, '왕좌 7단계');
+  eq(W.THRONES.map((t) => t.g).join(','), '1,2,3,4,5,6,7', '등급 1~7 순서');
+  ok(W.THRONES.every((t) => t.img && /\.webp$/.test(t.img)), '7종 모두 WebP 파일명');
+  ok(W.THRONES.every((t) => !('price' in t) && !('cost' in t) && !('buy' in t)), '구매·가격 필드 없음(비환금성)');
+  const wins = W.THRONES.map((t) => t.wins);
+  ok(wins.every((v, i) => i === 0 || v > wins[i - 1]), '누적 승리 조건이 등급마다 엄격히 증가', wins);
+  const rates = W.THRONES.map((t) => t.rate);
+  ok(rates.every((v, i) => i === 0 || v >= rates[i - 1]), '승률 조건이 내려가지 않는다', rates);
+  eq(W.THRONE_HUMAN_FROM, 3, '3등급부터 사람 대전만 집계');
+  eq(W.THRONE_RECENT, 100, '승률 모수 = 최근 100판');
+  eq(W.THRONE_COMEBACK_MULT, 3, '역전승 = 앤티 3배 이하 위기');
+  ok(W.THRONES.slice(2).every((t) => t.human === true), '3~7등급은 사람(온라인) 기록 기준');
+  ok(W.THRONES.slice(0, 2).every((t) => t.human === false), '1~2등급은 연습전 포함');
+
+  /* 이미지 실물 — 저장소에 WebP 7종이 있고 과하게 무겁지 않다 */
+  const dir = path.join(__dirname, '..', 'public', 'thrones');
+  W.THRONES.forEach((t) => {
+    const f = path.join(dir, t.img);
+    const exists = fs.existsSync(f);
+    ok(exists, '이미지 존재 ' + t.img);
+    if (!exists) return;
+    const b = fs.readFileSync(f);
+    ok(b.slice(0, 4).toString('ascii') === 'RIFF' && b.slice(8, 12).toString('ascii') === 'WEBP', 'WebP 포맷 ' + t.img);
+    ok(b.length < 120 * 1024, '경량(<120KB) ' + t.img + ' — ' + Math.round(b.length / 1024) + 'KB');
+  });
+}
+
+console.log('\n[20] 왕좌 — 저장·집계·승격 판정');
+{
+  /* 빈 기록 */
+  const blank = W.throneBlank();
+  eq(blank.plays, 0, '빈 기록 plays=0');
+  eq(gradeOf(), 0, '첫 방문(기록 없음) = 왕좌 없음(0)');
+  eq(W.throneApply(blank, { play: false }).plays, 0, '패스한 판은 승부로 세지 않는다');
+
+  /* 저장 왕복 */
+  const s1 = fakeStore();
+  W.throneSave(s1, { plays: 12, wins: 7, streakBest: 4 });
+  const back = W.throneLoad(s1);
+  eq(back.plays, 12, '저장 후 plays 유지');
+  eq(back.wins, 7, '저장 후 wins 유지');
+  eq(back.streakBest, 4, '저장 후 streakBest 유지');
+  eq(W.throneLoad(fakeStore('{깨진 JSON')).plays, 0, '깨진 저장값은 빈 기록으로');
+  eq(W.throneLoad(fakeStore({ plays: -5, wins: 'x' })).plays, 0, '음수·문자열은 0으로 정규화');
+  eq(W.throneLoad(null).plays, 0, '저장소 없음(null) 안전');
+  eq(W.throneLoad({ getItem() { throw new Error('blocked'); } }).plays, 0, 'localStorage 차단 환경 안전');
+
+  /* 1등급 — 첫 10판 승부 */
+  eq(gradeOf({ plays: 9 }), 0, '9판 = 아직 1등급 아님');
+  eq(gradeOf({ plays: 10 }), 1, '10판 승부 = 1등급 풋내기');
+  eq(gradeOf({ plays: 10, wins: 0 }), 1, '10판 전패여도 1등급(첫 10판 완료)');
+
+  /* 2등급 — 30승 · 승률 40% · 3연승 */
+  const g2 = { plays: 90, wins: 40, streakBest: 3, recent: recentMix(45, 100) };
+  eq(gradeOf(g2), 2, '30승+ · 승률 45% · 3연승 = 2등급 꾼');
+  eq(gradeOf(Object.assign({}, g2, { streakBest: 2 })), 1, '3연승 없으면 2등급 미달');
+  eq(gradeOf(Object.assign({}, g2, { recent: recentMix(35, 100) })), 1, '승률 35% 면 2등급 미달');
+  eq(gradeOf(Object.assign({}, g2, { wins: 29, streakBest: 3 })), 1, '29승이면 2등급 미달');
+
+  /* AI·솔로 연습전은 2등급까지만 — 사람 기록 0이면 3등급 불가 */
+  const farmed = { plays: 4000, wins: 3500, streakBest: 40, adoN: 300, adoW: 250, comeback: 50, recent: recentMix(90, 100) };
+  eq(gradeOf(farmed), 2, '연습전 3,500승을 쌓아도 2등급에서 멈춘다');
+
+  /* 3등급 — 사람 대전 100승 · 48% · 5연승 · 아도 3 */
+  const g3 = { plays: 4000, wins: 3500, streakBest: 3, recent: recentMix(90, 100), hPlays: 140, hWins: 100, hStreakBest: 5, hAdoN: 5, hAdoW: 3, hrecent: recentMix(48, 100) };
+  eq(gradeOf(g3), 3, '사람 100승+ · 48% · 5연승 · 아도 3 = 3등급 승부사');
+  eq(gradeOf(Object.assign({}, g3, { hWins: 99 })), 2, '사람 99승이면 3등급 미달');
+  eq(gradeOf(Object.assign({}, g3, { hAdoW: 2 })), 2, '아도 성공 2회면 3등급 미달');
+  eq(gradeOf(Object.assign({}, g3, { hStreakBest: 4 })), 2, '4연승이면 3등급 미달');
+  eq(gradeOf(Object.assign({}, g3, { hrecent: recentMix(47, 100) })), 2, '사람 승률 47% 면 3등급 미달');
+
+  /* 4등급 — 역전승 5회 추가 */
+  const g4 = Object.assign({}, g3, { hWins: 300, hPlays: 400, hStreakBest: 7, hAdoW: 10, hAdoN: 14, hrecent: recentMix(53, 100), hComeback: 5 });
+  eq(gradeOf(g4), 4, '300승·53%·7연승·아도 10·역전승 5 = 4등급 고수');
+  eq(gradeOf(Object.assign({}, g4, { hComeback: 4 })), 3, '역전승 4회면 4등급 미달');
+
+  /* 5·6·7등급 */
+  const g5 = Object.assign({}, g4, { hWins: 700, hPlays: 900, hStreakBest: 10, hAdoW: 25, hAdoN: 45, hrecent: recentMix(57, 100) });
+  eq(gradeOf(g5), 5, '700승·57%·10연승·아도 25·성공률 55% = 5등급 타짜');
+  eq(gradeOf(Object.assign({}, g5, { hAdoN: 60, hAdoW: 25 })), 4, '아도 성공률 41% 면 5등급 미달');
+  const g6 = Object.assign({}, g5, { hWins: 1500, hPlays: 1800, hStreakBest: 15, hAdoW: 60, hAdoN: 100, hrecent: recentMix(60, 100) });
+  eq(gradeOf(g6), 6, '1,500승·60%·15연승·아도 60·성공률 60% = 6등급 전설');
+  const g7 = Object.assign({}, g6, { hWins: 3000, hPlays: 3500, hStreakBest: 20, hAdoW: 100, hAdoN: 160, hrecent: recentMix(63, 100) });
+  eq(gradeOf(g7), 7, '3,000승·63%·20연승·아도 100·성공률 62% = 7등급 신');
+  eq(gradeOf(Object.assign({}, g7, { hrecent: recentMix(62, 100) })), 6, '사람 승률 62% 면 7등급 미달');
+
+  /* 승률 모수 — 최근 100판만 */
+  const longWin = Object.assign({}, g2, { recent: Array(300).fill(1).concat(recentMix(0, 100)) });
+  eq(W.throneRate(W.throneLoad(fakeStore(longWin)), false), 0, '옛 300연승은 승률 모수(최근 100판)에서 빠진다');
+  ok(W.throneLoad(fakeStore(longWin)).recent.length === 100, '최근 기록은 100판까지만 보관');
+  eq(W.throneRate(W.throneLoad(fakeStore({ hrecent: recentMix(48, 100), recent: recentMix(90, 100) })), true), 48, 'human=true 면 사람 기록만');
+  eq(W.throneRate(W.throneLoad(fakeStore({ hrecent: recentMix(48, 100), recent: recentMix(90, 100) })), false), 90, 'human=false 면 전체 기록');
+
+  /* 집계 — 연승·아도·역전승 */
+  let st = play(winN(2).concat([{ win: false }]).concat(winN(1)));
+  eq(st.plays, 4, '승부 4판 누적');
+  eq(st.wins, 3, '승리 3판');
+  eq(st.streak, 1, '패배 뒤 연승은 1부터');
+  eq(st.streakBest, 2, '최고 연승은 2로 보존');
+  st = play([{ win: true, ado: true, comeback: true }, { win: false, ado: true }, { win: true, ado: true, comeback: true }]);
+  eq(st.adoN, 3, '아도 시도 3회');
+  eq(st.adoW, 2, '아도 성공 2회');
+  eq(st.comeback, 2, '역전승 2회');
+  st = play([{ win: true, human: true }, { win: true, human: false }]);
+  eq(st.wins, 2, '전체 승리 2');
+  eq(st.hWins, 1, '사람 대전 승리 1');
+  eq(st.hPlays, 1, '사람 대전 승부 1');
+
+  /* 최고 왕좌는 영구 보존 — 현재 등급만 내려간다 */
+  const store2 = fakeStore(Object.assign({}, g2, { crownBest: 2 }));
+  eq(W.throneGrade(W.throneLoad(store2)), 2, '2등급 상태에서 시작');
+  let r = W.throneRecord(store2, { play: true, win: true });
+  eq(r.grade, 2, '승리해도 2등급 유지');
+  eq(r.up, false, '같은 등급이면 승격 아님');
+  const drop = W.throneApply(W.throneSave(store2, Object.assign({}, W.throneLoad(store2), { recent: recentMix(10, 100) })), { play: true, win: false });
+  eq(W.throneGrade(drop), 1, '승률이 40% 아래로 떨어지면 현재 등급은 1등급');
+  eq(drop.crownBest, 2, '그래도 최고 왕좌 2등급은 보존');
+  r = W.throneRecord(fakeStore({ plays: 10, crownBest: 0 }), { play: true, win: true });
+  eq(r.up, true, '9→10판으로 1등급 달성 시 승격 신호');
+  eq(r.upGrade, 1, '승격 등급 = 1');
+  eq(r.beforeBest, 0, '승격 전 최고 = 0');
+  eq(W.throneRecord(fakeStore({ plays: 10, crownBest: 1 }), { play: true, win: true }).up, false, '이미 보유한 왕좌는 다시 승격 알림 없음');
+
+  /* 판돈·베팅액은 등급에 영향 없음 — 이벤트에 실린 금액 필드는 집계에서 무시된다 */
+  const bigBet = play([{ win: true, bet: 500000, chips: 1000000}], { plays: 30, wins: 30, streakBest: 3 });
+  const smallBet = play([{ win: true, bet: 1000, chips: 2000 }], { plays: 30, wins: 30, streakBest: 3 });
+  eq(JSON.stringify(bigBet), JSON.stringify(smallBet), '판돈 규모와 무관하게 같은 집계');
+
+  /* 판 결과 → 집계 이벤트 */
+  const g = W.newGame({ mode: 'ai', ante: 1000, count: 2, chips: 5000 });
+  g.players[0].chips = 6000;
+  let ev = W.throneFromResult(g, 0, { type: 'win', delta: 1000, bet: 1000, ado: false }, 'ai');
+  ok(ev.play && ev.win, '승리 판 = play+win');
+  eq(ev.human, false, 'AI전은 사람 대전 아님');
+  ev = W.throneFromResult(g, 0, { type: 'win', delta: 1000, bet: 1000, ado: false }, 'online');
+  eq(ev.human, true, '온라인전은 사람 대전');
+  g.players[0].chips = 3200;   /* 정산 뒤 3,200 = 판 직전 2,200 (앤티 1,000 × 3 이하) */
+  eq(W.throneFromResult(g, 0, { type: 'win', delta: 1000, ado: false }, 'ai').comeback, true, '앤티 3배 이하에서 이기면 역전승');
+  g.players[0].chips = 9000;
+  eq(W.throneFromResult(g, 0, { type: 'win', delta: 1000, ado: false }, 'ai').comeback, false, '여유 있을 때 이긴 판은 역전승 아님');
+  eq(W.throneFromResult(g, 0, { type: 'lose', delta: -1000, bet: 1000, ado: false }, 'ai').win, false, '패배 판');
+  eq(W.throneFromResult(g, 0, { type: 'pairWin', delta: 500, bet: 500, ado: true }, 'ai').ado, true, '아도 판 승리 기록');
+  eq(W.throneFromResult(g, 0, { type: 'fold', delta: 0, kind: 'fold' }, 'ai').play, false, '패스는 승부로 세지 않음');
+  eq(W.throneFromResult(g, 0, { type: 'win', delta: 100 }, 'pass').human, false, '오프라인 친구방은 사람 기록 아님');
+  eq(W.throneFromResult(null, 0, { type: 'win' }, 'ai'), null, '상태 없으면 null');
+}
+
+console.log('\n[21] 왕좌 — 화면 배선 · 다국어');
+{
+  ok(/id="throneBtn"/.test(src), '헤더에 왕좌 배지 버튼(#throneBtn)');
+  ok(/id="thrBadgeN"/.test(src), '배지에 등급 숫자(#thrBadgeN)');
+  ok(/id="setupThr"/.test(src), '로비(설정 화면) 왕좌 배지(#setupThr)');
+  ok(/id="throneSheet"/.test(src) && /id="thrList"/.test(src), '7 왕좌 도감 시트(#throneSheet·#thrList)');
+  ok(/id="thrUp"/.test(src), '승격 배너(#thrUp)');
+  ok(/\.thrcard\.lock/.test(src), '미달성 카드는 잠금(실루엣) 스타일');
+  ok(/\.thrcard\.god/.test(src), '7등급 신 왕좌는 황금빛 강조');
+  ok(/\.thrup\.on/.test(src), '승격 배너 표시 스타일');
+  ok(/throneBtn'\).onclick = openThrone/.test(src) || /\$\('#throneBtn'\)/.test(src), '배지 버튼이 도감을 연다');
+  ok(/W\.throneCheck\(c\.st, row\.g\)/.test(src), '도감이 내 달성 현황(throneCheck)을 그린다');
+  ok(/refreshCoupons\(\);\n    paintThrone\(\);/.test(src), '언어·설정 변경 시 배지도 다시 그린다');
+  ok(/noteThrone\(res, 0, ui\.mode\)/.test(src), '솔로·AI 판 결과가 왕좌에 기록된다');
+  ok(/noteThrone\(res, res\.turn, 'online'\)/.test(src), '온라인 판 결과가 사람 대전으로 기록된다');
+  ok(/mode === 'pass'\) return null/.test(src), '오프라인 패스앤플레이는 기록 제외');
+  ok(/\/thrones\/' \+/.test(src) && !/https?:\/\/[^"']*throne/.test(src), '왕좌 이미지는 저장소 정적 경로(/thrones/)만');
+
+  /* 다국어 — KR/EN 모두 7등급 이름·왕좌 설명·조건 라벨 */
+  const dict = (name) => {
+    const m = src.match(new RegExp('\\n    ' + name + ': \\{([\\s\\S]*?)\\n    \\}'));
+    return m ? m[1] : '';
+  };
+  const kr = dict('kr'), en = dict('en');
+  ok(!!kr && !!en, 'kr·en 사전을 찾는다');
+  ['crownTitle', 'crownNote', 'crownRule', 'crownComeback', 'crownRank', 'crownUp', 'crownBest', 'crownNone',
+    'cWins', 'cPlays', 'cRate', 'cStreak', 'cAdo', 'cAdoRate', 'cComeback'].forEach((k) => {
+    ok(new RegExp('\\b' + k + ': ').test(kr) && new RegExp('\\b' + k + ': ').test(en), '조건·고지 문구 다국어: ' + k);
+  });
+  for (let i = 1; i <= 7; i++) {
+    ok(new RegExp('\\bthr' + i + ": '").test(kr) && new RegExp('\\bthr' + i + ": '").test(en), i + '등급 이름 다국어');
+    ok(new RegExp('\\bth' + i + ": '").test(kr) && new RegExp('\\bth' + i + ": '").test(en), i + '등급 왕좌 설명 다국어');
+  }
+  ok(!/아도|ADO/.test(en), '영문 사전에 아도·ADO 없음(MAX 사용)');
+  ok(/MAX/.test(en), '영문 아도 표기는 MAX');
+  ok(/비환금성|바꿀 수 없습니다/.test(kr) || /명예 등급입니다/.test(kr), '한국어 고지에 비환금성 명시');
+  ok(/honor rank|cash out/i.test(en), '영문 고지에 비환금성 명시');
+}
+
 console.log('\n결과: ' + pass + ' 통과 / ' + fail + ' 실패');
 process.exit(fail ? 1 : 0);

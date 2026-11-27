@@ -468,6 +468,69 @@ body{
 .cpnnum b{font-size:14px;font-weight:900;color:#ffeec4;font-variant-numeric:tabular-nums}
 .cpnnum i{font-style:normal;font-size:9.5px;color:#9fb5aa}
 .cpnbtn-wide{width:100%}
+/* ---------- 👑 왕좌(명예 등급) ---------- */
+.tbtn.thr{gap:3px;padding:6px 8px}
+.tbtn.thr b{font-size:11px;font-variant-numeric:tabular-nums;color:#ffe9b6}
+.tbtn.thr.god{border-color:rgba(255,224,150,.9);box-shadow:0 0 13px rgba(230,195,124,.55)}
+.thronebar{
+  display:flex;align-items:center;gap:9px;width:100%;margin-top:6px;padding:6px 9px;border-radius:14px;
+  border:1px solid rgba(230,195,124,.32);background:linear-gradient(180deg,rgba(230,195,124,.13),rgba(0,0,0,.24));
+  color:#f6eeda;font-family:inherit;text-align:left;cursor:pointer;flex:0 0 auto;
+}
+.thronebar:active{transform:scale(.985)}
+.thronebar img{width:32px;height:32px;border-radius:9px;object-fit:cover;flex:0 0 auto;border:1px solid rgba(230,195,124,.48)}
+.thronebar img.lock{filter:grayscale(.85) brightness(.55)}
+.thronebar .tbtext{display:flex;flex-direction:column;line-height:1.25;min-width:0;flex:1}
+.thronebar b{font-size:11.5px;font-weight:900;color:#ffeec4;letter-spacing:.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.thronebar i{font-size:9px;font-style:normal;color:#9fb5aa;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.thronebar .tbgo{font-size:16px;color:var(--gold);opacity:.7;flex:0 0 auto}
+.sheet.thr{align-items:flex-end}
+.thrbox{max-height:90dvh;overflow-y:auto;-webkit-overflow-scrolling:touch;gap:9px}
+.thrhead{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.thrhead h3{font-size:12px;letter-spacing:1.6px;color:#ffeec4;font-weight:900}
+.thrme{display:flex;gap:10px;align-items:center;padding:8px 10px;border-radius:13px;flex:0 0 auto;
+  border:1px solid rgba(230,195,124,.3);background:radial-gradient(130% 100% at 50% 0%,rgba(230,195,124,.17),rgba(0,0,0,.2))}
+.thrme img{width:54px;height:54px;border-radius:11px;object-fit:cover;border:1px solid rgba(230,195,124,.5)}
+.thrme img.lock{filter:grayscale(.9) brightness(.5)}
+.thrmetxt{display:flex;flex-direction:column;gap:1px;min-width:0}
+.thrmetxt b{font-size:14px;font-weight:900;color:#ffeec4}
+.thrmetxt span{font-size:10px;color:var(--gold);font-weight:800}
+.thrmetxt em{font-size:9.5px;font-style:normal;color:#9fb5aa;line-height:1.4}
+.thrnote{font-size:9.5px;line-height:1.6;color:#c9d8cf;background:rgba(255,255,255,.05);border-radius:10px;padding:7px 9px;flex:0 0 auto}
+.thrlist{display:flex;flex-direction:column;gap:6px}
+.thrcard{display:flex;align-items:center;gap:9px;padding:7px 8px;border-radius:13px;
+  border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.035)}
+.thrcard .thrpic{width:46px;height:46px;flex:0 0 auto;border-radius:9px;overflow:hidden;border:1px solid rgba(230,195,124,.26)}
+.thrcard .thrpic img{width:100%;height:100%;object-fit:cover;display:block}
+.thrcard.lock .thrpic img{filter:grayscale(1) brightness(.38)}
+.thrbody{flex:1;min-width:0}
+.thrttl{display:flex;flex-direction:column}
+.thrttl b{font-size:11.5px;font-weight:900;color:#ffeec4}
+.thrttl span{font-size:9px;color:#9fb5aa}
+.thrcard.lock .thrttl b{color:#c2cec7}
+.thrconds{list-style:none;display:flex;flex-wrap:wrap;gap:2px 7px;margin-top:3px}
+.thrconds li{font-size:8.5px;color:#8fa79b;display:inline-flex;gap:2px;white-space:nowrap}
+.thrconds li i{font-style:normal;color:#6e8378;font-variant-numeric:tabular-nums}
+.thrconds li.ok{color:#8fe0ac}
+.thrconds li.ok i{color:#5fbe84}
+.thrseal{font-size:8px;font-weight:900;letter-spacing:.2px;color:#8fa79b;white-space:nowrap;align-self:flex-start;padding-top:2px}
+.thrcard.done .thrseal{color:#ffe9b6}
+.thrcard.now{border-color:rgba(230,195,124,.6);background:rgba(230,195,124,.09);box-shadow:0 0 0 1px rgba(230,195,124,.16) inset}
+.thrcard.god{border-color:rgba(255,220,140,.55)}
+.thrcard.god .thrttl b{color:#ffe6a8}
+.thrcard.god.done{box-shadow:0 0 18px rgba(230,195,124,.42),0 0 0 1px rgba(255,235,180,.35) inset}
+.thrfoot{font-size:8.5px;line-height:1.6;color:#8fa79b}
+.thrup{
+  position:fixed;left:50%;top:calc(9px + env(safe-area-inset-top));transform:translate(-50%,-160%);
+  z-index:96;display:flex;align-items:center;gap:9px;padding:7px 14px 7px 7px;border-radius:15px;pointer-events:none;
+  background:linear-gradient(100deg,#f7e2ae,#d1a54a 55%,#f2d795);color:#2a1b06;opacity:0;
+  box-shadow:0 12px 30px rgba(0,0,0,.55),0 0 0 1px rgba(255,248,222,.5) inset;
+  transition:transform .4s cubic-bezier(.2,.9,.3,1.2),opacity .3s;
+}
+.thrup.on{transform:translate(-50%,0);opacity:1}
+.thrup img{width:34px;height:34px;border-radius:9px;object-fit:cover;border:1px solid rgba(74,50,8,.35)}
+.thrup b{display:block;font-size:12px;font-weight:900;letter-spacing:.3px}
+.thrup span{display:block;font-size:10px;font-weight:800;opacity:.75}
 </style>
 </head>
 <body>
@@ -477,6 +540,7 @@ body{
     <div class="brand"><b id="brandTitle">월남뽕</b><span id="brandSub">K-HWATU BETWEEN · 48 HANAFUDA</span></div>
     <div class="tools">
       <a class="tbtn back" href="/xaea12" title="XAEA12" aria-label="XAEA12"><span aria-hidden="true">&#8592;</span><span class="lbl">XAEA12</span></a>
+      <button class="tbtn thr" id="throneBtn" aria-label="왕좌" title="내 왕좌"><span aria-hidden="true">👑</span> <b id="thrBadgeN">–</b></button>
       <button class="tbtn cpn zero" id="cpnBtn" title="충전 쿠폰" aria-label="충전 쿠폰">🎟️ <b data-cpn>0</b></button>
       <button class="tbtn" id="sfxBtn" aria-label="sound" title="소리">🔊</button>
       <button class="tbtn" id="langBtn">EN</button>
@@ -492,6 +556,12 @@ body{
       <p class="official" id="heroOfficial">K-HWATU BETWEEN</p>
       <p class="sub" id="heroSub">금박 숫자(1~12) 전통 화투로 30초 만에 즐기는 K-심리 카드 게임 (두 패 사이를 쪼아 맞히는 룰)</p>
     </div>
+
+    <button class="thronebar" id="setupThr">
+      <img id="setupThrImg" alt="" src="/thrones/throne-1-rookie.webp" />
+      <span class="tbtext"><b id="setupThrName">—</b><i id="setupThrSub"></i></span>
+      <span class="tbgo" aria-hidden="true">›</span>
+    </button>
 
     <div class="modes">
       <button class="mode on" data-mode="solo"><b data-i18n="solo">혼자 하기</b><span data-i18n="soloSub">빠른 연습 1인</span></button>
@@ -615,6 +685,19 @@ body{
       </div>
     </div>
   </div>
+
+  <!-- 👑 왕좌 도감 (명예 등급) -->
+  <div class="sheet thr" id="throneSheet">
+    <div class="sheetbox thrbox">
+      <div class="thrhead"><h3 id="thrTitle">👑 7 왕좌 도감</h3><button class="tbtn" id="thrClose" aria-label="닫기">✕</button></div>
+      <div class="thrme" id="thrMe"></div>
+      <p class="thrnote" id="thrNote"></p>
+      <div class="thrlist" id="thrList"></div>
+      <p class="thrfoot" id="thrFoot"></p>
+      <button class="ghost" id="thrClose2">닫기</button>
+    </div>
+  </div>
+  <div class="thrup" id="thrUp"></div>
 
   <div class="sheet" id="sheet">
     <div class="sheetbox">
@@ -2442,6 +2525,175 @@ var WNB = (function () {
       : '월남뽕 온라인 방에 들어와 · 방 코드 ' + c;
   }
 
+  /* ============================================================
+     👑 왕좌(명예 등급) — 7단계 · 비환금성
+       · 돈·파이·칩·후원·초대 수로 오르지 않는다. 코인·현금·상품으로
+         바꿀 수 없고(환금 가치 0), 판돈·확률·배당·매칭에도 영향이 없다.
+       · 고액 베팅을 반복해도 오르지 않는다 — 승패·업적만 센다.
+       · 솔로·AI 연습전은 2등급까지, 3등급부터는 온라인 사람 대전만 집계.
+         오프라인 패스앤플레이(친구방)는 비공식이라 세지 않는다.
+       · 기록은 브라우저 localStorage(wnb_throne_v1)에 남는다.
+       · 조건값·집계 규칙을 바꾸면 테스트(tests/wnb_rules_test.js [19][20])도
+         같이 고쳐야 한다 — 도감 문구와 집계가 어긋나지 않게.
+     ============================================================ */
+  var THRONE_KEY = 'wnb_throne_v1';
+  var THRONE_HUMAN_FROM = 3;        /* 이 등급부터는 사람(온라인) 대전 기록만 인정 */
+  var THRONE_RECENT = 100;          /* 승률 = 최근 100판 */
+  var THRONE_COMEBACK_MULT = 3;     /* 역전승 = 보유 머니가 앤티의 3배 이하일 때 이긴 판 */
+
+  /* g=등급, img=public/thrones/ 파일명, plays=승부 판수, wins=승리, rate=최근 100판 승률(%),
+     streak=최고 연승, ado=아도 성공, adoRate=아도 성공률(%), comeback=역전승, human=사람 대전만 */
+  var THRONES = [
+    { g: 1, id: 'rookie', img: 'throne-1-rookie.webp', plays: 10, wins: 0, rate: 0, streak: 0, ado: 0, adoRate: 0, comeback: 0, human: false },
+    { g: 2, id: 'player', img: 'throne-2-player.webp', plays: 0, wins: 30, rate: 40, streak: 3, ado: 0, adoRate: 0, comeback: 0, human: false },
+    { g: 3, id: 'challenger', img: 'throne-3-challenger.webp', plays: 0, wins: 100, rate: 48, streak: 5, ado: 3, adoRate: 0, comeback: 0, human: true },
+    { g: 4, id: 'master', img: 'throne-4-master.webp', plays: 0, wins: 300, rate: 53, streak: 7, ado: 10, adoRate: 0, comeback: 5, human: true },
+    { g: 5, id: 'tazza', img: 'throne-5-tazza.webp', plays: 0, wins: 700, rate: 57, streak: 10, ado: 25, adoRate: 50, comeback: 0, human: true },
+    { g: 6, id: 'legend', img: 'throne-6-legend.webp', plays: 0, wins: 1500, rate: 60, streak: 15, ado: 60, adoRate: 55, comeback: 0, human: true },
+    { g: 7, id: 'god', img: 'throne-7-god.webp', plays: 0, wins: 3000, rate: 63, streak: 20, ado: 100, adoRate: 60, comeback: 0, human: true }
+  ];
+
+  function throneBlank() {
+    return {
+      v: 1, plays: 0, wins: 0, streak: 0, streakBest: 0, adoN: 0, adoW: 0, comeback: 0,
+      hPlays: 0, hWins: 0, hStreak: 0, hStreakBest: 0, hAdoN: 0, hAdoW: 0, hComeback: 0,
+      recent: [], hrecent: [], crown: 0, crownBest: 0
+    };
+  }
+  function throneNum(v) { v = Number(v); return isFinite(v) && v > 0 ? Math.floor(v) : 0; }
+  function throneNorm(raw) {
+    var st = throneBlank(), i, keys = [
+      'plays', 'wins', 'streak', 'streakBest', 'adoN', 'adoW', 'comeback',
+      'hPlays', 'hWins', 'hStreak', 'hStreakBest', 'hAdoN', 'hAdoW', 'hComeback', 'crown', 'crownBest'
+    ];
+    if (!raw || typeof raw !== 'object') return st;
+    for (i = 0; i < keys.length; i++) st[keys[i]] = throneNum(raw[keys[i]]);
+    function arr(v) {
+      if (!v || typeof v.length !== 'number') return [];
+      var out = [];
+      for (var k = 0; k < v.length; k++) out.push(v[k] ? 1 : 0);
+      return out.slice(-THRONE_RECENT);
+    }
+    st.recent = arr(raw.recent);
+    st.hrecent = arr(raw.hrecent);
+    if (st.streak > st.streakBest) st.streakBest = st.streak;
+    if (st.hStreak > st.hStreakBest) st.hStreakBest = st.hStreak;
+    return st;
+  }
+  function throneLoad(storage) {
+    try {
+      if (!storage) return throneBlank();
+      var raw = storage.getItem(THRONE_KEY);
+      if (!raw) return throneBlank();
+      return throneNorm(JSON.parse(raw));
+    } catch (e) { return throneBlank(); }
+  }
+  function throneSave(storage, st) {
+    var n = throneNorm(st);
+    try { if (storage) storage.setItem(THRONE_KEY, JSON.stringify(n)); } catch (e) {}
+    return n;
+  }
+  function throneRow(g) {
+    for (var i = 0; i < THRONES.length; i++) if (THRONES[i].g === g) return THRONES[i];
+    return null;
+  }
+  /* 승률 — human=true 면 온라인(사람) 판만. 기록이 100판 미만이면 있는 만큼으로 계산. */
+  function throneRate(st, human) {
+    var arr = (human ? st.hrecent : st.recent) || [];
+    if (!arr.length) return 0;
+    var w = 0;
+    for (var i = 0; i < arr.length; i++) w += arr[i];
+    return Math.round(w / arr.length * 100);
+  }
+  function throneStatsFor(st, human) {
+    var n = human ? st.hAdoN : st.adoN, w = human ? st.hAdoW : st.adoW;
+    return {
+      plays: human ? st.hPlays : st.plays,
+      wins: human ? st.hWins : st.wins,
+      rate: throneRate(st, human),
+      streak: human ? st.hStreakBest : st.streakBest,
+      ado: w,
+      adoRate: n ? Math.round(w / n * 100) : 0,
+      comeback: human ? st.hComeback : st.comeback
+    };
+  }
+  /* 등급 하나의 조건 충족 여부 — 부족한 항목도 같이 돌려준다(도감 진행 표시) */
+  function throneCheck(st, g) {
+    var row = throneRow(g), items = [];
+    if (!row) return { g: g, ok: false, human: false, items: items };
+    var human = g >= THRONE_HUMAN_FROM;
+    var s = throneStatsFor(throneNorm(st), human);
+    function need(k, have, n) { items.push({ k: k, have: have, need: n, ok: have >= n, human: human }); }
+    if (row.plays) need('plays', s.plays, row.plays);
+    if (row.wins) need('wins', s.wins, row.wins);
+    if (row.rate) need('rate', s.rate, row.rate);
+    if (row.streak) need('streak', s.streak, row.streak);
+    if (row.ado) need('ado', s.ado, row.ado);
+    if (row.adoRate) need('adoRate', s.adoRate, row.adoRate);
+    if (row.comeback) need('comeback', s.comeback, row.comeback);
+    var ok = items.length > 0;
+    for (var i = 0; i < items.length; i++) if (!items[i].ok) ok = false;
+    return { g: g, ok: ok, human: human, items: items, stats: s };
+  }
+  /* 지금 서 있는 등급 — 조건을 모두 채운 가장 높은 왕좌(없으면 0) */
+  function throneGrade(st) {
+    var n = throneNorm(st), g = 0;
+    for (var i = 0; i < THRONES.length; i++) if (throneCheck(n, THRONES[i].g).ok) g = THRONES[i].g;
+    return g;
+  }
+  /* 판 한 건 누적 — ev = { play, win, ado, comeback, human } */
+  function throneApply(st, ev) {
+    var s = throneNorm(st);
+    if (!ev || !ev.play) return s;               /* 패스한 판은 승부로 세지 않는다 */
+    var win = !!ev.win, ado = !!ev.ado, cb = !!ev.comeback, hu = !!ev.human;
+    s.plays += 1;
+    if (win) s.wins += 1;
+    s.streak = win ? s.streak + 1 : 0;
+    if (s.streak > s.streakBest) s.streakBest = s.streak;
+    if (ado) { s.adoN += 1; if (win) s.adoW += 1; }
+    if (win && cb) s.comeback += 1;
+    s.recent.push(win ? 1 : 0);
+    if (s.recent.length > THRONE_RECENT) s.recent = s.recent.slice(-THRONE_RECENT);
+    if (hu) {
+      s.hPlays += 1;
+      if (win) s.hWins += 1;
+      s.hStreak = win ? s.hStreak + 1 : 0;
+      if (s.hStreak > s.hStreakBest) s.hStreakBest = s.hStreak;
+      if (ado) { s.hAdoN += 1; if (win) s.hAdoW += 1; }
+      if (win && cb) s.hComeback += 1;
+      s.hrecent.push(win ? 1 : 0);
+      if (s.hrecent.length > THRONE_RECENT) s.hrecent = s.hrecent.slice(-THRONE_RECENT);
+    }
+    var g = throneGrade(s);
+    s.crown = g;
+    if (g > s.crownBest) s.crownBest = g;        /* 최고 왕좌는 영구 보존 */
+    return s;
+  }
+  /* 저장 + 승격 판정 */
+  function throneRecord(storage, ev) {
+    var before = throneLoad(storage);
+    var after = throneSave(storage, throneApply(before, ev));
+    return {
+      saved: after, grade: after.crown, best: after.crownBest,
+      up: after.crownBest > before.crownBest, upGrade: after.crownBest,
+      beforeBest: before.crownBest
+    };
+  }
+  /* 판 결과 → 집계 이벤트. mode: 'solo' | 'ai' | 'pass' | 'online'
+     (오프라인 패스앤플레이는 비공식 — 호출 쪽에서 걸러도 되고, 여기선 human=false) */
+  function throneFromResult(s, seat, res, mode) {
+    if (!s || !res || !s.players || !s.players[seat]) return null;
+    if (res.type === 'fold' || res.kind === 'fold') return { play: false };
+    var win = res.type === 'win' || res.type === 'pairWin';
+    var p = s.players[seat], delta = Number(res.delta) || 0;
+    var before = p.chips - delta;                 /* 정산 뒤 칩에서 되돌린 판 직전 보유 머니 */
+    return {
+      play: true, win: win, ado: !!res.ado,
+      comeback: win && before <= (Number(s.ante) || 0) * THRONE_COMEBACK_MULT,
+      human: mode === 'online'
+    };
+  }
+
   return {
     MONTHS: MONTHS, newDeck: newDeck, shuffle: shuffle, mulberry32: mulberry32,
     newGame: newGame, beginTurn: beginTurn, betLimits: betLimits, odds: odds,
@@ -2454,7 +2706,13 @@ var WNB = (function () {
     isChampion: isChampion, soloGoalHit: soloGoalHit, couponCheck: couponCheck, couponRecharge: couponRecharge,
     COUPON_KEY: COUPON_KEY, COUPON_MONEY: COUPON_MONEY, COUPON_SOLO_GOAL: COUPON_SOLO_GOAL,
     activeCount: activeCount, meta: meta, faceSVG: faceSVG, backSVG: backSVG,
-    roomCode: roomCode, inviteLink: inviteLink, parseInvite: parseInvite, inviteText: inviteText
+    roomCode: roomCode, inviteLink: inviteLink, parseInvite: parseInvite, inviteText: inviteText,
+    THRONES: THRONES, THRONE_KEY: THRONE_KEY, THRONE_HUMAN_FROM: THRONE_HUMAN_FROM,
+    THRONE_RECENT: THRONE_RECENT, THRONE_COMEBACK_MULT: THRONE_COMEBACK_MULT,
+    throneBlank: throneBlank, throneLoad: throneLoad, throneSave: throneSave, throneRow: throneRow,
+    throneRate: throneRate, throneStatsFor: throneStatsFor, throneCheck: throneCheck,
+    throneGrade: throneGrade, throneApply: throneApply, throneRecord: throneRecord,
+    throneFromResult: throneFromResult
   };
 })();
 if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
@@ -2530,7 +2788,18 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       agree: '동의', decline: '거절', raiseRejected: '판돈 인상이 거절되었습니다',
       raiseRejectedSub: '판돈은 그대로입니다', raiseTimeout: '동의 시간이 지나 제안이 취소되었습니다',
       raiseCount: '동의', autoTopupTitle: '판돈 자동 충전',
-      autoTopupSub: '쌓인 머니가 기본 베팅보다 적어 전원 기본 베팅 재적립'
+      autoTopupSub: '쌓인 머니가 기본 베팅보다 적어 전원 기본 베팅 재적립',
+      crown: '왕좌', crownTitle: '👑 7 왕좌 도감', crownMine: '내 왕좌', crownNone: '아직 왕좌 없음',
+      crownBest: '최고 왕좌', crownDone: '달성', crownLocked: '잠금', crownUp: '왕좌 승격!',
+      crownHint: '눌러서 7 왕좌 도감 보기', crownHuman: '온라인 기록', crownPractice: '연습전 포함',
+      crownNote: '명예 등급입니다 — 돈·파이·칩·후원으로 오르지 않고 코인·현금·상품으로 바꿀 수 없습니다. 판돈·확률·배당·매칭에 영향 없음.',
+      crownRule: '솔로·AI 연습전은 2등급까지, 3등급부터는 온라인 사람 대전 승리만 셉니다. 오프라인 패스앤플레이는 비공식이라 제외. 승률은 최근 100판 기준.',
+      crownComeback: '역전승 = 앤티의 3배 이하 위기에서 이긴 판',
+      crownRank: '6·7등급 시즌 랭킹 조건은 랭킹 도입 전까지 아도 성공률로 대체합니다.',
+      cWins: '승리', cPlays: '승부', cRate: '승률', cStreak: '연승', cAdo: '아도 성공', cAdoRate: '아도 성공률', cComeback: '역전승',
+      thr1: '풋내기', thr2: '꾼', thr3: '승부사', thr4: '고수', thr5: '타짜', thr6: '전설', thr7: '신',
+      th1: '소박한 원목 평상', th2: '대나무 엮은 좌식 왕좌', th3: '주칠(붉은 옻칠) 어좌', th4: '청동 호랑이·매화 어좌',
+      th5: '나전칠기(자개) 왕좌', th6: '흑요석·순금 봉황 왕좌', th7: '일월오봉도 천상 신좌'
     },
     en: {
       solo: 'Solo', soloSub: 'Quick practice',
@@ -2595,7 +2864,18 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       agree: 'Agree', decline: 'Decline', raiseRejected: 'The ante raise was declined',
       raiseRejectedSub: 'The ante stays the same', raiseTimeout: 'The vote timed out and was cancelled',
       raiseCount: 'agreed', autoTopupTitle: 'Pot auto top-up',
-      autoTopupSub: 'Everyone re-antes because the pot fell below the basic bet'
+      autoTopupSub: 'Everyone re-antes because the pot fell below the basic bet',
+      crown: 'Throne', crownTitle: '👑 The 7 Thrones', crownMine: 'My throne', crownNone: 'No throne yet',
+      crownBest: 'Best throne', crownDone: 'Unlocked', crownLocked: 'Locked', crownUp: 'THRONE UP!',
+      crownHint: 'Tap to open all 7 thrones', crownHuman: 'online only', crownPractice: 'practice included',
+      crownNote: 'An honor rank — never bought with money, Pi, chips or gifts, and worth nothing to cash out. No effect on ante, odds, payouts or matchmaking.',
+      crownRule: 'Solo and AI practice count up to rank 2; from rank 3 only online wins against people count. Offline pass-and-play is informal and excluded. Win rate = last 100 hands.',
+      crownComeback: 'Comeback = a win while holding 3× the ante or less',
+      crownRank: 'The season-ranking conditions for ranks 6–7 are replaced by MAX win rate until rankings launch.',
+      cWins: 'Wins', cPlays: 'Hands', cRate: 'Win rate', cStreak: 'Streak', cAdo: 'MAX wins', cAdoRate: 'MAX rate', cComeback: 'Comebacks',
+      thr1: 'Rookie', thr2: 'Player', thr3: 'Challenger', thr4: 'Master', thr5: 'Tazza', thr6: 'Legend', thr7: 'God of Hwatu',
+      th1: 'Plain wooden bench', th2: 'Woven bamboo seat', th3: 'Red-lacquer throne', th4: 'Bronze tiger & plum throne',
+      th5: 'Mother-of-pearl throne', th6: 'Obsidian & gold phoenix throne', th7: 'Sun-moon-five-peaks divine throne'
     }
   };
   var ui = { lang: 'kr', mode: 'solo', count: 3, aiCount: 3, names: [], ante: 1000, chips: 50000, sel: 0, useCouponNext: false };
@@ -3201,6 +3481,132 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
   }
 
   /* ------------------------------------------------------------
+     👑 왕좌 — 헤더 배지 · 로비 배지 · 7 왕좌 도감 · 승격 배너
+       기록은 W(throne*)가 localStorage에 남기고, 화면은 그리기만 한다.
+     ------------------------------------------------------------ */
+  var thrUpTimer = null, thrSheetOpen = false;
+
+  function throneState() {
+    var st = W.throneLoad(store());
+    var g = W.throneGrade(st);
+    return { st: st, g: g, best: Math.max(g, st.crownBest), next: g < 7 ? g + 1 : 0 };
+  }
+  function throneImg(g) {
+    var row = W.throneRow(g || 1);
+    return '/thrones/' + (row ? row.img : 'throne-1-rookie.webp');
+  }
+
+  function paintThrone() {
+    var c = throneState();
+    var name = c.g ? t('thr' + c.g) : t('crownNone');
+    var bn = $('#thrBadgeN');
+    if (bn) bn.textContent = c.g ? String(c.g) : '–';
+    var tb = $('#throneBtn');
+    if (tb) {
+      tb.classList.toggle('god', c.g >= 7);
+      var lbl = t('crownMine') + ' · ' + (c.g ? c.g + ' ' + name : name);
+      tb.title = lbl;
+      tb.setAttribute('aria-label', lbl);
+    }
+    var img = $('#setupThrImg');
+    if (img) { img.src = throneImg(c.g); img.classList.toggle('lock', !c.g); }
+    var nm = $('#setupThrName');
+    if (nm) nm.textContent = c.g ? (c.g + ' · ' + name) : t('crownNone');
+    var sb = $('#setupThrSub');
+    if (sb) sb.textContent = (c.best && c.best > c.g)
+      ? (t('crownBest') + ' · ' + c.best + ' ' + t('thr' + c.best))
+      : t('crownHint');
+  }
+
+  function condLine(it) {
+    var n = fmt(it.need);
+    if (it.k === 'wins') return t('cWins') + ' ' + n;
+    if (it.k === 'plays') return t('cPlays') + ' ' + n;
+    if (it.k === 'rate') return t('cRate') + ' ' + n + '%+';
+    if (it.k === 'streak') return n + t('cStreak');
+    if (it.k === 'ado') return t('cAdo') + ' ' + n;
+    if (it.k === 'adoRate') return t('cAdoRate') + ' ' + n + '%+';
+    if (it.k === 'comeback') return t('cComeback') + ' ' + n;
+    return '';
+  }
+
+  function renderThroneSheet() {
+    var c = throneState();
+    var me = $('#thrMe');
+    if (me) {
+      me.innerHTML = '<img class="' + (c.g ? '' : 'lock') + '" src="' + throneImg(c.g) + '" alt="">' +
+        '<div class="thrmetxt"><b>' + (c.g ? c.g + ' · ' + t('thr' + c.g) : t('crownNone')) + '</b>' +
+        '<span>' + t('crownBest') + ' · ' + (c.best ? c.best + ' ' + t('thr' + c.best) : '–') + '</span>' +
+        '<em>' + (c.g ? t('th' + c.g) : t('crownHint')) + '</em></div>';
+    }
+    var box = $('#thrList');
+    if (!box) return;
+    box.innerHTML = '';
+    W.THRONES.forEach(function (row) {
+      var chk = W.throneCheck(c.st, row.g);
+      var d = document.createElement('div');
+      d.className = 'thrcard' + (row.g === 7 ? ' god' : '') + (chk.ok ? ' done' : ' lock') + (c.g === row.g ? ' now' : '');
+      var lis = '';
+      chk.items.forEach(function (it) {
+        lis += '<li class="' + (it.ok ? 'ok' : '') + '"><span>' + condLine(it) + '</span> <i>' +
+          fmt(it.have) + '/' + fmt(it.need) + (it.k === 'rate' || it.k === 'adoRate' ? '%' : '') + '</i></li>';
+      });
+      d.innerHTML = '<div class="thrpic"><img src="' + throneImg(row.g) + '" alt=""></div>' +
+        '<div class="thrbody"><div class="thrttl"><b>' + row.g + ' · ' + t('thr' + row.g) + '</b>' +
+        '<span>' + t('th' + row.g) + ' · ' + (row.human ? t('crownHuman') : t('crownPractice')) + '</span></div>' +
+        '<ul class="thrconds">' + lis + '</ul></div>' +
+        '<div class="thrseal">' + (chk.ok ? '★ ' + t('crownDone') : '🔒 ' + t('crownLocked')) + '</div>';
+      box.appendChild(d);
+    });
+    var ti = $('#thrTitle'); if (ti) ti.textContent = t('crownTitle');
+    var nt = $('#thrNote'); if (nt) nt.textContent = t('crownNote');
+    var ft = $('#thrFoot');
+    if (ft) ft.textContent = t('crownRule') + ' · ' + t('crownComeback') + ' · ' + t('crownRank');
+    var cl = $('#thrClose2'); if (cl) cl.textContent = t('close');
+  }
+
+  function openThrone() {
+    thrSheetOpen = true;
+    renderThroneSheet();
+    var el = $('#throneSheet');
+    if (el) el.classList.add('on');
+  }
+  function closeThrone() {
+    thrSheetOpen = false;
+    var el = $('#throneSheet');
+    if (el) el.classList.remove('on');
+  }
+
+  /* 승격 — 게임 템포를 끊지 않는 얇은 금빛 배너(2~3초) + 축포(5등급부터) */
+  function throneCelebrate(g) {
+    var row = W.throneRow(g);
+    var el = $('#thrUp');
+    if (el && row) {
+      el.innerHTML = '<img src="' + throneImg(g) + '" alt=""><div><b>' + t('crownUp') + '</b><span>' +
+        g + ' · ' + t('thr' + g) + '</span></div>';
+      el.classList.remove('on');
+      void el.offsetWidth;
+      el.classList.add('on');
+      clearTimeout(thrUpTimer);
+      thrUpTimer = setTimeout(function () { el.classList.remove('on'); }, g >= 5 ? 3000 : 2000);
+    }
+    vibrate(g >= 5 ? [26, 44, 26, 44, 150] : [18, 40, 80]);
+    if (g >= 5) confetti();
+  }
+
+  /* 판 결과 한 건을 내 왕좌 기록에 남긴다 — 오프라인 친구방(pass)은 비공식이라 제외 */
+  function noteThrone(res, seat, mode) {
+    if (!res || !S || mode === 'pass') return null;
+    var ev = W.throneFromResult(S, seat, res, mode);
+    if (!ev || !ev.play) return null;
+    var r = W.throneRecord(store(), ev);
+    paintThrone();
+    if (thrSheetOpen) renderThroneSheet();
+    if (r.up) throneCelebrate(r.upGrade);
+    return r;
+  }
+
+  /* ------------------------------------------------------------
      화면 / 설정
      ------------------------------------------------------------ */
   function show(which) {
@@ -3249,6 +3655,8 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     var vnb = $('#voteNo'); if (vnb) vnb.textContent = t('decline');
     refreshRaiseBtn();
     refreshCoupons();
+    paintThrone();
+    if (thrSheetOpen) renderThroneSheet();
     if (S) { renderPlayers(); renderActions(); renderMsg(lastMsg.cls, lastMsg.l1, lastMsg.l2); }
   }
 
@@ -3841,6 +4249,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     var thirdCard = S.third ? { id: S.third.id, month: S.third.month, variant: S.third.variant } : null;
     var res = W.reveal(S);
     if (!res) { busy = false; return; }
+    if (res.turn === 0) noteThrone(res, 0, ui.mode);      /* 👑 내 판 → 왕좌 기록 */
     var win = (res.type === 'win' || res.type === 'pairWin');
     var adoWin = win && !!res.ado;
     /* 아도 승리는 일반 착지 "탁" 대신 한 체급 큰 "딱!!" — 음소거면 SFX가 스스로 침묵한다 */
@@ -4419,6 +4828,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       st.lastDoneRev = sn.rev;
       if (sn.rev > st.lastRev) applySnap(sn);
       revealed = true;
+      if (res && res.turn === myIdx()) noteThrone(res, res.turn, 'online');   /* 👑 온라인 = 사람 대전 */
       revealFx(res);
       if (isHost()) scheduleAdvance(res && res.type === 'fold' ? FOLD_MS : HOLD_MS);
     }
@@ -5055,6 +5465,18 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
     if (vyes) vyes.onclick = function () { ON.voteRaise(true); };
     var vno = $('#voteNo');
     if (vno) vno.onclick = function () { ON.voteRaise(false); };
+
+    /* 👑 왕좌 — 헤더 배지·로비 배지·도감 시트 */
+    var thrb = $('#throneBtn');
+    if (thrb) thrb.onclick = openThrone;
+    var sthr = $('#setupThr');
+    if (sthr) sthr.onclick = openThrone;
+    var tcl = $('#thrClose');
+    if (tcl) tcl.onclick = closeThrone;
+    var tcl2 = $('#thrClose2');
+    if (tcl2) tcl2.onclick = closeThrone;
+    var tsh = $('#throneSheet');
+    if (tsh) tsh.onclick = function (e) { if (e.target === tsh) closeThrone(); };
 
     $('#sfxBtn').onclick = function () {
       SFX.setOn(!SFX.isOn());
