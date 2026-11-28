@@ -60,6 +60,10 @@ const KO_SECTIONS: Section[] = [
         type: 'p',
         text: 'Pi Browser와 Pi Network 자체의 정보 처리에는 Pi Network의 개인정보 방침이 적용됩니다.',
       },
+      {
+        type: 'note',
+        text: '본 서비스는 Pi Network(Pi Community Company / SocialChain Inc.)가 직접 운영하는 공식 앱이 아닙니다. Pi 로그인·결제는 공식 Pi SDK와 플랫폼 API를 통해 이루어지며, 파이 코어팀(Pi Core Team)은 본 서비스의 운영 및 개인정보 처리에 대해 책임을 지지 않습니다.',
+      },
     ],
   },
   {
@@ -229,6 +233,10 @@ const EN_SECTIONS: Section[] = [
       {
         type: 'p',
         text: 'Data processed by Pi Browser and Pi Network itself is governed by the Pi Network privacy policy.',
+      },
+      {
+        type: 'note',
+        text: 'This service is not an official app directly operated by Pi Network (Pi Community Company / SocialChain Inc.). Pi Sign-In and payments are processed through the official Pi SDK and Platform API, and the Pi Core Team is not responsible for the operation or personal data processing of this service.',
       },
     ],
   },

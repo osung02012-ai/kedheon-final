@@ -108,6 +108,11 @@ body{
 }
 .start:active{transform:scale(.985)}
 .rules{font-size:9.5px;line-height:1.55;color:#8fa79b;text-align:center;padding:0 4px}
+.legallinks{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:4px 2px;padding:10px 4px 2px;font-size:10px;line-height:1.5}
+.legallinks a{color:#a9bcb2;text-decoration:underline;text-underline-offset:2px;text-decoration-color:rgba(230,195,124,.35);padding:3px 4px}
+.legallinks a:hover,.legallinks a:active{color:#ffeec4;text-decoration-color:#d1a54a}
+.legallinks .lldot{color:#5d6f66}
+.legallinks .llnote{color:#7d8f86;font-size:9px;white-space:nowrap}
 /* ---------- online room ---------- */
 .onlinebox{display:flex;flex-direction:column;gap:7px;border-top:1px dashed rgba(230,195,124,.18);padding-top:8px;margin-top:2px}
 .orow{display:flex;align-items:center;gap:8px;font-size:11.5px;color:#dfd8c6}
@@ -670,6 +675,13 @@ body{
 
     <button class="start" id="startBtn">시작하기</button>
     <p class="rules" id="rules"></p>
+    <nav class="legallinks" id="legalLinks" aria-label="개인정보 처리방침 · 이용약관">
+      <a href="/privacy" data-i18n="legalPrivacy">개인정보 처리방침</a>
+      <span class="lldot" aria-hidden="true">·</span>
+      <a href="/terms" data-i18n="legalTerms">이용약관</a>
+      <span class="lldot" aria-hidden="true">·</span>
+      <span class="llnote" data-i18n="legalPi">Pi Network 공식 앱 아님</span>
+    </nav>
   </section>
 
   <!-- ============ GAME ============ -->
@@ -2934,6 +2946,10 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       hallPiLink: 'π 연결', hallPiEdit: '변경', hallPiDeclared: 'π 선언', hallPiVerified: 'π 인증',
       hallPiHint: 'Pi 유저명을 넣으면 π 배지가 붙습니다. Pi Browser에서는 실제 인증도 가능합니다.',
       hallPiGuide: '파이 지갑이 없다면? Kedheon 가이드', hallPiSaved: 'π 배지를 연결했습니다',
+      hallPiTaken: '이미 π 인증된 유저명입니다. Pi Browser에서 본인 인증으로 이어할 수 있어요',
+      hallPiMerged: '두 계정을 하나로 합쳤어요 — 기록·좌석·순위가 이어집니다',
+      hallPiVerifyFail: 'π 인증을 확인하지 못했습니다. Pi Browser에서 다시 시도해 주세요',
+      legalPrivacy: '개인정보 처리방침', legalTerms: '이용약관', legalPi: 'Pi Network 공식 앱 아님',
       hallPiBad: '유저명을 넣어 주세요', hallRankYou: '나', hallNick: '닉네임', hallSave: '저장',
       hallOk: '확인', hallCancel: '취소', hallNickSaved: '닉네임을 저장했습니다',
       seatTitle: '왕좌 각인', seatDesc: '{g}등급 · {cap}석 중 {left}석 남음', seatClaim: '각인하기',
@@ -3029,6 +3045,10 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       hallPiLink: 'Connect π', hallPiEdit: 'edit', hallPiDeclared: 'π declared', hallPiVerified: 'π verified',
       hallPiHint: 'Enter your Pi username to get a π badge. Inside Pi Browser you can verify for real.',
       hallPiGuide: 'No Pi wallet? Open the Kedheon guide', hallPiSaved: 'π badge connected',
+      hallPiTaken: 'That Pi username is already verified. Continue with your own verification in the Pi Browser',
+      hallPiMerged: 'Your two accounts are now one — record, seat and rank carried over',
+      hallPiVerifyFail: 'Could not confirm Pi verification. Please try again in the Pi Browser',
+      legalPrivacy: 'Privacy Policy', legalTerms: 'Terms of Service', legalPi: 'Not an official Pi Network app',
       hallPiBad: 'Enter a username', hallRankYou: 'you', hallNick: 'Nickname', hallSave: 'Save',
       hallOk: 'OK', hallCancel: 'Cancel', hallNickSaved: 'Nickname saved',
       seatTitle: 'Engrave your seat', seatDesc: 'Rank {g} · {left} of {cap} seats left', seatClaim: 'Engrave',
@@ -3865,6 +3885,12 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
       .then(function (r) { return r.json(); })
       .then(function (j) {
         hall.data = (j && j.available) ? j : { available: false, seats: [], top: [], players: 0, pioneers: 0, me: null };
+        /* 서버가 내 닉네임을 알고 있고 이 브라우저에 아직 저장된 닉네임이 없으면 서버 값을 따른다
+           (크롬↔Pi Browser 병합 후 크롬이 'Player' 로 되돌려 보이던 문제) */
+        try {
+          var sv = hall.data && hall.data.me && hall.data.me.nickname;
+          if (sv && !String(lsGet('wnb.nick') || '').trim()) lsSet('wnb.nick', sv);
+        } catch (e) {}
         if (cb) cb(hall.data);
       })
       .catch(function () {
@@ -4263,16 +4289,27 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
   }
 
   /* ---------------- π 브릿지 ---------------- */
-  function savePi(name, verified) {
+  function savePi(name, verified, token) {
     name = String(name || '').replace(/^@/, '').trim().slice(0, 32);
     if (!name) { toast('π', t('hallPiBad'), 1800); return; }
-    boardPost({ action: 'pi', username: name, verified: !!verified }, function (j) {
-      if (!j || !j.ok) { toast('π', t('hallPiBad'), 1800); return; }
+    /* 인증(verified:true)은 서버가 accessToken 을 Pi Platform API 로 확인해야만 인정된다.
+       일반 브라우저에서 다른 사람의 π 인증 유저명을 빼앗으려 하면 서버가 verified_elsewhere 로 막는다. */
+    var body = { action: 'pi', username: name, verified: !!verified };
+    if (verified && token) body.accessToken = token;
+    boardPost(body, function (j) {
+      if (!j || !j.ok) {
+        var err = j && j.error;
+        var msg = err === 'verified_elsewhere' ? t('hallPiTaken')
+          : (err === 'pi_verify_failed' || err === 'username_mismatch') ? t('hallPiVerifyFail')
+          : t('hallPiBad');
+        toast('π', msg, 2800);
+        return;
+      }
       lsSet(PI_KEY, name);
       hall.piEdit = false;
       hall.piDraft = null;
       boardGet(function () { renderHall(); paintHallBar(); });
-      toast('π', t('hallPiSaved'), 1800);
+      toast('π', (j.merged ? t('hallPiMerged') : t('hallPiSaved')), j.merged ? 2800 : 1800);
     });
   }
   function piAuth() {
@@ -4286,7 +4323,8 @@ if (typeof module !== 'undefined' && module.exports) module.exports = WNB;
           return fetch('/api/pi/verify', {
             method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ accessToken: token })
           }).then(function (r) { return r.json(); }).then(function (j) {
-            if (j && j.verified && j.username) savePi(j.username, true);
+            /* 토큰을 함께 보내 보드 라우트가 /v2/me 로 한 번 더 확인하게 한다(사칭 방지). */
+            if (j && j.verified && j.username) savePi(j.username, true, token);
           });
         }).catch(function () { toast('π', t('hallPiHint'), 2600); });
       } catch (e) { toast('π', t('hallPiHint'), 2600); }

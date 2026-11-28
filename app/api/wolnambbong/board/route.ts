@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { rateLimit } from '../../../lib/rateLimit';
+import { bearerToken, verifyPiAccessToken } from '../../../lib/piServerAuth';
 import { sbRpc, supabaseConfigured } from '../../../lib/supabaseAdmin';
 
 /**
@@ -15,9 +16,14 @@ import { sbRpc, supabaseConfigured } from '../../../lib/supabaseAdmin';
  *  POST { action, ... }
  *    · profile { device, nickname, grade, money, wins, plays } → 기록 갱신(값은 내려가지 않음)
  *    · seat    { device, grade, nickname, pi }                 → 그 등급 좌석 고유 번호 발급
- *    · pi      { device, username, verified }                  → π 파이오니어 배지 연결
+ *    · pi      { device, username, verified, accessToken? }     → π 파이오니어 배지 연결
+ *              verified:true 는 **서버가 Pi Platform API(/v2/me)로 확인한 경우에만** 인정한다.
+ *              (accessToken 없이 verified:true 를 보내면 401 — 사칭 방지의 전제)
  *    · invite  { device, ref }                                 → 초대(개척자) 1회 집계
  *
+ *  - 같은 @을 이미 π 인증한 기기(계정)가 있으면:
+ *      · 인증된 쪽에서 들어오면 두 계정을 병합한다(wnb_merge_devices — 승수·판수 합산, 좌석 이동, 별칭 연결).
+ *      · 미인증 선언으로는 가져갈 수 없고 `verified_elsewhere`(409)로 돌려준다.
  *  - 테이블·함수가 없으면(마이그레이션 전) available:false 로 끝나고, 화면은 로컬 모드로 동작한다.
  *  - service_role 키는 서버에서만 쓰고 응답·로그로 내보내지 않는다.
  *  - 환금성 없음: 좌석·기록은 명예 표시일 뿐, 돈·코인·현금으로 바꿀 수 없다.
@@ -141,15 +147,34 @@ export async function POST(req: Request) {
   }
 
   if (action === 'pi') {
-    const username = String(body.username ?? '').trim().slice(0, 32);
+    const username = String(body.username ?? '').replace(/^@/, '').trim().slice(0, 32);
     if (!username) return json({ ok: false, available: true, error: 'bad_username' }, 400);
+
+    /* verified:true 는 클라이언트 말을 믿지 않는다 — Pi accessToken 을 서버가 /v2/me 로
+       확인하고, 그 토큰의 username 과 요청한 username 이 같을 때만 인증으로 인정한다. */
+    let verified = false;
+    if (body.verified === true) {
+      const token = typeof body.accessToken === 'string' ? body.accessToken.trim() : bearerToken(req);
+      const check = await verifyPiAccessToken(token);
+      if (!check.ok) {
+        return json({ ok: false, available: true, error: 'pi_verify_failed', detail: check.error }, check.status === 401 ? 401 : 502);
+      }
+      if (check.user.username.toLowerCase() !== username.toLowerCase()) {
+        return json({ ok: false, available: true, error: 'username_mismatch', pi: check.user.username }, 403);
+      }
+      verified = true;
+    }
+
     const r = await sbRpc<Record<string, unknown>>('wnb_pi_link', {
       p_device: device,
       p_username: username,
-      p_verified: body.verified === true
+      p_verified: verified
     });
     if (!r.ok) return json({ ok: false, available: !isMissingObject(r.status, r.error), error: r.error });
-    return json({ ok: true, available: true, pi: r.data });
+    const d = (r.data || {}) as Record<string, unknown>;
+    /* 함수가 돌려준 업무 규칙(이미 π 인증된 @ 등)은 그대로 화면에 전달한다. */
+    if (d.ok === false) return json({ ok: false, available: true, error: String(d.error || 'pi_link_failed'), pi: d }, 409);
+    return json({ ok: true, available: true, pi: d, merged: d.merged === true, me: d });
   }
 
   if (action === 'invite') {

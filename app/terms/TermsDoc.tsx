@@ -45,6 +45,10 @@ const KO_SECTIONS: Section[] = [
         text: '앱은 Pi Browser 안에서 Pi 로그인과 Pi 결제를 사용합니다. Pi 계정·지갑·네트워크 자체의 이용에는 Pi Network의 약관이 함께 적용됩니다.',
       },
       {
+        type: 'note',
+        text: '본 서비스는 Pi Network(Pi Community Company / SocialChain Inc.)가 직접 운영하는 공식 앱이 아닙니다. Pi 로그인·결제는 공식 Pi SDK와 플랫폼 API를 통해 이루어지며, 파이 코어팀(Pi Core Team)은 본 서비스의 운영 및 개인정보 처리에 대해 책임을 지지 않습니다.',
+      },
+      {
         type: 'p',
         text: '이 약관에 동의하지 않으면 앱을 이용하지 않을 수 있습니다. 시행일 이후에도 앱을 계속 이용하면 개정된 약관에 동의한 것으로 봅니다.',
       },
@@ -333,6 +337,10 @@ const EN_SECTIONS: Section[] = [
       {
         type: 'p',
         text: 'Inside Pi Browser the apps use Pi sign-in and Pi payments. Use of the Pi account, wallet and network itself is also governed by the Pi Network terms.',
+      },
+      {
+        type: 'note',
+        text: 'This service is not an official app directly operated by Pi Network (Pi Community Company / SocialChain Inc.). Pi Sign-In and payments are processed through the official Pi SDK and Platform API, and the Pi Core Team is not responsible for the operation or personal data processing of this service.',
       },
       {
         type: 'p',
